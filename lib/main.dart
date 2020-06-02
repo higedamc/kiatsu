@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weather/weather.dart';
 
@@ -14,6 +15,7 @@ class _MyAppState extends State<MyApp> {
   String _res2 = "ちんちん";
   String key = '85b471dd6643e05717257b12894250d1';
   WeatherStation ws;
+  int res_p = 0;
 
   @override
   void initState() {
@@ -49,12 +51,11 @@ class _MyAppState extends State<MyApp> {
     double pressure = w2.pressure.toDouble();
     setState(() {
       _res2 = w2.toString();
+      res_p = pressure.toInt();
       print('pressure *****************');
       print(w2);
       print('pressure *****************');
       print(pressure);
-//      print('pressure *****************');
-//      print(_res2);
     });
   }
 
@@ -63,20 +64,62 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Kiatsu Example"),
+          centerTitle: true,
+          title: Text(
+            "Kiatsu check meter",
+          ),
+          actions: <Widget>[
+            // sns share button
+            IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () {},
+            )
+          ],
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                _res,
+                '---pressure status---',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.indigoAccent),
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Text(
+                res_p.toString() + ' hPa',
+                style: TextStyle(
+                    color: Colors.indigoAccent,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0),
+              ),
+              SizedBox(height: 60.0),
+              Text(
+                '---weather status---',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.indigoAccent),
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Text(
+                _res2,
               ),
               Text(
                 '(ΦωΦ)',
                 style: TextStyle(
                     color: Colors.orangeAccent, fontWeight: FontWeight.bold),
               ),
+              Text(
+                'にゃーん',
+                style: TextStyle(
+                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+              )
             ],
           ),
         ),
