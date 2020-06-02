@@ -25,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     queryWeather();
+    queryBarometer();
   }
 
   void queryForecast() async {
@@ -38,15 +39,24 @@ class _MyAppState extends State<MyApp> {
     Weather w = await ws.currentWeather();
     setState(() {
       _res = w.toString();
+      print('weather api test*****************************');
+      print(_res);
     });
   }
-//
-//  void queryBarometer() async {
-//    double pressure = w2.pressure.toDouble();
-//    Weather w = await setState(() {
-//      _res2 = pressure.toString();
-//    });
-//  }
+
+  void queryBarometer() async {
+    Weather w2 = await ws.currentWeather();
+    double pressure = w2.pressure.toDouble();
+    setState(() {
+      _res2 = w2.toString();
+      print('pressure *****************');
+      print(w2);
+      print('pressure *****************');
+      print(pressure);
+//      print('pressure *****************');
+//      print(_res2);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +71,11 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Text(
                 _res,
+              ),
+              Text(
+                '(ΦωΦ)',
+                style: TextStyle(
+                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
               ),
             ],
           ),
