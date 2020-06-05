@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:weather/weather.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MaterialApp(home: MyApp()));
 
 class MyApp extends StatefulWidget {
   @override
@@ -92,23 +92,32 @@ class _MyAppState extends State<MyApp> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                             title: Text('title'),
-                            content: Column(
-                              children: <Widget>[
-                                Form(
-                                  key: _formKey,
-                                  child: Text(_text),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.share),
-                                  onPressed: () {
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState.save();
-                                      Share.share(_text);
-                                    }
-                                  },
-                                )
-                              ],
-                            ));
+                            content: Center(
+                                child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      children: <Widget>[
+                                        TextFormField(
+                                          decoration: const InputDecoration(
+                                            hintText: 'share text...',
+                                            labelText: 'share label...',
+                                          ),
+                                          onSaved: (String value) {
+                                            _text = value;
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.share),
+                                          onPressed: () {
+                                            if (_formKey.currentState
+                                                .validate()) {
+                                              _formKey.currentState.save();
+                                              Share.share(_text);
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    ))));
                       });
                 })
           ],
@@ -116,52 +125,67 @@ class _MyAppState extends State<MyApp> {
         body: RefreshIndicator(
           onRefresh: _onRefresh,
           color: Colors.amber,
-          child: ListView(children: <Widget>[
-            Center(
-              child: Container(
-                padding: EdgeInsets.all(10.0),
-                margin: EdgeInsets.all(10.0),
+          child: ListView(
+            children: <Widget>[
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.all(10.0),
+                  child: Text(
+                    '---pressure status---',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.indigoAccent),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Center(
                 child: Text(
-                  '---pressure status---',
+                  res_p.toString() + ' hPa',
+                  style: TextStyle(
+                      color: Colors.indigoAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0),
+                ),
+              ),
+              SizedBox(height: 60.0),
+              Center(
+                child: Text(
+                  '---weather status---',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
                       color: Colors.indigoAccent),
                 ),
               ),
-            ),
-            Text(
-              res_p.toString() + ' hPa',
-              style: TextStyle(
-                  color: Colors.indigoAccent,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0),
-            ),
-            SizedBox(height: 60.0),
-            Text(
-              '---weather status---',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
-                  color: Colors.indigoAccent),
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            Text(
-              _res2,
-            ),
-            Text(
-              '(ΦωΦ)',
-              style: TextStyle(
-                  color: Colors.orangeAccent, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'にゃーん',
-              style: TextStyle(
-                  color: Colors.orangeAccent, fontWeight: FontWeight.bold),
-            ),
-          ]),
+              SizedBox(
+                height: 24.0,
+              ),
+              Center(
+                child: Text(
+                  _res2,
+                ),
+              ),
+              Center(
+                child: Text(
+                  '(ΦωΦ)',
+                  style: TextStyle(
+                      color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Center(
+                child: Text(
+                  'にゃーん',
+                  style: TextStyle(
+                      color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: queryForecast, child: Icon(Icons.file_download)),
