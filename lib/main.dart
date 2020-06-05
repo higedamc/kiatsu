@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
             IconButton(
                 icon: Icon(Icons.share),
                 onPressed: () {
-                  Share.share(res_p.toString() + 'hPa is 定気圧しんどいぴえん🥺️');
+                  Share.share(res_p.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
                 })
           ],
         ),
