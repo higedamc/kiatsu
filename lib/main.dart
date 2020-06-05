@@ -30,6 +30,12 @@ class _MyAppState extends State<MyApp> {
     queryBarometer();
   }
 
+  Future<void> _onRefresh() async {
+    queryWeather();
+    queryBarometer();
+    queryForecast();
+  }
+
   void queryForecast() async {
     List<Weather> f = await ws.fiveDayForecast();
     setState(() {
@@ -76,49 +82,66 @@ class _MyAppState extends State<MyApp> {
             )
           ],
         ),
-        body: Center(
-          child: Column(
+        body: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView(
             children: <Widget>[
-              Text(
-                '---pressure status---',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.indigoAccent),
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.all(10.0),
+                  child: Text(
+                    '---pressure status---',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.indigoAccent),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 24.0,
               ),
-              Text(
-                res_p.toString() + ' hPa',
-                style: TextStyle(
-                    color: Colors.indigoAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24.0),
+              Center(
+                child: Text(
+                  res_p.toString() + ' hPa',
+                  style: TextStyle(
+                      color: Colors.indigoAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0),
+                ),
               ),
               SizedBox(height: 60.0),
-              Text(
-                '---weather status---',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.indigoAccent),
+              Center(
+                child: Text(
+                  '---weather status---',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Colors.indigoAccent),
+                ),
               ),
               SizedBox(
                 height: 24.0,
               ),
-              Text(
-                _res2,
+              Center(
+                child: Text(
+                  _res2,
+                ),
               ),
-              Text(
-                '(ΦωΦ)',
-                style: TextStyle(
-                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+              Center(
+                child: Text(
+                  '(ΦωΦ)',
+                  style: TextStyle(
+                      color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+                ),
               ),
-              Text(
-                'にゃーん',
-                style: TextStyle(
-                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+              Center(
+                child: Text(
+                  'にゃーん',
+                  style: TextStyle(
+                      color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+                ),
               )
             ],
           ),
