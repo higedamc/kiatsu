@@ -87,38 +87,7 @@ class _MyAppState extends State<MyApp> {
             IconButton(
                 icon: Icon(Icons.share),
                 onPressed: () {
-                  showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                            title: Text('title'),
-                            content: Center(
-                                child: Form(
-                                    key: _formKey,
-                                    child: Column(
-                                      children: <Widget>[
-                                        TextFormField(
-                                          decoration: const InputDecoration(
-                                            hintText: 'share text...',
-                                            labelText: 'share label...',
-                                          ),
-                                          onSaved: (String value) {
-                                            _text = value;
-                                          },
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.share),
-                                          onPressed: () {
-                                            if (_formKey.currentState
-                                                .validate()) {
-                                              _formKey.currentState.save();
-                                              Share.share(_text);
-                                            }
-                                          },
-                                        )
-                                      ],
-                                    ))));
-                      });
+                  Share.share('share dekita yaro?✌️');
                 })
           ],
         ),
