@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/weather_model.dart';
-//import 'package:weather/weather_library.dart';
+import 'package:share/share.dart';
+import 'package:weather/weather_library.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,6 +20,8 @@ class _MyAppState extends State<MyApp> {
 //  String _res = 'にゃーん';
   String _res2 = "ちんちん";
   String key = '85b471dd6643e05717257b12894250d1';
+  WeatherStation ws;
+  int res_p = 0;
 //  WeatherStation ws;
 //  int res_p = 0;
 
@@ -34,12 +37,14 @@ class _MyAppState extends State<MyApp> {
 //    queryWeather();
 ////    queryBarometer();
 //  }
-
-//  Future<void> _onRefresh() async {
-//    queryWeather();
-////    queryBarometer();
-////    queryForecast();
-//  }
+  /*
+  Future<void> _onRefresh() async {
+    print('future');
+    queryWeather();
+    queryBarometer();
+    queryForecast();
+  }
+   */
 
   Future<WeatherClass> getWeather() async {
     Position position = await Geolocator()
@@ -85,7 +90,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print('object');
+    //print(MaterialLocalizations.of(context));
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -94,10 +102,12 @@ class _MyAppState extends State<MyApp> {
           ),
           actions: <Widget>[
             // sns share button
+            // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
             IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {},
-            )
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  Share.share(res_p.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
+                })
           ],
         ),
         body: FutureBuilder<WeatherClass>(
