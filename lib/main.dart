@@ -113,7 +113,7 @@ class _MyAppState extends State<MyApp> {
                             onPressed: () {
                               Share.share(
                                   snapshot.data.main.pressure.toString() +
-                                      'hPa is 低気圧しんどいぴえん🥺️');
+                                      'hPa is 低気圧しんどいぴえん🥺️ #kiatsu');
                             })
                       ],
                     ),
