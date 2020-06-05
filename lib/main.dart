@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:weather/weather.dart';
 
 void main() => runApp(MyApp());
@@ -16,6 +17,8 @@ class _MyAppState extends State<MyApp> {
   String key = '85b471dd6643e05717257b12894250d1';
   WeatherStation ws;
   int res_p = 0;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _text = "";
 
   @override
   void initState() {
@@ -28,6 +31,13 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     queryWeather();
     queryBarometer();
+  }
+
+  Future<void> _onRefresh() async {
+    print('future');
+    queryWeather();
+    queryBarometer();
+    queryForecast();
   }
 
   void queryForecast() async {
@@ -61,7 +71,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print('object');
+    //print(MaterialLocalizations.of(context));
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -70,58 +83,85 @@ class _MyAppState extends State<MyApp> {
           ),
           actions: <Widget>[
             // sns share button
+            // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
             IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {},
-            )
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            title: Text('title'),
+                            content: Column(
+                              children: <Widget>[
+                                Form(
+                                  key: _formKey,
+                                  child: Text(_text),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.share),
+                                  onPressed: () {
+                                    if (_formKey.currentState.validate()) {
+                                      _formKey.currentState.save();
+                                      Share.share(_text);
+                                    }
+                                  },
+                                )
+                              ],
+                            ));
+                      });
+                })
           ],
         ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text(
-                '---pressure status---',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.indigoAccent),
+        body: RefreshIndicator(
+          onRefresh: _onRefresh,
+          color: Colors.amber,
+          child: ListView(children: <Widget>[
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.all(10.0),
+                child: Text(
+                  '---pressure status---',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Colors.indigoAccent),
+                ),
               ),
-              SizedBox(
-                height: 24.0,
-              ),
-              Text(
-                res_p.toString() + ' hPa',
-                style: TextStyle(
-                    color: Colors.indigoAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24.0),
-              ),
-              SizedBox(height: 60.0),
-              Text(
-                '---weather status---',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.indigoAccent),
-              ),
-              SizedBox(
-                height: 24.0,
-              ),
-              Text(
-                _res2,
-              ),
-              Text(
-                '(ΦωΦ)',
-                style: TextStyle(
-                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'にゃーん',
-                style: TextStyle(
-                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
+            ),
+            Text(
+              res_p.toString() + ' hPa',
+              style: TextStyle(
+                  color: Colors.indigoAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0),
+            ),
+            SizedBox(height: 60.0),
+            Text(
+              '---weather status---',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.indigoAccent),
+            ),
+            SizedBox(
+              height: 24.0,
+            ),
+            Text(
+              _res2,
+            ),
+            Text(
+              '(ΦωΦ)',
+              style: TextStyle(
+                  color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'にゃーん',
+              style: TextStyle(
+                  color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+            ),
+          ]),
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: queryForecast, child: Icon(Icons.file_download)),
