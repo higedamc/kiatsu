@@ -4,12 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:kiatsu/settings.dart';
-import 'package:kiatsu/status.dart';
 import 'package:kiatsu/weather_model.dart';
 import 'package:weather/weather_library.dart';
-
-import 'charts.dart';
 
 void main() => runApp(MyApp());
 
@@ -96,6 +92,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //home: Status(res_p: res_p.toString(),),
+      /*
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => Status(
@@ -104,6 +101,109 @@ class _MyAppState extends State<MyApp> {
         '/setting': (BuildContext context) => Settings(),
         '/charts': (BuildContext context) => Charts(),
       },
+       */
+      home: FutureBuilder<WeatherClass>(
+          future: getWeather(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            return snapshot.hasData
+                ? Scaffold(
+                    appBar: AppBar(
+                      centerTitle: true,
+                      title: Text(
+                        "Kiatsu check meter",
+                      ),
+                      actions: <Widget>[
+                        // sns share button
+                        // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
+                        IconButton(icon: Icon(Icons.share), onPressed: () {})
+                      ],
+                    ),
+                    body: FutureBuilder<WeatherClass>(
+                        future: getWeather(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) print(snapshot.error);
+                          return snapshot.hasData
+                              ? Container(
+                                  child: ListView(
+                                    children: <Widget>[
+                                      Center(
+                                        child: Container(
+                                          padding: EdgeInsets.all(10.0),
+                                          margin: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            '---pressure status---',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18.0,
+                                                color: Colors.indigoAccent),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 24.0,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          snapshot.data.main.pressure
+                                                  .toString() +
+                                              ' hPa',
+                                          style: TextStyle(
+                                              color: Colors.indigoAccent,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 24.0),
+                                        ),
+                                      ),
+                                      SizedBox(height: 60.0),
+                                      Center(
+                                        child: Text(
+                                          '---weather status---',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0,
+                                              color: Colors.indigoAccent),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 24.0,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          _res2,
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          '(ΦωΦ)',
+                                          style: TextStyle(
+                                              color: Colors.orangeAccent,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          'にゃーん',
+                                          style: TextStyle(
+                                              color: Colors.orangeAccent,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Center(
+                                  child: CircularProgressIndicator(
+                                      backgroundColor: Colors.pinkAccent),
+                                );
+                        }),
+//        floatingActionButton: FloatingActionButton(
+//            onPressed: , child: Icon(Icons.file_download)),
+                  )
+                : Center(
+                    child:
+                        CircularProgressIndicator(backgroundColor: Colors.pink),
+                  );
+          }),
     );
   }
 }
