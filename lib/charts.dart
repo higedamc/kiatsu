@@ -8,6 +8,15 @@ class Charts extends StatefulWidget {
 class _ChartsState extends State<Charts> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('chart'),
+      ),
+      body: Container(
+        child: Center(
+          child: Text('charts'),
+        ),
+      ),
+    );
   }
 }

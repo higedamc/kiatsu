@@ -16,7 +16,6 @@ class ApiGetter {
     String secret = remoteConfig.getValue('weather_api_key').asString();
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(secret);
     String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
         position.latitude.toString() +
         '&lon=' +
