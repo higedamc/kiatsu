@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kiatsu/pages/test_page.dart';
+import 'package:kiatsu/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //void main() => runApp(MyApp());
@@ -27,6 +27,6 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.pink,
         ),
-        home: TestPage());
+        home: HomePage());
   }
 }
