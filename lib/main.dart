@@ -1,11 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/weather_model.dart';
 import 'package:weather/weather_library.dart';
+import 'package:kiatsu/process/api_getter.dart';
+import 'package:share/share.dart';
+
+import 'model/weather_model.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,8 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-//  Weather w2;
-//  String _res = 'にゃーん';
+  final ApiGetter getData = ApiGetter();
   String _res2 = "ちんちん";
   String api_key = '85b471dd6643e05717257b12894250d1';
   WeatherStation ws;
@@ -27,8 +28,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-//    ws = new WeatherStation(key);
-//    initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -103,7 +102,7 @@ class _MyAppState extends State<MyApp> {
       },
        */
       home: FutureBuilder<WeatherClass>(
-          future: getWeather(),
+          future: getData.getWeather(),
           builder: (context, snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             return snapshot.hasData
@@ -117,10 +116,17 @@ class _MyAppState extends State<MyApp> {
                         // sns share button
                         // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                         IconButton(icon: Icon(Icons.share), onPressed: () {})
+                        IconButton(
+                            icon: Icon(Icons.share),
+                            onPressed: () {
+                              Share.share(
+                                  snapshot.data.main.pressure.toString() +
+                                      'hPa is 低気圧しんどいぴえん🥺️ #kiatsu');
+                            })
                       ],
                     ),
                     body: FutureBuilder<WeatherClass>(
-                        future: getWeather(),
+                        future: getData.getWeather(),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) print(snapshot.error);
                           return snapshot.hasData
