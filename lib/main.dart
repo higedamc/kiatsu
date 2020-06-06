@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kiatsu/charts.dart';
 import 'package:kiatsu/process/api_getter.dart';
-import 'package:kiatsu/settings.dart';
 import 'package:share/share.dart';
 
 import 'model/weather_model.dart';
@@ -27,11 +25,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      /*
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/settings': (BuildContext context) => Settings(),
         '/charts': (BuildContext context) => Charts()
       },
+
+       */
       home: FutureBuilder<WeatherClass>(
           future: getData.getWeather(),
           builder: (context, snapshot) {
