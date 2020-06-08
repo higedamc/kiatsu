@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:kiatsu/weather_model.dart';
 import 'package:share/share.dart';
 import 'package:weather/weather_library.dart';
+import 'const/constant.dart' as Constant;
 
 void main() => runApp(MyApp());
 
@@ -16,10 +17,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String a = Constant.key;
 //  Weather w2;
 //  String _res = 'にゃーん';
   static const String _res2 = "ちんちん";
-  static const String key = '85b471dd6643e05717257b12894250d1';
   WeatherStation ws;
   //  WeatherStation ws;
 //  int res_p = 0;
@@ -52,7 +53,7 @@ class _MyAppState extends State<MyApp> {
         position.latitude.toString() +
         '&lon=' +
         position.longitude.toString() +
-        '&APPID=$key';
+        '&APPID=$a';
     final response = await http.get(url);
     return WeatherClass.fromJson(json.decode(response.body));
   }
@@ -92,116 +93,101 @@ class _MyAppState extends State<MyApp> {
     print('object');
     //print(MaterialLocalizations.of(context));
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: FutureBuilder<WeatherClass>(
-          future: getWeather(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            return snapshot.hasData
-                ? Scaffold(
-                    appBar: AppBar(
-                      centerTitle: true,
-                      title: const Text(
-                        "THE KIATSU",
-                      ),
-                      actions: <Widget>[
-                        // sns share button
-                        // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
-                        IconButton(
-                            icon: const Icon(Icons.share),
-                            onPressed: () {
-                              Share.share(
-                                  snapshot.data.main.pressure.toString() +
-                                      'hPa is 低気圧しんどいぴえん🥺️');
-                            })
-                      ],
-                    ),
-                    body: FutureBuilder<WeatherClass>(
-                        future: getWeather(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) print(snapshot.error);
-                          return snapshot.hasData
-                              ? Container(
-                                  key: GlobalKey(),
-                                  child: ListView(
-                                    children: <Widget>[
-                                      Center(
-                                        child: Container(
-                                          padding: EdgeInsets.all(10.0),
-                                          margin: EdgeInsets.all(10.0),
-                                          child: const Text(
-                                            '---pressure status---',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18.0,
-                                                color: Colors.indigoAccent),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 24.0,
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          snapshot.data.main.pressure
-                                                  .toString() +
-                                              ' hPa',
-                                          style: TextStyle(
-                                              color: Colors.indigoAccent,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 24.0),
-                                        ),
-                                      ),
-                                      SizedBox(height: 60.0),
-                                      Center(
-                                        child: const Text(
-                                          '---weather status---',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18.0,
-                                              color: Colors.indigoAccent),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 24.0,
-                                      ),
-                                      Center(
-                                        child: const Text(
-                                          _res2,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          '(ΦωΦ)',
-                                          style: TextStyle(
-                                              color: Colors.orangeAccent,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: const Text(
-                                          'にゃーん',
-                                          style: TextStyle(
-                                              color: Colors.orangeAccent,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              : Center(
-                                  child: CircularProgressIndicator(
-                                      backgroundColor: Colors.pinkAccent),
-                                );
-                        }),
-//        floatingActionButton: FloatingActionButton(
-//            onPressed: , child: Icon(Icons.file_download)),
-                  )
-                : Center(
-                    child:
-                        CircularProgressIndicator(backgroundColor: Colors.pink),
-                  );
-          }),
-    );
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text(
+              "THE KIATSU",
+            ),
+            actions: <Widget>[
+              // sns share button
+              // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
+              IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: () {
+                    Share.share('testTEXT' + 'hPa is 低気圧しんどいぴえん🥺️');
+                  })
+            ],
+          ),
+          body: FutureBuilder<WeatherClass>(
+              future: getWeather(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                return snapshot.hasData
+                    ? Container(
+                        key: GlobalKey(),
+                        child: ListView(
+                          children: <Widget>[
+                            Center(
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                margin: EdgeInsets.all(10.0),
+                                child: const Text(
+                                  '---pressure status---',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                      color: Colors.indigoAccent),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 24.0,
+                            ),
+                            Center(
+                              child: Text(
+                                snapshot.data.main.pressure.toString() + ' hPa',
+                                style: TextStyle(
+                                    color: Colors.indigoAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24.0),
+                              ),
+                            ),
+                            SizedBox(height: 60.0),
+                            Center(
+                              child: const Text(
+                                '---weather status---',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                    color: Colors.indigoAccent),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 24.0,
+                            ),
+                            Center(
+                              child: const Text(
+                                _res2,
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                '(ΦωΦ)',
+                                style: TextStyle(
+                                    color: Colors.orangeAccent,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Center(
+                              child: const Text(
+                                'にゃーん',
+                                style: TextStyle(
+                                    color: Colors.orangeAccent,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(
+                            backgroundColor: Colors.pinkAccent),
+                      );
+              }),
+          //        floatingActionButton: FloatingActionButton(
+          //            onPressed: , child: Icon(Icons.file_download)),
+        ));
   }
 }
