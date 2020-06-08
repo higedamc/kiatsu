@@ -18,11 +18,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 //  Weather w2;
 //  String _res = 'にゃーん';
-  String _res2 = "ちんちん";
-  String key = '85b471dd6643e05717257b12894250d1';
+  static const String _res2 = "ちんちん";
+  static const String key = '85b471dd6643e05717257b12894250d1';
   WeatherStation ws;
-  int res_p = 0;
-//  WeatherStation ws;
+  //  WeatherStation ws;
 //  int res_p = 0;
 
   @override
@@ -102,14 +101,14 @@ class _MyAppState extends State<MyApp> {
                 ? Scaffold(
                     appBar: AppBar(
                       centerTitle: true,
-                      title: Text(
+                      title: const Text(
                         "THE KIATSU",
                       ),
                       actions: <Widget>[
                         // sns share button
                         // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                         IconButton(
-                            icon: Icon(Icons.share),
+                            icon: const Icon(Icons.share),
                             onPressed: () {
                               Share.share(
                                   snapshot.data.main.pressure.toString() +
@@ -123,13 +122,14 @@ class _MyAppState extends State<MyApp> {
                           if (snapshot.hasError) print(snapshot.error);
                           return snapshot.hasData
                               ? Container(
+                                  key: GlobalKey(),
                                   child: ListView(
                                     children: <Widget>[
                                       Center(
                                         child: Container(
                                           padding: EdgeInsets.all(10.0),
                                           margin: EdgeInsets.all(10.0),
-                                          child: Text(
+                                          child: const Text(
                                             '---pressure status---',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> {
                                       ),
                                       SizedBox(height: 60.0),
                                       Center(
-                                        child: Text(
+                                        child: const Text(
                                           '---weather status---',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class _MyAppState extends State<MyApp> {
                                         height: 24.0,
                                       ),
                                       Center(
-                                        child: Text(
+                                        child: const Text(
                                           _res2,
                                         ),
                                       ),
@@ -179,7 +179,7 @@ class _MyAppState extends State<MyApp> {
                                         ),
                                       ),
                                       Center(
-                                        child: Text(
+                                        child: const Text(
                                           'にゃーん',
                                           style: TextStyle(
                                               color: Colors.orangeAccent,
