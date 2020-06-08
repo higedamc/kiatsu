@@ -20,7 +20,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // SetState使わない実装方法
-  // final StreamController<String> _streamController = StreamController();
+  final StreamController<String> _streamController = StreamController();
   Future<WeatherClass> weather;
   // WeatherClass weather = WeatherClass.empty();
   String a = Constant.key;
@@ -221,15 +221,18 @@ class _MyAppState extends State<MyApp> {
                   );
                 }
               }),
-          floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.pinkAccent,
-              child: Icon(Icons.arrow_downward),
-              onPressed: () {
-                // リロードボタン TODO: pull to refresh に実装変える
-                setState(() {
-                  weather = getWeather();
-                });
-              }),
+          floatingActionButton: FutureBuilder<WeatherClass>(
+            future: getWeather(),
+            builder: (context, snapshot) {
+              return FloatingActionButton(
+                  backgroundColor: Colors.pinkAccent,
+                  child: Icon(Icons.share),
+                  onPressed: () {
+                    // リロードボタン TODO: pull to refresh に実装変える
+                    Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
+                  });
+            }
+          ),
         ));
   }
 }
