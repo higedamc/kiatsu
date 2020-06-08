@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/weather_model.dart';
+import 'package:share/share.dart';
 // import 'package:share/share.dart';
 import 'const/constant.dart' as Constant;
 
@@ -17,6 +19,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // SetState使わない実装方法
+  // final StreamController<String> _streamController = StreamController();
+  Future<WeatherClass> weather;
   // WeatherClass weather = WeatherClass.empty();
   String a = Constant.key;
 //  Weather w2;
@@ -29,6 +34,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    weather = getWeather();
 //    ws = new WeatherStation(key);
 //    initPlatformState();
   }
@@ -218,7 +224,12 @@ class _MyAppState extends State<MyApp> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.pinkAccent,
               child: Icon(Icons.arrow_downward),
-              onPressed: null),
+              onPressed: () {
+                // リロードボタン TODO: pull to refresh に実装変える
+                setState(() {
+                  weather = getWeather();
+                });
+              }),
         ));
   }
 }
