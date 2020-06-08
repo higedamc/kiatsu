@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
                     appBar: AppBar(
                       centerTitle: true,
                       title: Text(
-                        "Kiatsu check meter",
+                        "THE KIATSU",
                       ),
                       actions: <Widget>[
                         // sns share button
