@@ -20,7 +20,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // SetState使わない実装方法
-  final StreamController<String> _streamController = StreamController();
+  // final StreamController<String> _streamController = StreamController();
   Future<WeatherClass> weather;
   // WeatherClass weather = WeatherClass.empty();
   String a = Constant.key;
@@ -106,6 +106,11 @@ class _MyAppState extends State<MyApp> {
   //   });
 
   // }
+    _refresher() async {
+      setState(() {
+        weather = getWeather();
+      });
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +138,9 @@ class _MyAppState extends State<MyApp> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return Center(
-                      child: CircularProgressIndicator(
-                          backgroundColor: Colors.pinkAccent));
+                      child: Center(
+                        child: Text('読み込み中...'),
+                      ));
                 }
                 if (snapshot.hasError) print(snapshot.error);
                 if (snapshot.hasData) {
@@ -150,69 +156,74 @@ class _MyAppState extends State<MyApp> {
                             tileMode: TileMode.repeated)),
                     // color: Colors.black,
                     key: GlobalKey(),
-                    child: ListView(
-                      children: <Widget>[
-                        Center(
-                          child: Container(
-                            padding: EdgeInsets.all(10.0),
-                            margin: EdgeInsets.all(10.0),
+                    child: RefreshIndicator(
+                      onRefresh: () {
+                        return _refresher();
+                      },
+                      child: ListView(
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              padding: EdgeInsets.all(10.0),
+                              margin: EdgeInsets.all(10.0),
+                              child: const Text(
+                                '---pressure status---',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 18.0),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 24.0,
+                          ),
+                          Center(
+                            child: Text(
+                              snapshot.data.main.pressure.toString() + ' hPa',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 100.0),
+                            ),
+                          ),
+                          SizedBox(height: 60.0),
+                          Center(
                             child: const Text(
-                              '---pressure status---',
+                              '---weather status---',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100,
                                   fontSize: 18.0),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 24.0,
-                        ),
-                        Center(
-                          child: Text(
-                            snapshot.data.main.pressure.toString() + ' hPa',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w100,
-                                fontSize: 100.0),
+                          SizedBox(
+                            height: 24.0,
                           ),
-                        ),
-                        SizedBox(height: 60.0),
-                        Center(
-                          child: const Text(
-                            '---weather status---',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w100,
-                                fontSize: 18.0),
+                          Center(
+                            child: const Text(_res2,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w100)),
                           ),
-                        ),
-                        SizedBox(
-                          height: 24.0,
-                        ),
-                        Center(
-                          child: const Text(_res2,
+                          Center(
+                            child: Text(
+                              '＾ｑ＾',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w100)),
-                        ),
-                        Center(
-                          child: Text(
-                            '＾ｑ＾',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w100),
+                                  fontWeight: FontWeight.w100),
+                            ),
                           ),
-                        ),
-                        Center(
-                          child: const Text(
-                            'にゃーん',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w100),
-                          ),
-                        )
-                      ],
+                          Center(
+                            child: const Text(
+                              'にゃーん',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 } else {
@@ -228,7 +239,6 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Colors.pinkAccent,
                   child: Icon(Icons.share),
                   onPressed: () {
-                    // リロードボタン TODO: pull to refresh に実装変える
                     Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
                   });
             }
