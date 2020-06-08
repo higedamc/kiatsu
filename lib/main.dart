@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/weather_model.dart';
-import 'package:share/share.dart';
+// import 'package:share/share.dart';
 import 'const/constant.dart' as Constant;
 
 void main() => runApp(MyApp());
@@ -16,9 +17,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // WeatherClass weather = WeatherClass.empty();
   String a = Constant.key;
 //  Weather w2;
-  static const String _res = 'にゃーん';
+  // static const String _res = 'にゃーん';
   static const String _res2 = "ちんちん";
   // WeatherStation ws;
   //  WeatherStation ws;
@@ -44,6 +46,11 @@ class _MyAppState extends State<MyApp> {
     queryForecast();
   }
    */
+
+  // Future _onRefresher() async {
+  //   _getchuWeather();
+  //   print("どうよ？");
+  // }
 
   Future<WeatherClass> getWeather() async {
     Position position = await Geolocator()
@@ -86,13 +93,25 @@ class _MyAppState extends State<MyApp> {
 //      print(pressure);
 //    });
 //  }
-  
+  // void _getchuWeather() async {
+  //   WeatherClass bitch = await getWeather();
+  //   setState(() {
+  //     weather = bitch;
+  //   });
+
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          appBar: AppBar(
+          appBar: GradientAppBar(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [const Color(0xFFc423ba), const Color(0xFF00d5bf)],
+                tileMode: TileMode.repeated),
             centerTitle: true,
             title: const Text(
               "THE KIATSU",
@@ -107,11 +126,23 @@ class _MyAppState extends State<MyApp> {
               future: getWeather(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                          backgroundColor: Colors.pinkAccent));
                 }
                 if (snapshot.hasError) print(snapshot.error);
                 if (snapshot.hasData) {
                   return Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              const Color(0xFFc423ba),
+                              const Color(0xFF00d5bf)
+                            ],
+                            tileMode: TileMode.repeated)),
+                    // color: Colors.black,
                     key: GlobalKey(),
                     child: ListView(
                       children: <Widget>[
@@ -122,9 +153,9 @@ class _MyAppState extends State<MyApp> {
                             child: const Text(
                               '---pressure status---',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.0,
-                                  color: Colors.indigoAccent),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 18.0),
                             ),
                           ),
                         ),
@@ -135,9 +166,9 @@ class _MyAppState extends State<MyApp> {
                           child: Text(
                             snapshot.data.main.pressure.toString() + ' hPa',
                             style: TextStyle(
-                                color: Colors.indigoAccent,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24.0),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w100,
+                                fontSize: 100.0),
                           ),
                         ),
                         SizedBox(height: 60.0),
@@ -145,33 +176,34 @@ class _MyAppState extends State<MyApp> {
                           child: const Text(
                             '---weather status---',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                                color: Colors.indigoAccent),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w100,
+                                fontSize: 18.0),
                           ),
                         ),
                         SizedBox(
                           height: 24.0,
                         ),
                         Center(
-                          child: const Text(
-                            _res2,
-                          ),
+                          child: const Text(_res2,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100)),
                         ),
                         Center(
                           child: Text(
-                            '(ΦωΦ)',
+                            '＾ｑ＾',
                             style: TextStyle(
-                                color: Colors.orangeAccent,
-                                fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w100),
                           ),
                         ),
                         Center(
                           child: const Text(
                             'にゃーん',
                             style: TextStyle(
-                                color: Colors.orangeAccent,
-                                fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w100),
                           ),
                         )
                       ],
@@ -183,7 +215,10 @@ class _MyAppState extends State<MyApp> {
                   );
                 }
               }),
-          // floatingActionButton: ,
+          floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.pinkAccent,
+              child: Icon(Icons.arrow_downward),
+              onPressed: null),
         ));
   }
 }
