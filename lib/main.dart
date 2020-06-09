@@ -258,6 +258,7 @@ class _MyAppState extends State<MyApp> {
                     child: Icon(Icons.share),
                     onPressed: () {
                       Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
+                      // Wiredash.of(context).show();
                     });
               }
             ),
