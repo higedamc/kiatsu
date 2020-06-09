@@ -58,6 +58,12 @@ class _MyAppState extends State<MyApp> {
   //   print("どうよ？");
   // }
 
+  /**
+   * Get Weather
+   * ! This is a test purpose only comment using Better Comments
+   * ? Question version
+   * TODO: ToDo version
+   */
   Future<WeatherClass> getWeather() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
