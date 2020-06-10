@@ -24,6 +24,7 @@ class WeatherClass {
   String name;
   int cod;
 
+
   WeatherClass({
     this.coord,
     this.weather,
@@ -38,6 +39,7 @@ class WeatherClass {
     this.id,
     this.name,
     this.cod,
+    String pressure,
   });
 
   factory WeatherClass.fromJson(Map<String, dynamic> json) => WeatherClass(
@@ -72,6 +74,12 @@ class WeatherClass {
         "name": name,
         "cod": cod,
       };
+
+  factory WeatherClass.empty() {
+    return WeatherClass(
+      pressure: "",
+    );
+  }
 }
 
 class Clouds {
