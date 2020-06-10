@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
+import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
 import 'package:wiredash/wiredash.dart';
 import 'const/constant.dart' as Constant;
@@ -22,9 +23,9 @@ class _MyAppState extends State<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   // WeatherClass weather = WeatherClass.empty();
   String a = Constant.key;
+
   String b = Constant.projectId;
   String c = Constant.secret;
-
   // SetState使わない実装方法
   // final StreamController<String> _streamController = StreamController();
   Future<WeatherClass> weather;
@@ -33,6 +34,9 @@ class _MyAppState extends State<MyApp> {
 //  Weather w2;
   // static const String _res = 'にゃーん';
   static const String _res2 = "ちんちん";
+
+
+  
 
   // WeatherStation ws;
   //  WeatherStation ws;
@@ -45,6 +49,8 @@ class _MyAppState extends State<MyApp> {
 //    ws = new WeatherStation(key);
 //    initPlatformState();
   }
+
+  get value => null;
 
   // Future _onRefresher() async {
   //   _getchuWeather();
@@ -111,6 +117,12 @@ class _MyAppState extends State<MyApp> {
       });
     }
 
+    // _showWiredash() {
+    //   setState(() {
+    //     Wiredash.of(context).show();
+    //   });
+    // }
+
   // Platform messages are asynchronous, so we initialize in an async method.
 //  Future<void> initPlatformState() async {
 //    queryWeather();
@@ -132,6 +144,11 @@ class _MyAppState extends State<MyApp> {
       secret: c,
       navigatorKey: _navigatorKey,
       child: MaterialApp(
+        navigatorKey: _navigatorKey,
+          // initialRoute: '/a',
+          routes: {
+            // '/a': (BuildContext context) => SettingPage(),
+          },
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             appBar: GradientAppBar(
@@ -147,7 +164,9 @@ class _MyAppState extends State<MyApp> {
               actions: <Widget>[
                 // sns share button
                 // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
-                // IconButton(icon: const Icon(Icons.share), onPressed: () {})
+                IconButton(icon: const Icon(Icons.settings), onPressed: () {
+                  // _showWiredash();
+                })
               ],
             ),
             body: FutureBuilder<WeatherClass>(
