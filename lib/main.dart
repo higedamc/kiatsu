@@ -44,16 +44,10 @@ class _MyAppState extends State<MyApp> {
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  // WeatherStation ws;
-  //  WeatherStation ws;
-//  int res_p = 0;
-
   @override
   void initState() {
     super.initState();
     weather = getWeather();
-//    ws = new WeatherStation(key);
-//    initPlatformState();
   }
 
   get value => null;
@@ -128,20 +122,6 @@ class _MyAppState extends State<MyApp> {
     //   });
     // }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-//  Future<void> initPlatformState() async {
-//    queryWeather();
-////    queryBarometer();
-//  }
-  /*
-  Future<void> _onRefresh() async {
-    print('future');
-    queryWeather();
-    queryBarometer();
-    queryForecast();
-  }
-   */
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -163,8 +143,6 @@ class _MyAppState extends State<MyApp> {
               "THE KIATSU",
             ),
             actions: <Widget>[
-              // sns share button
-              // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
               /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
               Builder(
                 builder: (context) => IconButton(icon: const Icon(Icons.settings), onPressed: () {
@@ -292,6 +270,8 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Colors.pinkAccent,
                   child: Icon(Icons.share),
                   onPressed: () {
+                    // sns share button
+                    // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                     Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
                     // Wiredash.of(context).show();
                   });
