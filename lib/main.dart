@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:http/http.dart' as http;
-import 'package:kiatsu/weather_model.dart';
+import 'package:kiatsu/model/weather_model.dart';
 import 'package:share/share.dart';
 import 'package:wiredash/wiredash.dart';
-// import 'package:share/share.dart';
 import 'const/constant.dart' as Constant;
 
 void main() => runApp(MyApp());
