@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -14,7 +15,7 @@ class _SettingPageState extends State<SettingPage> {
     return SettingsList(
         sections: [
           SettingsSection(
-            title: 'セクション',
+            title: '一般',
             tiles: [
               SettingsTile(
                 title: '言語',
@@ -28,6 +29,20 @@ class _SettingPageState extends State<SettingPage> {
               //   switchValue: value,
               //   onToggle: (bool value) {},
               // ),
+            ],
+          ),
+          SettingsSection(
+            title: 'デバッグ用',
+            tiles: [
+              SettingsTile(
+                title:
+                 'クラッシュ',
+                 subtitle: '押',
+                 leading: Icon(Icons.bug_report),
+                 onTap: () {
+                   Crashlytics.instance.crash();
+                   print('クラッシュさせました＾ｑ＾');
+                 })
             ],
           ),
         ],

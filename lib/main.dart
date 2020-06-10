@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,7 +12,17 @@ import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
 import 'const/constant.dart' as Constant;
 
-void main() => runApp(MyApp());
+void main() {
+  // デバッグ中もクラッシュ情報収集できる
+  Crashlytics.instance.enableInDevMode = true;
+  // 以下 6 行 Firebase Crashlytics用のおまじない
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
+  runZonedGuarded(() async {
+      runApp(MyApp(
+          ));
+    }, (e, s) => Crashlytics.instance.recordError(e, s));
+  }
 
 class MyApp extends StatefulWidget {
   @override
@@ -19,20 +30,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // WeatherClass weather = WeatherClass.empty();
+  // API Key呼び出し
   String a = Constant.key;
 
-  String b = Constant.projectId;
-  String c = Constant.secret;
-  // SetState使わない実装方法
-  // final StreamController<String> _streamController = StreamController();
+  // 以下 2 つ Wiredash 用のストリング
+  // String b = Constant.projectId;
+  // String c = Constant.secret;
+  
   Future<WeatherClass> weather;
 
 
-//  Weather w2;
-  // static const String _res = 'にゃーん';
   static const String _res2 = "ちんちん";
-
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -59,7 +67,6 @@ class _MyAppState extends State<MyApp> {
    * Get Weather
    * ! This is a test purpose only comment using Better Comments
    * ? Question version
-   * TODO: ToDo version
    */
   Future<WeatherClass> getWeather() async {
     Position position = await Geolocator()
