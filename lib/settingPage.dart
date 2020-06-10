@@ -8,18 +8,17 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  // get value => null;
 
   @override
   Widget build (BuildContext context) {
-    SettingsList(
+    return SettingsList(
         sections: [
           SettingsSection(
-            title: 'Section',
+            title: 'セクション',
             tiles: [
               SettingsTile(
-                title: 'Language',
-                subtitle: 'English',
+                title: '言語',
+                subtitle: '日本語',
                 leading: Icon(Icons.language),
                 onTap: () {},
               ),
