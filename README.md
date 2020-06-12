@@ -5,7 +5,8 @@ An application for meteoropathy.
 
 # 今後実装する機能
 
-- [] 
+- [ ] 気圧に合わせて動的なコメントをシェアする機能。
+- [ ] アカウント登録機能。
 
 ## Getting Started
 
