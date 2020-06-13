@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
+import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
 
 void main() {
@@ -30,14 +31,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
+  // API Key呼び出し
+  static const String a = Constant.key;
+  Weather w;
+  WeatherStation ws = new WeatherStation(a);
   DateTime updated_at = new DateTime.now();
   // _MyAppState({this.remoteConfig});
 
   // final RemoteConfig remoteConfig;
 
-  // API Key呼び出し
-  String a = Constant.key;
+  
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
@@ -46,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   Future<WeatherClass> weather;
 
 
-  static const String _res2 = "＾ｑ＾";
+  String _res2 = '';
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -102,12 +105,18 @@ class _MyAppState extends State<MyApp> {
   //   return WeatherClass.fromJson(json.decode(response.body));
   // }
 
-//  void queryForecast() async {
-//    List<Weather> f = await ws.fiveDayForecast();
-//    setState(() {
-//      _res = f.toString();
-//    });
-//  }
+  // Future で 5日分の天気取得
+ Future<void> queryForecast() async {
+   // 位置情報取得
+  Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+        // Weather クラスに 5日分の天気情報格納
+   List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
+   setState(() {
+     // "_res2" の Text を List "f" にぶっこむ
+     _res2 = f.toString();
+   });
+ }
 
 //  void queryWeather() async {
 ////    Weather w = await ws.currentWeather(latitude, longitude);
@@ -143,6 +152,8 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         weather = getWeather();
         updated_at = new DateTime.now();
+        // 引っ張ったときに天気取得する
+        queryForecast();
       });
     }
 
@@ -262,7 +273,8 @@ class _MyAppState extends State<MyApp> {
                             height: 24.0,
                           ),
                           Center(
-                            child: const Text(_res2,
+                            // 5日分の天気データ
+                            child: Text(_res2,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w100)),
@@ -276,8 +288,8 @@ class _MyAppState extends State<MyApp> {
                             ),
                           ),
                           Center(
-                            child: const Text(
-                              'にゃーん',
+                            child: Text(
+                              _res2,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),
