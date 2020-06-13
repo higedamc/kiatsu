@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
+import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
 
 void main() {
@@ -23,7 +25,6 @@ void main() {
           ));
     }, (e, s) => Crashlytics.instance.recordError(e, s));
   }
-
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -31,7 +32,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // API Key呼び出し
-  String a = Constant.key;
+  static const String a = Constant.key;
+  Weather w;
+  WeatherStation ws = new WeatherStation(a);
+  DateTime updated_at = new DateTime.now();
+  // _MyAppState({this.remoteConfig});
+
+  // final RemoteConfig remoteConfig;
+
+  
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
@@ -40,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   Future<WeatherClass> weather;
 
 
-  static const String _res2 = "ちんちん";
+  String _res2 = '';
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -74,12 +83,40 @@ class _MyAppState extends State<MyApp> {
     return WeatherClass.fromJson(json.decode(response.body));
   }
 
-//  void queryForecast() async {
-//    List<Weather> f = await ws.fiveDayForecast();
-//    setState(() {
-//      _res = f.toString();
-//    });
-//  }
+  // Future _remoteConfig() async {
+  //   RemoteConfig remoteConfig = await RemoteConfig.instance;
+  //   await remoteConfig.fetch(expiration: const Duration(minutes: 60));
+  //   await remoteConfig.activateFetched();
+  //   String secret = remoteConfig.getString('weather_api_key');
+  //   return secret;
+  // }
+
+  // RemoteConfig用のgetWeather
+  // Future<WeatherClass> getWeather() async {
+  //   var result = remoteConfig.getString('weather_api_key');
+  //   Position position = await Geolocator()
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+  //   String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
+  //       position.latitude.toString() +
+  //       '&lon=' +
+  //       position.longitude.toString() +
+  //       '&APPID=$result';
+  //   final response = await http.get(url);
+  //   return WeatherClass.fromJson(json.decode(response.body));
+  // }
+
+  // Future で 5日分の天気取得
+ Future<void> queryForecast() async {
+   // 位置情報取得
+  Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+        // Weather クラスに 5日分の天気情報格納
+   List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
+   setState(() {
+     // "_res2" の Text を List "f" にぶっこむ
+     _res2 = f.toString();
+   });
+ }
 
 //  void queryWeather() async {
 ////    Weather w = await ws.currentWeather(latitude, longitude);
@@ -110,9 +147,13 @@ class _MyAppState extends State<MyApp> {
   //   });
 
   // }
-    _refresher() async {
+    // ListView 更新
+    Future<void> _refresher() async {
       setState(() {
         weather = getWeather();
+        updated_at = new DateTime.now();
+        // 引っ張ったときに天気取得する
+        queryForecast();
       });
     }
 
@@ -154,12 +195,11 @@ class _MyAppState extends State<MyApp> {
           body: FutureBuilder<WeatherClass>(
               future: getWeather(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return Center(
-                      child: Center(
-                        child: Text('読み込み中...'),
-                      ));
-                }
+                // if (snapshot.connectionState != ConnectionState.done) {
+                //   return Center(
+                //     child: Text('読み込み中...'),
+                //   );
+                // }
                 if (snapshot.hasError) print(snapshot.error);
                 if (snapshot.hasData) {
                   return Container(
@@ -179,6 +219,7 @@ class _MyAppState extends State<MyApp> {
                         return _refresher();
                       },
                       child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         children: <Widget>[
                           Center(
                             child: Container(
@@ -232,22 +273,23 @@ class _MyAppState extends State<MyApp> {
                             height: 24.0,
                           ),
                           Center(
-                            child: const Text(_res2,
+                            // 5日分の天気データ
+                            child: Text(_res2,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w100)),
                           ),
                           Center(
                             child: Text(
-                              '＾ｑ＾',
+                              "Updated at - " + updated_at.toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),
                             ),
                           ),
                           Center(
-                            child: const Text(
-                              'にゃーん',
+                            child: Text(
+                              _res2,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),
@@ -259,7 +301,7 @@ class _MyAppState extends State<MyApp> {
                   );
                 } else {
                   return Center(
-                    child: Text('データが存在しません'),
+                    child: const Text('データが存在しません'),
                   );
                 }
               }),
@@ -280,3 +322,17 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 }
+
+// Future<RemoteConfig> setupRemoteConfig() async {
+//   // Yes not very useful in this case
+//   final Future<RemoteConfig> _fakeRemoteConfig = RemoteConfig.instance;
+//   final RemoteConfig remoteConfig = await RemoteConfig.instance;
+//   // Enable developer mode to relax fetch throttling
+//   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
+//   remoteConfig.setDefaults(<String, dynamic>{
+//     'weather_api_key': 'apiKey',
+//   });
+//   return remoteConfig;
+// }
+
+
