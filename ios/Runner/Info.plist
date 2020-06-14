@@ -26,6 +26,8 @@
 	<string>This app uses location to forecast the weather.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses location to forecast the weather.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location is required for this app</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

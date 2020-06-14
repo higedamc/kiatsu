@@ -104,17 +104,17 @@ class _MyAppState extends State<MyApp> {
   // }
 
   // Future で 5日分の天気取得
- Future<void> queryForecast() async {
-   // 位置情報取得
-  Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-        // Weather クラスに 5日分の天気情報格納
-   List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
-   setState(() {
-     // "_res2" の Text を List "f" にぶっこむ
-     _res2 = f.toString();
-   });
- }
+//  Future<void> queryForecast() async {
+//    // 位置情報取得
+//   Position position = await Geolocator()
+//         .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+//         // Weather クラスに 5日分の天気情報格納
+//    List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
+//    setState(() {
+//      // "_res2" の Text を List "f" にぶっこむ
+//      _res2 = f.toString();
+//    });
+//  }
 
 //  void queryWeather() async {
 ////    Weather w = await ws.currentWeather(latitude, longitude);
