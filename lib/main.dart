@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,10 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
-import 'package:local_auth/local_auth.dart';
 
 void main() {
   // デバッグ中もクラッシュ情報収集できる
@@ -37,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   static const String a = Constant.key;
   Weather w;
   WeatherStation ws = new WeatherStation(a);
-  DateTime updated_at = new DateTime.now();
+  DateTime updatedAt = new DateTime.now();
   // _MyAppState({this.remoteConfig});
 
   // final RemoteConfig remoteConfig;
@@ -151,7 +148,7 @@ class _MyAppState extends State<MyApp> {
     Future<void> _refresher() async {
       setState(() {
         weather = getWeather();
-        updated_at = new DateTime.now();
+        updatedAt = new DateTime.now();
         // 引っ張ったときに天気取得する
         queryForecast();
       });
@@ -281,7 +278,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           Center(
                             child: Text(
-                              "Updated at - " + updated_at.toString(),
+                              "Updated at - " + updatedAt.toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),
