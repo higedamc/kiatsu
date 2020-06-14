@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,6 +12,7 @@ import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
 import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() {
   // デバッグ中もクラッシュ情報収集できる
@@ -35,12 +35,10 @@ class _MyAppState extends State<MyApp> {
   static const String a = Constant.key;
   Weather w;
   WeatherStation ws = new WeatherStation(a);
-  DateTime updated_at = new DateTime.now();
+  DateTime updatedAt = new DateTime.now();
   // _MyAppState({this.remoteConfig});
 
   // final RemoteConfig remoteConfig;
-
-  
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
@@ -106,17 +104,17 @@ class _MyAppState extends State<MyApp> {
   // }
 
   // Future で 5日分の天気取得
- Future<void> queryForecast() async {
-   // 位置情報取得
-  Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-        // Weather クラスに 5日分の天気情報格納
-   List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
-   setState(() {
-     // "_res2" の Text を List "f" にぶっこむ
-     _res2 = f.toString();
-   });
- }
+//  Future<void> queryForecast() async {
+//    // 位置情報取得
+//   Position position = await Geolocator()
+//         .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+//         // Weather クラスに 5日分の天気情報格納
+//    List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
+//    setState(() {
+//      // "_res2" の Text を List "f" にぶっこむ
+//      _res2 = f.toString();
+//    });
+//  }
 
 //  void queryWeather() async {
 ////    Weather w = await ws.currentWeather(latitude, longitude);
@@ -151,9 +149,10 @@ class _MyAppState extends State<MyApp> {
     Future<void> _refresher() async {
       setState(() {
         weather = getWeather();
-        updated_at = new DateTime.now();
-        // 引っ張ったときに天気取得する
-        queryForecast();
+        
+        updatedAt = new DateTime.now();
+        // 引っ張ったときに5日分の天気データ取得する
+        // queryForecast();
       });
     }
 
@@ -281,7 +280,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           Center(
                             child: Text(
-                              "Updated at - " + updated_at.toString(),
+                              "Updated at - " + timeago.format(updatedAt).toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),
@@ -314,7 +313,7 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     // sns share button
                     // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
-                    Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
+                    Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
                     // Wiredash.of(context).show();
                   });
             }
