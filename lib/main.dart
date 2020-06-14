@@ -12,6 +12,7 @@ import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
 import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() {
   // デバッグ中もクラッシュ情報収集できる
@@ -148,9 +149,10 @@ class _MyAppState extends State<MyApp> {
     Future<void> _refresher() async {
       setState(() {
         weather = getWeather();
+        
         updatedAt = new DateTime.now();
-        // 引っ張ったときに天気取得する
-        queryForecast();
+        // 引っ張ったときに5日分の天気データ取得する
+        // queryForecast();
       });
     }
 
@@ -278,7 +280,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           Center(
                             child: Text(
-                              "Updated at - " + updatedAt.toString(),
+                              "Updated at - " + timeago.format(updatedAt).toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),

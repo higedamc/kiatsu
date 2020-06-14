@@ -35,6 +35,7 @@ dependencies:
   flare_flutter: ^2.0.3
   tutorial_coach_mark: ^0.3.0
   local_auth: ^0.6.2+3
+  timeago: ^2.0.26
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
