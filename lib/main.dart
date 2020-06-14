@@ -313,7 +313,7 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     // sns share button
                     // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
-                    Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️');
+                    Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
                     // Wiredash.of(context).show();
                   });
             }
