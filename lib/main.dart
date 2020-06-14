@@ -14,6 +14,7 @@ import 'package:share/share.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
+import 'package:local_auth/local_auth.dart';
 
 void main() {
   // デバッグ中もクラッシュ情報収集できる
@@ -40,7 +41,6 @@ class _MyAppState extends State<MyApp> {
   // _MyAppState({this.remoteConfig});
 
   // final RemoteConfig remoteConfig;
-  
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
