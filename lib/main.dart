@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/settingPage.dart';
 import 'package:share/share.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
 
@@ -39,7 +40,6 @@ class _MyAppState extends State<MyApp> {
   // _MyAppState({this.remoteConfig});
 
   // final RemoteConfig remoteConfig;
-
   
 
   // 以下 2 つ Wiredash 用のストリング
