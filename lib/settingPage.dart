@@ -9,10 +9,12 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build (BuildContext context) {
     return SettingsList(
+      key: _scaffoldKey,
         sections: [
           SettingsSection(
             title: '一般',
@@ -39,9 +41,17 @@ class _SettingPageState extends State<SettingPage> {
                  'クラッシュ',
                  subtitle: '押',
                  leading: Icon(Icons.bug_report),
-                 onTap: () {
+                 onTap: () async {
                    Crashlytics.instance.crash();
                    print('クラッシュさせました＾ｑ＾');
+                   _scaffoldKey.currentState.showSnackBar(
+                     SnackBar(
+                       content: const Text('クラッシュボタンを押しました＾ｑ＾'),
+                       duration: const Duration(seconds: 5),
+                       action: SnackBarAction(
+                         label: '押した',
+                          onPressed: (){}),)
+                   );
                  })
             ],
           ),

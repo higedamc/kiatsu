@@ -31,6 +31,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   // API Key呼び出し
   static const String a = Constant.key;
   Weather w;
@@ -186,7 +188,7 @@ class _MyAppState extends State<MyApp> {
               /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
               Builder(
                 builder: (context) => IconButton(icon: const Icon(Icons.settings), onPressed: () {
-                  Navigator.of(context).pushNamed('/a');
+                  Navigator.of(context).pushNamed( '/a');
                 }),
               )
             ],
@@ -280,7 +282,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           Center(
                             child: Text(
-                              "Updated at - " + timeago.format(updatedAt).toString(),
+                              "最終更新 - " + timeago.format(updatedAt).toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100),
