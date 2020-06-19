@@ -31,13 +31,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   // API Key呼び出し
   static const String a = Constant.key;
-  Weather w;
-  WeatherStation ws = new WeatherStation(a);
+
+  static String fine = '元気すぎわろた＾ｑ＾';
+  static String pien = '低気圧つらすぎぴえん🥺';
+
+  List<String> items = [pien, fine];
   DateTime updatedAt = new DateTime.now();
+  Weather w;
   // _MyAppState({this.remoteConfig});
 
   // final RemoteConfig remoteConfig;
@@ -48,10 +50,10 @@ class _MyAppState extends State<MyApp> {
   
   Future<WeatherClass> weather;
 
-
-  String _res2 = '';
+  WeatherStation ws = new WeatherStation(a);
 
   final _navigatorKey = GlobalKey<NavigatorState>();
+  String _res2 = '';
 
   @override
   void initState() {
@@ -106,17 +108,17 @@ class _MyAppState extends State<MyApp> {
   // }
 
   // Future で 5日分の天気取得
-//  Future<void> queryForecast() async {
-//    // 位置情報取得
-//   Position position = await Geolocator()
-//         .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-//         // Weather クラスに 5日分の天気情報格納
-//    List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
-//    setState(() {
-//      // "_res2" の Text を List "f" にぶっこむ
-//      _res2 = f.toString();
-//    });
-//  }
+ Future<void> queryForecast() async {
+   // 位置情報取得
+  Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+        // Weather クラスに 5日分の天気情報格納
+   List<Weather> f = await ws.fiveDayForecast(position.latitude.toDouble(), position.longitude.toDouble());
+   setState(() {
+     // "_res2" の Text を List "f" にぶっこむ
+     _res2 = f.toString();
+   });
+ }
 
 //  void queryWeather() async {
 ////    Weather w = await ws.currentWeather(latitude, longitude);
@@ -157,6 +159,12 @@ class _MyAppState extends State<MyApp> {
         // queryForecast();
       });
     }
+    // Future _showPieng() async {
+    //   setState(() {
+    //     var result = getWeather();
+
+    //   });
+    // }
 
     // _showWiredash() {
     //   setState(() {
@@ -262,13 +270,20 @@ class _MyAppState extends State<MyApp> {
                           ),
                           SizedBox(height: 60.0),
                           Center(
-                            child: const Text(
-                              '---weather status---',
+
+
+                            child:
+                            snapshot.data.main.pressure < 1000 ? 
+                            Text('今日は地獄です',
+
+
+
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w100,
                                   fontSize: 18.0),
-                            ),
+                            )
+                            : Center(child: Text('今日は天国です')),
                           ),
                           SizedBox(
                             height: 24.0,
