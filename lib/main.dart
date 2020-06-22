@@ -307,13 +307,13 @@ class _MyAppState extends State<MyApp> {
 
 
                             child:
-                            snapshot.data.main.pressure < 1000 ? 
+                            snapshot.data.main.pressure < 1008 ? 
                             Text('今日は地獄です',
 
 
 
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.redAccent,
                                   fontWeight: FontWeight.w100,
                                   fontSize: 18.0),
                             )
