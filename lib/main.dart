@@ -247,26 +247,60 @@ class _MyAppState extends State<MyApp> {
                             height: 24.0,
                           ),
                           Center(
-                            child: Text(
-                              snapshot.data.main.pressure.toString() + ' hPa',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w100,
-                                  fontSize: 99.0),
+                            child: Container(
+                              // color: Colors.amber,
+                              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                              height: 220,
+                              width: double.maxFinite,
+                              child: Card(
+                                color: Colors.transparent,
+                                elevation: 5,
+                                child: Text(
+                                  snapshot.data.main.pressure.toString() + ' hPa',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w100,
+                                      fontSize: 70.0),
+                                ),
+                              ),
                             ),
                           ),
                           Container(
-                            height: 10,
-                            alignment: Alignment.centerRight,
+                            height: 100,
+                            alignment: Alignment.center,
+                            child: Text('test'),
+                          ),
+                          Container(
+                            // constraints: BoxConstraints.expand(),
+                            height: 100,
+                            // width: 50,
+                            alignment: Alignment.center,
                             child:
-                              Image.network(
-                                'http://openweathermap.org/img/wn/' + 
-                                snapshot.data.weather[0].icon + 
-                                '.png',
-                                // height: 200,
-                                // width: 150,
-                                // fit: BoxFit.fitHeight,
-                                ),
+                            snapshot.data.weather[0].main == 'clouds' ?
+                            Text('Cloudy',
+                            style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 70.0),)
+                            : snapshot.data.weather[0].main.toString() == 'Clear Sky' ?
+                            Text('Sunny',
+                            style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 70.0),)
+                            : snapshot.data.weather[0].main.toString() == 'Rain' ?
+                            Text('Rainy',
+                            style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 70.0),)
+                            
+                             : Text(snapshot.data.weather[0].main.toString(),
+                             style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 30,
+                                  ),),
                           ),
                           SizedBox(height: 60.0),
                           Center(
@@ -283,7 +317,9 @@ class _MyAppState extends State<MyApp> {
                                   fontWeight: FontWeight.w100,
                                   fontSize: 18.0),
                             )
-                            : Center(child: Text('今日は天国です')),
+                            : Center(child: Text('今日は天国です',style: TextStyle(
+                              color: Colors.yellow,
+                            ),)),
                           ),
                           SizedBox(
                             height: 24.0,
