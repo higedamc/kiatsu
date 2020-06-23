@@ -17,13 +17,15 @@ class _SettingPageState extends State<SettingPage> {
       key: _scaffoldKey,
         sections: [
           SettingsSection(
-            title: '一般',
+            title: 'デバッグ用',
             tiles: [
               SettingsTile(
-                title: '言語',
-                subtitle: '日本語',
+                title: '強制クラッシュ',
+                subtitle: '押',
                 leading: Icon(Icons.language),
-                onTap: () {},
+                onTap: () {
+                  Crashlytics.instance.crash();
+                },
               ),
               // SettingsTile.switchTile(
               //   title: 'Use fingerprint',
@@ -42,7 +44,11 @@ class _SettingPageState extends State<SettingPage> {
                  subtitle: '押',
                  leading: Icon(Icons.bug_report),
                  onTap: () async {
-                   Crashlytics.instance.crash();
+                   try{
+                              throw 'error example';
+                            } catch (e, s) {
+                              Crashlytics.instance.recordError(e, s, context: '＾ｑ＾');
+                            }
                    print('クラッシュさせました＾ｑ＾');
                    _scaffoldKey.currentState.showSnackBar(
                      SnackBar(
@@ -50,7 +56,9 @@ class _SettingPageState extends State<SettingPage> {
                        duration: const Duration(seconds: 5),
                        action: SnackBarAction(
                          label: '押した',
-                          onPressed: (){}),)
+                          onPressed: (){
+                            
+                          }),)
                    );
                  })
             ],

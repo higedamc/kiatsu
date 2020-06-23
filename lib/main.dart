@@ -23,7 +23,7 @@ void main() {
   runZonedGuarded(() async {
       runApp(MyApp(
           ));
-    }, (e, s) => Crashlytics.instance.recordError(e, s));
+    }, (e, s) async => await Crashlytics.instance.recordError(e, s));
   }
 class MyApp extends StatefulWidget {
   @override
