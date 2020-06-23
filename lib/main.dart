@@ -307,17 +307,27 @@ class _MyAppState extends State<MyApp> {
 
 
                             child:
-                            snapshot.data.main.pressure < 1008 ? 
-                            Text('今日は地獄です',
+                            snapshot.data.main.pressure < 1010 ? 
+                            Text('今日はちょっと注意しましょう',
 
 
 
                               style: TextStyle(
-                                  color: Colors.redAccent,
+                                  color: Colors.yellow[900],
                                   fontWeight: FontWeight.w100,
                                   fontSize: 18.0),
                             )
-                            : Center(child: Text('今日は天国です',style: TextStyle(
+                            : snapshot.data.main.pressure < 1008 ?
+                            Text('さぁ地獄のはじまりです＾ｑ＾',
+                            style: TextStyle(
+                              color: Colors.red[400],
+                            ),)
+                            : snapshot.data.main.pressure < 1000 ?
+                            Text("YOU'RE DEAD",
+                            style: TextStyle(
+                              color: Colors.redAccent[700],
+                            ),)
+                            : Center(child: Text('今日は天国です🌟🌟',style: TextStyle(
                               color: Colors.yellow,
                             ),)),
                           ),
@@ -374,17 +384,4 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 }
-
-// Future<RemoteConfig> setupRemoteConfig() async {
-//   // Yes not very useful in this case
-//   final Future<RemoteConfig> _fakeRemoteConfig = RemoteConfig.instance;
-//   final RemoteConfig remoteConfig = await RemoteConfig.instance;
-//   // Enable developer mode to relax fetch throttling
-//   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
-//   remoteConfig.setDefaults(<String, dynamic>{
-//     'weather_api_key': 'apiKey',
-//   });
-//   return remoteConfig;
-// }
-
 
