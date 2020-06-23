@@ -8,7 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
-import 'package:kiatsu/settingPage.dart';
+import 'package:kiatsu/setting_page.dart';
 import 'package:share/share.dart';
 import 'package:weather/weather_library.dart';
 import 'const/constant.dart' as Constant;
