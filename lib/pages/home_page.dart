@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:kiatsu/model/weather_model.dart';
@@ -64,7 +65,7 @@ Future<void> queryForecast() async {
 
 Future<WeatherClass> getWeather() async {
     Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
         position.latitude.toString() +
         '&lon=' +
@@ -78,20 +79,25 @@ Future<WeatherClass> getWeather() async {
   Widget build(BuildContext context) {
 
     return Scaffold(
-          appBar: GradientAppBar(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [const Color(0xFFc423ba), const Color(0xFF00d5bf)],
-                tileMode: TileMode.repeated),
+          appBar: NeumorphicAppBar(
+            // elevation: 0.0,
+            // Gradient化
+            // gradient: LinearGradient(
+            //     begin: Alignment.topLeft,
+            //     end: Alignment.bottomRight,
+            //     colors: [const Color(0xFFb43a8b), const Color(0xFFfc45bf)],
+            //     tileMode: TileMode.repeated),
             centerTitle: true,
             title: const Text(
-              "THE KIATSU",
+              "",
             ),
             actions: <Widget>[
               /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
               Builder(
-                builder: (context) => IconButton(icon: const Icon(Icons.settings), onPressed: () {
+                builder: (context) => IconButton(
+                  icon: NeumorphicIcon(
+                    Icons.settings,
+                    size: 45,), onPressed: () {
                   Navigator.of(context).pushNamed( '/a');
                 }),
               )
@@ -108,18 +114,20 @@ Future<WeatherClass> getWeather() async {
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData) {
               return Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          const Color(0xFFc423ba),
-                          const Color(0xFF00d5bf)
-                        ],
-                        tileMode: TileMode.repeated)),
+                // Gradiention化
+                // decoration: BoxDecoration(
+                //     gradient: LinearGradient(
+                //         begin: Alignment.topLeft,
+                //         end: Alignment.bottomRight,
+                //         colors: [
+                //           const Color(0xFFb43a8b),
+                //           const Color(0xFFfc45bf)
+                //         ],
+                //         tileMode: TileMode.repeated)),
                 // color: Colors.black,
                 key: GlobalKey(),
                 child: RefreshIndicator(
+                  color: Colors.black,
                   onRefresh: () {
                     return _refresher();
                   },
@@ -127,81 +135,108 @@ Future<WeatherClass> getWeather() async {
                   child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     children: <Widget>[
-                      Container(
-                        child: Center(
-                          child: Container(
-                            padding: EdgeInsets.all(10.0),
-                            margin: EdgeInsets.all(10.0),
-                            child: const Text(
-                              '---pressure status---',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w100,
-                                  fontSize: 18.0),
+                      // Container(
+                      //   child: Center(
+                      //     child: Container(
+                      //       padding: EdgeInsets.all(10.0),
+                      //       margin: EdgeInsets.all(10.0),
+                      //       child: Text(
+                      //         snapshot.,
+                      //         style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontWeight: FontWeight.w100,
+                      //             fontSize: 18.0),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 24.0,
+                      // ),
+                      Center(
+                        child: Container(
+                          // color: Colors.amber,
+                          // padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          height: 85,
+                          width: double.maxFinite,
+                          child: Center(
+                            child: NeumorphicText(
+                              snapshot.data.main.pressure.toString(),
+                              style: NeumorphicStyle(
+                                depth: 20,
+                                intensity: 1,
+                                color: Colors.black,
+                              ),
+                               textStyle: NeumorphicTextStyle(
+                                  // color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 75.0),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 24.0,
                       ),
                       Center(
                         child: Container(
                           // color: Colors.amber,
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          height: 220,
+                          // padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          height: 70,
                           width: double.maxFinite,
-                          child: Card(
-                            color: Colors.transparent,
-                            elevation: 5,
-                            child: Text(
-                              snapshot.data.main.pressure.toString() + ' hPa',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w100,
-                                  fontSize: 70.0),
+                          child: Center(
+                            child: NeumorphicText(
+                              'hPa',
+                              style: NeumorphicStyle(
+                                depth: 20,
+                                intensity: 1,
+                                  color: Colors.black,),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 75.0
+                                  ),
+                                  
+                                  
                             ),
                           ),
                         ),
                       ),
-                      Container(
-                        height: 100,
-                        alignment: Alignment.center,
-                        child: Text('test'),
-                      ),
+                      // Container(
+                      //   height: 100,
+                      //   alignment: Alignment.center,
+                      //   child: Text('test'),
+                      // ),
+                      SizedBox(height: 1.0),
                       Container(
                         // constraints: BoxConstraints.expand(),
-                        height: 100,
+                        height: 140,
                         // width: 50,
                         alignment: Alignment.center,
                         child:
                         snapshot.data.weather[0].main == 'clouds' ?
                         Text('Cloudy',
                         style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w100,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w200,
                               fontSize: 70.0),)
                         : snapshot.data.weather[0].main.toString() == 'Clear Sky' ?
                         Text('Sunny',
                         style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.w100,
                               fontSize: 70.0),)
                         : snapshot.data.weather[0].main.toString() == 'Rain' ?
                         Text('Rainy',
                         style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.w100,
                               fontSize: 70.0),)
                         
                          : Text(snapshot.data.weather[0].main.toString(),
                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w100,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w200,
                               fontSize: 30,
                               ),),
                       ),
-                      SizedBox(height: 60.0),
+                      SizedBox(height: 56.0),
                       Center(
 
 
@@ -213,21 +248,24 @@ Future<WeatherClass> getWeather() async {
 
                           style: TextStyle(
                               color: Colors.yellow[900],
+                              fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w100,
                               fontSize: 18.0),
                         )
                         : snapshot.data.main.pressure < 1008 ?
                         Text('さぁ地獄のはじまりです＾ｑ＾',
                         style: TextStyle(
-                          color: Colors.red[400],
+                          color: Colors.black,
                         ),)
                         : snapshot.data.main.pressure < 1000 ?
                         Text("YOU'RE DEAD",
                         style: TextStyle(
-                          color: Colors.redAccent[700],
+                          color: Colors.black,
                         ),)
-                        : Center(child: Text('今日は天国です🌟🌟',style: TextStyle(
-                          color: Colors.yellow,
+                        : Center(child: Text('KAITEKI',
+                        style: TextStyle(
+                          fontSize: 28.5,
+                          color: Colors.black,
                         ),)),
                       ),
                       SizedBox(
@@ -242,10 +280,11 @@ Future<WeatherClass> getWeather() async {
                       ),
                       Center(
                         child: Text(
-                          "最終更新 - " + timeago.format(updatedAt).toString(),
+                          "Last Update - " + timeago.format(updatedAt).toString(),
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w100),
+                              height: 10,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400),
                         ),
                       ),
                       Center(
@@ -269,12 +308,15 @@ Future<WeatherClass> getWeather() async {
                 
             }
           }),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FutureBuilder<WeatherClass>(
             future: getWeather(),
             builder: (context, snapshot) {
               return FloatingActionButton(
-                  backgroundColor: Colors.pinkAccent,
-                  child: Icon(Icons.share),
+                  backgroundColor: Colors.white,
+                  child: NeumorphicIcon(
+                    Icons.share,
+                    ),
                   onPressed: () {
                     // sns share button
                     // https://qiita.com/shimopata/items/142b39bab6176b6a5da9

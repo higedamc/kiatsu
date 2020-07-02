@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 
@@ -142,8 +143,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return NeumorphicApp(
       navigatorKey: _navigatorKey,
+      themeMode: ThemeMode.light,
+      theme: NeumorphicThemeData(
+        baseColor: Color(0xFFFFFFFF),
+        lightSource: LightSource.topLeft,
+        depth: 20,
+        intensity: 1,
+      ),
         // initialRoute: '/a',
         routes: {
           '/a': (BuildContext context) => SettingPage(),
