@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
@@ -243,7 +242,7 @@ Future<WeatherClass> getWeather() async {
 
                         child:
                         snapshot.data.main.pressure < 1010 ? 
-                        Text('今日はちょっと注意しましょう',
+                        Text('CHOI-YABAME',
 
 
 
@@ -254,12 +253,12 @@ Future<WeatherClass> getWeather() async {
                               fontSize: 18.0),
                         )
                         : snapshot.data.main.pressure < 1008 ?
-                        Text('さぁ地獄のはじまりです＾ｑ＾',
+                        Text('MURIGE',
                         style: TextStyle(
                           color: Colors.black,
                         ),)
                         : snapshot.data.main.pressure < 1000 ?
-                        Text("YOU'RE DEAD",
+                        Text("SHIBOU",
                         style: TextStyle(
                           color: Colors.black,
                         ),)
@@ -303,7 +302,7 @@ Future<WeatherClass> getWeather() async {
             } else {
               return Container(
                 child: Center(
-                  child: Text('データがありません'),
+                  child: Text('NO DATA'),
                 ),
               );
                 

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
+import 'package:kiatsu/services/authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -14,20 +16,27 @@ void main() {
   Crashlytics.instance.enableInDevMode = true;
   // 以下 6 行 Firebase Crashlytics用のおまじない
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
-  // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
-  runZonedGuarded(() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.getInstance().then((prefs) {
+    // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
+    runZonedGuarded(() async {
       runApp(MyApp(
+        prefs: prefs
           ));
     }, (e, s) async => await Crashlytics.instance.recordError(e, s));
-  }
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  // API Key呼び出し
+  });
   
+  
+  }
+// class MyApp extends StatefulWidget {
+//   @override
+//   _MyAppState createState() => _MyAppState();
+// }
+
+class MyApp extends StatelessWidget {
+  // API Key呼び出し
+  final SharedPreferences prefs;
+  MyApp({this.prefs});
 
   // static String fine = '元気すぎわろた＾ｑ＾';
   // static String pien = '低気圧つらすぎぴえん🥺';
@@ -40,6 +49,7 @@ class _MyAppState extends State<MyApp> {
 
 
   final _navigatorKey = GlobalKey<NavigatorState>();
+
 
  
 
@@ -60,15 +70,15 @@ class _MyAppState extends State<MyApp> {
 
    
 
-  @override
-  void initState() {
+  // @override
+  // void initState() {
     
     
-    super.initState();
+  //   super.initState();
     
-  }
+  // }
 
-  get value => null;
+  // get value => null;
 
   // Future _onRefresher() async {
   //   _getchuWeather();
@@ -155,10 +165,24 @@ class _MyAppState extends State<MyApp> {
         // initialRoute: '/a',
         routes: {
           '/a': (BuildContext context) => SettingPage(),
+          // '/loginsignup': (BuildContext context) => LoginSignupPage(),
+          // '/root': (BuildContext context) => RootPage(),
         },
         debugShowCheckedModeBanner: false,
         home: HomePage(),
-        );
-  }
+                );
+          }
+        
+          // Widget _handleCurrentScreen() {
+          //   bool _seen = (prefs.getBool('_seen') ?? false);
+          //   if (_seen) {
+          //     return new RootPage(
+          //       auth: new Auth(),
+          //     );
+          //   } else {
+          //     return new HomePage(),
+          //   }
+
+          // }
 }
 
