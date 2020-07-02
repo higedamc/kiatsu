@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:kiatsu/model/weather_model.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
 import 'package:timeago/timeago.dart' as timeago;
@@ -282,7 +283,7 @@ Future<WeatherClass> getWeather() async {
                         child: Text(
                           "Last Update - " + timeago.format(updatedAt).toString(),
                           style: TextStyle(
-                              height: 10,
+                              height: 1, // 10だとちょうど下すれすれで良い感じ
                               color: Colors.black,
                               fontWeight: FontWeight.w400),
                         ),
@@ -308,15 +309,17 @@ Future<WeatherClass> getWeather() async {
                 
             }
           }),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FutureBuilder<WeatherClass>(
             future: getWeather(),
             builder: (context, snapshot) {
               return FloatingActionButton(
                   backgroundColor: Colors.white,
-                  child: NeumorphicIcon(
-                    Icons.share,
-                    ),
+                  // child: Icon(
+                  //   Icons.share,
+                  //   color: Colors.black,
+                  //   ),
+                  child: Text('＾ｑ＾'),
                   onPressed: () {
                     // sns share button
                     // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
@@ -324,6 +327,45 @@ Future<WeatherClass> getWeather() async {
                     // Wiredash.of(context).show();
                   });
             }
+          ),
+          bottomNavigationBar: BottomAppBar(
+            color: Colors.white,
+            notchMargin: 6.0,
+            shape: AutomaticNotchedShape(
+              RoundedRectangleBorder(),
+              StadiumBorder(
+                side: BorderSide(),
+              )
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: new Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.person_outline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.info_outline,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    showBarModalBottomSheet(
+                      context:
+                       context,
+                        builder: (context, scrollController) => Container(
+                          child: Text('TEST'),
+                        ));
+                  },
+                ),
+              ],
+              ),),
           ),
         );
   }
