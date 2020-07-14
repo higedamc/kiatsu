@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+var _scaffoldKey = GlobalKey<ScaffoldState>();
 static const String a = Constant.key;
 
 DateTime updatedAt = new DateTime.now();
@@ -79,6 +80,7 @@ Future<WeatherClass> getWeather() async {
   Widget build(BuildContext context) {
 
     return Scaffold(
+          key: _scaffoldKey,
           appBar: NeumorphicAppBar(
             // elevation: 0.0,
             // Gradient化
@@ -210,7 +212,7 @@ Future<WeatherClass> getWeather() async {
                         // width: 50,
                         alignment: Alignment.center,
                         child:
-                        snapshot.data.weather[0].main == 'clouds' ?
+                        snapshot.data.weather[0].main.toString() == 'Clouds' ?
                         Text('Cloudy',
                         style: TextStyle(
                               color: Colors.black,
@@ -234,31 +236,32 @@ Future<WeatherClass> getWeather() async {
                               color: Colors.black,
                               fontWeight: FontWeight.w200,
                               fontSize: 30,
-                              ),),
+                              ),
+                              ),
                       ),
                       SizedBox(height: 56.0),
                       Center(
 
 
                         child:
-                        snapshot.data.main.pressure < 1010 ? 
-                        Text('CHOI-YABAME',
+                        snapshot.data.main.pressure <= 1000 ? 
+                        Text('DEADLY',
 
 
 
                           style: TextStyle(
-                              color: Colors.yellow[900],
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w100,
-                              fontSize: 18.0),
+                              color: Colors.redAccent[700],
+                              // fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 80.0),
                         )
-                        : snapshot.data.main.pressure < 1008 ?
-                        Text('MURIGE',
+                        : snapshot.data.main.pressure <= 1008 ?
+                        Text('YABAME',
                         style: TextStyle(
                           color: Colors.black,
                         ),)
-                        : snapshot.data.main.pressure < 1000 ?
-                        Text("SHIBOU",
+                        : snapshot.data.main.pressure <= 1010 ?
+                        Text("CHOI-YABAME",
                         style: TextStyle(
                           color: Colors.black,
                         ),)
@@ -275,7 +278,7 @@ Future<WeatherClass> getWeather() async {
                         // 5日分の天気データ
                         child: Text(_res2,
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w100)),
                       ),
                       Center(
@@ -322,7 +325,14 @@ Future<WeatherClass> getWeather() async {
                   onPressed: () {
                     // sns share button
                     // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
+                    if (snapshot.hasData)
                     Share.share(snapshot.data.main.pressure.toString() + 'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                    else {
+                      _scaffoldKey.currentState.showSnackBar(
+                        SnackBar(content: const Text("先に情報を読み込んでね＾ｑ＾"))
+                      );
+                      
+                    }
                     // Wiredash.of(context).show();
                   });
             }
