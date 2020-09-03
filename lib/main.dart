@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
-import 'package:kiatsu/services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
