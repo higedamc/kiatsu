@@ -1,6 +1,6 @@
 # kiatsu
 
-An application for meteoropathy.
+An application for meteoropathy
 気圧測定アプリ。
 
 # 今後実装する機能
