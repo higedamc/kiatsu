@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const String a = Constant.key;
+  // int _counter = 0;
 
   DateTime updatedAt = new DateTime.now();
   // RemoCon _remo;
@@ -455,19 +457,7 @@ class _HomePageState extends State<HomePage> {
                         context: context,
                         builder: (context, scrollController) => Scaffold(
                               body: getListView(),
-                              // ListTile(
-                              //   title: NeumorphicText(
-                              //     'ぴえん？',
-                              //     style: NeumorphicStyle(
-                              //       depth: 20,
-                              //       intensity: 1,
-                              //       color: Colors.black,
-                              //     ),
-                              //     textStyle: NeumorphicTextStyle(
-                              //         fontWeight: FontWeight.w500,
-                              //         fontSize: 55.0),
-                              //   ),
-                              // ),
+                              // body: _buildBody(context),
                             ));
                   else {
                     _scaffoldKey.currentState.showSnackBar(
@@ -517,33 +507,108 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildBody(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('pienn2').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Container(
+            child: Center(
+              child: Text('FETCHING DATA...'),
+            ),
+          );
+        return _buildList(context, snapshot.data.docs);
+        // return getListView(context, snapshot.data);
+      },
+    );
+  }
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return Container(
+      child: ListView(
+        padding: const EdgeInsets.only(top: 20.0),
+        children:
+            snapshot.map((data) => _buildListItem(context, data)).toList(),
+        // children: snapshot.map((data) => getListView(context, data)).toList(),
+      ),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final record = Record.fromSnapshot(data);
+
+    return Padding(
+      key: ValueKey(record.pienDo),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Center(
+          child: ListTile(
+            title: Text(record.pienDo),
+            trailing: Text(record.votes.toString()),
+            onTap: () =>
+                record.reference.update({'votes': FieldValue.increment(1)}),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Widget testTile() {
+  //   return Center(
+  //     child: NeumorphicText(
+  //       "ぴえんなう？",
+  //       style: NeumorphicStyle(
+  //         depth: 20,
+  //         intensity: 1,
+  //         color: Colors.black,
+  //       ),
+  //       textStyle:
+  //           NeumorphicTextStyle(fontWeight: FontWeight.w500, fontSize: 56.0),
+  //     ),
+  //   );
+  // }
+
   Widget getListView() {
-    var listview = ListView(
+    return Column(
       children: <Widget>[
         ListTile(
-          title: Center(
-            child: NeumorphicText(
-              'ぴえんなう?',
-              style: NeumorphicStyle(
-                depth: 20,
-                intensity: 1,
-                color: Colors.black,
+            title: Center(
+              child: NeumorphicText(
+                "ぴえんなう？",
+                style: NeumorphicStyle(
+                  depth: 20,
+                  intensity: 1,
+                  color: Colors.black,
+                ),
+                textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.w500, fontSize: 56.0),
               ),
-              textStyle: NeumorphicTextStyle(
-                  fontWeight: FontWeight.w500, fontSize: 56.0),
             ),
-          ),
-          onTap: () {
-            alertDialog(context);
-          },
-        ),
+            // trailing: Text(data.get('votes').toString()),
+            onTap: () {
+              // FirebaseFirestore.instance.runTransaction((transaction) async {
+              //   DocumentSnapshot freshData =
+              //       await transaction.get(data.reference);
+              //   transaction.update(
+              //       freshData.reference, {'votes': freshData.get('votes') + 1});
+              // });
+            }),
         SizedBox(
           width: 100,
           height: 100,
         ),
-        GestureDetector(
-          onTap: () {
-            alertDialog(context);
+        // _buildBody(context),
+        InkWell(
+          onTap: () async {
+            await FirebaseFirestore.instance
+                .collection('pienn2')
+                .doc("超ぴえん")
+                .update({"votes": FieldValue.increment(1)});
+            await alertDialog(context);
           },
           child: Center(
             child: Column(
@@ -559,17 +624,8 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xff333333),
                     ),
                     textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40
-                    ),
+                        fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  // Text(
-                  //   'Test description!',
-                  //   style: TextStyle(
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.normal,
-                  //     color: const Color(0xff333333),
-                  //   ),
-                  // ),
                 ]),
           ),
         ),
@@ -587,8 +643,7 @@ class _HomePageState extends State<HomePage> {
                     color: const Color(0xff333333),
                   ),
                   textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.w500, fontSize: 40
-                  ),
+                      fontWeight: FontWeight.w500, fontSize: 40),
                 ),
                 // Text(
                 //   'Test description!',
@@ -600,6 +655,18 @@ class _HomePageState extends State<HomePage> {
                 // ),
               ]),
         ),
+        // GestureDetector(
+        //   onTap: () async {
+        //     await FirebaseFirestore.instance
+        //     .collection('pienn2')
+        //     .doc("ぴえんじゃない")
+        //     .update(
+        //       {
+        //         "votes": FieldValue.increment(1)
+        //       }
+        //     );
+        //   },
+        // ),
         Center(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -614,8 +681,7 @@ class _HomePageState extends State<HomePage> {
                     color: const Color(0xff333333),
                   ),
                   textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.w500, fontSize: 40
-                  ),
+                      fontWeight: FontWeight.w500, fontSize: 40),
                 ),
                 // Text(
                 //   'Test description!',
@@ -636,15 +702,16 @@ class _HomePageState extends State<HomePage> {
         // )
       ],
     );
-    return listview;
+    // return listview;
   }
 
-  void alertDialog(BuildContext context) {
+  Future<void> alertDialog(BuildContext context) {
     var alert = AlertDialog(
       title: Text("なんで押したｗｗｗｗｗ"),
       content: Text("なんもないよ？？？？ｗｗｗｗｗ"),
     );
-    showDialog(context: context, builder: (BuildContext context) => alert);
+    return showDialog(
+        context: context, builder: (BuildContext context) => alert);
   }
 
   void alertDialog2(BuildContext context) {
@@ -654,4 +721,22 @@ class _HomePageState extends State<HomePage> {
     );
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
+}
+
+class Record {
+  final String pienDo;
+  final int votes;
+  final DocumentReference reference;
+
+  Record.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['pien_do'] != null),
+        assert(map['votes'] != null),
+        pienDo = map['pien_do'],
+        votes = map['votes'];
+
+  Record.fromSnapshot(DocumentSnapshot snaps)
+      : this.fromMap(snaps.data(), reference: snaps.reference);
+
+  @override
+  String toString() => "Record<$pienDo:$votes>";
 }
