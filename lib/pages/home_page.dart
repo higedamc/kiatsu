@@ -9,7 +9,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:package_info/package_info.dart';
 // import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
-// import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
@@ -535,7 +534,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onTap: () {
-            alertDialog();
+            alertDialog(context);
           },
         ),
         SizedBox(
@@ -544,7 +543,7 @@ class _HomePageState extends State<HomePage> {
         ),
         GestureDetector(
           onTap: () {
-            alertDialog();
+            alertDialog(context);
           },
           child: Center(
             child: Column(
@@ -560,7 +559,8 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xff333333),
                     ),
                     textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
+                      fontWeight: FontWeight.w500, fontSize: 40
+                    ),
                   ),
                   // Text(
                   //   'Test description!',
@@ -587,7 +587,8 @@ class _HomePageState extends State<HomePage> {
                     color: const Color(0xff333333),
                   ),
                   textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40),
+                    fontWeight: FontWeight.w500, fontSize: 40
+                  ),
                 ),
                 // Text(
                 //   'Test description!',
@@ -613,7 +614,8 @@ class _HomePageState extends State<HomePage> {
                     color: const Color(0xff333333),
                   ),
                   textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40),
+                    fontWeight: FontWeight.w500, fontSize: 40
+                  ),
                 ),
                 // Text(
                 //   'Test description!',
@@ -637,32 +639,18 @@ class _HomePageState extends State<HomePage> {
     return listview;
   }
 
-  void alertDialog() {
+  void alertDialog(BuildContext context) {
     var alert = AlertDialog(
-      title: NeumorphicText("なんで押したｗｗｗｗｗ"),
-      content: NeumorphicText("なんもないよ？？？？ｗｗｗｗｗ"),
-      // actions: [
-      //   NeumorphicButton(
-      //     onPressed: () {
-      //         // Share.share(snapshot.data.main.pressure.toString() +
-      //         //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
-              
-      //     },
-      //   ),
-      // ],
+      title: Text("なんで押したｗｗｗｗｗ"),
+      content: Text("なんもないよ？？？？ｗｗｗｗｗ"),
     );
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
 
-  void alertDialog2() {
+  void alertDialog2(BuildContext context) {
     var alert = AlertDialog(
       title: Text("Wake Up!"),
       content: Text("It's Time To Get Up!"),
-      // actions: [
-      //   NeumorphicButton(
-      //     onPressed: (){},
-      //   ),
-      // ],
     );
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
