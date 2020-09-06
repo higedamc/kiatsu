@@ -1,12 +1,15 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:share/share.dart';
+// import 'package:package_info/package_info.dart';
+// import 'package:package_info/package_info.dart';
+// import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
+// import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
@@ -20,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   static const String a = Constant.key;
 
   DateTime updatedAt = new DateTime.now();
+  // RemoCon _remo;
+  // final remoteConfig = RemoteConfig.instance;
 
   Weather w;
 
@@ -33,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   // String c = Constant.secret;
 
   Future<WeatherClass> weather;
+  // String a = "app";
 
   // WeatherStationクラスが廃止っぽいので停止
   // WeatherStation ws = new WeatherStation(a);
@@ -44,8 +50,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
+    // final getMo = locator<RemoteConfigService>();
+    // a = getMo.getSomething;
+    // print(a);
     weather = getWeather();
+    super.initState();
     // ws = new WeatherFactory(a, language: Language.JAPANESE);
   }
 
@@ -77,9 +86,57 @@ class _HomePageState extends State<HomePage> {
 //      _res2 = f.toString();
 //    });
 //  }
+  // Map<dynamic, String> _future() {
+  //   _remo.fetch(expiration: Duration(hours: 1));
+  //   _remo.activateFetched();
+  //   var yeah = _remo.getValue('app').asString();
+  //   return yeah;
+  // }
+//   Future<RemoteConfig> setupRemoteConfig() async {
+//   // final RemoteConfig remoteConfig = await RemoteConfig.instance;
+//   RemoteConfig remoteConfig;
+//   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
+//   remoteConfig.setDefaults(<String, dynamic>{
+//     'nyan_nyan': 'F-U',
+//   });
+
+//   try {
+//     // Using default duration to force fetching from remote server.
+//     await remoteConfig.fetch();
+//     await remoteConfig.activateFetched();
+//   } on FetchThrottledException catch (exception) {
+//     // Fetch throttled.
+//     print(exception);
+//   } catch (exception) {
+//     print(exception);
+//   }
+//   return remoteConfig;
+// }
 
   Future<WeatherClass> getWeather() async {
-    
+    // PackageInfo info = await PackageInfo.fromPlatform();
+    // List<String> items = info.packageName.split(".");
+    // var t = _remoteConfig.instance.getValue('app');
+    // print(t);
+    // RemoteConfig _remoteConfig;
+    // await _remoteConfig.init();
+    // await _remoteConfig.instance.fetch();
+    // await _remoteConfig.instance.activateFetched();
+    // String two = await _remoteConfig.getStringed(items[2]);
+    // _remo = await RemoteConfig.instance;
+    // await _remo.fetch(expiration: Duration(hours: 1));
+    // await _remo.activateFetched();
+    // var yeah = _remo.getValue('app').asString();
+    // var ahe = await setupRemoteConfig();
+    // var ahe2 = ahe.getValue('app').toString();
+    // var nya2 = jsonDecode(nya);
+    // await RemoteConfigService().initialize();
+    // var a = RemoteConfigService().getSomething;
+    // if(a.isEmpty){
+    //   a = "app";
+    // }
+    // final storage = new FlutterSecureStorage();
+    // var value = storage.read(key: a);
     final geo.GeolocationResult result =
         await geo.Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
@@ -94,6 +151,7 @@ class _HomePageState extends State<HomePage> {
       var test =
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
       print(test);
+
       geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
@@ -119,6 +177,12 @@ class _HomePageState extends State<HomePage> {
     // // var encoded = jsonEncode(w);
     // return WeatherClass.fromJson(jsonDecode(response.body));
   }
+
+  // @override
+
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -386,8 +450,26 @@ class _HomePageState extends State<HomePage> {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                   if (snapshot.hasData)
-                    Share.share(snapshot.data.main.pressure.toString() +
-                        'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                    // Share.share(snapshot.data.main.pressure.toString() +
+                    //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                    showBarModalBottomSheet(
+                        context: context,
+                        builder: (context, scrollController) => Scaffold(
+                              body: getListView(),
+                              // ListTile(
+                              //   title: NeumorphicText(
+                              //     'ぴえん？',
+                              //     style: NeumorphicStyle(
+                              //       depth: 20,
+                              //       intensity: 1,
+                              //       color: Colors.black,
+                              //     ),
+                              //     textStyle: NeumorphicTextStyle(
+                              //         fontWeight: FontWeight.w500,
+                              //         fontSize: 55.0),
+                              //   ),
+                              // ),
+                            ));
                   else {
                     _scaffoldKey.currentState.showSnackBar(
                         SnackBar(content: const Text("先に情報を読み込んでね＾ｑ＾")));
@@ -434,5 +516,154 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget getListView() {
+    var listview = ListView(
+      children: <Widget>[
+        ListTile(
+          title: Center(
+            child: NeumorphicText(
+              'ぴえんなう?',
+              style: NeumorphicStyle(
+                depth: 20,
+                intensity: 1,
+                color: Colors.black,
+              ),
+              textStyle: NeumorphicTextStyle(
+                  fontWeight: FontWeight.w500, fontSize: 56.0),
+            ),
+          ),
+          onTap: () {
+            alertDialog();
+          },
+        ),
+        SizedBox(
+          width: 100,
+          height: 100,
+        ),
+        GestureDetector(
+          onTap: () {
+            alertDialog();
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  NeumorphicText(
+                    '超ぴえん',
+                    style: NeumorphicStyle(
+                      // fontSize: 26,
+                      // fontWeight: FontWeight.bold,
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                  // Text(
+                  //   'Test description!',
+                  //   style: TextStyle(
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.normal,
+                  //     color: const Color(0xff333333),
+                  //   ),
+                  // ),
+                ]),
+          ),
+        ),
+        Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 10),
+                NeumorphicText(
+                  'ぴえん',
+                  style: NeumorphicStyle(
+                    // fontSize: 26,
+                    // fontWeight: FontWeight.bold,
+                    color: const Color(0xff333333),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 40),
+                ),
+                // Text(
+                //   'Test description!',
+                //   style: TextStyle(
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.normal,
+                //     color: const Color(0xff333333),
+                //   ),
+                // ),
+              ]),
+        ),
+        Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 10),
+                NeumorphicText(
+                  'ぴえんじゃない',
+                  style: NeumorphicStyle(
+                    // fontSize: 26,
+                    // fontWeight: FontWeight.bold,
+                    color: const Color(0xff333333),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 40),
+                ),
+                // Text(
+                //   'Test description!',
+                //   style: TextStyle(
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.normal,
+                //     color: const Color(0xff333333),
+                //   ),
+                // ),
+              ]),
+        ),
+        // あとで見る用
+        // ListTile(
+        //   leading: Icon(Icons.airline_seat_individual_suite),
+        //   title: Text('Wake Up!'),
+        //   subtitle: Text('Dont Sleep!'),
+        //   trailing: Icon(Icons.airline_seat_flat_angled),
+        // )
+      ],
+    );
+    return listview;
+  }
+
+  void alertDialog() {
+    var alert = AlertDialog(
+      title: NeumorphicText("なんで押したｗｗｗｗｗ"),
+      content: NeumorphicText("なんもないよ？？？？ｗｗｗｗｗ"),
+      // actions: [
+      //   NeumorphicButton(
+      //     onPressed: () {
+      //         // Share.share(snapshot.data.main.pressure.toString() +
+      //         //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+              
+      //     },
+      //   ),
+      // ],
+    );
+    showDialog(context: context, builder: (BuildContext context) => alert);
+  }
+
+  void alertDialog2() {
+    var alert = AlertDialog(
+      title: Text("Wake Up!"),
+      content: Text("It's Time To Get Up!"),
+      // actions: [
+      //   NeumorphicButton(
+      //     onPressed: (){},
+      //   ),
+      // ],
+    );
+    showDialog(context: context, builder: (BuildContext context) => alert);
   }
 }

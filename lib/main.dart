@@ -1,32 +1,31 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/locator.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
+// import 'package:kiatsu/services/remote_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
-
-void main() {
+Future<void> main() async {
   // デバッグ中もクラッシュ情報収集できる
-  Crashlytics.instance.enableInDevMode = true;
-  // 以下 6 行 Firebase Crashlytics用のおまじない
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await setupLocator();
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  // 以下 6 行 Firebase Crashlytics用のおまじない
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
-      runApp(MyApp(
-        prefs: prefs
-          ));
-    }, (e, s) async => await Crashlytics.instance.recordError(e, s));
+      runApp(MyApp(prefs: prefs));
+    }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   });
-  
-  
-  }
+}
 // class MyApp extends StatefulWidget {
 //   @override
 //   _MyAppState createState() => _MyAppState();
@@ -43,38 +42,27 @@ class MyApp extends StatelessWidget {
   final String headerTitle = 'ホーム';
   // List<String> items = [pien, fine];
   // final String screenName = 'THE KIATSU';
-  
-  
-
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+  // Future _showPieng() async {
+  //   setState(() {
+  //     var result = getWeather();
 
- 
+  //   });
+  // }
 
- 
-
-    // Future _showPieng() async {
-    //   setState(() {
-    //     var result = getWeather();
-
-    //   });
-    // }
-
-    // _showWiredash() {
-    //   setState(() {
-    //     Wiredash.of(context).show();
-    //   });
-    // }
-
-   
+  // _showWiredash() {
+  //   setState(() {
+  //     Wiredash.of(context).show();
+  //   });
+  // }
 
   // @override
   // void initState() {
-    
-    
+
   //   super.initState();
-    
+
   // }
 
   // get value => null;
@@ -89,7 +77,6 @@ class MyApp extends StatelessWidget {
    * ! This is a test purpose only comment using Better Comments
    * ? Question version
    */
-  
 
   // Future _remoteConfig() async {
   //   RemoteConfig remoteConfig = await RemoteConfig.instance;
@@ -114,7 +101,6 @@ class MyApp extends StatelessWidget {
   // }
 
   // Future で 5日分の天気取得
- 
 
 //  void queryWeather() async {
 ////    Weather w = await ws.currentWeather(latitude, longitude);
@@ -146,10 +132,6 @@ class MyApp extends StatelessWidget {
 
   // }
 
-    
-
-  
-
   @override
   Widget build(BuildContext context) {
     return NeumorphicApp(
@@ -161,27 +143,14 @@ class MyApp extends StatelessWidget {
         depth: 20,
         intensity: 1,
       ),
-        // initialRoute: '/a',
-        routes: {
-          '/a': (BuildContext context) => SettingPage(),
-          // '/loginsignup': (BuildContext context) => LoginSignupPage(),
-          // '/root': (BuildContext context) => RootPage(),
-        },
-        debugShowCheckedModeBanner: false,
-        home: HomePage(),
-                );
-          }
-        
-          // Widget _handleCurrentScreen() {
-          //   bool _seen = (prefs.getBool('_seen') ?? false);
-          //   if (_seen) {
-          //     return new RootPage(
-          //       auth: new Auth(),
-          //     );
-          //   } else {
-          //     return new HomePage(),
-          //   }
-
-          // }
+      // initialRoute: '/a',
+      routes: {
+        '/a': (BuildContext context) => SettingPage(),
+        // '/loginsignup': (BuildContext context) => LoginSignupPage(),
+        // '/root': (BuildContext context) => RootPage(),
+      },
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
 }
-

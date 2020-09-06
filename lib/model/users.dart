@@ -9,9 +9,9 @@ abstract class BaseUsers {
 
 class Users implements BaseUsers {
   Future<void> create(String uid) async {
-    var db = Firestore.instance;
+    var db = FirebaseFirestore.instance;
 
-    await db.collection("users").document(uid).setData({
+    await db.collection("users").doc(uid).set({
       "uid": uid,
       "createdAt": DateFormat("y/m/d H:mm", "en_US").format(new DateTime.now()),
       "updatedAt": DateFormat("y/m/d H:mm", "en_US").format(new DateTime.now()),
@@ -20,8 +20,8 @@ class Users implements BaseUsers {
   }
 
   Future<void> update(String uid) async {
-    var db = Firestore.instance;
-    await db.collection("users").document(uid).setData({
+    var db = FirebaseFirestore.instance;
+    await db.collection("users").doc(uid).set({
       "updatedAt": DateFormat("y/m/d/ H:mm", "en_US").format(new DateTime.now())
     });
   }

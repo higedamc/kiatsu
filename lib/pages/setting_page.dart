@@ -26,7 +26,7 @@ class _SettingPageState extends State<SettingPage> {
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.language),
                   onTap: () {
-                    Crashlytics.instance.crash();
+                    FirebaseCrashlytics.instance.crash();
                   },
                 ),
                 // SettingsTile.switchTile(
@@ -49,7 +49,7 @@ class _SettingPageState extends State<SettingPage> {
                      try{
                                 throw 'error example';
                               } catch (e, s) {
-                                Crashlytics.instance.recordError(e, s, context: '＾ｑ＾');
+                                FirebaseCrashlytics.instance.recordError(e, s, context: '＾ｑ＾');
                               }
                      print('クラッシュさせました＾ｑ＾');
                      _scaffoldKey.currentState.showSnackBar(
