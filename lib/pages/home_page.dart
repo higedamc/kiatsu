@@ -705,21 +705,21 @@ class _HomePageState extends State<HomePage> {
     // return listview;
   }
 
+  // Future<void> alertDialog2(BuildContext context) {
+  //   var alert = AlertDialog(
+  //     title: Text("なんで押したｗｗｗｗｗ"),
+  //     content: Text("なんもないよ？？？？ｗｗｗｗｗ"),
+  //   );
+  //   return showDialog(
+  //       context: context, builder: (BuildContext context) => alert);
+  // }
+
   Future<void> alertDialog(BuildContext context) {
     var alert = AlertDialog(
-      title: Text("なんで押したｗｗｗｗｗ"),
-      content: Text("なんもないよ？？？？ｗｗｗｗｗ"),
+      title: Text("ぴえん度が無事送信されました!"),
+      content: Text("これはテスト機能です＾ｑ＾"),
     );
-    return showDialog(
-        context: context, builder: (BuildContext context) => alert);
-  }
-
-  void alertDialog2(BuildContext context) {
-    var alert = AlertDialog(
-      title: Text("Wake Up!"),
-      content: Text("It's Time To Get Up!"),
-    );
-    showDialog(context: context, builder: (BuildContext context) => alert);
+   return showDialog(context: context, builder: (BuildContext context) => alert);
   }
 }
 
