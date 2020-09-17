@@ -507,55 +507,55 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('pienn2').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Container(
-            child: Center(
-              child: Text('FETCHING DATA...'),
-            ),
-          );
-        return _buildList(context, snapshot.data.docs);
-        // return getListView(context, snapshot.data);
-      },
-    );
-  }
+  // Widget _buildBody(BuildContext context) {
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: FirebaseFirestore.instance.collection('pienn2').snapshots(),
+  //     builder: (context, snapshot) {
+  //       if (!snapshot.hasData)
+  //         return Container(
+  //           child: Center(
+  //             child: Text('FETCHING DATA...'),
+  //           ),
+  //         );
+  //       return _buildList(context, snapshot.data.docs);
+  //       // return getListView(context, snapshot.data);
+  //     },
+  //   );
+  // }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    return Container(
-      child: ListView(
-        padding: const EdgeInsets.only(top: 20.0),
-        children:
-            snapshot.map((data) => _buildListItem(context, data)).toList(),
-        // children: snapshot.map((data) => getListView(context, data)).toList(),
-      ),
-    );
-  }
+  // Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+  //   return Container(
+  //     child: ListView(
+  //       padding: const EdgeInsets.only(top: 20.0),
+  //       children:
+  //           snapshot.map((data) => _buildListItem(context, data)).toList(),
+  //       // children: snapshot.map((data) => getListView(context, data)).toList(),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
+  // Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+  //   final record = Record.fromSnapshot(data);
 
-    return Padding(
-      key: ValueKey(record.pienDo),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: Center(
-          child: ListTile(
-            title: Text(record.pienDo),
-            trailing: Text(record.votes.toString()),
-            onTap: () =>
-                record.reference.update({'votes': FieldValue.increment(1)}),
-          ),
-        ),
-      ),
-    );
-  }
+  //   return Padding(
+  //     key: ValueKey(record.pienDo),
+  //     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         border: Border.all(color: Colors.grey),
+  //         borderRadius: BorderRadius.circular(5.0),
+  //       ),
+  //       child: Center(
+  //         child: ListTile(
+  //           title: Text(record.pienDo),
+  //           trailing: Text(record.votes.toString()),
+  //           onTap: () =>
+  //               record.reference.update({'votes': FieldValue.increment(1)}),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Widget testTile() {
   //   return Center(
