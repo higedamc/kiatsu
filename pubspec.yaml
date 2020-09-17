@@ -11,7 +11,9 @@ description: An application for meteoropathy
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+
+# Androidのバージョン指定。前者がVersionNameで後者がVersionCode
+version: 0.1.2+82
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -54,7 +56,7 @@ dependencies:
     git:
       url: git@github.com:higedamc/flutter_string_encryption.git
   get_it: ^4.0.4
-  flutter_secure_storage: ^3.3.3
+  # flutter_secure_storage: ^3.3.3
   flutter_launcher_icons: ^0.7.5
 
 dev_dependencies:
