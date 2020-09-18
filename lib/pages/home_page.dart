@@ -483,9 +483,11 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: Icon(
                   Icons.person_outline,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/timeline');
+                },
               ),
               IconButton(
                 icon: Icon(
@@ -719,7 +721,8 @@ class _HomePageState extends State<HomePage> {
       title: Text("ぴえん度が無事送信されました!"),
       content: Text("これはテスト機能です＾ｑ＾"),
     );
-   return showDialog(context: context, builder: (BuildContext context) => alert);
+    return showDialog(
+        context: context, builder: (BuildContext context) => alert);
   }
 }
 

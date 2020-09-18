@@ -7,6 +7,8 @@ class Timeline extends StatelessWidget {
     var listitem = [
       '低気圧つらすぎぴえん会社やめるニートになるもう誰か養って誰でもいいからもうここまで来たら。嫌なんだよ地元に帰って深夜にドンキに集まるクソガイジヤンキーの連れになってジャージにキティサンでハイエースゴールインは死んでもむりだからぁぁぁぁ👠',
       '気圧もそうだが雨も辛いね、そうです。今日は部長の代わりにとらやの羊羹で謝罪クエストがあるんです。え？私は受注したつもり無いですよ？でも社会人というのは不思議なものです🥺',
+      '今日はあっちこっち炎上してるけども、季節の変わり目と低気圧のせいだろうから一回寝ろ。あと、そういう時期はヤベエ奴ほどヤバさが天元突破して活発になっちゃうから相手すんな。まじでうまいもん食ってクソして寝ろ。 https://twitter.com/ayuneo/status/1303746094740811776',
+      '低気圧即死我即死即死即死即死即死即死他民加油加油加油加油🤮🤮🤮🤮',
       '低気圧つらいぴえんしょんしょん。。低気圧つらいぴえんしょんしょん。。低気圧つらいぴえんしょんしょん。。🥺🥺🥺',
     ];
     return Scaffold(
@@ -23,6 +25,7 @@ class Timeline extends StatelessWidget {
                 elevation: 10,
                 child: Container(
                   margin: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(2.0),
                   child: Column(children: <Widget>[
                     ListTile(
                       leading: Icon(
@@ -49,6 +52,7 @@ class Timeline extends StatelessWidget {
               Icons.add,
               color: Colors.white,
             ),
+            onPressed: () {},
           ),
         ));
   }
