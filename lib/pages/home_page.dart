@@ -22,18 +22,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const String a = Constant.key;
-  // int _counter = 0;
 
   DateTime updatedAt = new DateTime.now();
-  // RemoCon _remo;
-  // final remoteConfig = RemoteConfig.instance;
 
   Weather w;
 
-// List<Weather> _data = [];
-  // _MyAppState({this.remoteConfig});
-
-  // final RemoteConfig remoteConfig;
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
@@ -52,9 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // final getMo = locator<RemoteConfigService>();
-    // a = getMo.getSomething;
-    // print(a);
     weather = getWeather();
     super.initState();
     // ws = new WeatherFactory(a, language: Language.JAPANESE);
@@ -116,29 +106,6 @@ class _HomePageState extends State<HomePage> {
 // }
 
   Future<WeatherClass> getWeather() async {
-    // PackageInfo info = await PackageInfo.fromPlatform();
-    // List<String> items = info.packageName.split(".");
-    // var t = _remoteConfig.instance.getValue('app');
-    // print(t);
-    // RemoteConfig _remoteConfig;
-    // await _remoteConfig.init();
-    // await _remoteConfig.instance.fetch();
-    // await _remoteConfig.instance.activateFetched();
-    // String two = await _remoteConfig.getStringed(items[2]);
-    // _remo = await RemoteConfig.instance;
-    // await _remo.fetch(expiration: Duration(hours: 1));
-    // await _remo.activateFetched();
-    // var yeah = _remo.getValue('app').asString();
-    // var ahe = await setupRemoteConfig();
-    // var ahe2 = ahe.getValue('app').toString();
-    // var nya2 = jsonDecode(nya);
-    // await RemoteConfigService().initialize();
-    // var a = RemoteConfigService().getSomething;
-    // if(a.isEmpty){
-    //   a = "app";
-    // }
-    // final storage = new FlutterSecureStorage();
-    // var value = storage.read(key: a);
     final geo.GeolocationResult result =
         await geo.Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
@@ -149,14 +116,10 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (result.isSuccessful) {
-      // location permission is granted (or was already granted before making the request)
       var test =
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
       print(test);
       geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
-      // if (Platform.isAndroid){
-      //   double lat = 
-      // }
       double lat = result.location.latitude;
       double lon = result.location.longitude;
       String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
