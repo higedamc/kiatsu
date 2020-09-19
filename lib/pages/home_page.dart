@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocation/geolocation.dart' as geo;
+import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:package_info/package_info.dart';
@@ -141,7 +143,7 @@ class _HomePageState extends State<HomePage> {
     final geo.GeolocationResult result =
         await geo.Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
-        android: geo.LocationPermissionAndroid.fine,
+        android: geo.LocationPermissionAndroid.coarse,
         ios: geo.LocationPermissionIOS.always,
       ),
       openSettingsIfDenied: true,
@@ -152,8 +154,10 @@ class _HomePageState extends State<HomePage> {
       var test =
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
       print(test);
-
       geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
+      if (Platform.isAndroid){
+        double lat = 
+      }
       double lat = result.location.latitude;
       double lon = result.location.longitude;
       String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
@@ -167,7 +171,120 @@ class _HomePageState extends State<HomePage> {
     } else {
       // location permission is not granted
       // user might have denied, but it's also possible that location service is not enabled, restricted, and user never saw the permission request dialog. Check the result.error.type for details.
-      return null;
+      switch (result.error.type) {
+        case geo.GeolocationResultErrorType.runtime:
+          return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Runtime Error"
+                  ),
+                );
+              });
+        case geo.GeolocationResultErrorType.locationNotFound:
+          return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Location Not Found"
+                  ),
+                );
+              });
+        case geo.GeolocationResultErrorType.serviceDisabled:
+          return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Service are disabled"
+                  ),
+                );
+              });
+        case geo.GeolocationResultErrorType.permissionNotGranted:
+          return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Permission For Location Not Granted"
+                  ),
+                );
+              });
+        case geo.GeolocationResultErrorType.permissionDenied:
+          return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Permission For Location Denied"
+                  ),
+                );
+              });
+        case geo.GeolocationResultErrorType.playServicesUnavailable:
+          switch (result.error.additionalInfo as GeolocationAndroidPlayServices) {
+            case geo.GeolocationAndroidPlayServices.missing:
+            return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Something went wrong with Play Services"
+                  ),
+                );
+              });
+            case geo.GeolocationAndroidPlayServices.updating:
+            return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Something went wrong with Play Services"
+                  ),
+                );
+              });
+            case geo.GeolocationAndroidPlayServices.versionUpdateRequired:
+            return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Play Services gotta be updated"
+                  ),
+                );
+              });
+            case geo.GeolocationAndroidPlayServices.disabled:
+            return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Play Services are disabled"
+                  ),
+                );
+              });
+            case geo.GeolocationAndroidPlayServices.invalid:
+            return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Something went wrong with Play Services"
+                  ),
+                );
+              });
+          }
+        break;
+      } return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Something went wrong with Play Services"
+                  ),
+                );
+              });
     }
     // String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
     //     _locationData.latitude.toString() +
@@ -483,9 +600,11 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: Icon(
                   Icons.person_outline,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/timeline');
+                },
               ),
               IconButton(
                 icon: Icon(

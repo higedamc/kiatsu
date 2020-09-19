@@ -1,4 +1,4 @@
-package com.higechang.kiatsu
+package com.kiatsu.app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

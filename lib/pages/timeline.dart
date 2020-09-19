@@ -49,6 +49,17 @@ class Timeline extends StatelessWidget {
               Icons.add,
               color: Colors.white,
             ),
+            onPressed: () {
+              return showDialog(
+              context: context,
+              builder: (context){
+                return SimpleDialog(
+                  title: Text(
+                    "Hi:-)"
+                  ),
+                );
+              });
+            },
           ),
         ));
   }
