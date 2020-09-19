@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -155,9 +154,9 @@ class _HomePageState extends State<HomePage> {
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
       print(test);
       geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
-      if (Platform.isAndroid){
-        double lat = 
-      }
+      // if (Platform.isAndroid){
+      //   double lat = 
+      // }
       double lat = result.location.latitude;
       double lon = result.location.longitude;
       String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
