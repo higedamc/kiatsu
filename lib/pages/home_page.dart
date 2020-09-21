@@ -24,9 +24,10 @@ class _HomePageState extends State<HomePage> {
   static const String a = Constant.key;
 
   DateTime updatedAt = new DateTime.now();
+  // ボタン押したときのbool処理
+  // bool _pushedAlready = false;
 
   Weather w;
-
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
@@ -137,116 +138,96 @@ class _HomePageState extends State<HomePage> {
         case geo.GeolocationResultErrorType.runtime:
           return showDialog(
               context: context,
-              builder: (context){
+              builder: (context) {
                 return SimpleDialog(
-                  title: Text(
-                    "Runtime Error"
-                  ),
+                  title: Text("Runtime Error"),
                 );
               });
         case geo.GeolocationResultErrorType.locationNotFound:
           return showDialog(
               context: context,
-              builder: (context){
+              builder: (context) {
                 return SimpleDialog(
-                  title: Text(
-                    "Location Not Found"
-                  ),
+                  title: Text("Location Not Found"),
                 );
               });
         case geo.GeolocationResultErrorType.serviceDisabled:
           return showDialog(
               context: context,
-              builder: (context){
+              builder: (context) {
                 return SimpleDialog(
-                  title: Text(
-                    "Service are disabled"
-                  ),
+                  title: Text("Service are disabled"),
                 );
               });
         case geo.GeolocationResultErrorType.permissionNotGranted:
           return showDialog(
               context: context,
-              builder: (context){
+              builder: (context) {
                 return SimpleDialog(
-                  title: Text(
-                    "Permission For Location Not Granted"
-                  ),
+                  title: Text("Permission For Location Not Granted"),
                 );
               });
         case geo.GeolocationResultErrorType.permissionDenied:
           return showDialog(
               context: context,
-              builder: (context){
+              builder: (context) {
                 return SimpleDialog(
-                  title: Text(
-                    "Permission For Location Denied"
-                  ),
+                  title: Text("Permission For Location Denied"),
                 );
               });
         case geo.GeolocationResultErrorType.playServicesUnavailable:
-          switch (result.error.additionalInfo as GeolocationAndroidPlayServices) {
+          switch (
+              result.error.additionalInfo as GeolocationAndroidPlayServices) {
             case geo.GeolocationAndroidPlayServices.missing:
-            return showDialog(
-              context: context,
-              builder: (context){
-                return SimpleDialog(
-                  title: Text(
-                    "Something went wrong with Play Services"
-                  ),
-                );
-              });
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Something went wrong with Play Services"),
+                    );
+                  });
             case geo.GeolocationAndroidPlayServices.updating:
-            return showDialog(
-              context: context,
-              builder: (context){
-                return SimpleDialog(
-                  title: Text(
-                    "Something went wrong with Play Services"
-                  ),
-                );
-              });
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Something went wrong with Play Services"),
+                    );
+                  });
             case geo.GeolocationAndroidPlayServices.versionUpdateRequired:
-            return showDialog(
-              context: context,
-              builder: (context){
-                return SimpleDialog(
-                  title: Text(
-                    "Play Services gotta be updated"
-                  ),
-                );
-              });
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Play Services gotta be updated"),
+                    );
+                  });
             case geo.GeolocationAndroidPlayServices.disabled:
-            return showDialog(
-              context: context,
-              builder: (context){
-                return SimpleDialog(
-                  title: Text(
-                    "Play Services are disabled"
-                  ),
-                );
-              });
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Play Services are disabled"),
+                    );
+                  });
             case geo.GeolocationAndroidPlayServices.invalid:
-            return showDialog(
-              context: context,
-              builder: (context){
-                return SimpleDialog(
-                  title: Text(
-                    "Something went wrong with Play Services"
-                  ),
-                );
-              });
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Something went wrong with Play Services"),
+                    );
+                  });
           }
-        break;
-      } return showDialog(
-              context: context,
-              builder: (context){
-                return SimpleDialog(
-                  title: Text(
-                    "Something went wrong with Play Services"
-                  ),
-                );
-              });
+          break;
+      }
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Text("Something went wrong with Play Services"),
+            );
+          });
     }
     // String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
     //     _locationData.latitude.toString() +
@@ -432,6 +413,14 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                       ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            _pienRate(context),
+                          ],
+                        ),
+                      ),
                       SizedBox(height: 56.0),
                       Center(
                         child: snapshot.data.main.pressure <= 1000
@@ -587,6 +576,37 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget _pienRate(BuildContext context) {
+    CollectionReference _ref = FirebaseFirestore.instance.collection('pienn2');
+    return FutureBuilder<DocumentSnapshot>(
+        future: _ref.doc('超ぴえん').get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) return CircularProgressIndicator();
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data = snapshot.data.data();
+            return Column(
+              children: <Widget>[
+                Text(
+                  '${data['votes']}',
+                  style: TextStyle(fontSize: 30.0, color: Colors.black),
+                ),
+                Text(
+                  "Today's Pien Rate",
+                  style: TextStyle(fontSize: 18.0, color: Colors.black),
+                ),
+              ],
+            );
+          }
+          return Text('FETCHING DATA...');
+        });
+  }
+
+  // FirebaseFirestore.instance
+  //               .collection('pienn2')
+  //               .doc("超ぴえん")
+  //               .update({"votes": FieldValue.increment(1)})
 
   // Widget _buildBody(BuildContext context) {
   //   return StreamBuilder<QuerySnapshot>(
@@ -800,7 +820,8 @@ class _HomePageState extends State<HomePage> {
       title: Text("ぴえん度が無事送信されました!"),
       content: Text("これはテスト機能です＾ｑ＾"),
     );
-   return showDialog(context: context, builder: (BuildContext context) => alert);
+    return showDialog(
+        context: context, builder: (BuildContext context) => alert);
   }
 }
 
