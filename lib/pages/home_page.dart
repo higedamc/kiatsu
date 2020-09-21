@@ -229,34 +229,13 @@ class _HomePageState extends State<HomePage> {
             );
           });
     }
-    // String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
-    //     _locationData.latitude.toString() +
-    //     '&lon=' +
-    //     _locationData.longitude.toString() +
-    //     '&APPID=$a';
-    // final response = await http.get(url);
-    // // var encoded = jsonEncode(w);
-    // return WeatherClass.fromJson(jsonDecode(response.body));
   }
-
-  // @override
-
-  // void dispose() {
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: NeumorphicAppBar(
-        // elevation: 0.0,
-        // Gradient化
-        // gradient: LinearGradient(
-        //     begin: Alignment.topLeft,
-        //     end: Alignment.bottomRight,
-        //     colors: [const Color(0xFFb43a8b), const Color(0xFFfc45bf)],
-        //     tileMode: TileMode.repeated),
         centerTitle: true,
         title: const Text(
           "",
@@ -287,17 +266,6 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
               return Container(
-                // Gradiention化
-                // decoration: BoxDecoration(
-                //     gradient: LinearGradient(
-                //         begin: Alignment.topLeft,
-                //         end: Alignment.bottomRight,
-                //         colors: [
-                //           const Color(0xFFb43a8b),
-                //           const Color(0xFFfc45bf)
-                //         ],
-                //         tileMode: TileMode.repeated)),
-                // color: Colors.black,
                 key: GlobalKey(),
                 child: RefreshIndicator(
                   color: Colors.black,
@@ -325,8 +293,6 @@ class _HomePageState extends State<HomePage> {
                       // ),
                       Center(
                         child: Container(
-                          // color: Colors.amber,
-                          // padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           height: 85,
                           width: double.maxFinite,
                           child: Center(
@@ -347,8 +313,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Center(
                         child: Container(
-                          // color: Colors.amber,
-                          // padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           height: 70,
                           width: double.maxFinite,
                           child: Center(
