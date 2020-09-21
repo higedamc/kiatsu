@@ -730,31 +730,40 @@ class _HomePageState extends State<HomePage> {
                 ]),
           ),
         ),
-        Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10),
-                NeumorphicText(
-                  'ぴえん',
-                  style: NeumorphicStyle(
-                    // fontSize: 26,
-                    // fontWeight: FontWeight.bold,
-                    color: const Color(0xff333333),
+        InkWell(
+          onTap: () async {
+            await FirebaseFirestore.instance
+                .collection('pienn2')
+                .doc("ぴえん")
+                .update({"votes": FieldValue.increment(1)});
+            await alertDialog(context);
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  NeumorphicText(
+                    'ぴえん',
+                    style: NeumorphicStyle(
+                      // fontSize: 26,
+                      // fontWeight: FontWeight.bold,
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40),
-                ),
-                // Text(
-                //   'Test description!',
-                //   style: TextStyle(
-                //     fontSize: 18,
-                //     fontWeight: FontWeight.normal,
-                //     color: const Color(0xff333333),
-                //   ),
-                // ),
-              ]),
+                  // Text(
+                  //   'Test description!',
+                  //   style: TextStyle(
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.normal,
+                  //     color: const Color(0xff333333),
+                  //   ),
+                  // ),
+                ]),
+          ),
         ),
         // GestureDetector(
         //   onTap: () async {
@@ -768,31 +777,40 @@ class _HomePageState extends State<HomePage> {
         //     );
         //   },
         // ),
-        Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10),
-                NeumorphicText(
-                  'ぴえんじゃない',
-                  style: NeumorphicStyle(
-                    // fontSize: 26,
-                    // fontWeight: FontWeight.bold,
-                    color: const Color(0xff333333),
+        InkWell(
+          onTap: () async {
+            await FirebaseFirestore.instance
+                .collection('pienn2')
+                .doc("ぴえんじゃない")
+                .update({"votes": FieldValue.increment(1)});
+            await alertDialog(context);
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  NeumorphicText(
+                    'ぴえんじゃない',
+                    style: NeumorphicStyle(
+                      // fontSize: 26,
+                      // fontWeight: FontWeight.bold,
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40),
-                ),
-                // Text(
-                //   'Test description!',
-                //   style: TextStyle(
-                //     fontSize: 18,
-                //     fontWeight: FontWeight.normal,
-                //     color: const Color(0xff333333),
-                //   ),
-                // ),
-              ]),
+                  // Text(
+                  //   'Test description!',
+                  //   style: TextStyle(
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.normal,
+                  //     color: const Color(0xff333333),
+                  //   ),
+                  // ),
+                ]),
+          ),
         ),
         // あとで見る用
         // ListTile(
