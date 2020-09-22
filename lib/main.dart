@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/locator.dart';
-import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
+import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
 // import 'package:kiatsu/services/remote_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -152,7 +152,7 @@ class MyApp extends StatelessWidget {
         // '/root': (BuildContext context) => RootPage(),
       },
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: SplashPage(),
     );
   }
 }
