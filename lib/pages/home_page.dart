@@ -385,7 +385,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 56.0),
+                      SizedBox(height: 40.0),
                       Center(
                         child: snapshot.data.main.pressure <= 1000
                             ? Text(
@@ -420,7 +420,7 @@ class _HomePageState extends State<HomePage> {
                                       )),
                       ),
                       SizedBox(
-                        height: 24.0,
+                        height: 10.0,
                       ),
                       Center(
                         // 5日分の天気データ
@@ -556,8 +556,12 @@ class _HomePageState extends State<HomePage> {
                   '${data['votes']}',
                   style: TextStyle(fontSize: 30.0, color: Colors.black),
                 ),
+                SizedBox(
+                  width: 10,
+                  height: 10,
+                ),
                 Text(
-                  "Today's Pien Rate",
+                  "PIEN",
                   style: TextStyle(fontSize: 18.0, color: Colors.black),
                 ),
               ],
@@ -807,20 +811,20 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class Record {
-  final String pienDo;
-  final int votes;
-  final DocumentReference reference;
+// class PienDo {
+//   final String pienDo;
+//   final int votes;
+//   final DocumentReference reference;
 
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['pien_do'] != null),
-        assert(map['votes'] != null),
-        pienDo = map['pien_do'],
-        votes = map['votes'];
+//   PienDo.fromMap(Map<String, dynamic> map, {this.reference})
+//       : assert(map['pien_do'] != null),
+//         assert(map['votes'] != null),
+//         pienDo = map['pien_do'],
+//         votes = map['votes'];
 
-  Record.fromSnapshot(DocumentSnapshot snaps)
-      : this.fromMap(snaps.data(), reference: snaps.reference);
+//   PienDo.fromSnapshot(DocumentSnapshot snaps)
+//       : this.fromMap(snaps.data(), reference: snaps.reference);
 
-  @override
-  String toString() => "Record<$pienDo:$votes>";
-}
+//   @override
+//   String toString() => "Record<$pienDo:$votes>";
+// }

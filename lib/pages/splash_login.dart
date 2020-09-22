@@ -19,7 +19,7 @@ class SplashPage extends StatelessWidget {
 
   SplashPage() {
     var currentUser = firebaseAuth.currentUser;
-    if (currentUser.uid == null)
+    if (currentUser == null)
     signInAnon().then((UserCredential user) {
       print('User ${user.user.uid}');
     });
