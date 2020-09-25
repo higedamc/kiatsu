@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,8 +25,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const String a = Constant.key;
-
-  DateTime updatedAt = new DateTime.now();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+  DateTime updatedAt = DateTime.now();
+  int _counter = 0;
   // ボタン押したときのbool処理
   // bool _pushedAlready = false;
 
@@ -662,11 +665,15 @@ class _HomePageState extends State<HomePage> {
         // _buildBody(context),
         InkWell(
           onTap: () async {
-            await FirebaseFirestore.instance
-                .collection('pienn2')
-                .doc("超ぴえん")
-                .update({"votes": FieldValue.increment(1)});
-            await alertDialog(context);
+            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            var tomorrow = updatedAt.add(Duration(days: 1));
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
           },
           child: Center(
             child: Column(
@@ -688,11 +695,15 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () async {
-            await FirebaseFirestore.instance
-                .collection('pienn2')
-                .doc("ぴえん")
-                .update({"votes": FieldValue.increment(1)});
-            await alertDialog(context);
+            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            var tomorrow = updatedAt.add(Duration(days: 1));
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.pien': FieldValue.increment(1)});
           },
           child: Center(
             child: Column(
@@ -722,11 +733,16 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () async {
-            await FirebaseFirestore.instance
-                .collection('pienn2')
-                .doc("ぴえんじゃない")
-                .update({"votes": FieldValue.increment(1)});
-            await alertDialog(context);
+            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            var tomorrow = updatedAt.add(Duration(days: 1));
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.not_pien': FieldValue.increment(1)});
+            // await alertDialog(context);
           },
           child: Center(
             child: Column(

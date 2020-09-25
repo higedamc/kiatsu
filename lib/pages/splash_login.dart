@@ -23,6 +23,7 @@ class SplashPage extends StatelessWidget {
 
 
   SplashPage() {
+    DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
     var currentUser = firebaseAuth.currentUser;
     CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)
@@ -31,24 +32,29 @@ class SplashPage extends StatelessWidget {
       await users
       .doc(user.user.uid)
       .collection('votes')
-      .add({
+      .doc(today.toString())
+      .set({
         'pien_rate': [
-          {'cho_pien': null,
+          {'cho_pien': 0,
           'creaateAt': createdAt},
-          {'pien': null,
+          {'pien': 0,
           'createdAt': createdAt},
-          {'not_pien': null,
+          {'not_pien': 0,
           'createdAt': createdAt}
         ],
-        'createdAt': createdAt
-        // 'createdAt': createdAt,
         // 'location': 
       });
       await users
       .doc(user.user.uid)
       .collection('comments')
-      .add({
+      .doc(today.toString())
+      .set({
         'comment': _text.toString(),
+        'createdAt': createdAt
+      });
+      await users
+      .doc(user.user.uid)
+      .set({
         'createdAt': createdAt
       });
       // .then((users) => {
