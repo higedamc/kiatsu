@@ -479,6 +479,7 @@ class _HomePageState extends State<HomePage> {
                     // Share.share(snapshot.data.main.pressure.toString() +
                     //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
                     showBarModalBottomSheet(
+                        duration: Duration(milliseconds: 240),
                         context: context,
                         builder: (context, scrollController) => Scaffold(
                               body: getListView(),
@@ -521,6 +522,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   showBarModalBottomSheet(
+                      duration: Duration(milliseconds: 240),
                       context: context,
                       builder: (context, scrollController) => PieChartPage());
                 },
@@ -634,6 +636,7 @@ class _HomePageState extends State<HomePage> {
             title: Center(
               child: NeumorphicText(
                 "ぴえんなう？",
+                duration: Duration(microseconds: 200),
                 style: NeumorphicStyle(
                   depth: 20,
                   intensity: 1,
@@ -673,6 +676,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 10),
                   NeumorphicText(
                     '超ぴえん',
+                    duration: Duration(microseconds: 200),
                     style: NeumorphicStyle(
                       color: const Color(0xff333333),
                     ),
@@ -698,6 +702,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 10),
                   NeumorphicText(
                     'ぴえん',
+                    duration: Duration(microseconds: 200),
                     style: NeumorphicStyle(
                       color: const Color(0xff333333),
                     ),
@@ -731,6 +736,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 10),
                   NeumorphicText(
                     'ぴえんじゃない',
+                    duration: Duration(microseconds: 200),
                     style: NeumorphicStyle(
                       color: const Color(0xff333333),
                     ),

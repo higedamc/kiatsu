@@ -7,6 +7,8 @@ import 'package:splashscreen/splashscreen.dart';
 // 匿名ログイン + スプラッシュスクリーンの実装
 
 bool result;
+String commentId;
+TextEditingController _text;
 
 class SplashPage extends StatelessWidget {
 
@@ -27,11 +29,39 @@ class SplashPage extends StatelessWidget {
     signInAnon().then((UserCredential user) async {
       print('User ${user.user.uid}');
       await users
+      .doc(user.user.uid)
+      .collection('votes')
       .add({
-        'name': user.user.uid,
-        'createdAt': createdAt,
+        'pien_rate': [
+          {'cho_pien': null,
+          'creaateAt': createdAt},
+          {'pien': null,
+          'createdAt': createdAt},
+          {'not_pien': null,
+          'createdAt': createdAt}
+        ],
+        'createdAt': createdAt
+        // 'createdAt': createdAt,
         // 'location': 
       });
+      await users
+      .doc(user.user.uid)
+      .collection('comments')
+      .add({
+        'comment': _text.toString(),
+        'createdAt': createdAt
+      });
+      // .then((users) => {
+      //   users.collection('comments')
+      //   .doc(commentId)
+      //   .set(
+      //     {
+      //       'comment': null,
+      //       'createdAt': createdAt
+      //     }
+      //   )
+      // }
+      // );
     });
     else {
       print('User Already Registered');
