@@ -6,6 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
+import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:package_info/package_info.dart';
 // import 'package:package_info/package_info.dart';
@@ -521,9 +522,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   showBarModalBottomSheet(
                       context: context,
-                      builder: (context, scrollController) => Container(
-                            child: Text('TEST'),
-                          ));
+                      builder: (context, scrollController) => PieChartPage());
                 },
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kiatsu/pages/home_page.dart';
@@ -9,7 +10,9 @@ bool result;
 
 class SplashPage extends StatelessWidget {
 
+  DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 
   Future<UserCredential> signInAnon() async {
     UserCredential user = await firebaseAuth.signInAnonymously();
@@ -19,9 +22,16 @@ class SplashPage extends StatelessWidget {
 
   SplashPage() {
     var currentUser = firebaseAuth.currentUser;
+    CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)
-    signInAnon().then((UserCredential user) {
+    signInAnon().then((UserCredential user) async {
       print('User ${user.user.uid}');
+      await users
+      .add({
+        'name': user.user.uid,
+        'createdAt': createdAt,
+        // 'location': 
+      });
     });
     else {
       print('User Already Registered');

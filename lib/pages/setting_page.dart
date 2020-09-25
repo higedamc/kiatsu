@@ -72,7 +72,7 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: () async {
                   showDialog(
                       context: context,
-                      builder: (_) {
+                      builder: (context) {
                         return AlertDialog(
                           title: Text('CAUTION!!!'),
                           content:
