@@ -390,6 +390,10 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 24.0,
                       ),
+                      _pienVote(),
+                      SizedBox(
+                        height: 24.0,
+                      ),
                       Center(
                         // 5日分の天気データ
                         child: Text(_res2,
@@ -724,6 +728,31 @@ class _HomePageState extends State<HomePage> {
     return showDialog(
         context: context, builder: (BuildContext context) => alert);
   }
+}
+
+Widget _pienVote() {
+  return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('pienn2')
+          .doc('超ぴえん')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        var userField = snapshot.data.documents.map;
+        // if(snapshot.hasData)
+        return Column(
+          children: <Widget>[
+            Text(
+              userField['votes'].toString(),
+              // style: TextStyle(fontSize: 30.0, color: Colors.black),
+            ),
+            Text(
+              'Pien Rate',
+              style: TextStyle(fontSize: 18.0, color: Colors.black),
+            ),
+          ],
+        );
+      });
 }
 
 class Record {
