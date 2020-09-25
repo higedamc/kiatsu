@@ -415,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                                       )
                                     : Center(
                                         child: Text(
-                                        'KAITEKI',
+                                        '',
                                         style: TextStyle(
                                           fontSize: 28.5,
                                           color: Colors.black,
