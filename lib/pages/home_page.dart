@@ -401,21 +401,21 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 80.0),
                               )
                             : snapshot.data.main.pressure <= 1008
-                                ? Text(
+                                ? const Text(
                                     'YABAME',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
                                   )
                                 : snapshot.data.main.pressure <= 1010
-                                    ? Text(
+                                    ? const Text(
                                         "CHOI-YABAME",
                                         style: TextStyle(
                                           color: Colors.black,
                                         ),
                                       )
                                     : Center(
-                                        child: Text(
+                                        child: const Text(
                                         '',
                                         style: TextStyle(
                                           fontSize: 28.5,
@@ -459,7 +459,7 @@ class _HomePageState extends State<HomePage> {
             } else {
               return Container(
                 child: Center(
-                  child: Text('FETCHING DATA...'),
+                  child: const Text('FETCHING DATA...'),
                 ),
               );
 
@@ -471,7 +471,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             return FloatingActionButton(
                 backgroundColor: Colors.white,
-                child: Text('＾ｑ＾'),
+                child: const Text('＾ｑ＾'),
                 onPressed: () {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
@@ -502,7 +502,7 @@ class _HomePageState extends State<HomePage> {
             )),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: new Row(
+          child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -516,7 +516,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.info_outline,
                   color: Colors.black,
                 ),
@@ -553,14 +553,14 @@ class _HomePageState extends State<HomePage> {
                   width: 10,
                   height: 10,
                 ),
-                Text(
+                const Text(
                   "PIEN",
                   style: TextStyle(fontSize: 18.0, color: Colors.black),
                 ),
               ],
             );
           }
-          return Text('FETCHING DATA...');
+          return const Text('FETCHING DATA...');
         });
   }
 
