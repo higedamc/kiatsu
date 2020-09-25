@@ -15,6 +15,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
 
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -59,6 +60,8 @@ class _HomePageState extends State<HomePage> {
       // queryForecast();
     });
   }
+
+  
 
 // Future<void> _reload() async {
 //   weather = getWeather();
@@ -453,18 +456,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else {
-              // return Container(
-              //   child: Center(
-              //     // child: Text('NO DATA'),
-              //     child: CircularProgressIndicator(),
-              //   ),
-              // );
               return Container(
                 child: Center(
                   child: Text('FETCHING DATA...'),
                 ),
               );
-              // return Container();
 
             }
           }),
@@ -474,10 +470,6 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             return FloatingActionButton(
                 backgroundColor: Colors.white,
-                // child: Icon(
-                //   Icons.share,
-                //   color: Colors.black,
-                //   ),
                 child: Text('＾ｑ＾'),
                 onPressed: () {
                   // sns share button
@@ -570,11 +562,6 @@ class _HomePageState extends State<HomePage> {
           return Text('FETCHING DATA...');
         });
   }
-
-  // FirebaseFirestore.instance
-  //               .collection('pienn2')
-  //               .doc("超ぴえん")
-  //               .update({"votes": FieldValue.increment(1)})
 
   // Widget _buildBody(BuildContext context) {
   //   return StreamBuilder<QuerySnapshot>(
@@ -688,8 +675,6 @@ class _HomePageState extends State<HomePage> {
                   NeumorphicText(
                     '超ぴえん',
                     style: NeumorphicStyle(
-                      // fontSize: 26,
-                      // fontWeight: FontWeight.bold,
                       color: const Color(0xff333333),
                     ),
                     textStyle: NeumorphicTextStyle(
@@ -715,8 +700,6 @@ class _HomePageState extends State<HomePage> {
                   NeumorphicText(
                     'ぴえん',
                     style: NeumorphicStyle(
-                      // fontSize: 26,
-                      // fontWeight: FontWeight.bold,
                       color: const Color(0xff333333),
                     ),
                     textStyle: NeumorphicTextStyle(
@@ -733,18 +716,6 @@ class _HomePageState extends State<HomePage> {
                 ]),
           ),
         ),
-        // GestureDetector(
-        //   onTap: () async {
-        //     await FirebaseFirestore.instance
-        //     .collection('pienn2')
-        //     .doc("ぴえんじゃない")
-        //     .update(
-        //       {
-        //         "votes": FieldValue.increment(1)
-        //       }
-        //     );
-        //   },
-        // ),
         InkWell(
           onTap: () async {
             await FirebaseFirestore.instance
@@ -762,44 +733,17 @@ class _HomePageState extends State<HomePage> {
                   NeumorphicText(
                     'ぴえんじゃない',
                     style: NeumorphicStyle(
-                      // fontSize: 26,
-                      // fontWeight: FontWeight.bold,
                       color: const Color(0xff333333),
                     ),
                     textStyle: NeumorphicTextStyle(
                         fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  // Text(
-                  //   'Test description!',
-                  //   style: TextStyle(
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.normal,
-                  //     color: const Color(0xff333333),
-                  //   ),
-                  // ),
                 ]),
           ),
         ),
-        // あとで見る用
-        // ListTile(
-        //   leading: Icon(Icons.airline_seat_individual_suite),
-        //   title: Text('Wake Up!'),
-        //   subtitle: Text('Dont Sleep!'),
-        //   trailing: Icon(Icons.airline_seat_flat_angled),
-        // )
       ],
     );
-    // return listview;
   }
-
-  // Future<void> alertDialog2(BuildContext context) {
-  //   var alert = AlertDialog(
-  //     title: Text("なんで押したｗｗｗｗｗ"),
-  //     content: Text("なんもないよ？？？？ｗｗｗｗｗ"),
-  //   );
-  //   return showDialog(
-  //       context: context, builder: (BuildContext context) => alert);
-  // }
 
   Future<void> alertDialog(BuildContext context) {
     var alert = AlertDialog(

@@ -51,7 +51,7 @@ class _SettingPageState extends State<SettingPage> {
                       throw 'error example';
                     } catch (e, s) {
                       FirebaseCrashlytics.instance
-                          .recordError(e, s, context: '＾ｑ＾');
+                          .recordError(e, s);
                     }
                     print('クラッシュさせました＾ｑ＾');
                     _scaffoldKey.currentState.showSnackBar(SnackBar(

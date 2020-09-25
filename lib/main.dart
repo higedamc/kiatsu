@@ -1,4 +1,5 @@
 import 'dart:async';
+// import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -15,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main() async {
   // デバッグ中もクラッシュ情報収集できる
   WidgetsFlutterBinding.ensureInitialized();
+  // Admob.initialize();
   await Firebase.initializeApp();
   await setupLocator();
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);

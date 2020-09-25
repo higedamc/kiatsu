@@ -58,6 +58,10 @@ dependencies:
   # flutter_secure_storage: ^3.3.3
   flutter_launcher_icons: ^0.7.5
   splashscreen: ^1.2.0
+  # admob_flutter: ^1.0.0
+  # flutter_native_admob: ^2.1.0+3
+  # firebase_admob: ^0.10.0-dev.1
+  # flutter_firebase_admob: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +83,6 @@ flutter:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
     # - images/
-
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg
