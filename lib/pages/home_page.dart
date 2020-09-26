@@ -17,7 +17,6 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -64,8 +63,6 @@ class _HomePageState extends State<HomePage> {
       // queryForecast();
     });
   }
-
-  
 
 // Future<void> _reload() async {
 //   weather = getWeather();
@@ -429,6 +426,10 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 10.0,
                       ),
+                      _pienVote(),
+                      SizedBox(
+                        height: 24.0,
+                      ),
                       Center(
                         // 5日分の天気データ
                         child: Text(_res2,
@@ -465,7 +466,6 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('FETCHING DATA...'),
                 ),
               );
-
             }
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -665,7 +665,8 @@ class _HomePageState extends State<HomePage> {
         // _buildBody(context),
         InkWell(
           onTap: () async {
-            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
@@ -695,7 +696,8 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () async {
-            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
@@ -733,7 +735,8 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () async {
-            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
@@ -774,6 +777,8 @@ class _HomePageState extends State<HomePage> {
     return showDialog(
         context: context, builder: (BuildContext context) => alert);
   }
+
+  _pienVote() {}
 }
 
 // class PienDo {
