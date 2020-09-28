@@ -1,17 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-// import 'package:package_info/package_info.dart';
-// import 'package:package_info/package_info.dart';
-// import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
@@ -23,14 +20,13 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
+ 
   static const String a = Constant.key;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   DateTime updatedAt = DateTime.now();
-  // int _counter = 0;
-  // ボタン押したときのbool処理
-  // bool _pushedAlready = false;
 
   Weather w;
 
@@ -39,11 +35,7 @@ class _HomePageState extends State<HomePage> {
   // String c = Constant.secret;
 
   Future<WeatherClass> weather;
-  // String a = "app";
 
-  // WeatherStationクラスが廃止っぽいので停止
-  // WeatherStation ws = new WeatherStation(a);
-  // WeatherFactory wf = WeatherFactory(a);
   WeatherFactory ws;
 
   String _res2 = '';
@@ -51,9 +43,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    weather = getWeather();
     super.initState();
-    // ws = new WeatherFactory(a, language: Language.JAPANESE);
+    weather = getWeather();
   }
 
   Future<void> _refresher() async {
@@ -65,15 +56,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  
-
-// Future<void> _reload() async {
-//   weather = getWeather();
-//   updatedAt = new DateTime.now();
-//   setState(() {
-
-//   });
-// }
 
 // Future<void> queryForecast() async {
 //    // 位置情報取得
@@ -86,32 +68,6 @@ class _HomePageState extends State<HomePage> {
 //      _res2 = f.toString();
 //    });
 //  }
-  // Map<dynamic, String> _future() {
-  //   _remo.fetch(expiration: Duration(hours: 1));
-  //   _remo.activateFetched();
-  //   var yeah = _remo.getValue('app').asString();
-  //   return yeah;
-  // }
-//   Future<RemoteConfig> setupRemoteConfig() async {
-//   // final RemoteConfig remoteConfig = await RemoteConfig.instance;
-//   RemoteConfig remoteConfig;
-//   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
-//   remoteConfig.setDefaults(<String, dynamic>{
-//     'nyan_nyan': 'F-U',
-//   });
-
-//   try {
-//     // Using default duration to force fetching from remote server.
-//     await remoteConfig.fetch();
-//     await remoteConfig.activateFetched();
-//   } on FetchThrottledException catch (exception) {
-//     // Fetch throttled.
-//     print(exception);
-//   } catch (exception) {
-//     print(exception);
-//   }
-//   return remoteConfig;
-// }
 
   Future<WeatherClass> getWeather() async {
     final geo.GeolocationResult result =
@@ -139,8 +95,6 @@ class _HomePageState extends State<HomePage> {
       // var encoded = jsonEncode(w);
       return WeatherClass.fromJson(jsonDecode(response.body));
     } else {
-      // location permission is not granted
-      // user might have denied, but it's also possible that location service is not enabled, restricted, and user never saw the permission request dialog. Check the result.error.type for details.
       switch (result.error.type) {
         case geo.GeolocationResultErrorType.runtime:
           return showDialog(
@@ -264,11 +218,6 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<WeatherClass>(
           future: weather,
           builder: (context, snapshot) {
-            // if (snapshot.connectionState != ConnectionState.done) {
-            //   return Center(
-            //     child: CircularProgressIndicator(),
-            //   );
-            // }
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
@@ -280,24 +229,6 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     children: <Widget>[
-                      // Container(
-                      //   child: Center(
-                      //     child: Container(
-                      //       padding: EdgeInsets.all(10.0),
-                      //       margin: EdgeInsets.all(10.0),
-                      //       child: Text(
-                      //         snapshot.,
-                      //         style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontWeight: FontWeight.w100,
-                      //             fontSize: 18.0),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 24.0,
-                      // ),
                       Center(
                         child: Container(
                           height: 85,
@@ -336,16 +267,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      // Container(
-                      //   height: 100,
-                      //   alignment: Alignment.center,
-                      //   child: Text('test'),
-                      // ),
                       SizedBox(height: 1.0),
                       Container(
-                        // constraints: BoxConstraints.expand(),
                         height: 140,
-                        // width: 50,
                         alignment: Alignment.center,
                         child: snapshot.data.weather[0].main.toString() ==
                                 'Clouds'
@@ -399,7 +323,6 @@ class _HomePageState extends State<HomePage> {
                                 'DEADLY',
                                 style: TextStyle(
                                     color: Colors.redAccent[700],
-                                    // fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 80.0),
                               )
@@ -649,14 +572,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w500, fontSize: 56.0),
               ),
             ),
-            // trailing: Text(data.get('votes').toString()),
             onTap: () {
-              // FirebaseFirestore.instance.runTransaction((transaction) async {
-              //   DocumentSnapshot freshData =
-              //       await transaction.get(data.reference);
-              //   transaction.update(
-              //       freshData.reference, {'votes': freshData.get('votes') + 1});
-              // });
             }),
         SizedBox(
           width: 100,
@@ -666,7 +582,7 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            var tomorrow = updatedAt.add(Duration(days: 1));
+            // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
@@ -696,7 +612,7 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            var tomorrow = updatedAt.add(Duration(days: 1));
+            // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
@@ -720,21 +636,13 @@ class _HomePageState extends State<HomePage> {
                     textStyle: NeumorphicTextStyle(
                         fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  // Text(
-                  //   'Test description!',
-                  //   style: TextStyle(
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.normal,
-                  //     color: const Color(0xff333333),
-                  //   ),
-                  // ),
                 ]),
           ),
         ),
         InkWell(
           onTap: () async {
             DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            var tomorrow = updatedAt.add(Duration(days: 1));
+            // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
@@ -742,7 +650,6 @@ class _HomePageState extends State<HomePage> {
                 .collection('votes')
                 .doc(today.toString())
                 .update({'pien_rate.not_pien': FieldValue.increment(1)});
-            // await alertDialog(context);
           },
           child: Center(
             child: Column(
@@ -775,21 +682,3 @@ class _HomePageState extends State<HomePage> {
         context: context, builder: (BuildContext context) => alert);
   }
 }
-
-// class PienDo {
-//   final String pienDo;
-//   final int votes;
-//   final DocumentReference reference;
-
-//   PienDo.fromMap(Map<String, dynamic> map, {this.reference})
-//       : assert(map['pien_do'] != null),
-//         assert(map['votes'] != null),
-//         pienDo = map['pien_do'],
-//         votes = map['votes'];
-
-//   PienDo.fromSnapshot(DocumentSnapshot snaps)
-//       : this.fromMap(snaps.data(), reference: snaps.reference);
-
-//   @override
-//   String toString() => "Record<$pienDo:$votes>";
-// }
