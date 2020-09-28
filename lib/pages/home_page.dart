@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   DateTime updatedAt = DateTime.now();
-  int _counter = 0;
+  // int _counter = 0;
   // ボタン押したときのbool処理
   // bool _pushedAlready = false;
 

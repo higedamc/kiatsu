@@ -12,7 +12,7 @@ TextEditingController _text;
 
 class SplashPage extends StatelessWidget {
 
-  DateTime createdAt = new DateTime.now();
+  final DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 
