@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   DateTime updatedAt = DateTime.now();
+  // int _counter = 0;
 
   Weather w;
 
@@ -45,6 +47,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     weather = getWeather();
+  }
+
+  void _hapticFeedback() {
+    HapticFeedback.mediumImpact();
   }
 
   Future<void> _refresher() async {
@@ -573,6 +579,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             onTap: () {
+              _hapticFeedback();
             }),
         SizedBox(
           width: 100,
@@ -581,6 +588,7 @@ class _HomePageState extends State<HomePage> {
         // _buildBody(context),
         InkWell(
           onTap: () async {
+            _hapticFeedback();
             DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
@@ -611,6 +619,7 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () async {
+            _hapticFeedback();
             DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
@@ -641,6 +650,7 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () async {
+            _hapticFeedback();
             DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
