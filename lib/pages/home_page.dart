@@ -290,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                         height: 140,
                         alignment: Alignment.center,
                         child: snapshot.data.weather[0].main.toString() ==
-                                'Cloudy'
+                                'Clouds'
                             ? NeumorphicText(
                                 'Cloudy',
                                 style: NeumorphicStyle(color: Colors.black),
@@ -469,7 +469,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.person_outline,
+                  Icons.textsms,
                   color: Colors.black,
                 ),
                 onPressed: () {
