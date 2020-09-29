@@ -11,19 +11,17 @@ import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-
 class _HomePageState extends State<HomePage> {
- 
   static const String a = Constant.key;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -61,7 +59,6 @@ class _HomePageState extends State<HomePage> {
       // queryForecast();
     });
   }
-
 
 // Future<void> queryForecast() async {
 //    // 位置情報取得
@@ -278,47 +275,60 @@ class _HomePageState extends State<HomePage> {
                         height: 140,
                         alignment: Alignment.center,
                         child: snapshot.data.weather[0].main.toString() ==
-                                'Clouds'
-                            ? Text(
+                                'Cloudy'
+                            ? NeumorphicText(
                                 'Cloudy',
-                                style: TextStyle(
-                                    color: Colors.black,
+                                style: NeumorphicStyle(color: Colors.black),
+                                textStyle: NeumorphicTextStyle(
                                     fontWeight: FontWeight.w200,
-                                    fontSize: 70.0),
+                                    fontSize: 56.0),
                               )
                             : snapshot.data.weather[0].main.toString() ==
-                                    'Clear Sky'
-                                ? Text(
-                                    'Sunny',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: 70.0),
+                                    'Clear'
+                                ? NeumorphicText(
+                                    'Clear',
+                                    style: NeumorphicStyle(
+                                      color: Colors.black,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: 56.0),
                                   )
                                 : snapshot.data.weather[0].main.toString() ==
-                                        'Rain'
-                                    ? Text(
-                                        'Rainy',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w100,
-                                            fontSize: 70.0),
+                                        'Clear Sky'
+                                    ? NeumorphicText(
+                                        'Sunny',
+                                        style: NeumorphicStyle(
+                                            color: Colors.black),
+                                        textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.w200,
+                                            fontSize: 56.0),
                                       )
-                                    : Text(
-                                        snapshot.data.weather[0].main
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w200,
-                                          fontSize: 30,
-                                        ),
-                                      ),
+                                    : snapshot.data.weather[0].main
+                                                .toString() ==
+                                            'Rain'
+                                        ? NeumorphicText('Rainy',
+                                            style: NeumorphicStyle(
+                                                color: Colors.black),
+                                            textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 56.0))
+                                        : NeumorphicText(
+                                            snapshot.data.weather[0].main
+                                                .toString(),
+                                            style: NeumorphicStyle(
+                                              color: Colors.black,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 56.0),
+                                          ),
                       ),
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            _pienRate(context),
+                            // _pienRate(context),
                           ],
                         ),
                       ),
@@ -366,15 +376,16 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.w100)),
                       ),
                       Center(
-                        child: Text(
-                          "Last Update - " +
+                        child: NeumorphicText(
+                          "最終更新 - " +
                               timeago
                                   .format(updatedAt, locale: 'ja')
                                   .toString(),
-                          style: TextStyle(
-                              height: 1, // 10だとちょうど下すれすれで良い感じ
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400),
+                          style: NeumorphicStyle(
+                            // height: 1, // 10だとちょうど下すれすれで良い感じ
+                            color: Colors.black,
+                          ),
+                          textStyle: NeumorphicTextStyle(),
                         ),
                       ),
                       Center(
@@ -394,7 +405,6 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('FETCHING DATA...'),
                 ),
               );
-
             }
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -466,35 +476,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _pienRate(BuildContext context) {
-    CollectionReference _ref = FirebaseFirestore.instance.collection('pienn2');
-    return FutureBuilder<DocumentSnapshot>(
-        future: _ref.doc('超ぴえん').get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) return CircularProgressIndicator();
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data = snapshot.data.data();
-            return Column(
-              children: <Widget>[
-                Text(
-                  '${data['votes']}',
-                  style: TextStyle(fontSize: 30.0, color: Colors.black),
-                ),
-                SizedBox(
-                  width: 10,
-                  height: 10,
-                ),
-                const Text(
-                  "PIEN",
-                  style: TextStyle(fontSize: 18.0, color: Colors.black),
-                ),
-              ],
-            );
-          }
-          return const Text('FETCHING DATA...');
-        });
-  }
+  // Widget _pienRate(BuildContext context) {
+  //   CollectionReference _ref = FirebaseFirestore.instance.collection('pienn2');
+  //   return FutureBuilder<DocumentSnapshot>(
+  //       future: _ref.doc('超ぴえん').get(),
+  //       builder:
+  //           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  //         if (snapshot.hasError) return CircularProgressIndicator();
+  //         if (snapshot.connectionState == ConnectionState.done) {
+  //           Map<String, dynamic> data = snapshot.data.data();
+  //           return Column(
+  //             children: <Widget>[
+  //               Text(
+  //                 '${data['votes']}',
+  //                 style: TextStyle(fontSize: 30.0, color: Colors.black),
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //                 height: 10,
+  //               ),
+  //               const Text(
+  //                 "PIEN",
+  //                 style: TextStyle(fontSize: 18.0, color: Colors.black),
+  //               ),
+  //             ],
+  //           );
+  //         }
+  //         return const Text('FETCHING DATA...');
+  //       });
+  // }
 
   // Widget _buildBody(BuildContext context) {
   //   return StreamBuilder<QuerySnapshot>(
@@ -589,7 +599,8 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             _hapticFeedback();
-            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
@@ -620,7 +631,8 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             _hapticFeedback();
-            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
@@ -651,7 +663,8 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             _hapticFeedback();
-            DateTime today = new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');

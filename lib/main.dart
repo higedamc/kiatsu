@@ -9,6 +9,8 @@ import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:weather/weather.dart';
 
 Future<void> main() async {
   // デバッグ中もクラッシュ情報収集できる
@@ -16,6 +18,9 @@ Future<void> main() async {
   // Admob.initialize();
   await Firebase.initializeApp();
   await setupLocator();
+  final now = DateTime.now();
+  timeago.setLocaleMessages('ja', timeago.JaMessages());
+  print(timeago.format(now));
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   // 以下 6 行 Firebase Crashlytics用のおまじない
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
