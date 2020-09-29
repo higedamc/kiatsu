@@ -24,6 +24,10 @@ jobs:
     # - uses: actions/setup-java@v1
     #   with:
     #     java-version: '12.x'
+    - name: Get GitHub token
+      run: git config --global url.https://${GITHUB_TOKEN}:x-oauth-basic@github.com
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
 
     - name: Import Provisioning Profile
       run: |
