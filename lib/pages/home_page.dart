@@ -454,7 +454,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.person_outline,
+                  Icons.textsms,
                   color: Colors.black,
                 ),
                 onPressed: () {
