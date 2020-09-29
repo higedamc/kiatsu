@@ -12,7 +12,7 @@ TextEditingController _text;
 
 class SplashPage extends StatelessWidget {
 
-  DateTime createdAt = new DateTime.now();
+  final DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 
@@ -57,17 +57,6 @@ class SplashPage extends StatelessWidget {
       .set({
         'createdAt': createdAt
       });
-      // .then((users) => {
-      //   users.collection('comments')
-      //   .doc(commentId)
-      //   .set(
-      //     {
-      //       'comment': null,
-      //       'createdAt': createdAt
-      //     }
-      //   )
-      // }
-      // );
     });
     else {
       print('User Already Registered');
@@ -77,6 +66,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
+      loaderColor: Colors.black,
       seconds: 2,
       navigateAfterSeconds: HomePage(),
       image: new Image.asset('assets/images/face.png'),
