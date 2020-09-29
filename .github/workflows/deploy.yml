@@ -27,7 +27,7 @@ jobs:
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         echo '${{ secrets.PROVISIONING_PROFILE }}' | openssl base64 -d -out ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
     - name: Import Code-Signing Certificates
-      uses: Apple-Actions/import-codesign-certs@v1
+      uses: Apple-Actions/import-codesign-certs@v1.0.4
       with:
         p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
         p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
