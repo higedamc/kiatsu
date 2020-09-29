@@ -116,3 +116,4 @@ app.*.symbols
 /.blackbox/pubring.gpg~
 /.blackbox/pubring.kbx~
 /.blackbox/secring.gpg
+/Users/jackstash/work/testenv/kiatsu/lib/env/production_secrets.dart
