@@ -244,15 +244,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-  flutter_string_encryption:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "05c1a3796ce0fb807aa40fae891a7f2263766bf5"
-      url: "git@github.com:higedamc/flutter_string_encryption.git"
-    source: git
-    version: "0.3.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
