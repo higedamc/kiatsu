@@ -211,6 +211,14 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           "",
         ),
+        leading: IconButton(
+          icon: Icon(Icons.share),
+          onPressed: () {
+            Share.share('低気圧しんどいぴえん🥺️ #thekiatsu');
+            // Share.share(future.data.main.pressure.toString() +
+            //             'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+          },
+        ),
         actions: <Widget>[
           /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
           Builder(

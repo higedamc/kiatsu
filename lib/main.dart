@@ -10,7 +10,6 @@ import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:weather/weather.dart';
 
 Future<void> main() async {
   // デバッグ中もクラッシュ情報収集できる
