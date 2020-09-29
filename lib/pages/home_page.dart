@@ -307,12 +307,15 @@ class _HomePageState extends State<HomePage> {
                                     : snapshot.data.weather[0].main
                                                 .toString() ==
                                             'Rain'
-                                        ? NeumorphicText('Rainy',
+                                        ? NeumorphicText(
+                                            'Rainy',
                                             style: NeumorphicStyle(
                                                 color: Colors.black),
-                                            textStyle: NeumorphicTextStyle(
-                                                fontWeight: FontWeight.w200,
-                                                fontSize: 56.0))
+                                                textStyle: NeumorphicTextStyle(
+                                                  fontWeight: FontWeight.w200,
+                                                  fontSize: 56.0
+                                                )
+                                          )
                                         : NeumorphicText(
                                             snapshot.data.weather[0].main
                                                 .toString(),
@@ -320,8 +323,9 @@ class _HomePageState extends State<HomePage> {
                                               color: Colors.black,
                                             ),
                                             textStyle: NeumorphicTextStyle(
-                                                fontWeight: FontWeight.w200,
-                                                fontSize: 56.0),
+                                              fontWeight: FontWeight.w200,
+                                              fontSize: 56.0
+                                            ),
                                           ),
                       ),
                       Center(
