@@ -1,15 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocation/geolocation.dart' as geo;
+import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
+import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-// import 'package:package_info/package_info.dart';
-// import 'package:package_info/package_info.dart';
-// import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
@@ -21,29 +23,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const String a = Constant.key;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+  DateTime updatedAt = DateTime.now();
   // int _counter = 0;
 
-  DateTime updatedAt = new DateTime.now();
-  // RemoCon _remo;
-  // final remoteConfig = RemoteConfig.instance;
-
   Weather w;
-
-// List<Weather> _data = [];
-  // _MyAppState({this.remoteConfig});
-
-  // final RemoteConfig remoteConfig;
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
   // String c = Constant.secret;
 
   Future<WeatherClass> weather;
-  // String a = "app";
 
-  // WeatherStationクラスが廃止っぽいので停止
-  // WeatherStation ws = new WeatherStation(a);
-  // WeatherFactory wf = WeatherFactory(a);
   WeatherFactory ws;
 
   String _res2 = '';
@@ -51,12 +43,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // final getMo = locator<RemoteConfigService>();
-    // a = getMo.getSomething;
-    // print(a);
-    weather = getWeather();
     super.initState();
-    // ws = new WeatherFactory(a, language: Language.JAPANESE);
+    weather = getWeather();
+  }
+
+  void _hapticFeedback() {
+    HapticFeedback.mediumImpact();
   }
 
   Future<void> _refresher() async {
@@ -67,14 +59,6 @@ class _HomePageState extends State<HomePage> {
       // queryForecast();
     });
   }
-
-// Future<void> _reload() async {
-//   weather = getWeather();
-//   updatedAt = new DateTime.now();
-//   setState(() {
-
-//   });
-// }
 
 // Future<void> queryForecast() async {
 //    // 位置情報取得
@@ -87,72 +71,21 @@ class _HomePageState extends State<HomePage> {
 //      _res2 = f.toString();
 //    });
 //  }
-  // Map<dynamic, String> _future() {
-  //   _remo.fetch(expiration: Duration(hours: 1));
-  //   _remo.activateFetched();
-  //   var yeah = _remo.getValue('app').asString();
-  //   return yeah;
-  // }
-//   Future<RemoteConfig> setupRemoteConfig() async {
-//   // final RemoteConfig remoteConfig = await RemoteConfig.instance;
-//   RemoteConfig remoteConfig;
-//   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
-//   remoteConfig.setDefaults(<String, dynamic>{
-//     'nyan_nyan': 'F-U',
-//   });
-
-//   try {
-//     // Using default duration to force fetching from remote server.
-//     await remoteConfig.fetch();
-//     await remoteConfig.activateFetched();
-//   } on FetchThrottledException catch (exception) {
-//     // Fetch throttled.
-//     print(exception);
-//   } catch (exception) {
-//     print(exception);
-//   }
-//   return remoteConfig;
-// }
 
   Future<WeatherClass> getWeather() async {
-    // PackageInfo info = await PackageInfo.fromPlatform();
-    // List<String> items = info.packageName.split(".");
-    // var t = _remoteConfig.instance.getValue('app');
-    // print(t);
-    // RemoteConfig _remoteConfig;
-    // await _remoteConfig.init();
-    // await _remoteConfig.instance.fetch();
-    // await _remoteConfig.instance.activateFetched();
-    // String two = await _remoteConfig.getStringed(items[2]);
-    // _remo = await RemoteConfig.instance;
-    // await _remo.fetch(expiration: Duration(hours: 1));
-    // await _remo.activateFetched();
-    // var yeah = _remo.getValue('app').asString();
-    // var ahe = await setupRemoteConfig();
-    // var ahe2 = ahe.getValue('app').toString();
-    // var nya2 = jsonDecode(nya);
-    // await RemoteConfigService().initialize();
-    // var a = RemoteConfigService().getSomething;
-    // if(a.isEmpty){
-    //   a = "app";
-    // }
-    // final storage = new FlutterSecureStorage();
-    // var value = storage.read(key: a);
     final geo.GeolocationResult result =
         await geo.Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
-        android: geo.LocationPermissionAndroid.fine,
+        android: geo.LocationPermissionAndroid.coarse,
         ios: geo.LocationPermissionIOS.always,
       ),
       openSettingsIfDenied: true,
     );
 
     if (result.isSuccessful) {
-      // location permission is granted (or was already granted before making the request)
       var test =
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
       print(test);
-
       geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
@@ -165,38 +98,108 @@ class _HomePageState extends State<HomePage> {
       // var encoded = jsonEncode(w);
       return WeatherClass.fromJson(jsonDecode(response.body));
     } else {
-      // location permission is not granted
-      // user might have denied, but it's also possible that location service is not enabled, restricted, and user never saw the permission request dialog. Check the result.error.type for details.
-      return null;
+      switch (result.error.type) {
+        case geo.GeolocationResultErrorType.runtime:
+          return showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text("Runtime Error"),
+                );
+              });
+        case geo.GeolocationResultErrorType.locationNotFound:
+          return showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text("Location Not Found"),
+                );
+              });
+        case geo.GeolocationResultErrorType.serviceDisabled:
+          return showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text("Service are disabled"),
+                );
+              });
+        case geo.GeolocationResultErrorType.permissionNotGranted:
+          return showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text("Permission For Location Not Granted"),
+                );
+              });
+        case geo.GeolocationResultErrorType.permissionDenied:
+          return showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text("Permission For Location Denied"),
+                );
+              });
+        case geo.GeolocationResultErrorType.playServicesUnavailable:
+          switch (
+              result.error.additionalInfo as GeolocationAndroidPlayServices) {
+            case geo.GeolocationAndroidPlayServices.missing:
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Something went wrong with Play Services"),
+                    );
+                  });
+            case geo.GeolocationAndroidPlayServices.updating:
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Something went wrong with Play Services"),
+                    );
+                  });
+            case geo.GeolocationAndroidPlayServices.versionUpdateRequired:
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Play Services gotta be updated"),
+                    );
+                  });
+            case geo.GeolocationAndroidPlayServices.disabled:
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Play Services are disabled"),
+                    );
+                  });
+            case geo.GeolocationAndroidPlayServices.invalid:
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text("Something went wrong with Play Services"),
+                    );
+                  });
+          }
+          break;
+      }
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Text("Something went wrong with Play Services"),
+            );
+          });
     }
-    // String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
-    //     _locationData.latitude.toString() +
-    //     '&lon=' +
-    //     _locationData.longitude.toString() +
-    //     '&APPID=$a';
-    // final response = await http.get(url);
-    // // var encoded = jsonEncode(w);
-    // return WeatherClass.fromJson(jsonDecode(response.body));
   }
-
-  // @override
-
-  // void dispose() {
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: NeumorphicAppBar(
-        // elevation: 0.0,
-        // Gradient化
-        // gradient: LinearGradient(
-        //     begin: Alignment.topLeft,
-        //     end: Alignment.bottomRight,
-        //     colors: [const Color(0xFFb43a8b), const Color(0xFFfc45bf)],
-        //     tileMode: TileMode.repeated),
         centerTitle: true,
         title: const Text(
           "",
@@ -218,26 +221,10 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<WeatherClass>(
           future: weather,
           builder: (context, snapshot) {
-            // if (snapshot.connectionState != ConnectionState.done) {
-            //   return Center(
-            //     child: CircularProgressIndicator(),
-            //   );
-            // }
             if (snapshot.hasError) print(snapshot.error);
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
               return Container(
-                // Gradiention化
-                // decoration: BoxDecoration(
-                //     gradient: LinearGradient(
-                //         begin: Alignment.topLeft,
-                //         end: Alignment.bottomRight,
-                //         colors: [
-                //           const Color(0xFFb43a8b),
-                //           const Color(0xFFfc45bf)
-                //         ],
-                //         tileMode: TileMode.repeated)),
-                // color: Colors.black,
                 key: GlobalKey(),
                 child: RefreshIndicator(
                   color: Colors.black,
@@ -245,28 +232,8 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     children: <Widget>[
-                      // Container(
-                      //   child: Center(
-                      //     child: Container(
-                      //       padding: EdgeInsets.all(10.0),
-                      //       margin: EdgeInsets.all(10.0),
-                      //       child: Text(
-                      //         snapshot.,
-                      //         style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontWeight: FontWeight.w100,
-                      //             fontSize: 18.0),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 24.0,
-                      // ),
                       Center(
                         child: Container(
-                          // color: Colors.amber,
-                          // padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           height: 85,
                           width: double.maxFinite,
                           child: Center(
@@ -287,8 +254,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Center(
                         child: Container(
-                          // color: Colors.amber,
-                          // padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           height: 70,
                           width: double.maxFinite,
                           child: Center(
@@ -305,82 +270,99 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      // Container(
-                      //   height: 100,
-                      //   alignment: Alignment.center,
-                      //   child: Text('test'),
-                      // ),
                       SizedBox(height: 1.0),
                       Container(
-                        // constraints: BoxConstraints.expand(),
                         height: 140,
-                        // width: 50,
                         alignment: Alignment.center,
                         child: snapshot.data.weather[0].main.toString() ==
-                                'Clouds'
-                            ? Text(
+                                'Cloudy'
+                            ? NeumorphicText(
                                 'Cloudy',
-                                style: TextStyle(
-                                    color: Colors.black,
+                                style: NeumorphicStyle(color: Colors.black),
+                                textStyle: NeumorphicTextStyle(
                                     fontWeight: FontWeight.w200,
-                                    fontSize: 70.0),
+                                    fontSize: 56.0),
                               )
                             : snapshot.data.weather[0].main.toString() ==
-                                    'Clear Sky'
-                                ? Text(
-                                    'Sunny',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: 70.0),
+                                    'Clear'
+                                ? NeumorphicText(
+                                    'Clear',
+                                    style: NeumorphicStyle(
+                                      color: Colors.black,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: 56.0),
                                   )
                                 : snapshot.data.weather[0].main.toString() ==
-                                        'Rain'
-                                    ? Text(
-                                        'Rainy',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w100,
-                                            fontSize: 70.0),
+                                        'Clear Sky'
+                                    ? NeumorphicText(
+                                        'Sunny',
+                                        style: NeumorphicStyle(
+                                            color: Colors.black),
+                                        textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.w200,
+                                            fontSize: 56.0),
                                       )
-                                    : Text(
-                                        snapshot.data.weather[0].main
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w200,
-                                          fontSize: 30,
-                                        ),
-                                      ),
+                                    : snapshot.data.weather[0].main
+                                                .toString() ==
+                                            'Rain'
+                                        ? NeumorphicText(
+                                            'Rainy',
+                                            style: NeumorphicStyle(
+                                                color: Colors.black),
+                                                textStyle: NeumorphicTextStyle(
+                                                  fontWeight: FontWeight.w200,
+                                                  fontSize: 56.0
+                                                )
+                                          )
+                                        : NeumorphicText(
+                                            snapshot.data.weather[0].main
+                                                .toString(),
+                                            style: NeumorphicStyle(
+                                              color: Colors.black,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.w200,
+                                              fontSize: 56.0
+                                            ),
+                                          ),
                       ),
-                      SizedBox(height: 56.0),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            // _pienRate(context),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 40.0),
                       Center(
                         child: snapshot.data.main.pressure <= 1000
                             ? Text(
                                 'DEADLY',
                                 style: TextStyle(
                                     color: Colors.redAccent[700],
-                                    // fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 80.0),
                               )
                             : snapshot.data.main.pressure <= 1008
-                                ? Text(
+                                ? const Text(
                                     'YABAME',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
                                   )
                                 : snapshot.data.main.pressure <= 1010
-                                    ? Text(
+                                    ? const Text(
                                         "CHOI-YABAME",
                                         style: TextStyle(
                                           color: Colors.black,
                                         ),
                                       )
                                     : Center(
-                                        child: Text(
-                                        'KAITEKI',
+                                        child: const Text(
+                                        '',
                                         style: TextStyle(
                                           fontSize: 28.5,
                                           color: Colors.black,
@@ -388,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                                       )),
                       ),
                       SizedBox(
-                        height: 24.0,
+                        height: 10.0,
                       ),
                       _pienVote(),
                       SizedBox(
@@ -402,15 +384,16 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.w100)),
                       ),
                       Center(
-                        child: Text(
-                          "Last Update - " +
+                        child: NeumorphicText(
+                          "最終更新 - " +
                               timeago
                                   .format(updatedAt, locale: 'ja')
                                   .toString(),
-                          style: TextStyle(
-                              height: 1, // 10だとちょうど下すれすれで良い感じ
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400),
+                          style: NeumorphicStyle(
+                            // height: 1, // 10だとちょうど下すれすれで良い感じ
+                            color: Colors.black,
+                          ),
+                          textStyle: NeumorphicTextStyle(),
                         ),
                       ),
                       Center(
@@ -425,19 +408,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else {
-              // return Container(
-              //   child: Center(
-              //     // child: Text('NO DATA'),
-              //     child: CircularProgressIndicator(),
-              //   ),
-              // );
               return Container(
                 child: Center(
-                  child: Text('FETCHING DATA...'),
+                  child: const Text('FETCHING DATA...'),
                 ),
               );
-              // return Container();
-
             }
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -446,11 +421,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             return FloatingActionButton(
                 backgroundColor: Colors.white,
-                // child: Icon(
-                //   Icons.share,
-                //   color: Colors.black,
-                //   ),
-                child: Text('＾ｑ＾'),
+                child: const Text('＾ｑ＾'),
                 onPressed: () {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
@@ -458,6 +429,7 @@ class _HomePageState extends State<HomePage> {
                     // Share.share(snapshot.data.main.pressure.toString() +
                     //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
                     showBarModalBottomSheet(
+                        duration: Duration(milliseconds: 240),
                         context: context,
                         builder: (context, scrollController) => Scaffold(
                               body: getListView(),
@@ -480,7 +452,7 @@ class _HomePageState extends State<HomePage> {
             )),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: new Row(
+          child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -494,16 +466,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.info_outline,
                   color: Colors.black,
                 ),
                 onPressed: () {
                   showBarModalBottomSheet(
+                      duration: Duration(milliseconds: 240),
                       context: context,
-                      builder: (context, scrollController) => Container(
-                            child: Text('TEST'),
-                          ));
+                      builder: (context, scrollController) => PieChartPage());
                 },
               ),
             ],
@@ -512,6 +483,36 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // Widget _pienRate(BuildContext context) {
+  //   CollectionReference _ref = FirebaseFirestore.instance.collection('pienn2');
+  //   return FutureBuilder<DocumentSnapshot>(
+  //       future: _ref.doc('超ぴえん').get(),
+  //       builder:
+  //           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  //         if (snapshot.hasError) return CircularProgressIndicator();
+  //         if (snapshot.connectionState == ConnectionState.done) {
+  //           Map<String, dynamic> data = snapshot.data.data();
+  //           return Column(
+  //             children: <Widget>[
+  //               Text(
+  //                 '${data['votes']}',
+  //                 style: TextStyle(fontSize: 30.0, color: Colors.black),
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //                 height: 10,
+  //               ),
+  //               const Text(
+  //                 "PIEN",
+  //                 style: TextStyle(fontSize: 18.0, color: Colors.black),
+  //               ),
+  //             ],
+  //           );
+  //         }
+  //         return const Text('FETCHING DATA...');
+  //       });
+  // }
 
   // Widget _buildBody(BuildContext context) {
   //   return StreamBuilder<QuerySnapshot>(
@@ -585,6 +586,7 @@ class _HomePageState extends State<HomePage> {
             title: Center(
               child: NeumorphicText(
                 "ぴえんなう？",
+                duration: Duration(microseconds: 200),
                 style: NeumorphicStyle(
                   depth: 20,
                   intensity: 1,
@@ -594,14 +596,8 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w500, fontSize: 56.0),
               ),
             ),
-            // trailing: Text(data.get('votes').toString()),
             onTap: () {
-              // FirebaseFirestore.instance.runTransaction((transaction) async {
-              //   DocumentSnapshot freshData =
-              //       await transaction.get(data.reference);
-              //   transaction.update(
-              //       freshData.reference, {'votes': freshData.get('votes') + 1});
-              // });
+              _hapticFeedback();
             }),
         SizedBox(
           width: 100,
@@ -610,11 +606,17 @@ class _HomePageState extends State<HomePage> {
         // _buildBody(context),
         InkWell(
           onTap: () async {
-            await FirebaseFirestore.instance
-                .collection('pienn2')
-                .doc("超ぴえん")
-                .update({"votes": FieldValue.increment(1)});
-            await alertDialog(context);
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            // var tomorrow = updatedAt.add(Duration(days: 1));
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
           },
           child: Center(
             child: Column(
@@ -624,9 +626,8 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 10),
                   NeumorphicText(
                     '超ぴえん',
+                    duration: Duration(microseconds: 200),
                     style: NeumorphicStyle(
-                      // fontSize: 26,
-                      // fontWeight: FontWeight.bold,
                       color: const Color(0xff333333),
                     ),
                     textStyle: NeumorphicTextStyle(
@@ -635,90 +636,73 @@ class _HomePageState extends State<HomePage> {
                 ]),
           ),
         ),
-        Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10),
-                NeumorphicText(
-                  'ぴえん',
-                  style: NeumorphicStyle(
-                    // fontSize: 26,
-                    // fontWeight: FontWeight.bold,
-                    color: const Color(0xff333333),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            // var tomorrow = updatedAt.add(Duration(days: 1));
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  NeumorphicText(
+                    'ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40),
-                ),
-                // Text(
-                //   'Test description!',
-                //   style: TextStyle(
-                //     fontSize: 18,
-                //     fontWeight: FontWeight.normal,
-                //     color: const Color(0xff333333),
-                //   ),
-                // ),
-              ]),
+                ]),
+          ),
         ),
-        // GestureDetector(
-        //   onTap: () async {
-        //     await FirebaseFirestore.instance
-        //     .collection('pienn2')
-        //     .doc("ぴえんじゃない")
-        //     .update(
-        //       {
-        //         "votes": FieldValue.increment(1)
-        //       }
-        //     );
-        //   },
-        // ),
-        Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10),
-                NeumorphicText(
-                  'ぴえんじゃない',
-                  style: NeumorphicStyle(
-                    // fontSize: 26,
-                    // fontWeight: FontWeight.bold,
-                    color: const Color(0xff333333),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            // var tomorrow = updatedAt.add(Duration(days: 1));
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.not_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  NeumorphicText(
+                    'ぴえんじゃない',
+                    duration: Duration(microseconds: 200),
+                    style: NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
                   ),
-                  textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 40),
-                ),
-                // Text(
-                //   'Test description!',
-                //   style: TextStyle(
-                //     fontSize: 18,
-                //     fontWeight: FontWeight.normal,
-                //     color: const Color(0xff333333),
-                //   ),
-                // ),
-              ]),
+                ]),
+          ),
         ),
-        // あとで見る用
-        // ListTile(
-        //   leading: Icon(Icons.airline_seat_individual_suite),
-        //   title: Text('Wake Up!'),
-        //   subtitle: Text('Dont Sleep!'),
-        //   trailing: Icon(Icons.airline_seat_flat_angled),
-        // )
       ],
     );
-    // return listview;
   }
-
-  // Future<void> alertDialog2(BuildContext context) {
-  //   var alert = AlertDialog(
-  //     title: Text("なんで押したｗｗｗｗｗ"),
-  //     content: Text("なんもないよ？？？？ｗｗｗｗｗ"),
-  //   );
-  //   return showDialog(
-  //       context: context, builder: (BuildContext context) => alert);
-  // }
 
   Future<void> alertDialog(BuildContext context) {
     var alert = AlertDialog(
@@ -729,7 +713,6 @@ class _HomePageState extends State<HomePage> {
         context: context, builder: (BuildContext context) => alert);
   }
 }
-
 Widget _pienVote() {
   return StreamBuilder(
       stream: FirebaseFirestore.instance
