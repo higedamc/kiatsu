@@ -1,0 +1,98 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Import Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        echo '${{ secrets.PROVISIONING_PROFILE }}' | openssl base64 -d -out ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
+    - name: Import Code-Signing Certificates
+      uses: Apple-Actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+        p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+
+    - name: Flutter action
+      uses: subosito/flutter-action@v1.3.0
+    - run: flutter pub get
+    - run: flutter test
+    - run: flutter build ios
+    - run: flutter build apk
+
+    - name: iOS Build Action
+      uses: yukiarrr/ios-build-action@v0.5.0
+      with:
+        project-path: ios/Runner.xcodeproj
+        p12-base64: ${{ secrets.CERTIFICATES_P12 }}
+        mobileprovision-base64: ${{ secrets.PROVISIONING_PROFILE }}
+        code-signing-identity: iOS Distribution
+        team-id: ${{ secrets.TEAM_ID }}
+        workspace-path: ios/Runner.xcworkspace
+        export-method: development
+        certificate-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+        output-path: app-release.ipa
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: ios
+        path: app-release.ipa
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: android
+        path: build/app/outputs/apk/release/app-release.apk
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Download artifact
+      uses: actions/download-artifact@v1.0.0
+      with:
+        name: ios
+
+    - name: Download artifact
+      uses: actions/download-artifact@v1.0.0
+      with:
+        name: android
+
+    - name: Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID_IOS}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        groups: testers
+        file: ios/app-release.ipa
+
+    - name: Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        groups: testers
+        file: android/app-release.apk
