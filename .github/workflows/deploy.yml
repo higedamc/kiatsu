@@ -40,7 +40,7 @@ jobs:
     - run: flutter build apk
 
     - name: iOS Build Action
-      uses: yukiarrr/ios-build-action@v0.5.0
+      uses: yukiarrr/ios-build-action@v1.2.0
       with:
         project-path: ios/Runner.xcodeproj
         p12-base64: ${{ secrets.CERTIFICATES_P12 }}
