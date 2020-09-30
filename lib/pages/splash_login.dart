@@ -47,7 +47,7 @@ class SplashPage extends StatelessWidget {
       await users
       .doc(user.user.uid)
       .collection('comments')
-      .doc()
+      .doc(today.toString())
       .set({
         'comment': _text.toString(),
         'createdAt': createdAt

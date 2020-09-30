@@ -8,11 +8,12 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/env/production_secrets.dart';
+import 'package:kiatsu/main.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
-import 'package:share/share.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 // import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
@@ -27,6 +28,8 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   DateTime updatedAt = DateTime.now();
+
+  Secrets _secrets;
 
   Weather w;
 
@@ -384,6 +387,10 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 10.0,
                       ),
+                      _pienVote(),
+                      SizedBox(
+                        height: 24.0,
+                      ),
                       Center(
                         // 5日分の天気データ
                         child: Text(_res2,
@@ -720,4 +727,6 @@ class _HomePageState extends State<HomePage> {
     return showDialog(
         context: context, builder: (BuildContext context) => alert);
   }
+
+  _pienVote() {}
 }
