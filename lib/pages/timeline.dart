@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 final DateTime createdAt = new DateTime.now();
 DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
+DateTime now = new DateTime.now();
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -18,7 +19,9 @@ Future<UserCredential> signInAnon() async {
 
 // ignore: must_be_immutable
 class Timeline extends StatelessWidget {
-  var user = currentUser;
+  var user = firebaseAuth.currentUser;
+
+  Timeline({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // var listitem = [
@@ -34,14 +37,20 @@ class Timeline extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: users.doc(user.uid).collection('comments').snapshots(),
+        stream: users
+            .doc(user.uid)
+            .collection('comments')
+            .snapshots(includeMetadataChanges: true),
         // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          // final _doc = snapshot.data.docs.where((f) {
+          //   return f.documentID == _comments;
+          // }).toList();
           if (!snapshot.hasData) return CircularProgressIndicator();
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              Container(
-                  child: GestureDetector(
+          return ListView(
+            children: snapshot.data.documents
+                .map<Widget>((DocumentSnapshot docSnapshot) {
+              return GestureDetector(
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)),
@@ -56,17 +65,15 @@ class Timeline extends StatelessWidget {
                           size: 40,
                           color: Colors.black,
                         ),
-                        title: Text(
-                            snapshot.data.docs[index]['comment'].toString(),
+                        title: Text(docSnapshot.data()['comment'],
                             style:
                                 TextStyle(fontSize: 18.0, color: Colors.black)),
                       ),
                     ]),
                   ),
                 ),
-              ));
-            },
-            itemCount: snapshot.data.docs.length,
+              );
+            }).toList(),
           );
         },
       ),
@@ -79,7 +86,7 @@ class Timeline extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            TextEditingController Comment = TextEditingController();
+            var _editor = TextEditingController();
             return showDialog(
                 context: context,
                 builder: (context) {
@@ -96,7 +103,7 @@ class Timeline extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextFormField(
-                              controller: Comment,
+                              controller: _editor,
                               decoration:
                                   InputDecoration(hintText: 'ベロベロニャァァァァ'),
                             ),
@@ -107,8 +114,15 @@ class Timeline extends StatelessWidget {
                     actions: [
                       FlatButton(
                         child: Text('post'),
-                        onPressed: () {
-                          users.doc(today.toString()).set({'comment': Comment});
+                        onPressed: () async {
+                          await users
+                              .doc(user.uid)
+                              .collection('comments')
+                              .doc()
+                              .set({
+                            'comment': _editor.text,
+                            'createdAt': createdAt
+                          });
                           Navigator.of(context).pop();
                         },
                       )
