@@ -62,6 +62,13 @@ class _HomePageState extends State<HomePage> {
       // queryForecast();
     });
   }
+// Future<void> _reload() async {
+//   weather = getWeather();
+//   updatedAt = new DateTime.now();
+//   setState(() {
+
+//   });
+// }
 
 // Future<void> queryForecast() async {
 //    // 位置情報取得
@@ -208,6 +215,14 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           "",
         ),
+        leading: IconButton(
+          icon: Icon(Icons.share),
+          onPressed: () {
+            Share.share('低気圧しんどいぴえん🥺️ #thekiatsu');
+            // Share.share(future.data.main.pressure.toString() +
+            //             'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+          },
+        ),
         actions: <Widget>[
           /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
           Builder(
@@ -311,15 +326,12 @@ class _HomePageState extends State<HomePage> {
                                     : snapshot.data.weather[0].main
                                                 .toString() ==
                                             'Rain'
-                                        ? NeumorphicText(
-                                            'Rainy',
+                                        ? NeumorphicText('Rainy',
                                             style: NeumorphicStyle(
                                                 color: Colors.black),
-                                                textStyle: NeumorphicTextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 56.0
-                                                )
-                                          )
+                                            textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 56.0))
                                         : NeumorphicText(
                                             snapshot.data.weather[0].main
                                                 .toString(),
@@ -327,9 +339,8 @@ class _HomePageState extends State<HomePage> {
                                               color: Colors.black,
                                             ),
                                             textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.w200,
-                                              fontSize: 56.0
-                                            ),
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 56.0),
                                           ),
                       ),
                       Center(
@@ -375,6 +386,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(
                         height: 10.0,
+                      ),
+                      _pienVote(),
+                      SizedBox(
+                        height: 24.0,
                       ),
                       Center(
                         // 5日分の天気データ
@@ -712,4 +727,6 @@ class _HomePageState extends State<HomePage> {
     return showDialog(
         context: context, builder: (BuildContext context) => alert);
   }
+
+  _pienVote() {}
 }
