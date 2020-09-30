@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:provider/provider.dart';
 
 final DateTime createdAt = new DateTime.now();
 DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
@@ -12,12 +13,6 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 var currentUser = firebaseAuth.currentUser;
 CollectionReference users = firebaseStore.collection('users');
 
-Future<UserCredential> signInAnon() async {
-  UserCredential user = await firebaseAuth.signInAnonymously();
-  return user;
-}
-
-// ignore: must_be_immutable
 class Timeline extends StatelessWidget {
   var user = firebaseAuth.currentUser;
 
@@ -40,13 +35,18 @@ class Timeline extends StatelessWidget {
         stream: users
             .doc(user.uid)
             .collection('comments')
+            .orderBy('createdAt', descending: true)
             .snapshots(includeMetadataChanges: true),
         // ignore: missing_return
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           // final _doc = snapshot.data.docs.where((f) {
           //   return f.documentID == _comments;
           // }).toList();
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData)
+            return Center(
+                child: CircularProgressIndicator(
+              backgroundColor: Colors.black,
+            ));
           return ListView(
             children: snapshot.data.documents
                 .map<Widget>((DocumentSnapshot docSnapshot) {
@@ -89,46 +89,58 @@ class Timeline extends StatelessWidget {
             var _editor = TextEditingController();
             return showDialog(
                 context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text('自由にコメントしてね🥺'),
-                    content: Builder(builder: (context) {
-                      var height = MediaQuery.of(context).size.height / 6;
-                      var width = MediaQuery.of(context).size.width / 2;
-                      return Container(
-                        height: height,
-                        width: width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFormField(
-                              controller: _editor,
-                              decoration:
-                                  InputDecoration(hintText: 'ベロベロニャァァァァ'),
+                child: Dialog(
+                    backgroundColor: Colors.transparent,
+                    insetPadding: EdgeInsets.all(10),
+                    child: Stack(
+                      overflow: Overflow.visible,
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white),
+                          padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+                          child: TextFormField(
+                            controller: _editor,
+                            cursorWidth: 2,
+                            cursorColor: Colors.grey,
+                            decoration: InputDecoration(
+                              hintText: '自由にコメントしてね🥺',
+                              border: InputBorder.none,
                             ),
-                          ],
+                          ),
                         ),
-                      );
-                    }),
-                    actions: [
-                      FlatButton(
-                        child: Text('post'),
-                        onPressed: () async {
-                          await users
-                              .doc(user.uid)
-                              .collection('comments')
-                              .doc()
-                              .set({
-                            'comment': _editor.text,
-                            'createdAt': createdAt
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    ],
-                  );
-                });
+                        Positioned(
+                          top: 140,
+                          right: -20,
+                          child: FlatButton(
+                              onPressed: () async {
+                                await users
+                                    .doc(user.uid)
+                                    .collection('comments')
+                                    .doc()
+                                    .set({
+                                  'comment': _editor.text,
+                                  'createdAt': createdAt
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              child: NeumorphicText(
+                                '押',
+                                style: NeumorphicStyle(
+                                  color: Colors.black87,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontSize: 30,
+                                ),
+                              )),
+                        ),
+                      ],
+                    )),
+                );
           },
         ),
       ),
