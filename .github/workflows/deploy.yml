@@ -40,8 +40,8 @@ jobs:
         p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
     - name: Decrypt const file
       run: |
-        git clone --branch create_role_account https://github.com/hpoul/blackbox/ && cd blackbox
-        blackbox_edit_start lib/env/production_secrets.dart
+        git clone --branch create_role_account https://github.com/hpoul/blackbox/ && cd blackbox && export PATH=$(pwd)/blackbox/bin && blackbox_edit_start lib/env/production_secrets.dart
+        
 
     - name: Flutter action
       uses: subosito/flutter-action@v1.3.2
@@ -50,8 +50,8 @@ jobs:
     - run: flutter clean
     - run: flutter pub get
     # - run: flutter test
-    - run: flutter build ios
-    - run: flutter build apk
+    - run: flutter build ios -t lib/env/production.dart
+    - run: flutter build apk -t lib/env/production.dart
 
     - name: iOS Build Action
       uses: yukiarrr/ios-build-action@v1.2.0
