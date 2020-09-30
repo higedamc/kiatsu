@@ -78,9 +78,6 @@ PODS:
     - GoogleUtilities/Environment (~> 6.2)
     - "GoogleUtilities/NSData+zlib (~> 6.2)"
   - Flutter (1.0.0)
-  - flutter_string_encryption (0.0.1):
-    - Flutter
-    - SCrypto (~> 4.0.0)
   - geolocation (0.0.1):
     - Flutter
     - streams_channel
@@ -119,7 +116,6 @@ PODS:
     - Flutter
   - PromisesObjC (1.2.10)
   - Protobuf (3.13.0)
-  - SCrypto (4.0.1)
   - share (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -135,7 +131,6 @@ DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `6.26.0`)
   - Flutter (from `Flutter`)
-  - flutter_string_encryption (from `.symlinks/plugins/flutter_string_encryption/ios`)
   - geolocation (from `.symlinks/plugins/geolocation/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
@@ -164,7 +159,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Protobuf
-    - SCrypto
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -182,8 +176,6 @@ EXTERNAL SOURCES:
     :tag: 6.26.0
   Flutter:
     :path: Flutter
-  flutter_string_encryption:
-    :path: ".symlinks/plugins/flutter_string_encryption/ios"
   geolocation:
     :path: ".symlinks/plugins/geolocation/ios"
   geolocator:
@@ -223,7 +215,6 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
   FirebaseRemoteConfig: 1725314c4b89d8853c876099ded037f11bee26db
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_string_encryption: b7c70d03c08b3c4fe854de6cc31a9f62c84cbdba
   geolocation: c194aabfd0f48cd7d6041afa8ba6542aa5714dc2
   geolocator: f7622e0e7e2a24718285b73916d60c4a54b9f5b6
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
@@ -235,7 +226,6 @@ SPEC CHECKSUMS:
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
-  SCrypto: 2f817ed408a749840e5c40d2ffb351e415ac6b74
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   streams_channel: 16855ffd0568eded9563b2fec6a1bfa94420b353

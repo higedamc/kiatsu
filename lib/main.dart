@@ -1,51 +1,63 @@
 import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:kiatsu/locator.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:weather/weather.dart';
 
-Future<void> main() async {
-  // デバッグ中もクラッシュ情報収集できる
+abstract class Secrets{
+  String get firebaseApiKey;
+  String get firebaseSecret;
+  String get firebaseProjectId;
+}
+/**
+ * ! 破壊的変更の追加。
+ * 詳細は => https://codeux.design/articles/manage-secrets-flutter-project/
+ */
+Future<void> startApp(Secrets secrets) async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Admob.initialize();
   await Firebase.initializeApp();
-  await setupLocator();
-  final now = DateTime.now();
   timeago.setLocaleMessages('ja', timeago.JaMessages());
-  print(timeago.format(now));
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  // 以下 6 行 Firebase Crashlytics用のおまじない
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
-      runApp(MyApp(prefs: prefs));
+      runApp(MyApp(prefs: prefs, secrets: secrets,));
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   });
+
+
+
+
+
+  // runApp(MyApp(secrets: secrets));
 }
 
-class MyApp extends StatelessWidget {
-  // API Key呼び出し
+class MyApp extends StatelessWidget{
+
+  
+
+  MyApp({Key key, this.secrets, this.prefs}): super(key: key);
+
+  final Secrets secrets;
   final SharedPreferences prefs;
-  MyApp({this.prefs});
-
-  final String headerTitle = 'ホーム';
-
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+
   @override
-  Widget build(BuildContext context) {
-    return NeumorphicApp(
-      navigatorKey: _navigatorKey,
-      themeMode: ThemeMode.light,
+  Widget build (BuildContext context) {
+    return Provider<Secrets>.value(
+      value: secrets,
+      child: NeumorphicApp(
+        navigatorKey: _navigatorKey,
+        themeMode: ThemeMode.light,
       theme: NeumorphicThemeData(
         baseColor: Color(0xFFFFFFFF),
         lightSource: LightSource.topLeft,
@@ -59,6 +71,9 @@ class MyApp extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
       home: SplashPage(),
+
+
+      ),
     );
   }
 }

@@ -45,6 +45,7 @@ dependencies:
   splashscreen: ^1.2.0
   fl_chart: ^0.11.1
   font_awesome_flutter: ^8.8.1
+  provider: ^4.3.2+2
 
 dev_dependencies:
   flutter_test:

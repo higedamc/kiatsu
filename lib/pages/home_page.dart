@@ -7,13 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
+import 'package:kiatsu/env/production_secrets.dart';
+import 'package:kiatsu/main.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
-import 'package:share/share.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:kiatsu/const/constant.dart' as Constant;
+// import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,11 +24,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String a = Constant.key;
+  // static const String a = Constant.key;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   DateTime updatedAt = DateTime.now();
-  // int _counter = 0;
+
+  Secrets _secrets;
 
   Weather w;
 
@@ -83,6 +86,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (result.isSuccessful) {
+      var rr = ProductionSecrets().firebaseApiKey;
       var test =
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
       print(test);
@@ -93,7 +97,7 @@ class _HomePageState extends State<HomePage> {
           lat.toString() +
           '&lon=' +
           lon.toString() +
-          '&APPID=$a';
+          '&APPID=$rr';
       final response = await http.get(url);
       // var encoded = jsonEncode(w);
       return WeatherClass.fromJson(jsonDecode(response.body));

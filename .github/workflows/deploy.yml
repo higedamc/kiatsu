@@ -38,6 +38,9 @@ jobs:
       with:
         p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
         p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+    - name: Decrypt const file
+      run: |
+        blackbox_edit_start lib/env/production_secrets.dart
 
     - name: Flutter action
       uses: subosito/flutter-action@v1.3.2
@@ -45,8 +48,8 @@ jobs:
         flutter-version: '1.20.4'
     - run: flutter clean
     - run: flutter pub get
-    - run: flutter test
-    - run: flutter build ios --release --no-codesign
+    # - run: flutter test
+    - run: flutter build ios
     - run: flutter build apk
 
     - name: iOS Build Action
