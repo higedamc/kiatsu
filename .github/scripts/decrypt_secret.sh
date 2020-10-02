@@ -1,10 +1,11 @@
-#!/bin/zsh
-mkdir $HOME/secrets
+#!/bin/sh
+mkdir -p $HOME/secrets
+mkdir -p $HOME/.gnupg
 touch $HOME/.gnupg/gpg.conf
 touch $HOME/.gnupg/gpg-agent.conf
-echo 'user-agent' > ~/.gnupg/gpg.conf
-echo 'pinentry-mode loopback' > ~/.gnupg/gpg-agent.conf
-echo 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
+echo 'user-agent' > $HOME/.gnupg/gpg.conf
+echo 'pinentry-mode loopback' > $HOME/.gnupg/gpg-agent.conf
+echo 'allow-loopback-pinentry' >> $HOME/.gnupg/gpg-agent.conf
 echo RELOADAGENT | gpg-connect-agent
 printf "$GPG_SIGNING_KEY" | base64 --decode > $HOME/secrets/private.key
 gpg --import $HOME/secrets/private.key
