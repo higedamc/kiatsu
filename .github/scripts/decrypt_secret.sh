@@ -12,4 +12,4 @@ mkdir -p $HOME/.gnupg/
 printf "$GPG_SIGNING_KEY" | base64 --decode > $HOME/.gnupg/private.key
 gpg --import $HOME/.gnupg/private.key
 # gpg --quiet --batch --yes --passphrase="$SECRETS_PASSPHRASE" --output lib/env/production_secrets.dart --decrypt lib/env/production_secrets.dart.gpg
-echo 1 | gpg --passphrase-fd 0 --decrypt --batch lib/env/production_secrets.dart.gpg
+echo $SECRETS_PASSPHRASE | gpg --passphrase-fd 0 --output lib/env/production_secrets.dart --decrypt --batch lib/env/production_secrets.dart.gpg
