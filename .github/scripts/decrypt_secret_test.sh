@@ -1,7 +1,12 @@
 #!/bin/sh
 set -eo pipefail
 sudo gpgconf --kill dirmngr
-# mkdir -p ./.github/secrets/
+echo 'GPG_TTY=$(tty)' > $HOME/.bashrc
+echo 'export GPG_TTY' >> $HOME/.bashrc
+source $HOME/.bashrc
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+brew install pinentry-mac
+echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
 printf "$GPG_SIGNING_KEY" | base64 --decode > ./.github/private.key
 gpg --import ./.github/private.key
 # printenv | grep $SECRETS_PASSPHRASE
