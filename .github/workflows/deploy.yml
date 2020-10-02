@@ -37,7 +37,7 @@ jobs:
         BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY}}
     - name: execute
       run: |
-        cat - e 8F180B4E161067C1 | sed 's/\$/\\n/g'
+        cat - e 4591D73964C6BD25 | sed 's/\$/\\n/g'
         blackbox_postdeploy
         blackbox_edit_start lib/env/production_secrets.dart
     - name: Import Provisioning Profile
