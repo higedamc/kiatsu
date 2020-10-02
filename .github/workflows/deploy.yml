@@ -32,7 +32,6 @@ jobs:
     - name: GET PGP RIGHT
       run: |
         mkdir -p /github/home/work
-        chown -R /github/home/work
         printf "$GPG_SIGNING_KEY" | base64 --decode > /github/home/work/private.key
         gpg --import /github/home/work/private.key
       env:
