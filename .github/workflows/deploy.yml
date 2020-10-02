@@ -31,28 +31,20 @@ jobs:
     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: GET PGP RIGHT
       run: |
-        mkdir -p ~/work
-        sudo touch ~/.gnupg/gpg.conf
-        sudo touch ~/.gnupg/gpg-agent.conf
-        echo 'user-agent' > ~/.gnupg/gpg.conf
-        echo 'pinentry-mode loopback' > ~/.gnupg/gpg-agent.conf
-        echo 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
-        echo RELOADAGENT | gpg-connect-agent
-        printf "$GPG_SIGNING_KEY" | base64 --decode > ~/work/private.key
-        gpg --import ~/work/private.key
+        :/.github/scripts/decrypt_secret.sh
       env:
-        GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-    - name: Install blackbox
-      uses: jrmcdonald/blackbox-github-actions@v0.2.0
-      with:
-        bb_actions_subcommand: 'postdeploy'
-      env:
-        BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
-        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
-    - name: execute
-      run: |
-        blackbox_postdeploy
-        blackbox_edit_start lib/env/production_secrets.dart
+        SECREST_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
+    # - name: Install blackbox
+    #   uses: jrmcdonald/blackbox-github-actions@v0.2.0
+    #   with:
+    #     bb_actions_subcommand: 'postdeploy'
+    #   env:
+    #     BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
+    #     BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    # - name: execute
+    #   run: |
+    #     blackbox_postdeploy
+    #     blackbox_edit_start lib/env/production_secrets.dart
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
