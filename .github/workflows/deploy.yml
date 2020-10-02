@@ -29,11 +29,17 @@ jobs:
     #   run: git config --global url.https://${GITHUB_TOKEN}:x-oauth-basic@github.com
     #   env:
     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
-    - name: Decrypt GPG
-      uses: minddocdev/decrypt-action@master
+    - name: Install blackbox
+      uses: jrmcdonald/blackbox-github-actions@v0.2.0
       with:
-        files: lib/env/production_secrets.dart.gpg
-        passphrase: ${{ secrets.SECRETS_PASSPHRASE }}
+        bb_actions_subcommand: 'postdeploy'
+      env:
+        BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
+        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    - name: execute
+      run: |
+        blackbox_postdeploy
+        blackbox_edit_start lib/env/production_secrets.dart
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
