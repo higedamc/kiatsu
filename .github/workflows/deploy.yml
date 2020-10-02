@@ -20,8 +20,8 @@ jobs:
         fail-fast: true
         matrix:
           java: ['8', '11', '12']
-          os: [ubuntu-latest, macOS-latest]
-    if: matrix.os == 'ubuntu-latest'
+          os: [ubuntu-latest]
+#     if: matrix.os == 'ubuntu-latest'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
