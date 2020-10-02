@@ -1,14 +1,14 @@
 #!/bin/sh
 set -eo pipefail
-# sudo gpgconf --kill dirmngr
-mkdir -p $HOME/.gnupg
+sudo gpgconf --kill dirmngr
+# mkdir -p $HOME/.gnupg
 # echo 'GPG_TTY=$(tty)' > ~/.zshrc
 # echo 'export GPG_TTY' >> ~/.zshrc
 export GPG_TTY=$(tty)
 # source ~/.zshrc
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-# brew install pinentry-mac
-# echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+brew install pinentry-mac
+echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
 printf "$GPG_SIGNING_KEY" | base64 --decode > $HOME/.gnupg/private.key
 gpg --import $HOME/.gnupg/private.key
 # printenv | grep $SECRETS_PASSPHRASE
