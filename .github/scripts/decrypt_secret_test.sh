@@ -1,9 +1,9 @@
 #!/bin/sh
 set -eo pipefail
 sudo gpgconf --kill dirmngr
-echo 'GPG_TTY=$(tty)' > $HOME/.bashrc
-echo 'export GPG_TTY' >> $HOME/.bashrc
-source $HOME/.bashrc
+echo 'GPG_TTY=$(tty)' > ~/.zshrc
+echo 'export GPG_TTY' >> ~/.zshrc
+source ~/.zshrc
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 brew install pinentry-mac
 echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
