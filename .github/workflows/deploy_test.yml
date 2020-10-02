@@ -21,11 +21,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.3
   
-    - name: GET PGP RIGHT
-      run: ./.github/scripts/decrypt_secret_test.sh
+    # - name: GET PGP RIGHT
+    #   run: ./.github/scripts/decrypt_secret_test.sh
+    #   env:
+    #     SECRETS_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
+    #     GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+    - uses: actions/checkout@v2.3.3
+
+    - name: editstart
+      uses: jrmcdonald/blackbox-github-actions@v0.2.0
+      with:
+        bb_actions_subcommand: 'editstart'
       env:
-        SECRETS_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
-        GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
+        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    - name: execute
+      run: |
+        echo $SECRETS_PASSPHRASE
     
 
 
