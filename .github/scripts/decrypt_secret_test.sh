@@ -1,14 +1,16 @@
 #!/bin/sh
 set -eo pipefail
 git config --global gpg.program $(which gpg)
-export GPG_TTY=$(tty)
+# export GPG_TTY=$(tty)
 # mkdir -p ~/.gnupg
 # echo 'GPG_TTY=$(tty)' > ~/.zshrc
 # echo 'export GPG_TTY' >> ~/.zshrc
 # source ~/.zshrc
-# echo "no-tty" >> ~/.gnupg/gpg.conf
+echo "no-tty" >> ~/.gnupg/gpg.conf
 # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 # brew install pinentry-mac
+# mkdir ~/.gnupg
+# touch ~/.gnupg/gpg-agent.conf
 # echo "pinentry-program `which pinentry-mac`" > ~/.gnupg/gpg-agent.conf
 # gpgconf --kill gpg-agent
 touch private.key
