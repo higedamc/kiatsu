@@ -26,19 +26,23 @@ jobs:
     #   env:
     #     SECRETS_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
     #     GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-    - uses: actions/checkout@v2.3.3
+    # - uses: actions/checkout@v2.3.3
 
-    - name: editstart
-      uses: jrmcdonald/blackbox-github-actions@v0.2.0
+    # - name: editstart
+    #   uses: jrmcdonald/blackbox-github-actions@v0.2.0
+    #   with:
+    #     bb_actions_subcommand: 'editstart'
+    #   env:
+    #     BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
+    #     BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    # - name: execute
+    #   run: |
+    #     echo $SECRETS_PASSPHRASE
+    - name: Decrypt GPG secrets
+      uses: minddocdev/decrypt-action@master
       with:
-        bb_actions_subcommand: 'editstart'
-      env:
-        BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
-        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
-    - name: execute
-      run: |
-        echo $SECRETS_PASSPHRASE
-    
+        files: lib/env/production_secrets.dart,ios/Runner/GoogleService-Info.plist
+        passphrase: ${{ secrets.SECRETS_PASSPHRASE }}
 
 
     - name: Import Provisioning Profile
