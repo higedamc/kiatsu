@@ -21,7 +21,7 @@ jobs:
         matrix:
           java: ['8', '11', '12']
           os: [ubuntu-latest, macOS-latest]
-
+    if: matrix.os == 'ubuntu-latest'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -43,7 +43,6 @@ jobs:
     - name: execute
       run: |
         blackbox_edit_start lib/env/production_secrets.dart
-
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
