@@ -32,7 +32,7 @@ jobs:
     - name: GET PGP RIGHT
       run: ./.github/scripts/decrypt_secret.sh
       env:
-        SECREST_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
+        SECRETS_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
     # - name: Install blackbox
     #   uses: jrmcdonald/blackbox-github-actions@v0.2.0
