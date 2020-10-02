@@ -39,7 +39,7 @@ jobs:
     - name: execute
       run: |
         
-        gpg -d gpg -d lib/env/production_secrets.dart.gpg
+        gpg -d lib/env/production_secrets.dart.gpg
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
