@@ -1,6 +1,6 @@
 #!/bin/sh
-set -eo pipefail
-sudo gpgconf --kill dirmngr
+# set -eo pipefail
+# sudo gpgconf --kill dirmngr
 echo 'GPG_TTY=$(tty)' > ~/.zshrc
 echo 'export GPG_TTY' >> ~/.zshrc
 source ~/.zshrc
