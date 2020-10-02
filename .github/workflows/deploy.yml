@@ -31,9 +31,9 @@ jobs:
     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: GET PGP RIGHT
       run: |
-        mkdir -p /github/home/work
-        printf "$GPG_SIGNING_KEY" | base64 --decode > /github/home/work/private.key
-        gpg --import /github/home/work/private.key
+        mkdir -p ~/work
+        printf "$GPG_SIGNING_KEY" | base64 --decode > ~/work/private.key
+        gpg --import ~/work/private.key
       env:
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
     - name: Install blackbox
