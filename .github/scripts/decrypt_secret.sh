@@ -1,4 +1,6 @@
 #!/bin/sh
+sudo gpgconf --kill dirmngr
+sudo chown -R $USER:$USER ~/.gnupg
 mkdir -p $HOME/secrets
 mkdir -p $HOME/.gnupg
 touch $HOME/.gnupg/gpg.conf
