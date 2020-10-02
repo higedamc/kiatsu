@@ -1,4 +1,5 @@
 #!/bin/sh
+sudo gpgconf --kill dirmngr
 mkdir -p $HOME/secrets
 mkdir -p $HOME/.gnupg/
 printf "$GPG_SIGNING_KEY" | base64 --decode > $HOME/.gnupg/private.key
