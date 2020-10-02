@@ -32,9 +32,11 @@ jobs:
     - name: GET PGP RIGHT
       run: |
         mkdir -p ~/work
-        echo 'use-agent' > ~/.gnupg/gpg.conf
-        echo 'pinentry-mode loopback' >> ~/.gnupg/gpg-agent.conf
-        echo 'allow-loopback-pinentry' > ~/.gnupg/gpg-agent.conf
+        touch ~/.gnupg/gpg.conf
+        touch ~/.gnupg/gpg-agent.conf
+        echo 'user-agent' > ~/.gnupg/gpg.conf
+        echo 'pinentry-mode loopback' > ~/.gnupg/gpg-agent.conf
+        echo 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
         echo RELOADAGENT | gpg-connect-agent
         printf "$GPG_SIGNING_KEY" | base64 --decode > ~/work/private.key
         gpg --import ~/work/private.key
