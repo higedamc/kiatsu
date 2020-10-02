@@ -1,3 +1,3 @@
-Users/jackstash/work/testenv/tmp/kiatsu/ios/Runner/GoogleService-Info.plist
-Users/jackstash/work/testenv/tmp/kiatsu/lib/env/production_secrets.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
 lib/env/production_secrets.dart
