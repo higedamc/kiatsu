@@ -10,11 +10,10 @@ git config --global gpg.program $(which gpg)
 # brew install pinentry-mac
 # echo "pinentry-program `which pinentry-mac`" > ~/.gnupg/gpg-agent.conf
 # gpgconf --kill gpg-agent
-# printf "$GPG_SIGNING_KEY" | base64 --decode > ~/.gnupg/private.key
+touch private.key
+printf "$GPG_SIGNING_KEY" | base64 --decode > private.key
 # gpg --import ~/.gnupg/private.key
 # printenv | grep $SECRETS_PASSPHRASE
-touch private.key
-echo $BLACKBOX_PRIVKEY > private.key
 gpg --import private.key
 echo $SECRETS_PASSPHRASE | gpg --passphrase-fd 0 --output lib/env/production_secrets.dart --decrypt --batch lib/env/production_secrets.dart.gpg
 echo $SECRETS_PASSPHRASE | gpg --passphrase-fd 0 --output ios/Runner/GoogleService-Info.plist --decrypt --batch ios/Runner/GoogleService-Info.plist.gpg
