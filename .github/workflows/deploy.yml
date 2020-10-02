@@ -15,7 +15,12 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+        fail-fast: true
+        matrix:
+          java: ['8', '11', '12']
+          os: [ubuntu-latest, macOS-latest]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -28,6 +33,16 @@ jobs:
     #   run: git config --global url.https://${GITHUB_TOKEN}:x-oauth-basic@github.com
     #   env:
     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
+    - name: Install blackbox
+      uses: jrmcdonald/blackbox-github-actions@v0.2.0
+      with:
+        bb_actions_subcommand: 'postdeploy'
+      env:
+        BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY}}
+        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY}}
+    - name: execute
+      run: |
+        blackbox_edit_start lib/env/production_secrets.dart
 
     - name: Import Provisioning Profile
       run: |
@@ -37,11 +52,7 @@ jobs:
       uses: Apple-Actions/import-codesign-certs@v1.0.4
       with:
         p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
-        p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-    - name: Decrypt const file
-      run: |
-        git clone --branch create_role_account https://github.com/hpoul/blackbox/ && cd blackbox && export PATH=$(pwd)/blackbox/bin && blackbox_edit_start lib/env/production_secrets.dart
-        
+        p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}    
 
     - name: Flutter action
       uses: subosito/flutter-action@v1.3.2

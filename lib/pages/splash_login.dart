@@ -8,7 +8,6 @@ import 'package:splashscreen/splashscreen.dart';
 
 bool result;
 String commentId;
-TextEditingController _text;
 
 class SplashPage extends StatelessWidget {
 
@@ -49,7 +48,7 @@ class SplashPage extends StatelessWidget {
       .collection('comments')
       .doc()
       .set({
-        'comment': _text.toString(),
+        'comment': 'ようこそ！',
         'createdAt': createdAt
       });
       await users

@@ -1,1 +1,2 @@
-Users/jackstash/work/testenv/kiatsu/lib/env/production_secrets.dart
+Users/jackstash/work/testenv/tmp/kiatsu/lib/env/production_secrets.dart
+lib/env/production_secrets.dart
