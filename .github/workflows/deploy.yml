@@ -30,8 +30,7 @@ jobs:
     #   env:
     #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: GET PGP RIGHT
-      run: |
-        :/.github/scripts/decrypt_secret.sh
+      run: ./.github/scripts/decrypt_secret.sh
       env:
         SECREST_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
     # - name: Install blackbox
