@@ -6,7 +6,7 @@ git config --global gpg.program $(which gpg)
 # echo 'GPG_TTY=$(tty)' > ~/.zshrc
 # echo 'export GPG_TTY' >> ~/.zshrc
 # source ~/.zshrc
-echo "no-tty" >> ~/.gnupg/gpg.conf
+# echo "no-tty" >> ~/.gnupg/gpg.conf
 # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 # brew install pinentry-mac
 # mkdir ~/.gnupg
