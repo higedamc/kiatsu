@@ -1,5 +1,4 @@
 #!/bin/sh
-# sudo gpgconf --kill dirmngr
 mkdir -p $HOME/secrets
 mkdir -p $HOME/.gnupg/
 # For macOS
@@ -18,6 +17,8 @@ echo 'allow-loopback-pinentry' >> $HOME/.gnupg/gpg-agent.conf
 chmod 600 $HOME/.gnupg
 chmod 600 $HOME/.gnupg/*
 echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
+sudo gpgconf --kill dirmngr
+echo RELOADAGENT | gpg-connect-agent
 gpgconf --kill gpg-agent
 # End
 printf "$GPG_SIGNING_KEY" | base64 --decode > $HOME/.gnupg/private.key
