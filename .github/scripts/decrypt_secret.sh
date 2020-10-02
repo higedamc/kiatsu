@@ -17,6 +17,7 @@ brew install pinentry-mac
 chmod 600 $HOME/.gnupg/*
 echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
 gpgconf --kill gpg-agent
+# End
 printf "$GPG_SIGNING_KEY" | base64 --decode > $HOME/.gnupg/private.key
 gpg --import $HOME/.gnupg/private.key
 # printenv | grep $SECRETS_PASSPHRASE
