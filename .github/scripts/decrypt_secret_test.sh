@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eo pipefail
 git config --global gpg.program $(which gpg)
+export GPG_TTY=$(tty)
 # mkdir -p ~/.gnupg
 # echo 'GPG_TTY=$(tty)' > ~/.zshrc
 # echo 'export GPG_TTY' >> ~/.zshrc
