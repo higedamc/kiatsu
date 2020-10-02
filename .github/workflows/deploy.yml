@@ -38,9 +38,8 @@ jobs:
         BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY}}
     - name: execute
       run: |
-        cat -e FE965EF7FA08C931 | sed 's/\$/\\n/g'
-        blackbox_postdeploy
-        blackbox_edit_start lib/env/production_secrets.dart
+        
+        gpg -d gpg -d lib/env/production_secrets.dart.gpg
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
