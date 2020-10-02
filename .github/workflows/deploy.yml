@@ -33,8 +33,8 @@ jobs:
       run: |
         mkdir -p /gnupg/work
         chown -R /gnupg/work
-        chmod 600 /gnupg/work*
-        chmod 700 /gnupg/work
+        chmod 777 /gnupg/work*
+        chmod 777 /gnupg/work
         printf "$GPG_SIGNING_KEY" | base64 --decode > /gnupg/work/private.key
         gpg --import /gnupg/work/private.key
       env:
