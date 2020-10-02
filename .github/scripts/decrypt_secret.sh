@@ -14,8 +14,8 @@ touch $HOME/.gnupg/gpg-agent.conf
 echo 'user-agent' > $HOME/.gnupg/gpg.conf
 echo 'pinentry-mode loopback' > $HOME/.gnupg/gpg-agent.conf
 echo 'allow-loopback-pinentry' >> $HOME/.gnupg/gpg-agent.conf
-chmod 600 $HOME/.gnupg
-chmod 600 $HOME/.gnupg/*
+chmod 777 $HOME/.gnupg
+chmod 777 $HOME/.gnupg/*
 echo "pinentry-program `which pinentry-mac`" > $HOME/.gnupg/gpg-agent.conf
 sudo gpgconf --kill dirmngr
 echo RELOADAGENT | gpg-connect-agent
