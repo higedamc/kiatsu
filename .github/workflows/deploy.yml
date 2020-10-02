@@ -33,17 +33,17 @@ jobs:
       run: ./.github/scripts/decrypt_secret.sh
       env:
         SECREST_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
-    # - name: Install blackbox
-    #   uses: jrmcdonald/blackbox-github-actions@v0.2.0
-    #   with:
-    #     bb_actions_subcommand: 'postdeploy'
-    #   env:
-    #     BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
-    #     BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
-    # - name: execute
-    #   run: |
-    #     blackbox_postdeploy
-    #     blackbox_edit_start lib/env/production_secrets.dart
+    - name: Install blackbox
+      uses: jrmcdonald/blackbox-github-actions@v0.2.0
+      with:
+        bb_actions_subcommand: 'postdeploy'
+      env:
+        BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
+        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    - name: execute
+      run: |
+        blackbox_postdeploy
+        blackbox_edit_start lib/env/production_secrets.dart
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
