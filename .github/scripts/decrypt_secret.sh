@@ -1,6 +1,5 @@
 #!/bin/sh
-sudo gpgconf --kill dirmngr
-# sudo chown -R $USER:$USER ~/.gnupg
+# sudo gpgconf --kill dirmngr
 mkdir -p $HOME/secrets
 mkdir -p $HOME/.gnupg/  
 echo 'GPG_TTY=$(tty)' > $HOME/.bashrc
