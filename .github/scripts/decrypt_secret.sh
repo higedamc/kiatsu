@@ -3,6 +3,9 @@ sudo gpgconf --kill dirmngr
 # sudo chown -R $USER:$USER ~/.gnupg
 mkdir -p $HOME/secrets
 mkdir -p $HOME/.gnupg/
+echo 'GPG_TTY=$(tty)' > ~/.bashrc
+echo 'export GPG_TTY' >> ~/.bashrc
+source ~/.bashrc
 # touch $HOME/.gnupg/gpg.conf
 # touch $HOME/.gnupg/gpg-agent.conf
 # echo 'user-agent' > $HOME/.gnupg/gpg.conf
