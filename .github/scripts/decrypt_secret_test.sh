@@ -9,7 +9,6 @@ export GPG_TTY=$(tty)
 # echo "no-tty" >> ~/.gnupg/gpg.conf
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 brew install pinentry-mac
-sudo gpgconf --kill dirmngr
 echo "pinentry-program `which pinentry-mac`" > ~/.gnupg/gpg-agent.conf
 printf "$GPG_SIGNING_KEY" | base64 --decode > ~/.gnupg/private.key
 gpg --import ~/.gnupg/private.key
