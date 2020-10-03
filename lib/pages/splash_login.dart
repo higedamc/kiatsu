@@ -56,6 +56,11 @@ class SplashPage extends StatelessWidget {
       .set({
         'createdAt': createdAt
       });
+      await users
+      .doc(user.user.uid)
+      .set({
+        'userId': user.user.uid
+      });
     });
     else {
       print('User Already Registered');
