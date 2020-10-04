@@ -11,11 +11,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-abstract class Secrets{
+abstract class Secrets {
   String get firebaseApiKey;
   String get firebaseSecret;
   String get firebaseProjectId;
 }
+
 /**
  * ! 破壊的変更の追加。
  * 詳細は => https://codeux.design/articles/manage-secrets-flutter-project/
@@ -29,50 +30,40 @@ Future<void> startApp(Secrets secrets) async {
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
-      runApp(MyApp(prefs: prefs, secrets: secrets,));
+      runApp(MyApp(
+        prefs: prefs,
+        secrets: secrets,
+      ));
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   });
-
-
-
-
-
-  // runApp(MyApp(secrets: secrets));
 }
 
-class MyApp extends StatelessWidget{
-
-  
-
-  MyApp({Key key, this.secrets, this.prefs}): super(key: key);
+class MyApp extends StatelessWidget {
+  MyApp({Key key, this.secrets, this.prefs}) : super(key: key);
 
   final Secrets secrets;
   final SharedPreferences prefs;
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return Provider<Secrets>.value(
       value: secrets,
       child: NeumorphicApp(
         navigatorKey: _navigatorKey,
         themeMode: ThemeMode.light,
-      theme: NeumorphicThemeData(
-        baseColor: Color(0xFFFFFFFF),
-        lightSource: LightSource.topLeft,
-        depth: 20,
-        intensity: 1,
-      ),
-      // initialRoute: '/a',
-      routes: {
-        '/a': (BuildContext context) => SettingPage(),
-        '/timeline': (BuildContext context) => Timeline(),
-      },
-      debugShowCheckedModeBanner: false,
-      home: SplashPage(),
-
-
+        theme: NeumorphicThemeData(
+          baseColor: Color(0xFFFFFFFF),
+          lightSource: LightSource.topLeft,
+          depth: 20,
+          intensity: 1,
+        ),
+        routes: {
+          '/a': (BuildContext context) => SettingPage(),
+          '/timeline': (BuildContext context) => Timeline(),
+        },
+        debugShowCheckedModeBanner: false,
+        home: SplashPage(),
       ),
     );
   }

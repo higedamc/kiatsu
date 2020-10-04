@@ -10,7 +10,6 @@ bool result;
 String commentId;
 
 class SplashPage extends StatelessWidget {
-
   final DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -20,46 +19,36 @@ class SplashPage extends StatelessWidget {
     return user;
   }
 
-
   SplashPage() {
-    // DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
+    DateTime today =
+        new DateTime(createdAt.year, createdAt.month, createdAt.day);
     var currentUser = firebaseAuth.currentUser;
     CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)
-    signInAnon().then((UserCredential user) async {
-      print('User ${user.user.uid}');
-      /**
+      signInAnon().then((UserCredential user) async {
+        print('User ${user.user.uid}');
+        /**
        * ! Firebaseの現状のセキュリティルールだと書き込みできないため一時的に無効化中
        */
-      // await users
-      // .doc(user.user.uid)
-      // .collection('votes')
-      // .doc(today.toString())
-      // .set({
-      //   'pien_rate': [
-      //     {'cho_pien': 0,
-      //     'creaateAt': createdAt},
-      //     {'pien': 0,
-      //     'createdAt': createdAt},
-      //     {'not_pien': 0,
-      //     'createdAt': createdAt}
-      //   ],
-      //   // 'location': 
-      // });
-      await users
-      .doc(user.user.uid)
-      .collection('comments')
-      .doc()
-      .set({
-        'comment': 'ようこそ！',
-        'createdAt': createdAt
+        await users
+            .doc(user.user.uid)
+            .collection('votes')
+            .doc(today.toString())
+            .set({
+          'pien_rate': [
+            {'cho_pien': 0, 'creaateAt': createdAt},
+            {'pien': 0, 'createdAt': createdAt},
+            {'not_pien': 0, 'createdAt': createdAt}
+          ],
+          // 'location':
+        });
+        await users
+            .doc(user.user.uid)
+            .collection('comments')
+            .doc()
+            .set({'comment': 'ようこそ！', 'createdAt': createdAt});
+        await users.doc(user.user.uid).set({'createdAt': createdAt});
       });
-      await users
-      .doc(user.user.uid)
-      .set({
-        'createdAt': createdAt
-      });
-    });
     else {
       print('User Already Registered');
     }
@@ -75,5 +64,4 @@ class SplashPage extends StatelessWidget {
       photoSize: 100.0,
     );
   }
-
 }
