@@ -122,3 +122,4 @@ app.*.symbols
 /Users/jackstash/work/testenv/tmp/kiatsu/ios/Runner/GoogleService-Info.plist
 /android/app/google-services.json
 /ios/Runner/GoogleService-info.plist
+/ios/GoogleService-Info.plist
