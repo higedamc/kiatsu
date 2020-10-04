@@ -54,9 +54,18 @@ class Timeline extends StatelessWidget {
                             size: 40,
                             color: Colors.black,
                           ),
-                          title: Text(docSnapshot.data()['comment'].toString(),
-                              style: TextStyle(
-                                  fontSize: 18.0, color: Colors.black)),
+                          title: StreamBuilder<QuerySnapshot>(
+                              stream: users
+                                  .doc(user.uid)
+                                  .collection('comments')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                return Text(
+                                    docSnapshot.data()['comment'].toString(),
+                                    style: TextStyle(
+                                        fontSize: 18.0, color: Colors.black));
+                              }),
                         ),
                       ]),
                     ),
