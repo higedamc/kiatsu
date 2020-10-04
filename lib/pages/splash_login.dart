@@ -22,7 +22,7 @@ class SplashPage extends StatelessWidget {
 
 
   SplashPage() {
-    DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
+    // DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
     var currentUser = firebaseAuth.currentUser;
     CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)

@@ -3,45 +3,61 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kiatsu/model/auth.dart';
+import 'package:kiatsu/model/user.dart';
 
 final DateTime createdAt = new DateTime.now();
-DateTime today = new DateTime(createdAt.year, createdAt.month, createdAt.day);
-DateTime now = new DateTime.now();
-
+final DateTime today =
+    new DateTime(createdAt.year, createdAt.month, createdAt.day);
+final DateTime now = new DateTime.now();
+String _comment = 'comment';
+final Auth auth = Auth();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-var currentUser = firebaseAuth.currentUser;
-CollectionReference users = firebaseStore.collection('users');
+Stream collectionStream = firebaseStore.collectionGroup('comments').snapshots();
+final currentUser = firebaseAuth.currentUser;
+final CollectionReference users = firebaseStore.collection('users');
+// var allUsers = firebaseStore.collectionGroup('comments').get();
+// var getOne = firebaseStore
+//     .collection('users').doc(user.uid).collection('comments')
+//         .where('comments', isEqualTo: 'ha').get();
 
 class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
 
+  // final DocumentSnapshot snapshot;
+
+  // Future getDocs(QuerySnapshot snapshot) async {
+  //   QuerySnapshot querySnapshot =
+  //       await FirebaseFirestore.instance.collection("users").get();
+
+  //   for (int i = 0; i < querySnapshot.docs.length; i++) {
+  //     var a = querySnapshot.docs[i];
+
+  //     return snapshot =
+  //         (await FirebaseFirestore.instance.collection('users').doc(a.id).get()) as QuerySnapshot;
+  //   }
+  // }
+  // Future getDocs() async {
+  //   QuerySnapshot querySnapshot =
+  //       await FirebaseFirestore.instance.collection("collection").get();
+  //   for (int i = 0; i < querySnapshot.docs.length; i++) {
+  //     var a = querySnapshot.docs[i];
+  //     return (a.data());
+  //   }
+  // }
+
   Timeline({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // var listitem = [
-    //   '低気圧つらすぎぴえん会社やめるニートになるもう誰か養って誰でもいいからもうここまで来たら。嫌なんだよ地元に帰って深夜にドンキに集まるクソガイジヤンキーの連れになってジャージにキティサンでハイエースゴールインは死んでもむりだからぁぁぁぁ👠',
-    //   '気圧もそうだが雨も辛いね、そうです。今日は部長の代わりにとらやの羊羹で謝罪クエストがあるんです。え？私は受注したつもり無いですよ？でも社会人というのは不思議なものです🥺',
-    //   '今日はあっちこっち炎上してるけども、季節の変わり目と低気圧のせいだろうから一回寝ろ。あと、そういう時期はヤベエ奴ほどヤバさが天元突破して活発になっちゃうから相手すんな。まじでうまいもん食ってクソして寝ろ。 https://twitter.com/ayuneo/status/1303746094740811776',
-    //   '低気圧即死我即死即死即死即死即死即死他民加油加油加油加油🤮🤮🤮🤮',
-    //   '低気圧つらいぴえんしょんしょん。。低気圧つらいぴえんしょんしょん。。低気圧つらいぴえんしょんしょん。。🥺🥺🥺',
-    // ];
     return Scaffold(
       appBar: NeumorphicAppBar(
         title: Text('timeline'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: users
-            .doc(user.uid)
-            .collection('comments')
-            .orderBy('createdAt', descending: true)
-            .snapshots(includeMetadataChanges: true),
-        // ignore: missing_return
+        stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // final _doc = snapshot.data.docs.where((f) {
-          //   return f.documentID == _comments;
-          // }).toList();
           if (!snapshot.hasData)
             return Center(
                 child: CircularProgressIndicator(
@@ -68,7 +84,7 @@ class Timeline extends StatelessWidget {
                             size: 40,
                             color: Colors.black,
                           ),
-                          title: Text(docSnapshot.data()['comment'],
+                          title: Text(docSnapshot.data()['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
                         ),
