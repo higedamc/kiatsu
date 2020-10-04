@@ -3,49 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:kiatsu/model/auth.dart';
-import 'package:kiatsu/model/user.dart';
 
 final DateTime createdAt = new DateTime.now();
 final DateTime today =
     new DateTime(createdAt.year, createdAt.month, createdAt.day);
 final DateTime now = new DateTime.now();
-String _comment = 'comment';
-final Auth auth = Auth();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 Stream collectionStream = firebaseStore.collectionGroup('comments').snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
-// var allUsers = firebaseStore.collectionGroup('comments').get();
-// var getOne = firebaseStore
-//     .collection('users').doc(user.uid).collection('comments')
-//         .where('comments', isEqualTo: 'ha').get();
 
 class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
-
-  // final DocumentSnapshot snapshot;
-
-  // Future getDocs(QuerySnapshot snapshot) async {
-  //   QuerySnapshot querySnapshot =
-  //       await FirebaseFirestore.instance.collection("users").get();
-
-  //   for (int i = 0; i < querySnapshot.docs.length; i++) {
-  //     var a = querySnapshot.docs[i];
-
-  //     return snapshot =
-  //         (await FirebaseFirestore.instance.collection('users').doc(a.id).get()) as QuerySnapshot;
-  //   }
-  // }
-  // Future getDocs() async {
-  //   QuerySnapshot querySnapshot =
-  //       await FirebaseFirestore.instance.collection("collection").get();
-  //   for (int i = 0; i < querySnapshot.docs.length; i++) {
-  //     var a = querySnapshot.docs[i];
-  //     return (a.data());
-  //   }
-  // }
 
   Timeline({Key key}) : super(key: key);
   @override
@@ -113,7 +83,6 @@ class Timeline extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black26,
-        // onPressed: () {},
         onPressed: () {},
         child: IconButton(
           icon: Icon(
