@@ -28,21 +28,24 @@ class SplashPage extends StatelessWidget {
     if (currentUser == null)
     signInAnon().then((UserCredential user) async {
       print('User ${user.user.uid}');
-      await users
-      .doc(user.user.uid)
-      .collection('votes')
-      .doc(today.toString())
-      .set({
-        'pien_rate': [
-          {'cho_pien': 0,
-          'creaateAt': createdAt},
-          {'pien': 0,
-          'createdAt': createdAt},
-          {'not_pien': 0,
-          'createdAt': createdAt}
-        ],
-        // 'location': 
-      });
+      /**
+       * ! Firebaseの現状のセキュリティルールだと書き込みできないため一時的に無効化中
+       */
+      // await users
+      // .doc(user.user.uid)
+      // .collection('votes')
+      // .doc(today.toString())
+      // .set({
+      //   'pien_rate': [
+      //     {'cho_pien': 0,
+      //     'creaateAt': createdAt},
+      //     {'pien': 0,
+      //     'createdAt': createdAt},
+      //     {'not_pien': 0,
+      //     'createdAt': createdAt}
+      //   ],
+      //   // 'location': 
+      // });
       await users
       .doc(user.user.uid)
       .collection('comments')
@@ -55,11 +58,6 @@ class SplashPage extends StatelessWidget {
       .doc(user.user.uid)
       .set({
         'createdAt': createdAt
-      });
-      await users
-      .doc(user.user.uid)
-      .set({
-        'userId': user.user.uid
       });
     });
     else {
