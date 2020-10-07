@@ -59,13 +59,6 @@ class _HomePageState extends State<HomePage> {
       // queryForecast();
     });
   }
-// Future<void> _reload() async {
-//   weather = getWeather();
-//   updatedAt = new DateTime.now();
-//   setState(() {
-
-//   });
-// }
 
 // Future<void> queryForecast() async {
 //    // 位置情報取得

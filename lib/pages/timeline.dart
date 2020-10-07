@@ -7,18 +7,20 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 final DateTime createdAt = new DateTime.now();
-final DateTime today =
-    new DateTime(createdAt.year, createdAt.month, createdAt.day);
-final DateTime now = new DateTime.now();
+// final rightNow = createdAt.toIso8601String();
+// final rightNow = DateTime(createdAt.year, createdAt.month, createdAt.day
+// , createdAt.hour, createdAt.minute, createdAt.second, createdAt.millisecond
+// , createdAt.microsecond);
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+final uid = firebaseAuth.currentUser.uid;
 Stream collectionStream = firebaseStore
 .collectionGroup('comments')
-// .limit(100)
+// .limit(limit)
 // .where('comment')
-// .limit(50)
-// .orderBy('createdAt', descending: true)
-// .limit(10)
+.orderBy('createdAt', descending: true)
+// .orderBy('comment', descending: true)
+// .limit(200)
 .snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
@@ -39,6 +41,7 @@ class Timeline extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if(snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(
                 child: CircularProgressIndicator(
@@ -65,7 +68,6 @@ class Timeline extends StatelessWidget {
                             size: 40,
                             color: Colors.black,
                           ),
-                          // ワンチャンここのStreamBuilder要らないかもしれない（白目）
                           title: Text(docSnapshot.data()['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
@@ -73,6 +75,7 @@ class Timeline extends StatelessWidget {
                       ]),
                     ),
                     actions: <Widget>[
+                      if (docSnapshot.data().containsValue(user.uid))
                       IconSlideAction(
                         caption: '削除',
                         color: Colors.red[700],
@@ -140,8 +143,10 @@ class Timeline extends StatelessWidget {
                                   .doc()
                                   .set({
                                 'comment': _editor.text,
-                                'createdAt': createdAt
+                                'createdAt': createdAt,
+                                'userId': user.uid
                               });
+                              // print(createdAt.toString());
                               Navigator.of(context).pop();
                             },
                             child: NeumorphicText(

@@ -125,3 +125,4 @@ app.*.symbols
 /ios/GoogleService-Info.plist
 /Users/jackstash/work/testenv/tmp/kiatsu/ios/GoogleService-Info.plist
 /Users/jackstash/work/testenv/tmp/kiatsu/android/app/google-services.json
+firestore.indexes.json

@@ -18,34 +18,33 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  shared_preferences: ^0.5.7+3
-  http: ^0.12.1
-  weather: ^1.1.1
+  flutter:
+    sdk: flutter
+  cloud_firestore: "^0.14.1"
+  cupertino_icons: ^0.1.3
+  firebase_auth: "^0.18.1"
   # Firebase
   firebase_core: "^0.5.0"
   firebase_crashlytics: "^0.2.1"
-  firebase_auth: "^0.18.1"
-  cloud_firestore: "^0.14.1"
-
-  flutter:
-    sdk: flutter
-  share: ^0.6.4+3
-  settings_ui: ^0.3.0
-  timeago: ^2.0.26
+  fl_chart: ^0.11.1
+  flutter_launcher_icons: ^0.7.5
   flutter_neumorphic: ^3.0.1
-  modal_bottom_sheet: ^0.1.6+1
-  cupertino_icons: ^0.1.3
+  flutter_slidable: ^0.5.7
+  font_awesome_flutter: ^8.8.1
+  geolocation: ^1.1.2
   geopoint: ^0.7.1
   geopoint_location: ^0.4.0
-  geolocation: ^1.1.2
-  package_info: ^0.4.3
   get_it: ^4.0.4
-  flutter_launcher_icons: ^0.7.5
-  splashscreen: ^1.2.0
-  fl_chart: ^0.11.1
-  font_awesome_flutter: ^8.8.1
+  http: ^0.12.1
+  modal_bottom_sheet: ^0.1.6+1
+  package_info: ^0.4.3
   provider: ^4.3.2+2
-  flutter_slidable: ^0.5.7
+  settings_ui: ^0.3.0
+  share: ^0.6.4+3
+  shared_preferences: ^0.5.7+3
+  splashscreen: ^1.2.0
+  timeago: ^2.0.26
+  weather: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -95,4 +94,3 @@ flutter:
 #
 # For details regarding fonts from package dependencies,
 # see https://flutter.dev/custom-fonts/#from-packages
-
