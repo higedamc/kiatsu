@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,18 @@ final DateTime today =
 final DateTime now = new DateTime.now();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-Stream collectionStream = firebaseStore.collectionGroup('comments').snapshots();
+Stream collectionStream = firebaseStore
+.collectionGroup('comments')
+// .limit(100)
+// .where('comment')
+// .limit(50)
+// .orderBy('createdAt', descending: true)
+// .limit(10)
+.snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
+// StreamController streamController = streamController
+// .addStream(collectionStream)
 
 class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
@@ -54,18 +65,10 @@ class Timeline extends StatelessWidget {
                             size: 40,
                             color: Colors.black,
                           ),
-                          title: StreamBuilder<QuerySnapshot>(
-                              stream: users
-                                  .doc(user.uid)
-                                  .collection('comments')
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                return Text(
-                                    docSnapshot.data()['comment'].toString(),
-                                    style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black));
-                              }),
+                          // ワンチャンここのStreamBuilder要らないかもしれない（白目）
+                          title: Text(docSnapshot.data()['comment'].toString(),
+                              style: TextStyle(
+                                  fontSize: 18.0, color: Colors.black)),
                         ),
                       ]),
                     ),

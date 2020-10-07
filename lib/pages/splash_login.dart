@@ -23,6 +23,7 @@ class SplashPage extends StatelessWidget {
     DateTime today =
         new DateTime(createdAt.year, createdAt.month, createdAt.day);
     var currentUser = firebaseAuth.currentUser;
+    var uid = currentUser.uid;
     CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)
       signInAnon().then((UserCredential user) async {
@@ -50,7 +51,7 @@ class SplashPage extends StatelessWidget {
         await users.doc(user.user.uid).set({'createdAt': createdAt});
       });
     else {
-      print('User Already Registered');
+      print('User Already Registered: $uid');
     }
   }
 
