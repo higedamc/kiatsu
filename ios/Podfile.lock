@@ -61,6 +61,10 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.6)
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
+  - geocoder (0.0.1):
+    - Flutter
+  - geoflutterfire (0.0.1):
+    - Flutter
   - geolocation (0.0.1):
     - Flutter
     - streams_channel
@@ -112,6 +116,8 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `6.26.0`)
   - Flutter (from `Flutter`)
+  - geocoder (from `.symlinks/plugins/geocoder/ios`)
+  - geoflutterfire (from `.symlinks/plugins/geoflutterfire/ios`)
   - geolocation (from `.symlinks/plugins/geolocation/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
@@ -152,6 +158,10 @@ EXTERNAL SOURCES:
     :tag: 6.26.0
   Flutter:
     :path: Flutter
+  geocoder:
+    :path: ".symlinks/plugins/geocoder/ios"
+  geoflutterfire:
+    :path: ".symlinks/plugins/geoflutterfire/ios"
   geolocation:
     :path: ".symlinks/plugins/geolocation/ios"
   geolocator:
@@ -188,6 +198,8 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 2cf6944bc538e57c94d8332bae501178edb70727
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
+  geoflutterfire: 2a6493e01fb6eef1a6c9046b1baf9a943d0c5ffe
   geolocation: c194aabfd0f48cd7d6041afa8ba6542aa5714dc2
   geolocator: f7622e0e7e2a24718285b73916d60c4a54b9f5b6
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020

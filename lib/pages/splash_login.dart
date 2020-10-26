@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -8,6 +9,7 @@ import 'package:splashscreen/splashscreen.dart';
 
 bool result;
 String commentId;
+final geo = Geoflutterfire();
 
 class SplashPage extends StatelessWidget {
   final DateTime createdAt = new DateTime.now();
@@ -23,14 +25,11 @@ class SplashPage extends StatelessWidget {
     DateTime today =
         new DateTime(createdAt.year, createdAt.month, createdAt.day);
     var currentUser = firebaseAuth.currentUser;
-    var uid = currentUser.uid;
+    // var uid = currentUser.uid;
     CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)
       signInAnon().then((UserCredential user) async {
         print('User ${user.user.uid}');
-        /**
-       * ! Firebaseの現状のセキュリティルールだと書き込みできないため一時的に無効化中
-       */
         await users
             .doc(user.user.uid)
             .collection('votes')
@@ -51,7 +50,7 @@ class SplashPage extends StatelessWidget {
         await users.doc(user.user.uid).set({'createdAt': createdAt});
       });
     else {
-      print('User Already Registered: $uid');
+      print('User Already Registered: $currentUser');
     }
   }
 

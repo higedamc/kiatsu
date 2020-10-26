@@ -5,27 +5,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
-final DateTime createdAt = new DateTime.now();
-// final rightNow = createdAt.toIso8601String();
-// final rightNow = DateTime(createdAt.year, createdAt.month, createdAt.day
-// , createdAt.hour, createdAt.minute, createdAt.second, createdAt.millisecond
-// , createdAt.microsecond);
+final geo = Geoflutterfire();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser.uid;
 Stream collectionStream = firebaseStore
 .collectionGroup('comments')
-// .limit(limit)
-// .where('comment')
 .orderBy('createdAt', descending: true)
-// .orderBy('comment', descending: true)
-// .limit(200)
 .snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
-// StreamController streamController = streamController
-// .addStream(collectionStream)
 
 class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
@@ -71,6 +62,7 @@ class Timeline extends StatelessWidget {
                           title: Text(docSnapshot.data()['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
+                          // subtitle: Text(''),
                         ),
                       ]),
                     ),
@@ -105,6 +97,7 @@ class Timeline extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
+            final DateTime createdAt = new DateTime.now();
             var _editor = TextEditingController();
             return showDialog(
               context: context,

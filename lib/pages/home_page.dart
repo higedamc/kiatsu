@@ -5,17 +5,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:geocoder/geocoder.dart' as coder;
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
+import 'package:kiatsu/pages/timeline.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 // import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
+
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+  final CollectionReference users = firebaseStore.collection('users');
+  final currentUser = firebaseAuth.currentUser;
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,8 +32,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // static const String a = Constant.key;
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+  final geoF = Geoflutterfire();
   DateTime updatedAt = DateTime.now();
 
   Weather w;
@@ -83,13 +90,32 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (result.isSuccessful) {
+      
       var rr = ProductionSecrets().firebaseApiKey;
       var test =
           geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
-      print(test);
+      print(test.toString());
       geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
+      // var co = new coder.Coordinates(lat, lon);
+      // GeoFirePoint myLocation = geoF.point(latitude: lat, longitude: lon);
+      // var addresses = await coder.Geocoder.local.findAddressesFromCoordinates(co);
+      // var first = addresses.first;
+      // var last = addresses.last;
+      // print("${first.featureName}");
+      // print("${first.locality}");
+      // print("${first.addressLine}");
+      // print("${last.postalCode}");
+      // print("${myLocation.data.toString()}");
+
+      // var collectionReference = firebaseStore.doc(currentUser.uid).collection('locations');
+      // firebaseStore.doc(currentUser.uid).collection('locations').doc(updatedAt.toString()).set({'place_name': first.locality, 'position': myLocation.data});
+      // ロケーション10km圏内
+      // double radius = 10;
+      // String field = 'position';
+      // Stream<List<DocumentSnapshot>> stream = geoF.collection(collectionRef: collectionReference)
+      //                                   .within(center: myLocation, radius: radius, field: field);
       String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
           lat.toString() +
           '&lon=' +
