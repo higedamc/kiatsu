@@ -1,2 +1,3 @@
-Users/jackstash/work/testenv/tmp/kiatsu/lib/env/production_secrets.dart
+android/app/google-services.json
+ios/GoogleService-Info.plist
 lib/env/production_secrets.dart
