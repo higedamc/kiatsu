@@ -20,6 +20,7 @@ final CollectionReference users = firebaseStore.collection('users');
 
 class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
+  
 
   Timeline({Key key}) : super(key: key);
   @override
@@ -62,7 +63,7 @@ class Timeline extends StatelessWidget {
                           title: Text(docSnapshot.data()['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
-                          // subtitle: Text(''),
+                          subtitle: Text('Tokyo'),
                         ),
                       ]),
                     ),

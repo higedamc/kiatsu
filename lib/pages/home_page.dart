@@ -43,8 +43,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<WeatherClass> weather;
 
-  WeatherFactory ws;
-
   String _res2 = '';
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
