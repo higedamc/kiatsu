@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/a': (BuildContext context) => SettingPage(),
           '/timeline': (BuildContext context) => Timeline(),
+          '/home': (BuildContext context) => HomePage(),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
