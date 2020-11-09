@@ -42,11 +42,11 @@ class SplashPage extends StatelessWidget {
           ],
           // 'location':
         });
-        await users
-            .doc(user.user.uid)
-            .collection('comments')
-            .doc()
-            .set({'comment': 'ようこそ！', 'createdAt': createdAt});
+        // await users
+        //     .doc(user.user.uid)
+        //     .collection('comments')
+        //     .doc()
+        //     .set({'comment': 'ようこそ！', 'createdAt': createdAt});
         await users.doc(user.user.uid).set({'createdAt': createdAt});
       });
     else {

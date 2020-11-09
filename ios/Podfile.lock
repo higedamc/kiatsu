@@ -68,7 +68,7 @@ PODS:
   - geolocation (0.0.1):
     - Flutter
     - streams_channel
-  - "geolocator (5.3.2+2)":
+  - "geolocator (6.0.0+4)":
     - Flutter
   - GoogleDataTransport (6.2.1)
   - GoogleDataTransportCCTSupport (3.2.0):
@@ -92,14 +92,14 @@ PODS:
   - GoogleUtilities/UserDefaults (6.7.2):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.4.0)
-  - "location_permissions (3.0.0+1)":
-    - Flutter
   - nanopb (1.30905.0):
     - nanopb/decode (= 1.30905.0)
     - nanopb/encode (= 1.30905.0)
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
   - package_info (0.0.1):
+    - Flutter
+  - "permission_handler (4.4.0+hotfix.4)":
     - Flutter
   - PromisesObjC (1.2.10)
   - share (0.0.1):
@@ -120,8 +120,8 @@ DEPENDENCIES:
   - geoflutterfire (from `.symlinks/plugins/geoflutterfire/ios`)
   - geolocation (from `.symlinks/plugins/geolocation/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
-  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - streams_channel (from `.symlinks/plugins/streams_channel/ios`)
@@ -166,10 +166,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geolocation/ios"
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
-  location_permissions:
-    :path: ".symlinks/plugins/location_permissions/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   shared_preferences:
@@ -201,14 +201,14 @@ SPEC CHECKSUMS:
   geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
   geoflutterfire: 2a6493e01fb6eef1a6c9046b1baf9a943d0c5ffe
   geolocation: c194aabfd0f48cd7d6041afa8ba6542aa5714dc2
-  geolocator: f7622e0e7e2a24718285b73916d60c4a54b9f5b6
+  geolocator: 1ae40084cc6c1586ce5ad12cfc3fd38c64d05f2f
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: 489c1265d2c85b68187a83a911913d190012158d
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
-  location_permissions: 7e0f9aa0f60deb8ff93ddf0e2a164c7e8197bc94
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
@@ -216,4 +216,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 27781264048b728965952b65b202bcec566ac872
 
-COCOAPODS: 1.10.0.rc.1
+COCOAPODS: 1.10.0
