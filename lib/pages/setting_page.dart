@@ -98,6 +98,23 @@ class _SettingPageState extends State<SettingPage> {
                         });
                   },
                 ),
+                
+                // SettingsTile.switchTile(
+                //   title: 'Use fingerprint',
+                //   leading: Icon(Icons.fingerprint),
+                //   switchValue: value,
+                //   onToggle: (bool value) {},
+                // ),
+              ],
+            ),
+            SettingsSection(
+              title: 'ユーザーID',
+              tiles: [
+                SettingsTile(
+                  title: firebaseAuth.currentUser.uid,
+                  leading: NeumorphicIcon(Icons.people),
+                ),
+                
                 // SettingsTile.switchTile(
                 //   title: 'Use fingerprint',
                 //   leading: Icon(Icons.fingerprint),

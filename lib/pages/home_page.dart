@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoder/geocoder.dart' as coder;
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocation/geolocation.dart' as geo;
@@ -15,10 +16,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
+import 'package:kiatsu/pages/generate_page.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 // import 'package:kiatsu/const/constant.dart' as Constant;
@@ -273,9 +276,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _goBack() async {
-    Navigator.pop(
-      context
-    );
+    Navigator.pop(context);
   }
 
   @override
@@ -504,7 +505,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             return FloatingActionButton(
                 backgroundColor: Colors.white,
-                child: const Text('＾ｑ＾'),
+                child: const Text('QR'),
                 onPressed: () {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
@@ -515,7 +516,7 @@ class _HomePageState extends State<HomePage> {
                         duration: Duration(milliseconds: 240),
                         context: context,
                         builder: (context, scrollController) => Scaffold(
-                              body: getListView(),
+                              body: qrView(),
                               // body: _buildBody(context),
                             ));
                   else {
@@ -792,12 +793,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> alertDialog(BuildContext context) {
-    var alert = AlertDialog(
-      title: Text("ぴえん度が無事送信されました!"),
-      content: Text("これはテスト機能です＾ｑ＾"),
+  Widget qrView () {
+    return ListView(
+      children: <Widget> [
+        // Card(
+        //   child: ListTile(
+        //     title: Text('コードをスキャン'),
+        //     leading: Icon(MaterialCommunityIcons.qrcode_scan),
+        //     onTap: () {
+        //       Navigator.of(context)
+        //       .push(MaterialPageRoute(builder: (context) => ));
+        //     },
+        //   ),
+        // ),
+        Card(
+          child: ListTile(
+            title: Text('QRコード生成'),
+            leading: Icon(MaterialCommunityIcons.qrcode_edit),
+            onTap: () {
+              Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => GeneratePage()));
+            },
+          )
+        )
+      ]
     );
-    return showDialog(
-        context: context, builder: (BuildContext context) => alert);
   }
 }
+
+Future<void> alertDialog(BuildContext context) {
+  var alert = AlertDialog(
+    title: Text("ぴえん度が無事送信されました!"),
+    content: Text("これはテスト機能です＾ｑ＾"),
+  );
+  return showDialog(context: context, builder: (BuildContext context) => alert);
+}
+
+String dummyData;

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final geo = Geoflutterfire();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -18,15 +19,33 @@ Stream collectionStream = firebaseStore
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
 
-class Timeline extends StatelessWidget {
-  final user = firebaseAuth.currentUser;
+class Timeline extends StatefulWidget {
 
   Timeline({Key key}) : super(key: key);
+
+  @override
+  _TimelineState createState() => _TimelineState();
+}
+
+class _TimelineState extends State<Timeline> {
+  final user = firebaseAuth.currentUser;
+
+  DateTime updatedAt = DateTime.now();
+
+  Future<void> _refresher() async {
+    setState(() {
+      updatedAt = new DateTime.now();
+      // 引っ張ったときに5日分の天気データ取得する
+      // queryForecast();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final DateTime createdAt = new DateTime.now();
     return Scaffold(
       appBar: NeumorphicAppBar(
-        title: Text('timeline'),
+        title: Text('受付タイムライン'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -38,53 +57,56 @@ class Timeline extends StatelessWidget {
                 child: CircularProgressIndicator(
               backgroundColor: Colors.black,
             ));
-          return ListView(
-            children: snapshot.data.documents
-                .map<Widget>((DocumentSnapshot docSnapshot) {
-              return GestureDetector(
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0)),
-                  elevation: 10,
-                  child: Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: Container(
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.all(2.0),
-                      child: Column(children: <Widget>[
-                        ListTile(
-                          leading: Icon(
-                            Icons.cloud_circle,
-                            size: 40,
-                            color: Colors.black,
+          return RefreshIndicator(
+            onRefresh: () => _refresher(),
+            child: ListView(
+              children: snapshot.data.documents
+                  .map<Widget>((DocumentSnapshot docSnapshot) {
+                return GestureDetector(
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    elevation: 10,
+                    child: Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.25,
+                      child: Container(
+                        margin: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(2.0),
+                        child: Column(children: <Widget>[
+                          ListTile(
+                            leading: Icon(
+                              Icons.cloud_circle,
+                              size: 40,
+                              color: Colors.black,
+                            ),
+                            title: Text(docSnapshot.data()['comment'].toString(),
+                                style: TextStyle(
+                                    fontSize: 18.0, color: Colors.black)),
+                            subtitle: Text(timeago.format(updatedAt, locale: 'ja').toString()),
                           ),
-                          title: Text(docSnapshot.data()['comment'].toString(),
-                              style: TextStyle(
-                                  fontSize: 18.0, color: Colors.black)),
-                          // subtitle: Text(''),
-                        ),
-                      ]),
-                    ),
-                    actions: <Widget>[
-                      if (docSnapshot.data().containsValue(user.uid))
-                      IconSlideAction(
-                        caption: '削除',
-                        color: Colors.red[700],
-                        icon: Icons.delete,
-                        onTap: () => {
-                          users
-                              .doc(user.uid)
-                              .collection('comments')
-                              .doc(docSnapshot.id)
-                              .delete()
-                        },
+                        ]),
                       ),
-                    ],
+                      actions: <Widget>[
+                        if (docSnapshot.data().containsValue(user.uid))
+                        IconSlideAction(
+                          caption: '削除',
+                          color: Colors.red[700],
+                          icon: Icons.delete,
+                          onTap: () => {
+                            users
+                                .doc(user.uid)
+                                .collection('comments')
+                                .doc(docSnapshot.id)
+                                .delete()
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           );
         },
       ),
