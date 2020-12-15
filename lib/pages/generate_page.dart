@@ -20,9 +20,10 @@ class GeneratePageState extends State<GeneratePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _subimitForm() {
+    var _currentTime = DateTime.now();
     if (_formKey.currentState.validate()) {
       FeedbackForm feedbackForm = FeedbackForm(
-          nameController.text, timeController.text, statusController.text);
+          nameController.text, _currentTime.toString(),);
       FromController fromController = FromController((String response) {
         print("Response: $response");
         if (response == FromController.STATUS_SUCCESS) {
@@ -46,6 +47,7 @@ class GeneratePageState extends State<GeneratePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       // appBar: NeumorphiAppBar(
       //   title: Text('QRコードを生成します'),
       // ),
@@ -53,31 +55,34 @@ class GeneratePageState extends State<GeneratePage> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Card(
-              elevation: 5,
-              child: ListTile(
-                leading: Icon(Icons.edit),
-                trailing: FlatButton(
-                  child: Text(
-                    "ENTER",
-                    style: TextStyle(
-                      color: Colors.white,
+            child: Form(
+              key: _formKey,
+              child: Card(
+                elevation: 5,
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  trailing: FlatButton(
+                    child: Text(
+                      "ENTER",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
+                    color: Colors.green,
+                    onPressed: () {
+                      setState(() {
+                        dummyData = nameController.text == ""
+                            ? null
+                            : nameController.text;
+                      });
+                      _subimitForm();
+                    },
                   ),
-                  color: Colors.green,
-                  onPressed: () {
-                    setState(() {
-                      dummyData = nameController.text == ""
-                          ? null
-                          : nameController.text;
-                    });
-                    // _subimitForm();
-                  },
-                ),
-                title: TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: "登録する利用者名を入力してください",
+                  title: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      hintText: "登録する利用者名を入力してください",
+                    ),
                   ),
                 ),
               ),
