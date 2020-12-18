@@ -116,7 +116,10 @@ class Timeline extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15),
                             color: Colors.white),
                         padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
-                        child: TextFormField(
+                        child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          // maxLength: ,
+                          maxLines: null,
                           controller: _editor,
                           cursorWidth: 2,
                           cursorColor: Colors.grey,
