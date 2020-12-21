@@ -128,3 +128,4 @@ app.*.symbols
 firestore.indexes.json
 /firestore.rules
 /Users/jackstash/work/testenv/tmp/kiatsu/firestore.rules
+/Users/jackstash/work/testenv/tmp/kiatsu/.firebaserc
