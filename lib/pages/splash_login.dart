@@ -22,26 +22,24 @@ class SplashPage extends StatelessWidget {
   }
 
   SplashPage() {
-    DateTime today =
-        new DateTime(createdAt.year, createdAt.month, createdAt.day);
     var currentUser = firebaseAuth.currentUser;
     // var uid = currentUser.uid;
     CollectionReference users = firebaseStore.collection('users');
     if (currentUser == null)
       signInAnon().then((UserCredential user) async {
         print('User ${user.user.uid}');
-        await users
-            .doc(user.user.uid)
-            .collection('votes')
-            .doc(today.toString())
-            .set({
-          'pien_rate': [
-            {'cho_pien': 0, 'creaateAt': createdAt},
-            {'pien': 0, 'createdAt': createdAt},
-            {'not_pien': 0, 'createdAt': createdAt}
-          ],
-          // 'location':
-        });
+        // await users
+        //     .doc(user.user.uid)
+        //     .collection('votes')
+        //     .doc()
+        //     .set({
+        //   'pien_rate': [
+        //     {'cho_pien': 0, 'creaateAt': createdAt},
+        //     {'pien': 0, 'createdAt': createdAt},
+        //     {'not_pien': 0, 'createdAt': createdAt}
+        //   ],
+        //   // 'location':
+        // });
         await users.doc(user.user.uid).set({'createdAt': createdAt});
       });
     else {
