@@ -1,5 +1,4 @@
 .firebaserc
-Users/jackstash/work/testenv/tmp/kiatsu/screenshots/testShit.jpg
 android/app/google-services.json
 firebase.json
 firestore.indexes.json
