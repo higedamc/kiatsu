@@ -1,1 +1,1 @@
-firestore.rules
+Users/jackstash/work/testenv/tmp/kiatsu/firestore.rules

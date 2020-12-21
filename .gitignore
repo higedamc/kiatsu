@@ -127,3 +127,4 @@ app.*.symbols
 /Users/jackstash/work/testenv/tmp/kiatsu/android/app/google-services.json
 firestore.indexes.json
 /firestore.rules
+/Users/jackstash/work/testenv/tmp/kiatsu/firestore.rules
