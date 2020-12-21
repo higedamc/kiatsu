@@ -123,6 +123,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text("OK"),
                         onPressed: () async {
                           await _refresher();
+                          // 1回の実行じゃ何故か戻らないのでawaitで2回実行させるというクソ仕様なので誰か直して＾q＾
                           await _goBack();
                           await _goBack();
                         }),
