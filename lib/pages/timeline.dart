@@ -66,6 +66,7 @@ class Timeline extends StatelessWidget {
                           subtitle: Text('Tokyo'),
                         ),
                       ]),
+
                     ),
                     actions: <Widget>[
                       if (docSnapshot.data().containsValue(user.uid))

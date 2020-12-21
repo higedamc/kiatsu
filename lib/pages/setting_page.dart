@@ -21,93 +21,91 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Neumorphic(
-        child: SettingsList(
-          key: _scaffoldKey,
-          sections: [
-            SettingsSection(
-              title: 'デバッグ用',
-              tiles: [
-                SettingsTile(
-                  title: '強制クラッシュ',
+    return Neumorphic(
+      child: SettingsList(
+        key: _scaffoldKey,
+        sections: [
+          SettingsSection(
+            title: 'デバッグ用',
+            tiles: [
+              SettingsTile(
+                title: '強制クラッシュ',
+                subtitle: '押',
+                leading: NeumorphicIcon(Icons.language),
+                onTap: () {
+                  FirebaseCrashlytics.instance.crash();
+                },
+              ),
+              // SettingsTile.switchTile(
+              //   title: 'Use fingerprint',
+              //   leading: Icon(Icons.fingerprint),
+              //   switchValue: value,
+              //   onToggle: (bool value) {},
+              // ),
+            ],
+          ),
+          SettingsSection(
+            title: 'デバッグ用',
+            tiles: [
+              SettingsTile(
+                  title: 'クラッシュ',
                   subtitle: '押',
-                  leading: NeumorphicIcon(Icons.language),
-                  onTap: () {
-                    FirebaseCrashlytics.instance.crash();
-                  },
-                ),
-                // SettingsTile.switchTile(
-                //   title: 'Use fingerprint',
-                //   leading: Icon(Icons.fingerprint),
-                //   switchValue: value,
-                //   onToggle: (bool value) {},
-                // ),
-              ],
-            ),
-            SettingsSection(
-              title: 'デバッグ用',
-              tiles: [
-                SettingsTile(
-                    title: 'クラッシュ',
-                    subtitle: '押',
-                    leading: NeumorphicIcon(Icons.bug_report),
-                    onTap: () async {
-                      try {
-                        throw 'error example';
-                      } catch (e, s) {
-                        FirebaseCrashlytics.instance.recordError(e, s);
-                      }
-                      print('クラッシュさせました＾ｑ＾');
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(
-                        content: NeumorphicText('クラッシュボタンを押しました＾ｑ＾'),
-                        duration: const Duration(seconds: 5),
-                        action: SnackBarAction(label: '押した', onPressed: () {}),
-                      ));
-                    })
-              ],
-            ),
-            SettingsSection(
-              title: 'デバッグ用',
-              tiles: [
-                SettingsTile(
-                  title: 'アカウント削除',
-                  subtitle: '押',
-                  leading: NeumorphicIcon(Icons.language),
+                  leading: NeumorphicIcon(Icons.bug_report),
                   onTap: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('CAUTION!!!'),
-                            content:
-                                Text('Do you really want to delete account?'),
-                            actions: <Widget>[
-                              FlatButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('Cancel')),
-                              FlatButton(
-                                  onPressed: () async {
-                                    Navigator.of(context).pop();
-                                    var currentUser = firebaseAuth.currentUser;
-                                    await currentUser.delete();
-                                  },
-                                  child: Text('OK')),
-                            ],
-                          );
-                        });
-                  },
-                ),
-                // SettingsTile.switchTile(
-                //   title: 'Use fingerprint',
-                //   leading: Icon(Icons.fingerprint),
-                //   switchValue: value,
-                //   onToggle: (bool value) {},
-                // ),
-              ],
-            ),
-          ],
-        ),
+                    try {
+                      throw 'error example';
+                    } catch (e, s) {
+                      FirebaseCrashlytics.instance.recordError(e, s);
+                    }
+                    print('クラッシュさせました＾ｑ＾');
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: NeumorphicText('クラッシュボタンを押しました＾ｑ＾'),
+                      duration: const Duration(seconds: 5),
+                      action: SnackBarAction(label: '押した', onPressed: () {}),
+                    ));
+                  })
+            ],
+          ),
+          SettingsSection(
+            title: 'デバッグ用',
+            tiles: [
+              SettingsTile(
+                title: 'アカウント削除',
+                subtitle: '押',
+                leading: NeumorphicIcon(Icons.language),
+                onTap: () async {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('CAUTION!!!'),
+                          content:
+                              Text('Do you really want to delete account?'),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('Cancel')),
+                            FlatButton(
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+                                  var currentUser = firebaseAuth.currentUser;
+                                  await currentUser.delete();
+                                },
+                                child: Text('OK')),
+                          ],
+                        );
+                      });
+                },
+              ),
+              // SettingsTile.switchTile(
+              //   title: 'Use fingerprint',
+              //   leading: Icon(Icons.fingerprint),
+              //   switchValue: value,
+              //   onToggle: (bool value) {},
+              // ),
+            ],
+          ),
+        ],
       ),
     );
   }
