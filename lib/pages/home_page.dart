@@ -1,28 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:android_intent/android_intent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:geocoder/geocoder.dart' as coder;
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
-import 'package:geolocator/geolocator.dart' as locator;
-import 'package:geolocator/geolocator.dart';
 import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
-import 'package:kiatsu/pages/timeline.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
-// import 'package:kiatsu/const/constant.dart' as Constant;
-import 'package:weather/weather.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -39,9 +31,6 @@ class _HomePageState extends State<HomePage> {
   final PermissionHandler permissionHandler = PermissionHandler();
   Map<PermissionGroup, PermissionStatus> permissions;
 
-  // 以下 2 つ Wiredash 用のストリング
-  // String b = Constant.projectId;
-  // String c = Constant.secret;
 
   Future<WeatherClass> weather;
 
@@ -51,65 +40,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // requestLocationPermission();
-    // _gpsService();
     weather = getWeather();
   }
 
-  // Future<bool> _requestPermission(PermissionGroup permission) async {
-  //   final PermissionHandler _permissionHandler = PermissionHandler();
-  //   var result = await _permissionHandler.requestPermissions([permission]);
-  //   if (result[permission] == PermissionStatus.granted) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // Future<bool> requestLocationPermission({Function onPermissionDenied}) async {
-  //   var granted = await _requestPermission(PermissionGroup.location);
-  //   if (granted != true) {
-  //     requestLocationPermission();
-  //   }
-  //   debugPrint('requestContactsPermission $granted');
-  //   return granted;
-  // }
-
-  // Future _checkGps() async {
-  //   if (!(await Geolocator.isLocationServiceEnabled())) {
-  //     if (Theme.of(context).platform == TargetPlatform.android) {
-  //       showDialog(
-  //           context: context,
-  //           builder: (BuildContext context) {
-  //             return AlertDialog(
-  //               title: Text("Can't get gurrent location"),
-  //               content:
-  //                   const Text('Please make sure you enable GPS and try again'),
-  //               actions: <Widget>[
-  //                 FlatButton(
-  //                     child: Text('Ok'),
-  //                     onPressed: () {
-  //                       final AndroidIntent intent = AndroidIntent(
-  //                           action:
-  //                               'android.settings.LOCATION_SOURCE_SETTINGS');
-  //                       intent.launch();
-  //                       Navigator.of(context, rootNavigator: true).pop();
-  //                       _gpsService();
-  //                     })
-  //               ],
-  //             );
-  //           });
-  //     }
-  //   }
-  // }
-
-  // Future _gpsService() async {
-  //   if (!(await Geolocator.isLocationServiceEnabled())) {
-  //     _checkGps();
-  //     return null;
-  //   } else
-  //     return true;
-  // }
-
+  
   void _hapticFeedback() {
     HapticFeedback.mediumImpact();
   }
@@ -118,26 +52,10 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       weather = getWeather();
       updatedAt = new DateTime.now();
-      // 引っ張ったときに5日分の天気データ取得する
-      // queryForecast();
     });
   }
 
-// Future<void> queryForecast() async {
-//    // 位置情報取得
-//   Position position = await Geolocator()
-//         .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
-//         // Weather クラスに 5日分の天気情報格納
-//    List<Weather> f = (await wf.currentWeatherByLocation(position.latitude.toDouble(), position.longitude.toDouble())) as List<Weather>;
-//    setState(() {
-//      // "_res2" の Text を List "f" にぶっこむ
-//      _res2 = f.toString();
-//    });
-//  }
-
   Future<WeatherClass> getWeather() async {
-    // final test =
-    // locator.Geolocator.getCurrentPosition(desiredAccuracy: locator.LocationAccuracy.best);
     final GeolocationResult result =
         await Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
@@ -158,7 +76,6 @@ class _HomePageState extends State<HomePage> {
           lon.toString() +
           '&APPID=$rr';
       final response = await http.get(url);
-      // var encoded = jsonEncode(w);
       return WeatherClass.fromJson(jsonDecode(response.body));
     } else {
       switch (result.error.type) {
@@ -202,10 +119,6 @@ class _HomePageState extends State<HomePage> {
                   title: Text("kiatsuへようこそ！"),
                   content: Text('さぁ、はじめましょう。'),
                   actions: <Widget>[
-                    // FlatButton(
-                    //   child: Text("Cancel"),
-                    //   onPressed: () => Navigator.pop(context),
-                    // ),
                     FlatButton(
                         child: Text("OK"),
                         onPressed: () async {
@@ -459,7 +372,6 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      _pienVote(),
                       SizedBox(
                         height: 24.0,
                       ),
@@ -531,7 +443,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ));
                   }
-                  // Wiredash.of(context).show();
                 });
           }),
       bottomNavigationBar: BottomAppBar(
@@ -576,100 +487,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget _pienRate(BuildContext context) {
-  //   CollectionReference _ref = FirebaseFirestore.instance.collection('pienn2');
-  //   return FutureBuilder<DocumentSnapshot>(
-  //       future: _ref.doc('超ぴえん').get(),
-  //       builder:
-  //           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-  //         if (snapshot.hasError) return CircularProgressIndicator();
-  //         if (snapshot.connectionState == ConnectionState.done) {
-  //           Map<String, dynamic> data = snapshot.data.data();
-  //           return Column(
-  //             children: <Widget>[
-  //               Text(
-  //                 '${data['votes']}',
-  //                 style: TextStyle(fontSize: 30.0, color: Colors.black),
-  //               ),
-  //               SizedBox(
-  //                 width: 10,
-  //                 height: 10,
-  //               ),
-  //               const Text(
-  //                 "PIEN",
-  //                 style: TextStyle(fontSize: 18.0, color: Colors.black),
-  //               ),
-  //             ],
-  //           );
-  //         }
-  //         return const Text('FETCHING DATA...');
-  //       });
-  // }
-
-  // Widget _buildBody(BuildContext context) {
-  //   return StreamBuilder<QuerySnapshot>(
-  //     stream: FirebaseFirestore.instance.collection('pienn2').snapshots(),
-  //     builder: (context, snapshot) {
-  //       if (!snapshot.hasData)
-  //         return Container(
-  //           child: Center(
-  //             child: Text('FETCHING DATA...'),
-  //           ),
-  //         );
-  //       return _buildList(context, snapshot.data.docs);
-  //       // return getListView(context, snapshot.data);
-  //     },
-  //   );
-  // }
-
-  // Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-  //   return Container(
-  //     child: ListView(
-  //       padding: const EdgeInsets.only(top: 20.0),
-  //       children:
-  //           snapshot.map((data) => _buildListItem(context, data)).toList(),
-  //       // children: snapshot.map((data) => getListView(context, data)).toList(),
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-  //   final record = Record.fromSnapshot(data);
-
-  //   return Padding(
-  //     key: ValueKey(record.pienDo),
-  //     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         border: Border.all(color: Colors.grey),
-  //         borderRadius: BorderRadius.circular(5.0),
-  //       ),
-  //       child: Center(
-  //         child: ListTile(
-  //           title: Text(record.pienDo),
-  //           trailing: Text(record.votes.toString()),
-  //           onTap: () =>
-  //               record.reference.update({'votes': FieldValue.increment(1)}),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget testTile() {
-  //   return Center(
-  //     child: NeumorphicText(
-  //       "ぴえんなう？",
-  //       style: NeumorphicStyle(
-  //         depth: 20,
-  //         intensity: 1,
-  //         color: Colors.black,
-  //       ),
-  //       textStyle:
-  //           NeumorphicTextStyle(fontWeight: FontWeight.w500, fontSize: 56.0),
-  //     ),
-  //   );
-  // }
 
   Widget getListView() {
     return Column(
@@ -695,13 +512,11 @@ class _HomePageState extends State<HomePage> {
           width: 100,
           height: 100,
         ),
-        // _buildBody(context),
         InkWell(
           onTap: () async {
             _hapticFeedback();
             DateTime today =
                 new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
@@ -733,7 +548,6 @@ class _HomePageState extends State<HomePage> {
             _hapticFeedback();
             DateTime today =
                 new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
@@ -765,7 +579,6 @@ class _HomePageState extends State<HomePage> {
             _hapticFeedback();
             DateTime today =
                 new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            // var tomorrow = updatedAt.add(Duration(days: 1));
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
@@ -819,7 +632,6 @@ Widget _pienVote() {
           children: <Widget>[
             Text(
               userField['votes'].toString(),
-              // style: TextStyle(fontSize: 30.0, color: Colors.black),
             ),
             Text(
               'Pien Rate',

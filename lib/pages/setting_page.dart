@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:settings_ui/settings_ui.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-// import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -97,12 +92,6 @@ class _SettingPageState extends State<SettingPage> {
                       });
                 },
               ),
-              // SettingsTile.switchTile(
-              //   title: 'Use fingerprint',
-              //   leading: Icon(Icons.fingerprint),
-              //   switchValue: value,
-              //   onToggle: (bool value) {},
-              // ),
             ],
           ),
         ],
