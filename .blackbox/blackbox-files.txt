@@ -1,3 +1,4 @@
 Users/jackstash/work/testenv/tmp/kiatsu/.firebaserc
 Users/jackstash/work/testenv/tmp/kiatsu/firebase.json
+Users/jackstash/work/testenv/tmp/kiatsu/firestore.indexes.json
 Users/jackstash/work/testenv/tmp/kiatsu/firestore.rules
