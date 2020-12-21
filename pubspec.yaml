@@ -33,12 +33,13 @@ dependencies:
   geocoder: ^0.2.1
   geoflutterfire: ^2.2.1
   geolocation: ^1.1.2
+  geolocator: ^6.1.6
   geopoint: ^0.7.1
-  geopoint_location: ^0.4.0
   get_it: ^4.0.4
   http: ^0.12.1
   modal_bottom_sheet: ^0.1.6+1
   package_info: ^0.4.3
+  permission_handler: ^4.4.0+hotfix.2
   provider: ^4.3.2+2
   settings_ui: ^0.3.0
   share: ^0.6.4+3
@@ -67,7 +68,6 @@ flutter:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
     # - images/
-
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg

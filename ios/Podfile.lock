@@ -291,7 +291,7 @@ PODS:
   - geolocation (0.0.1):
     - Flutter
     - streams_channel
-  - "geolocator (5.3.2+2)":
+  - "geolocator (6.0.0+4)":
     - Flutter
   - GoogleDataTransport (7.5.1):
     - nanopb (~> 1.30906.0)
@@ -365,8 +365,8 @@ DEPENDENCIES:
   - geoflutterfire (from `.symlinks/plugins/geoflutterfire/ios`)
   - geolocation (from `.symlinks/plugins/geolocation/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
-  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - streams_channel (from `.symlinks/plugins/streams_channel/ios`)
@@ -410,10 +410,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geolocation/ios"
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
-  location_permissions:
-    :path: ".symlinks/plugins/location_permissions/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   shared_preferences:
