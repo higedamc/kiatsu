@@ -1,4 +1,5 @@
 Users/jackstash/work/testenv/tmp/kiatsu/.firebaserc
+Users/jackstash/work/testenv/tmp/kiatsu/firebase.json
 android/app/google-services.json
 firestore.rules
 ios/GoogleService-Info.plist
