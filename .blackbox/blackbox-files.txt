@@ -1,6 +1,7 @@
 .firebaserc
-firebase.json
 android/app/google-services.json
+firebase.json
+firestore.indexes.json
 firestore.rules
-ios/GoogleService-Info.plist
+ios/Runner/GoogleService-Info.plist
 lib/env/production_secrets.dart
