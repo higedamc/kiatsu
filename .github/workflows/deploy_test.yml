@@ -1,0 +1,126 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ forActions ]
+  pull_request:
+    branches: [ forActions ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v2.3.3
+  
+    - name: GET PGP RIGHT
+      run: ./.github/scripts/decrypt_secret_test.sh
+      env:
+        SECRETS_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
+        GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    - uses: actions/checkout@v2.3.3
+
+    # - name: editstart
+    #   uses: jrmcdonald/blackbox-github-actions@v0.2.0
+    #   with:
+    #     bb_actions_subcommand: 'editstart'
+    #   env:
+    #     BLACKBOX_PUBKEY: ${{ secrets.BLACKBOX_PUBKEY }}
+    #     BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+    # - name: execute
+    #   run: |
+    #     echo $SECRETS_PASSPHRASE
+    # - name: Decrypt GPG secrets
+    #   uses: minddocdev/decrypt-action@master
+    #   with:
+    #     files: lib/env/production_secrets.dart,ios/Runner/GoogleService-Info.plist
+    #     passphrase: ${{ secrets.SECRETS_PASSPHRASE }}
+
+
+    - name: Import Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        echo '${{ secrets.PROVISIONING_PROFILE }}' | openssl base64 -d -out ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
+    - name: Import Code-Signing Certificates
+      uses: Apple-Actions/import-codesign-certs@v1.0.4
+      with:
+        p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+        p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}    
+
+    - name: Flutter action
+      uses: subosito/flutter-action@v1.3.2
+      with:
+        flutter-version: '1.20.4'
+    - run: flutter clean
+    - run: flutter pub get
+    # - run: flutter test
+    - run: flutter build ios -t lib/env/production.dart
+    # - run: flutter build apk -t lib/env/production.dart
+
+    - name: iOS Build Action
+      uses: yukiarrr/ios-build-action@v1.2.0
+      with:
+        project-path: ios/Runner.xcodeproj
+        p12-base64: ${{ secrets.CERTIFICATES_P12 }}
+        mobileprovision-base64: ${{ secrets.PROVISIONING_PROFILE }}
+        code-signing-identity: iOS Distribution
+        team-id: ${{ secrets.TEAM_ID }}
+        workspace-path: ios/Runner.xcworkspace
+        export-method: development
+        certificate-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+        output-path: app-release.ipa
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ios
+        path: app-release.ipa
+
+    # - name: Upload artifact
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: android
+    #     path: build/app/outputs/apk/release/app-release.apk
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: ios
+
+    # - name: Download artifact
+    #   uses: actions/download-artifact@v2
+    #   with:
+    #     name: android
+
+    - name: Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+      with:
+        appId: ${{secrets.FIREBASE_APP_ID_IOS}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        groups: testers
+        file: ios/app-release.ipa
+
+    # - name: Firebase App Distribution
+    #   uses: wzieba/Firebase-Distribution-Github-Action@v1.2.1
+    #   with:
+    #     appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
+    #     token: ${{secrets.FIREBASE_TOKEN}}
+    #     groups: testers
+    #     file: android/app-release.apk
+        ## End

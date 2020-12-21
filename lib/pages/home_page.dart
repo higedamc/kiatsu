@@ -1,20 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:android_intent/android_intent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:geocoder/geocoder.dart' as coder;
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
+import 'package:geolocator/geolocator.dart' as locator;
+import 'package:geolocator/geolocator.dart';
+import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
+import 'package:kiatsu/pages/timeline.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:kiatsu/const/constant.dart' as Constant;
+// import 'package:kiatsu/const/constant.dart' as Constant;
 import 'package:weather/weather.dart';
+
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+final CollectionReference users = firebaseStore.collection('users');
+final currentUser = firebaseAuth.currentUser;
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,13 +35,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String a = Constant.key;
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   DateTime updatedAt = DateTime.now();
-  // int _counter = 0;
-
-  Weather w;
+  final PermissionHandler permissionHandler = PermissionHandler();
+  Map<PermissionGroup, PermissionStatus> permissions;
 
   // 以下 2 つ Wiredash 用のストリング
   // String b = Constant.projectId;
@@ -36,16 +45,70 @@ class _HomePageState extends State<HomePage> {
 
   Future<WeatherClass> weather;
 
-  WeatherFactory ws;
-
   String _res2 = '';
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    // requestLocationPermission();
+    // _gpsService();
     weather = getWeather();
   }
+
+  // Future<bool> _requestPermission(PermissionGroup permission) async {
+  //   final PermissionHandler _permissionHandler = PermissionHandler();
+  //   var result = await _permissionHandler.requestPermissions([permission]);
+  //   if (result[permission] == PermissionStatus.granted) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  // Future<bool> requestLocationPermission({Function onPermissionDenied}) async {
+  //   var granted = await _requestPermission(PermissionGroup.location);
+  //   if (granted != true) {
+  //     requestLocationPermission();
+  //   }
+  //   debugPrint('requestContactsPermission $granted');
+  //   return granted;
+  // }
+
+  // Future _checkGps() async {
+  //   if (!(await Geolocator.isLocationServiceEnabled())) {
+  //     if (Theme.of(context).platform == TargetPlatform.android) {
+  //       showDialog(
+  //           context: context,
+  //           builder: (BuildContext context) {
+  //             return AlertDialog(
+  //               title: Text("Can't get gurrent location"),
+  //               content:
+  //                   const Text('Please make sure you enable GPS and try again'),
+  //               actions: <Widget>[
+  //                 FlatButton(
+  //                     child: Text('Ok'),
+  //                     onPressed: () {
+  //                       final AndroidIntent intent = AndroidIntent(
+  //                           action:
+  //                               'android.settings.LOCATION_SOURCE_SETTINGS');
+  //                       intent.launch();
+  //                       Navigator.of(context, rootNavigator: true).pop();
+  //                       _gpsService();
+  //                     })
+  //               ],
+  //             );
+  //           });
+  //     }
+  //   }
+  // }
+
+  // Future _gpsService() async {
+  //   if (!(await Geolocator.isLocationServiceEnabled())) {
+  //     _checkGps();
+  //     return null;
+  //   } else
+  //     return true;
+  // }
 
   void _hapticFeedback() {
     HapticFeedback.mediumImpact();
@@ -73,27 +136,27 @@ class _HomePageState extends State<HomePage> {
 //  }
 
   Future<WeatherClass> getWeather() async {
-    final geo.GeolocationResult result =
-        await geo.Geolocation.requestLocationPermission(
+    // final test =
+    // locator.Geolocator.getCurrentPosition(desiredAccuracy: locator.LocationAccuracy.best);
+    final GeolocationResult result =
+        await Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
-        android: geo.LocationPermissionAndroid.coarse,
-        ios: geo.LocationPermissionIOS.always,
+        android: LocationPermissionAndroid.fine,
+        ios: LocationPermissionIOS.always,
       ),
       openSettingsIfDenied: true,
     );
 
     if (result.isSuccessful) {
-      var test =
-          geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.block);
-      print(test);
-      geo.LocationResult result = await geo.Geolocation.lastKnownLocation();
+      final rr = ProductionSecrets().firebaseApiKey;
+      final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
       String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
           lat.toString() +
           '&lon=' +
           lon.toString() +
-          '&APPID=$a';
+          '&APPID=$rr';
       final response = await http.get(url);
       // var encoded = jsonEncode(w);
       return WeatherClass.fromJson(jsonDecode(response.body));
@@ -135,8 +198,22 @@ class _HomePageState extends State<HomePage> {
           return showDialog(
               context: context,
               builder: (context) {
-                return SimpleDialog(
-                  title: Text("Permission For Location Denied"),
+                return AlertDialog(
+                  title: Text("kiatsuへようこそ！"),
+                  content: Text('さぁ、はじめましょう。'),
+                  actions: <Widget>[
+                    // FlatButton(
+                    //   child: Text("Cancel"),
+                    //   onPressed: () => Navigator.pop(context),
+                    // ),
+                    FlatButton(
+                        child: Text("OK"),
+                        onPressed: () async {
+                          await _refresher();
+                          await _goBack();
+                          await _goBack();
+                        }),
+                  ],
                 );
               });
         case geo.GeolocationResultErrorType.playServicesUnavailable:
@@ -195,6 +272,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _goBack() async {
+    Navigator.pop(
+      context
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,6 +286,14 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: const Text(
           "",
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.share),
+          onPressed: () {
+            Share.share('低気圧しんどいぴえん🥺️ #thekiatsu');
+            // Share.share(future.data.main.pressure.toString() +
+            //             'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+          },
         ),
         actions: <Widget>[
           /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
@@ -213,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                   size: 45,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/a');
+                  Navigator.pushNamed(context, '/a');
                 }),
           )
         ],
@@ -275,7 +366,7 @@ class _HomePageState extends State<HomePage> {
                         height: 140,
                         alignment: Alignment.center,
                         child: snapshot.data.weather[0].main.toString() ==
-                                'Cloudy'
+                                'Clouds'
                             ? NeumorphicText(
                                 'Cloudy',
                                 style: NeumorphicStyle(color: Colors.black),
@@ -307,15 +398,12 @@ class _HomePageState extends State<HomePage> {
                                     : snapshot.data.weather[0].main
                                                 .toString() ==
                                             'Rain'
-                                        ? NeumorphicText(
-                                            'Rainy',
+                                        ? NeumorphicText('Rainy',
                                             style: NeumorphicStyle(
                                                 color: Colors.black),
-                                                textStyle: NeumorphicTextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 56.0
-                                                )
-                                          )
+                                            textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 56.0))
                                         : NeumorphicText(
                                             snapshot.data.weather[0].main
                                                 .toString(),
@@ -323,9 +411,8 @@ class _HomePageState extends State<HomePage> {
                                               color: Colors.black,
                                             ),
                                             textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.w200,
-                                              fontSize: 56.0
-                                            ),
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 56.0),
                                           ),
                       ),
                       Center(
@@ -436,8 +523,13 @@ class _HomePageState extends State<HomePage> {
                               // body: _buildBody(context),
                             ));
                   else {
-                    _scaffoldKey.currentState.showSnackBar(
-                        SnackBar(content: const Text("先に情報を読み込んでね＾ｑ＾")));
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: const Text("先に情報を読み込んでね＾ｑ＾"),
+                      action: SnackBarAction(
+                        label: '読込',
+                        onPressed: () => _refresher(),
+                      ),
+                    ));
                   }
                   // Wiredash.of(context).show();
                 });
@@ -458,7 +550,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.person_outline,
+                  Icons.textsms,
                   color: Colors.black,
                 ),
                 onPressed: () {

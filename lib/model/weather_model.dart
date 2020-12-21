@@ -143,6 +143,7 @@ class Main {
         pressure: json["pressure"],
         humidity: json["humidity"],
       );
+  
 
   Map<String, dynamic> toJson() => {
         "temp": temp,
