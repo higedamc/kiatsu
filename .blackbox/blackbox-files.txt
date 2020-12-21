@@ -1,1 +1,2 @@
+Users/jackstash/work/testenv/tmp/kiatsu/android/app/google-services.json
 Users/jackstash/work/testenv/tmp/kiatsu/firestore.rules
