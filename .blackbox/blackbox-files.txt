@@ -1,3 +1,4 @@
 android/app/google-services.json
+firestore.rules
 ios/GoogleService-Info.plist
 lib/env/production_secrets.dart
