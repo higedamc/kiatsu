@@ -131,3 +131,4 @@ firestore.indexes.json
 /Users/jackstash/work/testenv/tmp/kiatsu/.firebaserc
 /Users/jackstash/work/testenv/tmp/kiatsu/firebase.json
 /.firebaserc
+/firebase.json
