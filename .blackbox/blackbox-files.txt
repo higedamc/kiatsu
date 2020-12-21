@@ -1,3 +1,4 @@
 Users/jackstash/work/testenv/tmp/kiatsu/android/app/google-services.json
 Users/jackstash/work/testenv/tmp/kiatsu/firestore.rules
 Users/jackstash/work/testenv/tmp/kiatsu/ios/GoogleService-Info.plist
+Users/jackstash/work/testenv/tmp/kiatsu/lib/env/production_secrets.dart
