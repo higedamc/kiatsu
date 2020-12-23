@@ -8,6 +8,7 @@ import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/tool/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -31,9 +32,12 @@ Future<void> startApp(Secrets secrets) async {
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
-      runApp(MyApp(
-        prefs: prefs,
-        secrets: secrets,
+      runApp(ChangeNotifierProvider(
+        create: (_) => AppTheme(),
+        child: MyApp(
+          prefs: prefs,
+          secrets: secrets,
+        ),
       ));
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   });
@@ -56,8 +60,13 @@ class MyApp extends StatelessWidget {
         theme: NeumorphicThemeData(
           baseColor: Color(0xFFFFFFFF),
           lightSource: LightSource.topLeft,
-          depth: 20,
+          depth: 10,
           intensity: 1,
+        ),
+        darkTheme: NeumorphicThemeData(
+          baseColor: Color(0xFF020412),
+          lightSource: LightSource.bottom,
+          depth: 6,
         ),
         routes: {
           '/a': (BuildContext context) => SettingPage(),

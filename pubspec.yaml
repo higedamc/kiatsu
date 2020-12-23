@@ -11,7 +11,6 @@ description: An application for meteoropathy
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
 version: 0.1.5+309
 
@@ -38,11 +37,12 @@ dependencies:
   geopoint: ^0.7.1
   get_it: ^4.0.4
   http: ^0.12.1
+  location: ^3.1.0
   modal_bottom_sheet: ^0.1.6+1
   package_info: ^0.4.3
   permission_handler: ^4.4.0+hotfix.2
   provider: ^4.3.2+2
-  settings_ui: ^0.3.0
+  settings_ui: ^0.5.0
   share: ^0.6.4+3
   shared_preferences: ^0.5.7+3
   splashscreen: ^1.2.0
@@ -69,6 +69,7 @@ flutter:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
     # - images/
+
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg

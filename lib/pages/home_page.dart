@@ -195,6 +195,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: NeumorphicTheme.of(context).isUsingDark ? NeumorphicColors.darkBackground : Colors.white,
       key: _scaffoldKey,
       appBar: NeumorphicAppBar(
         centerTitle: true,
@@ -247,11 +248,12 @@ class _HomePageState extends State<HomePage> {
                               style: NeumorphicStyle(
                                 depth: 20,
                                 intensity: 1,
-                                color: Colors.black,
+                                color: NeumorphicTheme.of(context).isUsingDark ? Colors.white
+                                : Colors.black,
                               ),
                               textStyle: NeumorphicTextStyle(
                                   // color: Colors.white,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w200,
                                   fontSize: 75.0),
                             ),
                           ),
@@ -267,10 +269,11 @@ class _HomePageState extends State<HomePage> {
                               style: NeumorphicStyle(
                                 depth: 20,
                                 intensity: 1,
-                                color: Colors.black,
+                                color: NeumorphicTheme.of(context).isUsingDark ? Colors.white
+                                : Colors.black,
                               ),
                               textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 75.0),
+                                  fontWeight: FontWeight.w200, fontSize: 75.0),
                             ),
                           ),
                         ),
@@ -283,7 +286,11 @@ class _HomePageState extends State<HomePage> {
                                 'Clouds'
                             ? NeumorphicText(
                                 'Cloudy',
-                                style: NeumorphicStyle(color: Colors.black),
+                                style: NeumorphicStyle(
+                                  color:
+                                  NeumorphicTheme.of(context).isUsingDark ?
+                                   Colors.white : 
+                                   Colors.black),
                                 textStyle: NeumorphicTextStyle(
                                     fontWeight: FontWeight.w200,
                                     fontSize: 56.0),
@@ -391,7 +398,9 @@ class _HomePageState extends State<HomePage> {
                                   .toString(),
                           style: NeumorphicStyle(
                             // height: 1, // 10だとちょうど下すれすれで良い感じ
-                            color: Colors.black,
+                            color: NeumorphicTheme.of(context).isUsingDark ?
+                             Colors.white : 
+                             Colors.black,
                           ),
                           textStyle: NeumorphicTextStyle(),
                         ),
@@ -421,7 +430,8 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             return FloatingActionButton(
                 backgroundColor: Colors.white,
-                child: const Text('＾ｑ＾'),
+                child: Text( NeumorphicTheme.of(context).isUsingDark ?
+                  '黒' : '＾q＾',),
                 onPressed: () {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9

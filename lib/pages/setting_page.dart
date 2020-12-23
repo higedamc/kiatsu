@@ -3,6 +3,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/tool/app_theme.dart';
+import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatefulWidget {
@@ -24,11 +26,19 @@ class _SettingPageState extends State<SettingPage> {
             title: 'デバッグ用',
             tiles: [
               SettingsTile(
-                title: '強制クラッシュ',
+                title: 'テーマ切り替え',
                 subtitle: '押',
-                leading: NeumorphicIcon(Icons.language),
-                onTap: () {
-                  FirebaseCrashlytics.instance.crash();
+                leading: NeumorphicIcon(Icons.color_lens),
+                onPressed: (_) {
+                  final theme = Provider.of<AppTheme>(context, listen: false);
+                  Switch.adaptive(
+                      value: theme.isDark,
+                      onChanged: (_) {
+                        theme.changeMode();
+                      });
+                  NeumorphicTheme.of(context).isUsingDark ? 
+                  NeumorphicTheme.of(context).themeMode = ThemeMode.light :
+                  NeumorphicTheme.of(context).themeMode = ThemeMode.dark;
                 },
               ),
               // SettingsTile.switchTile(
@@ -46,7 +56,7 @@ class _SettingPageState extends State<SettingPage> {
                   title: 'クラッシュ',
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.bug_report),
-                  onTap: () async {
+                  onPressed: (_) async {
                     try {
                       throw 'error example';
                     } catch (e, s) {
@@ -68,7 +78,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: 'アカウント削除',
                 subtitle: '押',
                 leading: NeumorphicIcon(Icons.language),
-                onTap: () async {
+                onPressed: (_) async {
                   showDialog(
                       context: context,
                       builder: (context) {

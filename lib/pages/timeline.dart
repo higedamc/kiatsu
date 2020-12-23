@@ -5,35 +5,41 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 
-final geo = Geoflutterfire();
+
+// final geo = Geoflutterfire();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser.uid;
 Stream collectionStream = firebaseStore
-.collectionGroup('comments')
-.orderBy('createdAt', descending: true)
-.snapshots();
+    .collectionGroup('comments')
+    .orderBy('createdAt', descending: true)
+    .snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
-
 class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
-  
 
   Timeline({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NeumorphicAppBar(
-        title: Text('timeline'),
+        title: NeumorphicText('timeline',
+        style: NeumorphicStyle(
+          depth: 4,
+          color: NeumorphicTheme.of(context).isUsingDark ? Colors.black
+          : Colors.black,
+        ),
+        textStyle: NeumorphicTextStyle(
+          fontSize: 30
+        ),),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if(snapshot.hasError) print(snapshot.error);
+          if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(
                 child: CircularProgressIndicator(
@@ -63,25 +69,24 @@ class Timeline extends StatelessWidget {
                           title: Text(docSnapshot.data()['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
-                          subtitle: Text('Tokyo'),
+                          subtitle: Text('^q^'),
                         ),
                       ]),
-
                     ),
                     actions: <Widget>[
                       if (docSnapshot.data().containsValue(user.uid))
-                      IconSlideAction(
-                        caption: '削除',
-                        color: Colors.red[700],
-                        icon: Icons.delete,
-                        onTap: () => {
-                          users
-                              .doc(user.uid)
-                              .collection('comments')
-                              .doc(docSnapshot.id)
-                              .delete()
-                        },
-                      ),
+                        IconSlideAction(
+                          caption: '削除',
+                          color: Colors.red[700],
+                          icon: Icons.delete,
+                          onTap: () => {
+                            users
+                                .doc(user.uid)
+                                .collection('comments')
+                                .doc(docSnapshot.id)
+                                .delete()
+                          },
+                        ),
                     ],
                   ),
                 ),
@@ -93,11 +98,11 @@ class Timeline extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black26,
         onPressed: () {},
-        child: IconButton(
-          icon: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
+        child: NeumorphicButton(
+          // icon: Icon(
+          //   Icons.add,
+          //   color: Colors.white,
+          // ),
           onPressed: () {
             final DateTime createdAt = new DateTime.now();
             var _editor = TextEditingController();
