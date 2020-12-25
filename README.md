@@ -1,6 +1,6 @@
 # kiatsu
 
-[![Donate with Bitcoin](https://en.cryptobadges.io/badge/big/3Gmm3fU6DfsnaW3VPsRoWMXnkJpyvd6Qo2)](https://en.cryptobadges.io/donate/3Gmm3fU6DfsnaW3VPsRoWMXnkJpyvd6Qo2)
+[![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3Gmm3fU6DfsnaW3VPsRoWMXnkJpyvd6Qo2)](https://en.cryptobadges.io/donate/3Gmm3fU6DfsnaW3VPsRoWMXnkJpyvd6Qo2)
 
 <img src="https://github.com/higedamc/kiatsu/blob/master/screenshots/IMG_2924.jpg">
 
