@@ -12,7 +12,7 @@ import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/pages/chart_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -28,8 +28,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime updatedAt = DateTime.now();
-  final PermissionHandler permissionHandler = PermissionHandler();
-  Map<PermissionGroup, PermissionStatus> permissions;
+  // final PermissionHandler permissionHandler = PermissionHandler();
+  // Map<PermissionGroup, PermissionStatus> permissions;
 
 
   Future<WeatherClass> weather;
@@ -70,12 +70,26 @@ class _HomePageState extends State<HomePage> {
       final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
-      String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
-          lat.toString() +
-          '&lon=' +
-          lon.toString() +
-          '&APPID=$rr';
-      final response = await http.get(url);
+      // var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
+      //     lat.toString() +
+      //     '&lon=' +
+      //     lon.toString() +
+      //     '&APPID=$rr';
+      // var endpointUrl = 'https://api.openweathermap.org/data/2.5/weather';
+      Map<String, String> queryParams = {
+        'lat': lat.toString(),
+        'lon': lon.toString(),
+        'APPID': rr.toString(),
+      };
+      // var queryString = Uri(queryParameters: queryParams).query;
+      // var requestUrl = endpointUrl + '?' + queryString;
+      var uri = Uri(
+        scheme: 'https',
+        host: 'api.openweathermap.org',
+        path: '/data/2.5/weather',
+        queryParameters: queryParams,
+      );
+      final response = await http.get(uri);
       return WeatherClass.fromJson(jsonDecode(response.body));
     } else {
       switch (result.error.type) {
@@ -426,15 +440,15 @@ class _HomePageState extends State<HomePage> {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                   if (snapshot.hasData)
-                    // Share.share(snapshot.data.main.pressure.toString() +
-                    //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
-                    showBarModalBottomSheet(
-                        duration: Duration(milliseconds: 240),
-                        context: context,
-                        builder: (context, scrollController) => Scaffold(
-                              body: getListView(),
-                              // body: _buildBody(context),
-                            ));
+                    Share.share(snapshot.data.main.pressure.toString() +
+                        'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                    // showBarModalBottomSheet(
+                    //     duration: Duration(milliseconds: 240),
+                    //     context: context,
+                    //     builder: (context, scrollController) => Scaffold(
+                    //           body: getListView(),
+                    //           // body: _buildBody(context),
+                    //         ));
                   else {
                     _scaffoldKey.currentState.showSnackBar(SnackBar(
                       content: const Text("先に情報を読み込んでね＾ｑ＾"),
@@ -475,10 +489,12 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  showBarModalBottomSheet(
-                      duration: Duration(milliseconds: 240),
-                      context: context,
-                      builder: (context, scrollController) => PieChartPage());
+                  Share.share('低気圧しんどいぴえん🥺️ #thekiatsu');
+                  // showBarModalBottomSheet(
+                  //     duration: Duration(milliseconds: 240),
+                  //     context: context,
+                  //     builder: (context, scrollController) => PieChartPage(),
+                  //     );
                 },
               ),
             ],

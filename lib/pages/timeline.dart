@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+// import 'package:geoflutterfire/geoflutterfire.dart';
 
-final geo = Geoflutterfire();
+// final geo = Geoflutterfire();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser.uid;
@@ -40,7 +40,7 @@ class Timeline extends StatelessWidget {
               backgroundColor: Colors.black,
             ));
           return ListView(
-            children: snapshot.data.documents
+            children: snapshot.data.docs
                 .map<Widget>((DocumentSnapshot docSnapshot) {
               return GestureDetector(
                 child: Card(
@@ -103,10 +103,11 @@ class Timeline extends StatelessWidget {
             var _editor = TextEditingController();
             return showDialog(
               context: context,
-              child: Dialog(
+              builder: (context) => Dialog(
                   backgroundColor: Colors.transparent,
                   insetPadding: EdgeInsets.all(10),
                   child: Stack(
+                    // ignore: deprecated_member_use
                     overflow: Overflow.visible,
                     alignment: Alignment.center,
                     children: <Widget>[
@@ -133,7 +134,7 @@ class Timeline extends StatelessWidget {
                       Positioned(
                         top: 140,
                         right: -20,
-                        child: FlatButton(
+                        child: TextButton(
                             onPressed: () async {
                               await users
                                   .doc(user.uid)

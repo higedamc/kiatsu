@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/home_page.dart';
+import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 // 匿名ログイン + スプラッシュスクリーンの実装
 
 bool result;
 String commentId;
-final geo = Geoflutterfire();
+// final geo = Geoflutterfire();
 
 class SplashPage extends StatelessWidget {
   final DateTime createdAt = new DateTime.now();
@@ -20,6 +21,8 @@ class SplashPage extends StatelessWidget {
     UserCredential user = await firebaseAuth.signInAnonymously();
     return user;
   }
+
+
 
   SplashPage() {
     var currentUser = firebaseAuth.currentUser;
@@ -42,6 +45,7 @@ class SplashPage extends StatelessWidget {
         await users.doc(user.user.uid).set({'createdAt': createdAt});
       });
     else {
+
       print('User Already Registered: $currentUser');
     }
   }

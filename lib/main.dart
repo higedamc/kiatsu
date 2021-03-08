@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
@@ -25,6 +26,8 @@ abstract class Secrets {
 Future<void> startApp(Secrets secrets) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final appleSignInAvailable = await AppleSignInAvailable.check();
+
   timeago.setLocaleMessages('ja', timeago.JaMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
