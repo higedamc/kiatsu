@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,6 +52,9 @@ class _SettingPageState extends State<SettingPage> {
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
 
+    // if(Platform.isAndroid)
+
+
     // Request credential for the currently signed in Apple account.
     final appleCredential = await SignInWithApple.getAppleIDCredential(
       scopes: [
@@ -68,8 +72,8 @@ class _SettingPageState extends State<SettingPage> {
 
     // Sign in the user with Firebase. If the nonce we generated earlier does
     // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-    //  return await signInAnon().then((UserCredential user) => user.user.linkWithCredential(oauthCredential));
+    // return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+     return await signInAnon().then((UserCredential user) => user.user.linkWithCredential(oauthCredential));
     // final appleIdCredential = await SignInWithApple.getAppleIDCredential(
     //   scopes: [
     //     AppleIDAuthorizationScopes.email,
