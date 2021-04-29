@@ -21,23 +21,23 @@ dependencies:
   flutter:
     sdk: flutter
   apple_sign_in: ^0.1.0
-  cloud_firestore: ^1.0.0
+  cloud_firestore: ^1.0.7
   crypto: ^3.0.0
   cupertino_icons: ^1.0.2
-  firebase_auth: ^1.0.0
-  firebase_core: ^1.0.0
-  firebase_crashlytics: ^1.0.0
+  firebase_auth: ^1.1.2
+  firebase_core: ^1.1.0
+  firebase_crashlytics: ^2.0.2
   fl_chart: ^0.20.1
   flutter_launcher_icons: ^0.9.0
   flutter_neumorphic: ^3.0.1
   flutter_slidable: ^0.5.7
   font_awesome_flutter: ^8.8.1
   geocoder: ^0.2.1
-  # geoflutterfire: ^2.2.2
   geolocation: ^1.1.2
   geolocator: ^7.0.1
   geopoint: ^0.8.0
   get_it: ^6.0.0
+  github_sign_in: ^0.0.4
   http: ^0.13.0
   modal_bottom_sheet: ^2.0.0
   package_info: ^2.0.0
@@ -48,8 +48,8 @@ dependencies:
   shared_preferences: ^2.0.3
   sign_in_with_apple: ^3.0.0
   splashscreen: ^1.2.0
+  the_apple_sign_in: ^1.1.1
   timeago: ^3.0.1
-  # weather: ^1.2.4
 
 dev_dependencies:
   flutter_test:
