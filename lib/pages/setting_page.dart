@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/utils/apple_auth.dart';
 import 'package:kiatsu/utils/github_auth.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -100,15 +101,17 @@ class _SettingPageState extends State<SettingPage> {
             title: 'アカウント管理',
             tiles: [
               SettingsTile(
-                  title: 'Apple IDでサインインする',
+                  title: '他のアカウントでサインインする',
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.account_circle_outlined),
                   onPressed: (context) async {
-                    print(AppleAuthUtil.isSignedIn().toString());
-                    User user2 = AppleAuthUtil.getCurrentUser();
-                    await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
+                    // print(AppleAuthUtil.isSignedIn().toString());
+                    // User user2 = AppleAuthUtil.getCurrentUser();
+                    // print(user2.toString());
+                    // await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
                     // await GithubAuthUtil.signIn(context)
                     //     .then((user) => setState(() => user2 = user));
+                    await Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
                   }),
               SettingsTile(
                 title: 'アカウント削除',
@@ -128,9 +131,9 @@ class _SettingPageState extends State<SettingPage> {
                                 child: Text('Cancel')),
                             FlatButton(
                                 onPressed: () async {
-                                  Navigator.of(context).pop();
                                   var currentUser = firebaseAuth.currentUser;
                                   await currentUser.delete();
+                                  Navigator.of(context).pop();
                                 },
                                 child: Text('OK')),
                           ],

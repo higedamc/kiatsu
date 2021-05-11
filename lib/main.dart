@@ -7,6 +7,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
+import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:provider/provider.dart';
@@ -34,10 +35,15 @@ Future<void> startApp(Secrets secrets) async {
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
-      runApp(MyApp(
-        prefs: prefs,
-        secrets: secrets,
-      ));
+      runApp(
+        Provider<AppleSignInAvailable>.value(
+          child: MyApp(
+            prefs: prefs,
+            secrets: secrets,
+          ),
+          value: appleSignInAvailable,
+        ),
+      );
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   });
 }
@@ -66,6 +72,7 @@ class MyApp extends StatelessWidget {
           '/a': (BuildContext context) => SettingPage(),
           '/timeline': (BuildContext context) => Timeline(),
           '/home': (BuildContext context) => HomePage(),
+          '/signpage': (BuildContext context) => SignInPage(),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
