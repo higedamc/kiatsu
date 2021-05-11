@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 String generateNonce([int length = 32]) {
   final charset =
@@ -23,6 +24,7 @@ String sha256ofString(String input) {
   return digest.toString();
 }
 
+
 class AppleAuthUtil {
   // static final AppleSignIn _appleSignIn = AppleSignIn(
   //   // clientId: '********',
@@ -33,96 +35,117 @@ class AppleAuthUtil {
 
   /// サインイン中か
   static bool isSignedIn() => FirebaseAuth.instance.currentUser != null;
-
   /// 現在のユーザー情報
-  static User getCurrentUser() => FirebaseAuth.instance.currentUser;
+  static User? getCurrentUser() => FirebaseAuth.instance.currentUser;
+  // emailが認証済みかどうか
+  static bool isEmailVerified() => getCurrentUser()!.emailVerified == true;
+
+  
 
   /// サインアウト
   static void signOut() => FirebaseAuth.instance.signOut();
 
   /// サインイン
-  static Future<User> signIn(BuildContext context) async {
-    // final UserCredential credential = await signInWithApple();
-    final User user = await signInWithApple();
-    // return credential.user;
-    return user;
+  static Future<User?> signIn(BuildContext context) async {
+    final UserCredential credential = await signInWithApple();
+    // final User user = await signInWithApple();
+    return credential.user;
+    // return user;
+  }
+  static Future<void> forceLink(BuildContext context) async {
+    final _auth = FirebaseAuth.instance;
+    final _user = _auth.currentUser;
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+
+      
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      final oAuthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+      );
+
+      // final userCredential = await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+      // final AuthCredential authCre = userCredential.credential;
+
+      await _user!.linkWithCredential(oAuthCredential);
   }
 
-  // ignore: missing_return
-  static Future<User> signInWithApple({List<Scope> scopes = const[]}) async {
-    // final rawNonce = generateNonce();
-    // final nonce = sha256ofString(rawNonce);
-    // // Request credential for the currently signed in Apple account.
-    // final appleCredential = await SignInWithApple.getAppleIDCredential(
-    //   scopes: [
-    //     AppleIDAuthorizationScopes.email,
-    //     AppleIDAuthorizationScopes.fullName,
-    //   ],
-    //   nonce: nonce,
-    // );
-    //
-    final res = await AppleSignIn.performRequests([
-      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    ]);
-    switch (res.status) {
-      case AuthorizationStatus.authorized:
-        try {
-          final AppleIdCredential appleIdCredential = res.credential;
-          final OAuthProvider oAuthProvider = OAuthProvider('apple.com');
-          final credential = oAuthProvider.credential(
-            idToken: String.fromCharCodes(appleIdCredential.identityToken),
-            accessToken:
-                String.fromCharCodes(appleIdCredential.authorizationCode),
-          );
-          // return await FirebaseAuth.instance.signInWithCredential(credential);
-          final authResult =
-              await FirebaseAuth.instance.signInWithCredential(credential);
-          final firebaseUser = authResult.user;
-          if (scopes.contains(Scope.fullName)) {
-            final displayName =
-                '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-            await firebaseUser.updateProfile(displayName: displayName);
-          }
-          return firebaseUser;
-        } on PlatformException catch (e) {
-          print(e.message);
-        }
-        print('サインインされました');
-        break;
-      case AuthorizationStatus.cancelled:
-        // TODO: Handle this case.
-        print('User cancelled');
-        throw PlatformException(
-            code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
-        break;
-      case AuthorizationStatus.error:
-        // TODO: Handle this case.
-        print("Sign in failed: ${res.error.localizedDescription}");
-        throw PlatformException(
-          code: 'ERROR_AUTHORIZATION_DINED',
-          message: res.error.toString(),
-        );
+  // static Future<User> linkAnonToApple(BuildContext context) async {
+  //   final _auth = FirebaseAuth.instance;
+  //   final user = _auth.currentUser;
+  //   final credential = await signInWithApple();
+  //   // final AuthCredential authCredential = credential.credential;
+  //   final authResult = await user.linkWithCredential(credential.credential);
+  //   final firebaseUser = authResult.user;
+  //   return firebaseUser;
+  // }
 
-        break;
-      default:
-        throw UnimplementedError();
+  static Future<UserCredential> signInWithApple() async {
+    
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+    var userCredential;
+    // Request credential for the currently signed in Apple account.
+    try {
+      
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      final oAuthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+      );
+
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+      // if (userCredential == null)
+      print(userCredential);
+
+
+      // final authResult =
+      //     await FirebaseAuth.instance.signInWithCredential(credential);
+      // final firebaseUser = authResult.user;
+      // if (scopes.contains(Scope.fullName)) {
+      //   final displayName =
+      //       '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
+      //   await firebaseUser.updateProfile(displayName: displayName);
+      // }
+      // return firebaseUser;
+      // return userCredential;
+    } catch (e) {
+      print(e.toString());
     }
-    // final res = await AppleSignIn.performRequests([AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])]);
-    // final OAuthProvider oAuth = OAuthProvider('apple.com');
-    // final AppleIdCredential appleIdCredential = res.credential;
-    // final credential = oAuth.credential(
-    //   idToken: String.fromCharCodes(appleIdCredential.identityToken),
-    //   accessToken: String.fromCharCodes(appleIdCredential.authorizationCode),
-    // );
-    // Create an `OAuthCredential` from the credential returned by Apple.
-    // final oauthCredential = OAuthProvider('apple.com').credential(
-    //   idToken: appleCredential.identityToken,
-    //   rawNonce: rawNonce,
-    // );
-    // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    // return await FirebaseAuth.instance.signInWithCredential(credential);
-    //  on FirebaseAuthException catch (e) {
-    //   print(e.message);
+    print('サインインされました');
+    return userCredential;
   }
+  // final res = await AppleSignIn.performRequests([AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])]);
+  // final OAuthProvider oAuth = OAuthProvider('apple.com');
+  // final AppleIdCredential appleIdCredential = res.credential;
+  // final credential = oAuth.credential(
+  //   idToken: String.fromCharCodes(appleIdCredential.identityToken),
+  //   accessToken: String.fromCharCodes(appleIdCredential.authorizationCode),
+  // );
+  // Create an `OAuthCredential` from the credential returned by Apple.
+  // final oauthCredential = OAuthProvider('apple.com').credential(
+  //   idToken: appleCredential.identityToken,
+  //   rawNonce: rawNonce,
+  // );
+  // Sign in the user with Firebase. If the nonce we generated earlier does
+  // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+  // return await FirebaseAuth.instance.signInWithCredential(credential);
+  //  on FirebaseAuthException catch (e) {
+  //   print(e.message);
 }

@@ -1,16 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kiatsu/auth/apple_signin_available.dart';
+
 import 'package:kiatsu/pages/home_page.dart';
-import 'package:provider/provider.dart';
+import 'package:kiatsu/utils/apple_auth.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 // 匿名ログイン + スプラッシュスクリーンの実装
-
-bool result;
-String commentId;
-// final geo = Geoflutterfire();
 
 class SplashPage extends StatelessWidget {
   final DateTime createdAt = new DateTime.now();
@@ -22,14 +18,12 @@ class SplashPage extends StatelessWidget {
     return user;
   }
 
-
-
   SplashPage() {
-    var currentUser = firebaseAuth.currentUser;
-    CollectionReference users = firebaseStore.collection('users');
-    if (currentUser == null)
+    final current = firebaseAuth.currentUser;
+    final CollectionReference users = firebaseStore.collection('users');
+    if (!AppleAuthUtil.isSignedIn() && !current!.emailVerified) {
       signInAnon().then((UserCredential user) async {
-        print('User ${user.user.uid}');
+        print('User ${user!.user!.uid}');
         // await users
         //     .doc(user.user.uid)
         //     .collection('votes')
@@ -42,11 +36,10 @@ class SplashPage extends StatelessWidget {
         //   ],
         //   // 'location':
         // });
-        await users.doc(user.user.uid).set({'createdAt': createdAt});
+        users.doc(user!.user!.uid).set({'createdAt': createdAt});
       });
-    else {
-
-      print('User Already Registered: $currentUser');
+    } else {
+      print('User Already Registered: $current');
     }
   }
 

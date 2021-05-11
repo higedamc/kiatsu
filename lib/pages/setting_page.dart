@@ -132,7 +132,7 @@ class _SettingPageState extends State<SettingPage> {
                             FlatButton(
                                 onPressed: () async {
                                   var currentUser = firebaseAuth.currentUser;
-                                  await currentUser.delete();
+                                  await currentUser!.delete();
                                   Navigator.of(context).pop();
                                 },
                                 child: Text('OK')),

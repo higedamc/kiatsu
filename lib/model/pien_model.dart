@@ -1,19 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PienDo {
-  final String pienDo;
-  final int votes;
-  final DocumentReference reference;
+// class PienDo {
+//   final String pienDo;
+//   final int votes;
+//   final DocumentReference reference;
 
-  PienDo.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['pien_do'] != null),
-        assert(map['votes'] != null),
-        pienDo = map['pien_do'],
-        votes = map['votes'];
+//   PienDo.fromMap(Map<String, dynamic> map, {required this.reference})
+//       : assert(map['pien_do'] != null),
+//         assert(map['votes'] != null),
+//         pienDo = map['pien_do'],
+//         votes = map['votes'];
 
-  PienDo.fromSnapshot(DocumentSnapshot snaps)
-      : this.fromMap(snaps.data(), reference: snaps.reference);
+//   PienDo.fromSnapshot(DocumentSnapshot snaps)
+//       : this.fromMap(snaps.get(), reference: snaps.reference);
 
-  @override
-  String toString() => "Record<$pienDo:$votes>";
-}
+//   @override
+//   String toString() => "Record<$pienDo:$votes>";
+// }
