@@ -11,43 +11,45 @@ description: An application for meteoropathy
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
 version: 0.1.5+309
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.14.4
-  cupertino_icons: ^0.1.3
-  firebase_auth: ^0.18.4
-  firebase_core: ^0.5.3
-  firebase_crashlytics: ^0.2.4
-  fl_chart: ^0.11.1
-  flutter_launcher_icons: ^0.7.5
-  flutter_neumorphic: ^3.0.1
-  flutter_slidable: ^0.5.7
-  font_awesome_flutter: ^8.8.1
+  apple_sign_in: ^0.1.0
+  cloud_firestore: ^2.1.0
+  crypto: ^3.0.1
+  cupertino_icons: ^1.0.3
+  firebase_auth: ^1.1.4
+  firebase_core: ^1.1.1
+  firebase_crashlytics: ^2.0.3
+  fl_chart: ^0.36.1
+  flutter_launcher_icons: ^0.9.0
+  flutter_neumorphic: ^3.1.0
+  flutter_slidable: ^0.6.0
+  font_awesome_flutter: ^9.0.0
   geocoder: ^0.2.1
-  geoflutterfire: ^2.2.1
   geolocation: ^1.1.2
-  geolocator: ^6.1.6
-  geopoint: ^0.7.1
-  get_it: ^4.0.4
-  http: ^0.12.1
-  modal_bottom_sheet: ^0.1.6+1
-  package_info: ^0.4.3
-  permission_handler: ^4.4.0+hotfix.2
-  provider: ^4.3.2+2
-  settings_ui: ^0.3.0
-  share: ^0.6.4+3
-  shared_preferences: ^0.5.7+3
+  geolocator: ^7.0.3
+  geopoint: ^0.8.0
+  get_it: ^7.1.3
+  github_sign_in: ^0.0.4
+  http: ^0.13.3
+  modal_bottom_sheet: ^2.0.0
+  package_info: ^2.0.0
+  permission_handler: ^7.1.0
+  provider: ^5.0.0
+  settings_ui: ^1.0.0
+  share: ^2.0.1
+  shared_preferences: ^2.0.5
+  sign_in_with_apple: ^3.0.0
   splashscreen: ^1.2.0
-  timeago: ^2.0.26
-  weather: ^1.1.1
+  the_apple_sign_in: ^1.1.1
+  timeago: ^3.0.2
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +71,7 @@ flutter:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
     # - images/
+
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg

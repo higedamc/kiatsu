@@ -1,17 +1,18 @@
 import 'dart:async';
+import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+// import 'package:geoflutterfire/geoflutterfire.dart';
 
-final geo = Geoflutterfire();
+// final geo = Geoflutterfire();
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-final uid = firebaseAuth.currentUser.uid;
-Stream collectionStream = firebaseStore
+final uid = firebaseAuth.currentUser!.uid;
+Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
 .collectionGroup('comments')
 .orderBy('createdAt', descending: true)
 .snapshots();
@@ -22,7 +23,7 @@ class Timeline extends StatelessWidget {
   final user = firebaseAuth.currentUser;
   
 
-  Timeline({Key key}) : super(key: key);
+  Timeline({required Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +31,7 @@ class Timeline extends StatelessWidget {
         title: Text('timeline'),
         centerTitle: true,
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if(snapshot.hasError) print(snapshot.error);
@@ -39,28 +40,29 @@ class Timeline extends StatelessWidget {
                 child: CircularProgressIndicator(
               backgroundColor: Colors.black,
             ));
+            // if(snapshot.hasData)
           return ListView(
-            children: snapshot.data.documents
-                .map<Widget>((DocumentSnapshot docSnapshot) {
-              return GestureDetector(
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0)),
-                  elevation: 10,
-                  child: Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: Container(
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.all(2.0),
-                      child: Column(children: <Widget>[
-                        ListTile(
-                          leading: Icon(
-                            Icons.cloud_circle,
-                            size: 40,
-                            color: Colors.black,
-                          ),
-                          title: Text(docSnapshot.data()['comment'].toString(),
+            children: snapshot.data.docs
+                .map<Widget>((DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
+                            return GestureDetector(
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                elevation: 10,
+                                child: Slidable(
+                                  actionPane: SlidableDrawerActionPane(),
+                                  actionExtentRatio: 0.25,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    padding: EdgeInsets.all(2.0),
+                                    child: Column(children: <Widget>[
+                                      ListTile(
+                                        leading: Icon(
+                                          Icons.cloud_circle,
+                                          size: 40,
+                                          color: Colors.black,
+                                        ),
+                                        title: Text(docSnapshot.data()!['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
                           subtitle: Text('Tokyo'),
@@ -69,14 +71,14 @@ class Timeline extends StatelessWidget {
 
                     ),
                     actions: <Widget>[
-                      if (docSnapshot.data().containsValue(user.uid))
+                      if (docSnapshot.data()!.containsValue(user!.uid))
                       IconSlideAction(
                         caption: '削除',
                         color: Colors.red[700],
                         icon: Icons.delete,
                         onTap: () => {
                           users
-                              .doc(user.uid)
+                              .doc(user!.uid)
                               .collection('comments')
                               .doc(docSnapshot.id)
                               .delete()
@@ -101,12 +103,13 @@ class Timeline extends StatelessWidget {
           onPressed: () {
             final DateTime createdAt = new DateTime.now();
             var _editor = TextEditingController();
-            return showDialog(
+            showDialog(
               context: context,
-              child: Dialog(
+              builder: (context) => Dialog(
                   backgroundColor: Colors.transparent,
                   insetPadding: EdgeInsets.all(10),
                   child: Stack(
+                    // ignore: deprecated_member_use
                     overflow: Overflow.visible,
                     alignment: Alignment.center,
                     children: <Widget>[
@@ -133,16 +136,16 @@ class Timeline extends StatelessWidget {
                       Positioned(
                         top: 140,
                         right: -20,
-                        child: FlatButton(
+                        child: TextButton(
                             onPressed: () async {
                               await users
-                                  .doc(user.uid)
+                                  .doc(user!.uid)
                                   .collection('comments')
                                   .doc()
                                   .set({
                                 'comment': _editor.text,
                                 'createdAt': createdAt,
-                                'userId': user.uid
+                                'userId': user!.uid
                               });
                               // print(createdAt.toString());
                               Navigator.of(context).pop();

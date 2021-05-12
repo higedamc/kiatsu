@@ -9,10 +9,8 @@ import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
-import 'package:kiatsu/pages/chart_page.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -28,11 +26,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime updatedAt = DateTime.now();
-  final PermissionHandler permissionHandler = PermissionHandler();
-  Map<PermissionGroup, PermissionStatus> permissions;
+  // final PermissionHandler permissionHandler = PermissionHandler();
+  // Map<PermissionGroup, PermissionStatus> permissions;
 
-
-  Future<WeatherClass> weather;
+  late Future<WeatherClass> weather;
 
   String _res2 = '';
   var _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -43,7 +40,6 @@ class _HomePageState extends State<HomePage> {
     weather = getWeather();
   }
 
-  
   void _hapticFeedback() {
     HapticFeedback.mediumImpact();
   }
@@ -56,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<WeatherClass> getWeather() async {
+    var test;
     final GeolocationResult result =
         await Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
@@ -70,49 +67,67 @@ class _HomePageState extends State<HomePage> {
       final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
-      String url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
-          lat.toString() +
-          '&lon=' +
-          lon.toString() +
-          '&APPID=$rr';
-      final response = await http.get(url);
+      // var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
+      //     lat.toString() +
+      //     '&lon=' +
+      //     lon.toString() +
+      //     '&APPID=$rr';
+      // var endpointUrl = 'https://api.openweathermap.org/data/2.5/weather';
+      Map<String, String> queryParams = {
+        'lat': lat.toString(),
+        'lon': lon.toString(),
+        'APPID': rr.toString(),
+      };
+      // var queryString = Uri(queryParameters: queryParams).query;
+      // var requestUrl = endpointUrl + '?' + queryString;
+      var uri = Uri(
+        scheme: 'https',
+        host: 'api.openweathermap.org',
+        path: '/data/2.5/weather',
+        queryParameters: queryParams,
+      );
+      final response = await http.get(uri);
       return WeatherClass.fromJson(jsonDecode(response.body));
     } else {
       switch (result.error.type) {
         case geo.GeolocationResultErrorType.runtime:
-          return showDialog(
+          showDialog(
               context: context,
               builder: (context) {
                 return SimpleDialog(
                   title: Text("Runtime Error"),
                 );
               });
+          break;
         case geo.GeolocationResultErrorType.locationNotFound:
-          return showDialog(
+          showDialog(
               context: context,
               builder: (context) {
                 return SimpleDialog(
                   title: Text("Location Not Found"),
                 );
               });
+          break;
         case geo.GeolocationResultErrorType.serviceDisabled:
-          return showDialog(
+          showDialog(
               context: context,
               builder: (context) {
                 return SimpleDialog(
                   title: Text("Service are disabled"),
                 );
               });
+          break;
         case geo.GeolocationResultErrorType.permissionNotGranted:
-          return showDialog(
+          showDialog(
               context: context,
               builder: (context) {
                 return SimpleDialog(
                   title: Text("Permission For Location Not Granted"),
                 );
               });
+          break;
         case geo.GeolocationResultErrorType.permissionDenied:
-          return showDialog(
+          showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
@@ -130,66 +145,70 @@ class _HomePageState extends State<HomePage> {
                   ],
                 );
               });
+          break;
         case geo.GeolocationResultErrorType.playServicesUnavailable:
           switch (
               result.error.additionalInfo as GeolocationAndroidPlayServices) {
             case geo.GeolocationAndroidPlayServices.missing:
-              return showDialog(
+              showDialog(
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
                       title: Text("Something went wrong with Play Services"),
                     );
                   });
+              break;
             case geo.GeolocationAndroidPlayServices.updating:
-              return showDialog(
+              showDialog(
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
                       title: Text("Something went wrong with Play Services"),
                     );
                   });
+              break;
             case geo.GeolocationAndroidPlayServices.versionUpdateRequired:
-              return showDialog(
+              showDialog(
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
                       title: Text("Play Services gotta be updated"),
                     );
                   });
+              break;
             case geo.GeolocationAndroidPlayServices.disabled:
-              return showDialog(
+              showDialog(
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
                       title: Text("Play Services are disabled"),
                     );
                   });
+              break;
             case geo.GeolocationAndroidPlayServices.invalid:
-              return showDialog(
+              showDialog(
                   context: context,
                   builder: (context) {
                     return SimpleDialog(
                       title: Text("Something went wrong with Play Services"),
                     );
                   });
+              break;
           }
           break;
       }
-      return showDialog(
+      showDialog(
           context: context,
           builder: (context) {
             return SimpleDialog(
               title: Text("Something went wrong with Play Services"),
             );
           });
-    }
+    } return test;
   }
 
   Future<void> _goBack() async {
-    Navigator.pop(
-      context
-    );
+    Navigator.pop(context);
   }
 
   @override
@@ -243,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                           width: double.maxFinite,
                           child: Center(
                             child: NeumorphicText(
-                              snapshot.data.main.pressure.toString(),
+                              snapshot.data!.main.pressure.toString(),
                               style: NeumorphicStyle(
                                 depth: 20,
                                 intensity: 1,
@@ -279,7 +298,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         height: 140,
                         alignment: Alignment.center,
-                        child: snapshot.data.weather[0].main.toString() ==
+                        child: snapshot.data!.weather[0].main.toString() ==
                                 'Clouds'
                             ? NeumorphicText(
                                 'Cloudy',
@@ -288,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w200,
                                     fontSize: 56.0),
                               )
-                            : snapshot.data.weather[0].main.toString() ==
+                            : snapshot.data!.weather[0].main.toString() ==
                                     'Clear'
                                 ? NeumorphicText(
                                     'Clear',
@@ -299,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.w200,
                                         fontSize: 56.0),
                                   )
-                                : snapshot.data.weather[0].main.toString() ==
+                                : snapshot.data!.weather[0].main.toString() ==
                                         'Clear Sky'
                                     ? NeumorphicText(
                                         'Sunny',
@@ -309,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                                             fontWeight: FontWeight.w200,
                                             fontSize: 56.0),
                                       )
-                                    : snapshot.data.weather[0].main
+                                    : snapshot.data!.weather[0].main
                                                 .toString() ==
                                             'Rain'
                                         ? NeumorphicText('Rainy',
@@ -319,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                                                 fontWeight: FontWeight.w200,
                                                 fontSize: 56.0))
                                         : NeumorphicText(
-                                            snapshot.data.weather[0].main
+                                            snapshot.data!.weather[0].main
                                                 .toString(),
                                             style: NeumorphicStyle(
                                               color: Colors.black,
@@ -339,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 40.0),
                       Center(
-                        child: snapshot.data.main.pressure <= 1000
+                        child: snapshot.data!.main.pressure <= 1000
                             ? Text(
                                 'DEADLY',
                                 style: TextStyle(
@@ -347,14 +366,14 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 80.0),
                               )
-                            : snapshot.data.main.pressure <= 1008
+                            : snapshot.data!.main.pressure <= 1008
                                 ? const Text(
                                     'YABAME',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
                                   )
-                                : snapshot.data.main.pressure <= 1010
+                                : snapshot.data!.main.pressure <= 1010
                                     ? const Text(
                                         "CHOI-YABAME",
                                         style: TextStyle(
@@ -426,17 +445,17 @@ class _HomePageState extends State<HomePage> {
                   // sns share button
                   // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                   if (snapshot.hasData)
-                    // Share.share(snapshot.data.main.pressure.toString() +
-                    //     'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
-                    showBarModalBottomSheet(
-                        duration: Duration(milliseconds: 240),
-                        context: context,
-                        builder: (context, scrollController) => Scaffold(
-                              body: getListView(),
-                              // body: _buildBody(context),
-                            ));
+                    Share.share(snapshot.data!.main.pressure.toString() +
+                        'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                  // showBarModalBottomSheet(
+                  //     duration: Duration(milliseconds: 240),
+                  //     context: context,
+                  //     builder: (context, scrollController) => Scaffold(
+                  //           body: getListView(),
+                  //           // body: _buildBody(context),
+                  //         ));
                   else {
-                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                    _scaffoldKey.currentState!.showSnackBar(SnackBar(
                       content: const Text("先に情報を読み込んでね＾ｑ＾"),
                       action: SnackBarAction(
                         label: '読込',
@@ -475,10 +494,12 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  showBarModalBottomSheet(
-                      duration: Duration(milliseconds: 240),
-                      context: context,
-                      builder: (context, scrollController) => PieChartPage());
+                  Share.share('低気圧しんどいぴえん🥺️ #thekiatsu');
+                  // showBarModalBottomSheet(
+                  //     duration: Duration(milliseconds: 240),
+                  //     context: context,
+                  //     builder: (context, scrollController) => PieChartPage(),
+                  //     );
                 },
               ),
             ],
@@ -487,7 +508,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   Widget getListView() {
     return Column(
@@ -521,7 +541,7 @@ class _HomePageState extends State<HomePage> {
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
-                .doc(firebaseAuth.currentUser.uid)
+                .doc(firebaseAuth.currentUser!.uid)
                 .collection('votes')
                 .doc(today.toString())
                 .update({'pien_rate.cho_pien': FieldValue.increment(1)});
@@ -552,7 +572,7 @@ class _HomePageState extends State<HomePage> {
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
-                .doc(firebaseAuth.currentUser.uid)
+                .doc(firebaseAuth.currentUser!.uid)
                 .collection('votes')
                 .doc(today.toString())
                 .update({'pien_rate.pien': FieldValue.increment(1)});
@@ -583,7 +603,7 @@ class _HomePageState extends State<HomePage> {
             print(firebaseAuth.currentUser);
             CollectionReference users = firebaseStore.collection('users');
             await users
-                .doc(firebaseAuth.currentUser.uid)
+                .doc(firebaseAuth.currentUser!.uid)
                 .collection('votes')
                 .doc(today.toString())
                 .update({'pien_rate.not_pien': FieldValue.increment(1)});
@@ -619,44 +639,21 @@ class _HomePageState extends State<HomePage> {
         context: context, builder: (BuildContext context) => alert);
   }
 }
-Widget _pienVote() {
-  return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('pienn2')
-          .doc('超ぴえん')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
-        var userField = snapshot.data.documents.map;
-        // if(snapshot.hasData)
-        return Column(
-          children: <Widget>[
-            Text(
-              userField['votes'].toString(),
-            ),
-            Text(
-              'Pien Rate',
-              style: TextStyle(fontSize: 18.0, color: Colors.black),
-            ),
-          ],
-        );
-      });
-}
 
-class Record {
-  final String pienDo;
-  final int votes;
-  final DocumentReference reference;
+// class Record {
+//   final String pienDo;
+//   final int votes;
+//   final DocumentReference reference;
 
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['pien_do'] != null),
-        assert(map['votes'] != null),
-        pienDo = map['pien_do'],
-        votes = map['votes'];
+//   Record.fromMap(Map<String, dynamic> map, {required this.reference})
+//       : assert(map['pien_do'] != null),
+//         assert(map['votes'] != null),
+//         pienDo = map['pien_do'],
+//         votes = map['votes'];
 
-  Record.fromSnapshot(DocumentSnapshot snaps)
-      : this.fromMap(snaps.data(), reference: snaps.reference);
+//   Record.fromSnapshot(DocumentSnapshot snaps)
+//       : this.fromMap(snaps.data()!, reference: snaps.reference);
 
-  @override
-  String toString() => "Record<$pienDo:$votes>";
-}
+//   @override
+//   String toString() => "Record<$pienDo:$votes>";
+// }

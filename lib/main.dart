@@ -4,13 +4,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
+import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:splashscreen/splashscreen.dart';
 
 abstract class Secrets {
   String get firebaseApiKey;
@@ -24,23 +27,42 @@ abstract class Secrets {
  */
 Future<void> startApp(Secrets secrets) async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await Firebase.initializeApp();
+  final appleSignInAvailable = await AppleSignInAvailable.check();
+
   timeago.setLocaleMessages('ja', timeago.JaMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    // return SplashScreen(
+    //   loaderColor: Colors.black,
+    //   // seconds: 2,
+    //   // navigateAfterSeconds: HomePage(),
+    //   image: new Image.asset('assets/images/face.png'),
+    //   photoSize: 100.0,
+    // );
+    // return Center(child: CircularProgressIndicator(backgroundColor: Colors.white,));
+    return Center(child: CircularProgressIndicator(backgroundColor: Colors.white,));
+  };
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
-      runApp(MyApp(
-        prefs: prefs,
-        secrets: secrets,
-      ));
+      runApp(
+        Provider<AppleSignInAvailable>.value(
+          child: MyApp(
+            prefs: prefs,
+            secrets: secrets, key: UniqueKey(),
+          ),
+          value: appleSignInAvailable,
+        ),
+      );
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   });
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key key, this.secrets, this.prefs}) : super(key: key);
+  MyApp({required Key key, required this.secrets, required this.prefs}) : super(key: key);
 
   final Secrets secrets;
   final SharedPreferences prefs;
@@ -61,8 +83,9 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/a': (BuildContext context) => SettingPage(),
-          '/timeline': (BuildContext context) => Timeline(),
+          '/timeline': (BuildContext context) => Timeline(key: UniqueKey()),
           '/home': (BuildContext context) => HomePage(),
+          '/signpage': (BuildContext context) => SignInPage(),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
