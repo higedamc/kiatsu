@@ -21,9 +21,9 @@ class SplashPage extends StatelessWidget {
   SplashPage() {
     final current = firebaseAuth.currentUser;
     final CollectionReference users = firebaseStore.collection('users');
-    if (!AppleAuthUtil.isSignedIn() && !current!.emailVerified) {
+    if (!AppleAuthUtil.isSignedIn()) {
       signInAnon().then((UserCredential user) async {
-        print('User ${user!.user!.uid}');
+        print('User ${user.user!.uid}');
         // await users
         //     .doc(user.user.uid)
         //     .collection('votes')
@@ -36,7 +36,7 @@ class SplashPage extends StatelessWidget {
         //   ],
         //   // 'location':
         // });
-        users.doc(user!.user!.uid).set({'createdAt': createdAt});
+        users.doc(user.user!.uid).set({'createdAt': createdAt});
       });
     } else {
       print('User Already Registered: $current');

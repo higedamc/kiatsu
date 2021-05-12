@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kiatsu/model/weather_model.dart';
+import 'package:kiatsu/utils/get_weather.dart';
 // import 'package:geoflutterfire/geoflutterfire.dart';
 
 // final geo = Geoflutterfire();
@@ -18,9 +20,10 @@ Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
 .snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
+final weather = GetWeather().getWeather();
 
 class Timeline extends StatelessWidget {
-  final user = firebaseAuth.currentUser;
+  // final user = firebaseAuth.currentUser;
   
 
   Timeline({required Key key}) : super(key: key);
@@ -28,7 +31,7 @@ class Timeline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NeumorphicAppBar(
-        title: Text('timeline'),
+        title: Text('お気持ち投稿の場'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -65,20 +68,25 @@ class Timeline extends StatelessWidget {
                                         title: Text(docSnapshot.data()!['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
-                          subtitle: Text('Tokyo'),
+                          subtitle: Text(
+                            (docSnapshot.data()!['location'].toString() == "null") ?
+                            "電子の海" : docSnapshot.data()!['location'].toString(),
+                            ),
+
+
                         ),
                       ]),
 
                     ),
                     actions: <Widget>[
-                      if (docSnapshot.data()!.containsValue(user!.uid))
+                      if (docSnapshot.data()!.containsValue(currentUser!.uid))
                       IconSlideAction(
                         caption: '削除',
                         color: Colors.red[700],
                         icon: Icons.delete,
                         onTap: () => {
                           users
-                              .doc(user!.uid)
+                              .doc(currentUser!.uid)
                               .collection('comments')
                               .doc(docSnapshot.id)
                               .delete()
@@ -93,7 +101,7 @@ class Timeline extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black26,
+        backgroundColor: Colors.black,
         onPressed: () {},
         child: IconButton(
           icon: Icon(
@@ -135,30 +143,36 @@ class Timeline extends StatelessWidget {
                       ),
                       Positioned(
                         top: 140,
-                        right: -20,
-                        child: TextButton(
-                            onPressed: () async {
-                              await users
-                                  .doc(user!.uid)
-                                  .collection('comments')
-                                  .doc()
-                                  .set({
-                                'comment': _editor.text,
-                                'createdAt': createdAt,
-                                'userId': user!.uid
-                              });
-                              // print(createdAt.toString());
-                              Navigator.of(context).pop();
-                            },
-                            child: NeumorphicText(
-                              '押',
-                              style: NeumorphicStyle(
-                                color: Colors.black87,
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontSize: 30,
-                              ),
-                            )),
+                        right: 1,
+                        child: FutureBuilder<WeatherClass>(
+                          future: weather,
+                          builder: (context, snapshot) {
+                            return TextButton(
+                                onPressed: () async {
+                                  await users
+                                      .doc(currentUser!.uid)
+                                      .collection('comments')
+                                      .doc()
+                                      .set({
+                                    'comment': _editor.text,
+                                    'createdAt': createdAt,
+                                    'userId': currentUser!.uid,
+                                    'location': snapshot.data!.name.toString(),
+                                  });
+                                  // print(createdAt.toString());
+                                  Navigator.of(context).pop();
+                                },
+                                child: NeumorphicText(
+                                  '押',
+                                  style: NeumorphicStyle(
+                                    color: Colors.black87,
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontSize: 30,
+                                  ),
+                                ));
+                          }
+                        ),
                       ),
                     ],
                   )),

@@ -17,7 +17,7 @@ class SignInPage extends StatelessWidget {
         Provider.of<AppleSignInAvailable>(context, listen: false);
     return Scaffold(
       appBar: NeumorphicAppBar(
-        title: Text('Sign In'),
+        title: Text('アカウントページ'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(6.0),
@@ -40,8 +40,19 @@ class SignInPage extends StatelessWidget {
                     print('Apple IDでサイン済み');
                   }
                 },
-              ) : Center(child: Text('Apple IDでサインイン済み')),
-              
+              ) : Center(child: Text('他のアカウントでサインイン済み')),
+              // サインアウトボタン
+              // (AppleAuthUtil.isSignedIn()) ?
+              // NeumorphicButton(
+              //   tooltip: 'サインアウトする',
+              //   style: NeumorphicStyle(
+              //     color: Colors.black,
+              //   ),
+              //   onPressed: () => {
+              //     AppleAuthUtil.signOut(),
+              //   },
+              // ) : Center(),
+
           ],
         ),
       ),

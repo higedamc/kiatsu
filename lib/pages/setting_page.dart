@@ -1,20 +1,17 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
-import 'package:kiatsu/utils/apple_auth.dart';
-import 'package:kiatsu/utils/github_auth.dart';
 import 'package:settings_ui/settings_ui.dart';
-// import 'package:kiatsu/auth/apple_signin_available.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+  final currentUser = firebaseAuth.currentUser;
 
 class SettingPage extends StatefulWidget {
   @override
@@ -22,8 +19,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+
   // bool isSignedInWithApple =
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -85,7 +81,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: '強制クラッシュ',
                 subtitle: '押',
                 leading: NeumorphicIcon(Icons.language),
-                onTap: () {
+                onPressed: (_) {
                   FirebaseCrashlytics.instance.crash();
                 },
               ),
@@ -117,21 +113,20 @@ class _SettingPageState extends State<SettingPage> {
                 title: 'アカウント削除',
                 subtitle: '押',
                 leading: NeumorphicIcon(Icons.language),
-                onTap: () async {
+                onPressed: (_) async {
                   showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('CAUTION!!!'),
+                          title: Text('危険です！'),
                           content:
-                              Text('Do you really want to delete account?'),
+                              Text('本当にアカウントを削除しますか？'),
                           actions: <Widget>[
-                            FlatButton(
+                            TextButton(
                                 onPressed: () => Navigator.pop(context),
                                 child: Text('Cancel')),
-                            FlatButton(
+                            TextButton(
                                 onPressed: () async {
-                                  var currentUser = firebaseAuth.currentUser;
                                   await currentUser!.delete();
                                   Navigator.of(context).pop();
                                 },
@@ -141,6 +136,19 @@ class _SettingPageState extends State<SettingPage> {
                       });
                 },
               ),
+              SettingsTile(
+                title: 'アカウント名',
+                onPressed: (context) => Clipboard.setData(
+                  ClipboardData(
+                    text: currentUser!.uid.toString(),
+                  ),
+                ).then((_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('アカウント名がコピーされました！')),
+                  );
+                }),
+                subtitle: currentUser!.uid,),
             ],
           ),
         ],
