@@ -2,19 +2,11 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:apple_sign_in/apple_sign_in_button.dart' as app;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/utils/apple_auth.dart';
 import 'package:provider/provider.dart';
-
-// Future<User> linkAnonToApple(BuildContext context) async {
-//     final _auth = FirebaseAuth.instance;
-//     final user = _auth.currentUser;
-//     final credential = await signInWithApple();
-//     // final AuthCredential authCredential = credential.credential;
-
-//     return firebaseUser;
-//   }
 
 class SignInPage extends StatelessWidget {
   @override
@@ -24,7 +16,7 @@ class SignInPage extends StatelessWidget {
     final appleSignInAvailable =
         Provider.of<AppleSignInAvailable>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(
+      appBar: NeumorphicAppBar(
         title: Text('Sign In'),
       ),
       body: Padding(
@@ -34,7 +26,7 @@ class SignInPage extends StatelessWidget {
           children: [
             (appleSignInAvailable.isAvailable && now!.isAnonymous) ?
               AppleSignInButton(
-                style: app.ButtonStyle.black, // style as needed
+                style: app.ButtonStyle.whiteOutline, // style as needed
                 type: ButtonType.signIn, // style as needed
                 onPressed: () async {
                   if (now.isAnonymous) {
@@ -49,6 +41,7 @@ class SignInPage extends StatelessWidget {
                   }
                 },
               ) : Center(child: Text('Apple IDでサインイン済み')),
+              
           ],
         ),
       ),
