@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kiatsu/env/production_secrets.dart';
 
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/utils/apple_auth.dart';

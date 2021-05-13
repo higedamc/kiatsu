@@ -284,6 +284,10 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.0)
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
+  - flutter_twitter_login (0.0.1):
+    - Flutter
+    - TwitterCore (~> 3.2.0)
+    - TwitterKit (~> 3.4.0)
   - flutter_webview_plugin (0.0.1):
     - Flutter
   - geocoder (0.0.1):
@@ -360,6 +364,9 @@ PODS:
     - Flutter
   - the_apple_sign_in (1.0.0):
     - Flutter
+  - TwitterCore (3.2.0)
+  - TwitterKit (3.4.2):
+    - TwitterCore (>= 3.2.0)
 
 DEPENDENCIES:
   - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
@@ -368,6 +375,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
+  - flutter_twitter_login (from `.symlinks/plugins/flutter_twitter_login/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - geocoder (from `.symlinks/plugins/geocoder/ios`)
   - geolocation (from `.symlinks/plugins/geolocation/ios`)
@@ -399,6 +407,8 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - TwitterCore
+    - TwitterKit
 
 EXTERNAL SOURCES:
   apple_sign_in:
@@ -413,6 +423,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
   Flutter:
     :path: Flutter
+  flutter_twitter_login:
+    :path: ".symlinks/plugins/flutter_twitter_login/ios"
   flutter_webview_plugin:
     :path: ".symlinks/plugins/flutter_webview_plugin/ios"
   geocoder:
@@ -452,6 +464,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: f495bb336b23eca23ea5d3605dce2a4cc214fde9
   FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_twitter_login: 1f670e60647cdf517ba20495e1b32046d9f22697
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
   geolocation: c194aabfd0f48cd7d6041afa8ba6542aa5714dc2
@@ -471,7 +484,9 @@ SPEC CHECKSUMS:
   sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
   streams_channel: 16855ffd0568eded9563b2fec6a1bfa94420b353
   the_apple_sign_in: 2e78c83cdb09eba07bb16dcc1f3bc12fcdc8263d
+  TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
+  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: b261c01f8453c7e652713ef881ac8d4f6284ff46
+PODFILE CHECKSUM: 17020ea7efa6f408df243e4f13713e9cf9886ecc
 
 COCOAPODS: 1.10.1

@@ -19,6 +19,8 @@ abstract class Secrets {
   String get firebaseApiKey;
   String get firebaseSecret;
   String get firebaseProjectId;
+  String get twitterConsumerKey;
+  String get twitterSecretKey;
 }
 
 /**
@@ -62,18 +64,18 @@ Future<void> startApp(Secrets secrets) async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({required Key key, required this.secrets, required this.prefs}) : super(key: key);
+  const MyApp({required Key key, required this.secrets, required this.prefs}) : super(key: key);
 
   final Secrets secrets;
   final SharedPreferences prefs;
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  // final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Provider<Secrets>.value(
       value: secrets,
       child: NeumorphicApp(
-        navigatorKey: _navigatorKey,
+        // navigatorKey: _navigatorKey,
         themeMode: ThemeMode.light,
         theme: NeumorphicThemeData(
           baseColor: Color(0xFFFFFFFF),

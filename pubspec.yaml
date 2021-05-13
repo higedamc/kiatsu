@@ -31,6 +31,9 @@ dependencies:
   flutter_launcher_icons: ^0.9.0
   flutter_neumorphic: ^3.1.0
   flutter_slidable: ^0.6.0
+  flutter_twitter_login:
+    git:
+      url: git://github.com/eudangeld/flutter_twitter_login.git
   font_awesome_flutter: ^9.0.0
   geocoder: ^0.2.1
   geolocation: ^1.1.2
@@ -47,9 +50,11 @@ dependencies:
   share: ^2.0.1
   shared_preferences: ^2.0.5
   sign_in_with_apple: ^3.0.0
+  social_auth_buttons: ^2.0.0-nullsafety.1
   splashscreen: ^1.2.0
   the_apple_sign_in: ^1.1.1
   timeago: ^3.0.2
+  # twitter_login: ^3.0.8
 
 dev_dependencies:
   flutter_test:

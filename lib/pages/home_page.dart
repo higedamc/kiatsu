@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     final GeolocationResult result =
         await Geolocation.requestLocationPermission(
       permission: const geo.LocationPermission(
-        android: LocationPermissionAndroid.fine,
+        android: LocationPermissionAndroid.coarse,
         ios: LocationPermissionIOS.always,
       ),
       openSettingsIfDenied: true,
@@ -450,15 +452,15 @@ class _HomePageState extends State<HomePage> {
                       // sns share button
                       // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                       if (snapshot.hasData)
-                        Share.share(snapshot.data!.main.pressure.toString() +
-                            'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
-                      // showBarModalBottomSheet(
-                      //     duration: Duration(milliseconds: 240),
-                      //     context: context,
-                      //     builder: (context, scrollController) => Scaffold(
-                      //           body: getListView(),
-                      //           // body: _buildBody(context),
-                      //         ));
+                      //   Share.share(snapshot.data!.main.pressure.toString() +
+                      //       'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                      showBarModalBottomSheet(
+                          duration: Duration(milliseconds: 240),
+                          context: context,
+                          builder: (context) => Scaffold(
+                                body: getListView(),
+                                // body: _buildBody(context),
+                              ));
                       else {
                         _scaffoldKey.currentState!.showSnackBar(SnackBar(
                           content: const Text("先に情報を読み込んでね＾ｑ＾"),
@@ -647,20 +649,20 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// class Record {
-//   final String pienDo;
-//   final int votes;
-//   final DocumentReference reference;
+class Record {
+  final String pienDo;
+  final int votes;
+  final DocumentReference reference;
 
-//   Record.fromMap(Map<String, dynamic> map, {required this.reference})
-//       : assert(map['pien_do'] != null),
-//         assert(map['votes'] != null),
-//         pienDo = map['pien_do'],
-//         votes = map['votes'];
+  Record.fromMap(Map<String, dynamic> map, {required this.reference})
+      : assert(map['pien_do'] != null),
+        assert(map['votes'] != null),
+        pienDo = map['pien_do'],
+        votes = map['votes'];
 
-//   Record.fromSnapshot(DocumentSnapshot snaps)
-//       : this.fromMap(snaps.data()!, reference: snaps.reference);
+  Record.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snaps)
+      : this.fromMap(snaps.data()!, reference: snaps.reference);
 
-//   @override
-//   String toString() => "Record<$pienDo:$votes>";
-// }
+  @override
+  String toString() => "Record<$pienDo:$votes>";
+}
