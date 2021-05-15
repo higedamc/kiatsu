@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wiredash/wiredash.dart';
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
