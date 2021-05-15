@@ -1,1 +1,1 @@
-- Test build for testing Codemagic & GitHub Actions & Firebase Distribution
+- Test build 2 for testing Codemagic & GitHub Actions & Firebase Distribution
