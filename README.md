@@ -6,22 +6,28 @@
 
 シンプルな気圧測定アプリ / A simple application for meteoropathy
 
-# How To Build
+# How To Use
 
-flutter_launcher_iconsのパッケージを使っているため、ビルド前に下記を実行する必要があるかもしれません＾ｑ＾
+1. rootディレクトリに.envファイルを配置
+2. .envファイルに以下の環境変数を設定
 
 ```
-flutter pub get
-flutter pub run flutter_launcher_icons:main -f <your config file name here>
-flutter pub get
-flutter pub run flutter_launcher_icons:main
+FIREBASE_API_KEY='YOUR_API_KEY'
+FIREBASE_SECRET='YOUR_SECRET_KEY'
+FIREBASE_PROJECT_ID='YOUR_PROJECT_ID'
+TWITTER_CONSUMER_KEY='YOUR_CONSUMER_KEY'
+TWITTER_SECRET_KEY='YOUR_SECRET_KEY'
 ```
-詳細は[こちら](https://pub.dev/packages/flutter_launcher_icons)
+3. env配下のproduction.dartを起動
 
 # 今後実装する機能 / Future Feature
 
-- [ ] 気圧に合わせて動的なコメントをシェアする機能。
-- [ ] アカウント登録機能。
+- [ ] 全国気圧ヒートマップ
+- [ ] 1週間分の気圧変化チャート
+
+## 実装済み
+- [ x ] 気圧に合わせて動的なコメントをシェアする機能。
+- [ x ] アカウント登録機能。
 
 ## Contact
 
