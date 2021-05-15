@@ -1,8 +1,8 @@
+.env
 .firebaserc
 android/app/google-services.json
 firebase.json
 firestore.indexes.json
 firestore.rules
 ios/Runner/GoogleService-Info.plist
-lib/env/production_secrets.dart
 lib/utils/github_auth.dart
