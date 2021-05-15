@@ -8,21 +8,22 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:wiredash/wiredash.dart';
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
   final currentUser = firebaseAuth.currentUser;
 
-class SettingPage extends StatefulWidget {
-  @override
-  _SettingPageState createState() => _SettingPageState();
-}
+// class SettingPage extends StatefulWidget {
+//   @override
+//   _SettingPageState createState() => _SettingPageState();
+// }
 
-class _SettingPageState extends State<SettingPage> {
+class SettingPage extends StatelessWidget {
 
   // bool isSignedInWithApple =
 
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Future<UserCredential> signInAnon() async {
   //   UserCredential user = await firebaseAuth.signInAnonymously();
@@ -145,10 +146,11 @@ class _SettingPageState extends State<SettingPage> {
                 ).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      key: _scaffoldKey,
                       content: const Text('アカウント名がコピーされました！')),
                   );
                 }),
-                subtitle: currentUser!.uid,),
+                subtitle: currentUser!.uid),
             ],
           ),
         ],

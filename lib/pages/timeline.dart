@@ -15,17 +15,14 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser!.uid;
 Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
-.collectionGroup('comments')
-.orderBy('createdAt', descending: true)
-.snapshots();
+    .collectionGroup('comments')
+    .orderBy('createdAt', descending: true)
+    .snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
 final weather = GetWeather().getWeather();
 
 class Timeline extends StatelessWidget {
-  // final user = firebaseAuth.currentUser;
-  
-
   Timeline({required Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -37,61 +34,112 @@ class Timeline extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if(snapshot.hasError) print(snapshot.error);
+          
+          if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(
                 child: CircularProgressIndicator(
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.blue,
             ));
-            // if(snapshot.hasData)
+          // if(snapshot.hasData)
           return ListView(
-            children: snapshot.data.docs
-                .map<Widget>((DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
-                            return GestureDetector(
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                elevation: 10,
-                                child: Slidable(
-                                  actionPane: SlidableDrawerActionPane(),
-                                  actionExtentRatio: 0.25,
-                                  child: Container(
-                                    margin: EdgeInsets.all(10.0),
-                                    padding: EdgeInsets.all(2.0),
-                                    child: Column(children: <Widget>[
-                                      ListTile(
-                                        leading: Icon(
-                                          Icons.cloud_circle,
-                                          size: 40,
-                                          color: Colors.black,
-                                        ),
-                                        title: Text(docSnapshot.data()!['comment'].toString(),
-                              style: TextStyle(
-                                  fontSize: 18.0, color: Colors.black)),
-                          subtitle: Text(
-                            (docSnapshot.data()!['location'].toString() == "null") ?
-                            "電子の海" : docSnapshot.data()!['location'].toString(),
+            children: snapshot.data.docs.map<Widget>(
+                (DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
+              return GestureDetector(
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  elevation: 10,
+                  child: Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: Container(
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(2.0),
+                      child: Column(children: [
+                        // for (final data in currentUser!.providerData)
+                        //   (data.photoURL?.contains('null') == false) ?
+                            ListTile(
+                              leading: Icon(
+                                Icons.cloud_circle,
+                                size: 40,
+                                color: Colors.black,
+                              ),
+
+                              // leading: (docSnapshot
+                              //         .data()!
+                              //         .containsValue(currentUser!.uid))
+                              //     ? CircleAvatar(
+                              //         backgroundImage:
+                              //             NetworkImage(data.photoURL!),
+                              //       )
+                              //     :
+                              //     Icon(
+                              //         Icons.cloud_circle,
+                              //         size: 40,
+                              //         color: Colors.black,
+                              //       ),
+                              title: Text(
+                                  docSnapshot.data()!['comment'].toString(),
+                                  style: TextStyle(
+                                      fontSize: 18.0, color: Colors.black)),
+                              subtitle: Text(
+                                (docSnapshot.data()!['location'].toString() ==
+                                        "null")
+                                    ? "電子の海"
+                                    : docSnapshot
+                                        .data()!['location']
+                                        .toString(),
+                              ),
+                            // ) : ListTile(
+                            //   leading: Icon(
+                            //     Icons.cloud_circle,
+                            //     size: 40,
+                            //     color: Colors.black,
+                            //   ),
+
+                              // leading: (!docSnapshot
+                              //         .data()!
+                              //         .containsValue(currentUser!.uid))
+                              //     ? CircleAvatar(
+                              //         backgroundImage:
+                              //             NetworkImage(data.photoURL!),
+                              //       )
+                              //     :
+                              //     Icon(
+                              //         Icons.cloud_circle,
+                              //         size: 40,
+                              //         color: Colors.black,
+                              //       ),
+                              // title: Text(
+                              //     docSnapshot.data()!['comment'].toString(),
+                              //     style: TextStyle(
+                              //         fontSize: 18.0, color: Colors.black)),
+                              // subtitle: Text(
+                              //   (docSnapshot.data()!['location'].toString() ==
+                              //           "null")
+                              //       ? "電子の海"
+                              //       : docSnapshot
+                              //           .data()!['location']
+                              //           .toString(),
+                              // ),
                             ),
-
-
-                        ),
                       ]),
-
                     ),
                     actions: <Widget>[
                       if (docSnapshot.data()!.containsValue(currentUser!.uid))
-                      IconSlideAction(
-                        caption: '削除',
-                        color: Colors.red[700],
-                        icon: Icons.delete,
-                        onTap: () => {
-                          users
-                              .doc(currentUser!.uid)
-                              .collection('comments')
-                              .doc(docSnapshot.id)
-                              .delete()
-                        },
-                      ),
+                        IconSlideAction(
+                          caption: '削除',
+                          color: Colors.red[700],
+                          icon: Icons.delete,
+                          onTap: () => {
+                            users
+                                .doc(currentUser!.uid)
+                                .collection('comments')
+                                .doc(docSnapshot.id)
+                                .delete()
+                          },
+                        ),
                     ],
                   ),
                 ),
@@ -145,34 +193,34 @@ class Timeline extends StatelessWidget {
                         top: 140,
                         right: 1,
                         child: FutureBuilder<WeatherClass>(
-                          future: weather,
-                          builder: (context, snapshot) {
-                            return TextButton(
-                                onPressed: () async {
-                                  await users
-                                      .doc(currentUser!.uid)
-                                      .collection('comments')
-                                      .doc()
-                                      .set({
-                                    'comment': _editor.text,
-                                    'createdAt': createdAt,
-                                    'userId': currentUser!.uid,
-                                    'location': snapshot.data!.name.toString(),
-                                  });
-                                  // print(createdAt.toString());
-                                  Navigator.of(context).pop();
-                                },
-                                child: NeumorphicText(
-                                  '押',
-                                  style: NeumorphicStyle(
-                                    color: Colors.black87,
-                                  ),
-                                  textStyle: NeumorphicTextStyle(
-                                    fontSize: 30,
-                                  ),
-                                ));
-                          }
-                        ),
+                            future: weather,
+                            builder: (context, snapshot) {
+                              return TextButton(
+                                  onPressed: () async {
+                                    await users
+                                        .doc(currentUser!.uid)
+                                        .collection('comments')
+                                        .doc()
+                                        .set({
+                                      'comment': _editor.text,
+                                      'createdAt': createdAt,
+                                      'userId': currentUser!.uid,
+                                      'location':
+                                          snapshot.data!.name.toString(),
+                                    });
+                                    // print(createdAt.toString());
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: NeumorphicText(
+                                    '押',
+                                    style: NeumorphicStyle(
+                                      color: Colors.black87,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontSize: 30,
+                                    ),
+                                  ));
+                            }),
                       ),
                     ],
                   )),

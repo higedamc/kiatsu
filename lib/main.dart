@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
+import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
@@ -21,6 +22,8 @@ abstract class Secrets {
   String get firebaseProjectId;
   String get twitterConsumerKey;
   String get twitterSecretKey;
+  String get wiredashProjectId;
+  String get wiredashSecret;
 }
 
 /**
@@ -85,9 +88,10 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/a': (BuildContext context) => SettingPage(),
-          '/timeline': (BuildContext context) => Timeline(key: UniqueKey()),
+          '/timeline': (BuildContext context) => Timeline(key: UniqueKey(),),
           '/home': (BuildContext context) => HomePage(),
           '/signpage': (BuildContext context) => SignInPage(),
+          '/dialog': (BuildContext context) => Dialogs(),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
