@@ -109,6 +109,7 @@ coverage/
 app.*.symbols
 
 # Exceptions to above rules.
+.env
 !**/ios/**/default.mode1v3
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
@@ -143,3 +144,4 @@ screenshots/testShit.jpg
 /lib/utils/github_auth.dart
 ios/Podfile.lock
 ios/Podfile
+/.env

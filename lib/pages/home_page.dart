@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
-import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (result.isSuccessful) {
-      final rr = ProductionSecrets().firebaseApiKey;
+      final rr = env['FIREBASE_API_KEY'];
       final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
