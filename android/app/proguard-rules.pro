@@ -21,3 +21,7 @@
         <fields>;
         **[] values();
     }
+
+    # Moshi - end
+
+# Geolocation - end

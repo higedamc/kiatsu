@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kiatsu/env/production_secrets.dart';
 
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/utils/apple_auth.dart';
@@ -20,26 +21,38 @@ class SplashPage extends StatelessWidget {
 
   SplashPage() {
     final current = firebaseAuth.currentUser;
+    final pData = current!.providerData;
     final CollectionReference users = firebaseStore.collection('users');
-    if (!AppleAuthUtil.isSignedIn() && !current!.emailVerified) {
+    if (!AppleAuthUtil.isSignedIn()) {
       signInAnon().then((UserCredential user) async {
-        print('User ${user!.user!.uid}');
-        // await users
-        //     .doc(user.user.uid)
-        //     .collection('votes')
-        //     .doc()
-        //     .set({
-        //   'pien_rate': [
-        //     {'cho_pien': 0, 'creaateAt': createdAt},
-        //     {'pien': 0, 'createdAt': createdAt},
-        //     {'not_pien': 0, 'createdAt': createdAt}
-        //   ],
-        //   // 'location':
-        // });
-        users.doc(user!.user!.uid).set({'createdAt': createdAt});
+        print('User ${user.user!.uid}');
+        await users
+            .doc(user.user!.uid)
+            .collection('votes')
+            .doc()
+            .set({
+          'pien_rate': [
+            {'cho_pien': 0, 'creaateAt': createdAt},
+            {'pien': 0, 'createdAt': createdAt},
+            {'not_pien': 0, 'createdAt': createdAt}
+          ],
+          // 'location':
+        });
+        users.doc(user.user!.uid).set({'createdAt': createdAt});
       });
     } else {
       print('User Already Registered: $current');
+      // pData.forEach((items) => {
+      //   users.doc(current.uid).collection('comments').doc().set({'displayName': items.displayName})
+      // });
+      // for (final data in current.providerData) {
+      //     if (data.displayName?.toLowerCase().contains('null') == false) {
+      //       print(data.displayName);
+      //       users.doc(current.uid).collection('comments').doc().set(
+      //         {'display_name': data.displayName});
+      //     }
+      //   }
+      // print('User Already Registered: $pData');
     }
   }
 

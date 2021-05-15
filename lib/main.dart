@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
+import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
@@ -19,6 +20,10 @@ abstract class Secrets {
   String get firebaseApiKey;
   String get firebaseSecret;
   String get firebaseProjectId;
+  String get twitterConsumerKey;
+  String get twitterSecretKey;
+  String get wiredashProjectId;
+  String get wiredashSecret;
 }
 
 /**
@@ -62,18 +67,18 @@ Future<void> startApp(Secrets secrets) async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({required Key key, required this.secrets, required this.prefs}) : super(key: key);
+  const MyApp({required Key key, required this.secrets, required this.prefs}) : super(key: key);
 
   final Secrets secrets;
   final SharedPreferences prefs;
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  // final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Provider<Secrets>.value(
       value: secrets,
       child: NeumorphicApp(
-        navigatorKey: _navigatorKey,
+        // navigatorKey: _navigatorKey,
         themeMode: ThemeMode.light,
         theme: NeumorphicThemeData(
           baseColor: Color(0xFFFFFFFF),
@@ -83,9 +88,10 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/a': (BuildContext context) => SettingPage(),
-          '/timeline': (BuildContext context) => Timeline(key: UniqueKey()),
+          '/timeline': (BuildContext context) => Timeline(key: UniqueKey(),),
           '/home': (BuildContext context) => HomePage(),
           '/signpage': (BuildContext context) => SignInPage(),
+          '/dialog': (BuildContext context) => Dialogs(),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
