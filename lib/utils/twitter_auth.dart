@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 // import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:github_sign_in/github_sign_in.dart';
-import 'package:kiatsu/env/production_secrets.dart';
 import 'package:provider/provider.dart';
 
 abstract class Secrets {
@@ -14,8 +14,8 @@ abstract class Secrets {
 class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
 
-    consumerKey: ProductionSecrets().twitterConsumerKey,
-    consumerSecret: ProductionSecrets().twitterSecretKey,
+    consumerKey: env['TWITTER_CONSUMER_KEY'],
+    consumerSecret: env['TWITTER_SECRET_KEY'],
 
 
   );
