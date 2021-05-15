@@ -141,7 +141,6 @@ firestore.indexes.json
 /Users/jackstash/work/testenv/tmp/kiatsu/screenshots/testShit.jpg
 screenshots/testShit.jpg
 
-/lib/utils/github_auth.dart
 ios/Podfile.lock
 ios/Podfile
 /.env

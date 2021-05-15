@@ -1,15 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_twitter_login/flutter_twitter_login.dart';
-// import 'package:flutter_twitter_login/flutter_twitter_login.dart';
-import 'package:github_sign_in/github_sign_in.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_twitter_login/flutter_twitter_login.dart' show TwitterLogin, TwitterSession;
 
-abstract class Secrets {
-  String get twitterConsumerKey;
-  String get twitterSecretKey;
-}
 
 class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
