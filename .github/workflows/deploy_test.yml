@@ -26,7 +26,7 @@ jobs:
       env:
         SECRETS_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-        BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
+        # BLACKBOX_PRIVKEY: ${{ secrets.BLACKBOX_PRIVKEY }}
     - uses: actions/checkout@v2.3.3
 
     # - name: editstart

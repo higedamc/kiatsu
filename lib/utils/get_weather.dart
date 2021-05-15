@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
-import 'package:kiatsu/env/production_secrets.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +20,7 @@ class GetWeather {
     );
 
     if (result.isSuccessful) {
-      final rr = ProductionSecrets().firebaseApiKey;
+      final rr = env['FIREBASE_API_KEY'];
       final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
