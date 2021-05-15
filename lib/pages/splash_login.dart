@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:kiatsu/env/production_secrets.dart';
+
 import 'package:kiatsu/pages/home_page.dart';
+import 'package:kiatsu/utils/apple_auth.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 // 匿名ログイン + スプラッシュスクリーンの実装
-
-bool result;
-String commentId;
-final geo = Geoflutterfire();
 
 class SplashPage extends StatelessWidget {
   final DateTime createdAt = new DateTime.now();
@@ -22,27 +20,39 @@ class SplashPage extends StatelessWidget {
   }
 
   SplashPage() {
-    var currentUser = firebaseAuth.currentUser;
-    CollectionReference users = firebaseStore.collection('users');
-    if (currentUser == null)
+    final current = firebaseAuth.currentUser;
+    final pData = current!.providerData;
+    final CollectionReference users = firebaseStore.collection('users');
+    if (!AppleAuthUtil.isSignedIn()) {
       signInAnon().then((UserCredential user) async {
-        print('User ${user.user.uid}');
-        // await users
-        //     .doc(user.user.uid)
-        //     .collection('votes')
-        //     .doc()
-        //     .set({
-        //   'pien_rate': [
-        //     {'cho_pien': 0, 'creaateAt': createdAt},
-        //     {'pien': 0, 'createdAt': createdAt},
-        //     {'not_pien': 0, 'createdAt': createdAt}
-        //   ],
-        //   // 'location':
-        // });
-        await users.doc(user.user.uid).set({'createdAt': createdAt});
+        print('User ${user.user!.uid}');
+        await users
+            .doc(user.user!.uid)
+            .collection('votes')
+            .doc()
+            .set({
+          'pien_rate': [
+            {'cho_pien': 0, 'creaateAt': createdAt},
+            {'pien': 0, 'createdAt': createdAt},
+            {'not_pien': 0, 'createdAt': createdAt}
+          ],
+          // 'location':
+        });
+        users.doc(user.user!.uid).set({'createdAt': createdAt});
       });
-    else {
-      print('User Already Registered: $currentUser');
+    } else {
+      print('User Already Registered: $current');
+      // pData.forEach((items) => {
+      //   users.doc(current.uid).collection('comments').doc().set({'displayName': items.displayName})
+      // });
+      // for (final data in current.providerData) {
+      //     if (data.displayName?.toLowerCase().contains('null') == false) {
+      //       print(data.displayName);
+      //       users.doc(current.uid).collection('comments').doc().set(
+      //         {'display_name': data.displayName});
+      //     }
+      //   }
+      // print('User Already Registered: $pData');
     }
   }
 
