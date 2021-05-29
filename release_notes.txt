@@ -1,1 +1,1 @@
-- Test build 2 for testing Codemagic & GitHub Actions & Firebase Distribution
+- バグ報告や追加して欲しい機能など、設定からフィードバックを送る機能を追加しました！
