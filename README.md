@@ -1,6 +1,6 @@
 # kiatsu
 
-[![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3Gmm3fU6DfsnaW3VPsRoWMXnkJpyvd6Qo2)](https://en.cryptobadges.io/donate/3Gmm3fU6DfsnaW3VPsRoWMXnkJpyvd6Qo2)
+[![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3LrRRh3Tz49AmEFwpmF5gt7rXgzyXMGsuV)](https://en.cryptobadges.io/donate/3LrRRh3Tz49AmEFwpmF5gt7rXgzyXMGsuV)
 
 <img src="https://github.com/higedamc/kiatsu/blob/master/screenshots/IMG_2924.jpg">
 
@@ -31,4 +31,4 @@ TWITTER_SECRET_KEY='YOUR_SECRET_KEY'
 
 ## Contact
 
-[higeChang](mailto: jstache@tutanota.com)
+[フィードバック](<mailto:jstache@tutanota.com>)
