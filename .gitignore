@@ -144,3 +144,4 @@ screenshots/testShit.jpg
 ios/Podfile.lock
 ios/Podfile
 /.env
+/ios/Runner/GoogleService-Info.plist
