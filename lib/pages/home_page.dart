@@ -231,13 +231,23 @@ class _HomePageState extends State<HomePage> {
                 Builder(
                   builder: (context) => IconButton(
                       icon: NeumorphicIcon(
-                        Icons.settings_outlined,
+                        Icons.notifications_outlined,
                         size: 25,
                         style: NeumorphicStyle(color: Colors.black87),
                       ),
                       onPressed: () async {
+                        // 未実装ダイアログ
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialogBox(
+                                title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                                descriptions: "この機能はまだ未実装です♡",
+                                text: "おけまる",
+                                key: UniqueKey(),
+                              );
+                            });
                         // Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SettingPage(secrets: secrets)));
-                        await Navigator.of(context).pushNamed('/a');
                       }),
                 )
               ],
@@ -457,19 +467,23 @@ class _HomePageState extends State<HomePage> {
                   return FloatingActionButton(
                       backgroundColor: Colors.white,
                       child: const Text('＾ｑ＾'),
-                      onPressed: () {
+                      onPressed: () async {
                         // sns share button
                         // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                         if (snapshot.hasData)
+                        await Navigator.of(context).pushNamed('/timeline');
+
                           //   Share.share(snapshot.data!.main.pressure.toString() +
                           //       'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
-                          showBarModalBottomSheet(
-                              duration: Duration(milliseconds: 240),
-                              context: context,
-                              builder: (context) => Scaffold(
-                                    body: getListView(),
-                                    // body: _buildBody(context),
-                                  ));
+                          // showBarModalBottomSheet(
+                          //     duration: Duration(milliseconds: 240),
+                          //     context: context,
+                          //     builder: (context) => 
+                          //     Scaffold(
+                          //           body: 
+                          //           // getTimelineView(context),
+                          //           getListView(),
+                          //         ));
                         else {
                           _scaffoldKey.currentState!.showSnackBar(SnackBar(
                             content: const Text("先に情報を読み込んでね＾ｑ＾"),
@@ -497,19 +511,12 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(
-                        Icons.textsms_outlined,
+                        Icons.search_outlined,
                         color: Colors.black,
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/timeline');
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.map_outlined,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
+                        // Navigator.of(context).pushNamed('/timeline');
+                        // 未実装ダイアログ
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -521,11 +528,15 @@ class _HomePageState extends State<HomePage> {
                                 key: UniqueKey(),
                               );
                             });
-                        // showBarModalBottomSheet(
-                        //     duration: Duration(milliseconds: 240),
-                        //     context: context,
-                        //     builder: (context, scrollController) => PieChartPage(),
-                        //     );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.home_outlined,
+                        color: Colors.black,
+                      ),
+                      onPressed: () async {
+                        await Navigator.of(context).pushNamed('/a');
                       },
                     ),
                   ],
@@ -534,6 +545,11 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         });
+  }
+  
+  getTimelineView(BuildContext context) {
+    return Navigator.of(context).pushNamed('/timeline');
+
   }
 
   Widget getListView() {
@@ -563,6 +579,7 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             _hapticFeedback();
+            Navigator.of(context).pushNamed('/timeline');
             DateTime today =
                 new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             print(firebaseAuth.currentUser);

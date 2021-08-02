@@ -145,3 +145,4 @@ ios/Podfile.lock
 ios/Podfile
 /.env
 /ios/Runner/GoogleService-Info.plist
+ios/Podfile.lock

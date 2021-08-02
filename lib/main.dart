@@ -8,6 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
+import 'package:kiatsu/pages/iap_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
@@ -27,30 +28,36 @@ Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   await Firebase.initializeApp();
-  final appleSignInAvailable = await AppleSignInAvailable.check();
-
-  timeago.setLocaleMessages('ja', timeago.JaMessages());
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return Center(child: CircularProgressIndicator(backgroundColor: Colors.white,));
-  };
-  // 後悔 できない環境変数の読み込み
-  await dotenv.load();
-  SharedPreferences.getInstance().then((prefs) {
-    // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
-    runZonedGuarded(() async {
-      runApp(
-        Provider<AppleSignInAvailable>.value(
-          child: MyApp(
-            prefs: prefs, key: UniqueKey(),
+  // await initPlatformState();
+    final appleSignInAvailable = await AppleSignInAvailable.check();
+  
+    timeago.setLocaleMessages('ja', timeago.JaMessages());
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      return Center(child: CircularProgressIndicator(backgroundColor: Colors.white,));
+    };
+    // 後悔 できない環境変数の読み込み
+    await dotenv.load();
+    SharedPreferences.getInstance().then((prefs) {
+      // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
+      runZonedGuarded(() async {
+        runApp(
+          Provider<AppleSignInAvailable>.value(
+            child: MyApp(
+              prefs: prefs, key: UniqueKey(),
+            ),
+            value: appleSignInAvailable,
           ),
-          value: appleSignInAvailable,
-        ),
-      );
-    }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
-  });
-}
+        );
+      }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
+    });
+  }
+  
+//   Future<void> initPlatformState() async {
+//     await Purchases.setDebugLogsEnabled(true);
+//     await Purchases.setup("hEGjqaMrDIyByWbYGXSlPRcswbreVkgj");
+// }
 
 class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);
@@ -87,6 +94,7 @@ class MyApp extends StatelessWidget {
           '/home': (BuildContext context) => HomePage(),
           '/signpage': (BuildContext context) => SignInPage(),
           '/dialog': (BuildContext context) => Dialogs(),
+          '/iap': (BuildContext context) => IAPPage(key: UniqueKey()),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),
