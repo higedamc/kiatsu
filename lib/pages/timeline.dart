@@ -8,9 +8,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/utils/get_weather.dart';
-// import 'package:geoflutterfire/geoflutterfire.dart';
 
-// final geo = Geoflutterfire();
+
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser!.uid;
@@ -41,7 +40,6 @@ class Timeline extends StatelessWidget {
                 child: CircularProgressIndicator(
               backgroundColor: Colors.blue,
             ));
-          // if(snapshot.hasData)
           return ListView(
             children: snapshot.data.docs.map<Widget>(
                 (DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
@@ -57,28 +55,12 @@ class Timeline extends StatelessWidget {
                       margin: EdgeInsets.all(10.0),
                       padding: EdgeInsets.all(2.0),
                       child: Column(children: [
-                        // for (final data in currentUser!.providerData)
-                        //   (data.photoURL?.contains('null') == false) ?
                             ListTile(
                               leading: Icon(
                                 Icons.cloud_circle,
                                 size: 40,
                                 color: Colors.black,
                               ),
-
-                              // leading: (docSnapshot
-                              //         .data()!
-                              //         .containsValue(currentUser!.uid))
-                              //     ? CircleAvatar(
-                              //         backgroundImage:
-                              //             NetworkImage(data.photoURL!),
-                              //       )
-                              //     :
-                              //     Icon(
-                              //         Icons.cloud_circle,
-                              //         size: 40,
-                              //         color: Colors.black,
-                              //       ),
                               title: Text(
                                   docSnapshot.data()!['comment'].toString(),
                                   style: TextStyle(
@@ -91,38 +73,6 @@ class Timeline extends StatelessWidget {
                                         .data()!['location']
                                         .toString(),
                               ),
-                            // ) : ListTile(
-                            //   leading: Icon(
-                            //     Icons.cloud_circle,
-                            //     size: 40,
-                            //     color: Colors.black,
-                            //   ),
-
-                              // leading: (!docSnapshot
-                              //         .data()!
-                              //         .containsValue(currentUser!.uid))
-                              //     ? CircleAvatar(
-                              //         backgroundImage:
-                              //             NetworkImage(data.photoURL!),
-                              //       )
-                              //     :
-                              //     Icon(
-                              //         Icons.cloud_circle,
-                              //         size: 40,
-                              //         color: Colors.black,
-                              //       ),
-                              // title: Text(
-                              //     docSnapshot.data()!['comment'].toString(),
-                              //     style: TextStyle(
-                              //         fontSize: 18.0, color: Colors.black)),
-                              // subtitle: Text(
-                              //   (docSnapshot.data()!['location'].toString() ==
-                              //           "null")
-                              //       ? "電子の海"
-                              //       : docSnapshot
-                              //           .data()!['location']
-                              //           .toString(),
-                              // ),
                             ),
                       ]),
                     ),
@@ -178,7 +128,6 @@ class Timeline extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
                         child: TextField(
                           keyboardType: TextInputType.multiline,
-                          // maxLength: ,
                           maxLines: null,
                           controller: _editor,
                           cursorWidth: 2,

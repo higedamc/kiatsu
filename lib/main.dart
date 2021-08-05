@@ -28,7 +28,6 @@ Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   await Firebase.initializeApp();
-  // await initPlatformState();
     final appleSignInAvailable = await AppleSignInAvailable.check();
   
     timeago.setLocaleMessages('ja', timeago.JaMessages());
@@ -53,11 +52,6 @@ Future<void> startApp() async {
       }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
     });
   }
-  
-//   Future<void> initPlatformState() async {
-//     await Purchases.setDebugLogsEnabled(true);
-//     await Purchases.setup("hEGjqaMrDIyByWbYGXSlPRcswbreVkgj");
-// }
 
 class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);

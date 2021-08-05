@@ -41,17 +41,6 @@ class SplashPage extends StatelessWidget {
       });
     } else {
       print('User Already Registered: $current');
-      // pData.forEach((items) => {
-      //   users.doc(current.uid).collection('comments').doc().set({'displayName': items.displayName})
-      // });
-      // for (final data in current.providerData) {
-      //     if (data.displayName?.toLowerCase().contains('null') == false) {
-      //       print(data.displayName);
-      //       users.doc(current.uid).collection('comments').doc().set(
-      //         {'display_name': data.displayName});
-      //     }
-      //   }
-      // print('User Already Registered: $pData');
     }
   }
 

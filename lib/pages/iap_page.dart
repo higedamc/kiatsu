@@ -10,7 +10,9 @@ class IAPPage extends StatefulWidget {
 }
 
 class _IAPScreenState extends State<IAPPage> {
-  late PurchaserInfo _purchaserInfo;
+
+  // https://stackoverflow.com/questions/67401385/lateinitializationerror-field-data-has-not-been-initialized-got-error
+  PurchaserInfo? _purchaserInfo;
   late Offerings _offerings;
 
   @override
@@ -27,10 +29,12 @@ class _IAPScreenState extends State<IAPPage> {
     // SDK Keyは RevenueCatの各アプリのAPI Keysから取得できます。
     // アプリで使用しているユーザーIDと紐づける場合は、
     // await Purchases.setup("public_sdk_key", appUserId: "my_app_user_id");
-    await Purchases.setup('hEGjqaMrDIyByWbYGXSlPRcswbreVkgj'); 
+    await Purchases.setup('hEGjqaMrDIyByWbYGXSlPRcswbreVkgj', appUserId: "kiatsu"); 
 
     final purchaserInfo = await Purchases.getPurchaserInfo();
     final offerings = await Purchases.getOfferings();
+    print(purchaserInfo);
+    print(offerings);
 
     if (!mounted) return;
 

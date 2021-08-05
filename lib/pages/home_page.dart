@@ -11,7 +11,6 @@ import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:wiredash/wiredash.dart';
@@ -247,7 +246,6 @@ class _HomePageState extends State<HomePage> {
                                 key: UniqueKey(),
                               );
                             });
-                        // Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SettingPage(secrets: secrets)));
                       }),
                 )
               ],
@@ -471,19 +469,19 @@ class _HomePageState extends State<HomePage> {
                         // sns share button
                         // https://qiita.com/shimopata/items/142b39bab6176b6a5da9
                         if (snapshot.hasData)
-                        await Navigator.of(context).pushNamed('/timeline');
+                          await Navigator.of(context).pushNamed('/timeline');
 
-                          //   Share.share(snapshot.data!.main.pressure.toString() +
-                          //       'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
-                          // showBarModalBottomSheet(
-                          //     duration: Duration(milliseconds: 240),
-                          //     context: context,
-                          //     builder: (context) => 
-                          //     Scaffold(
-                          //           body: 
-                          //           // getTimelineView(context),
-                          //           getListView(),
-                          //         ));
+                        //   Share.share(snapshot.data!.main.pressure.toString() +
+                        //       'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                        // showBarModalBottomSheet(
+                        //     duration: Duration(milliseconds: 240),
+                        //     context: context,
+                        //     builder: (context) =>
+                        //     Scaffold(
+                        //           body:
+                        //           // getTimelineView(context),
+                        //           getListView(),
+                        //         ));
                         else {
                           _scaffoldKey.currentState!.showSnackBar(SnackBar(
                             content: const Text("先に情報を読み込んでね＾ｑ＾"),
@@ -520,8 +518,7 @@ class _HomePageState extends State<HomePage> {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return 
-                              CustomDialogBox(
+                              return CustomDialogBox(
                                 title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
                                 descriptions: "この機能はまだ未実装です♡",
                                 text: "おけまる",
@@ -546,10 +543,9 @@ class _HomePageState extends State<HomePage> {
           );
         });
   }
-  
+
   getTimelineView(BuildContext context) {
     return Navigator.of(context).pushNamed('/timeline');
-
   }
 
   Widget getListView() {
