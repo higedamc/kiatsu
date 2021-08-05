@@ -40,13 +40,8 @@ class SignInPage extends StatelessWidget {
                   borderRadius: 8.0,
                   separator: 15.0,
                   borderColor: Colors.black,
-                  // style: app.ButtonStyle.whiteOutline, // style as needed
-                  // type: ButtonType.signIn, // style as needed
                   onPressed: () async {
                     if (now.isAnonymous) {
-                      // await AppleAuthUtil.signIn(context);
-                      // if (currentUser.isAnonymous)
-                      // await AppleAuthUtil.linkAnonToApple(context);
                       await AppleAuthUtil.forceLink(context);
                       print(now.uid);
                     } else {

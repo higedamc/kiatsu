@@ -9,9 +9,9 @@ import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
 
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-  final currentUser = firebaseAuth.currentUser;
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+final currentUser = firebaseAuth.currentUser;
 
 // class SettingPage extends StatefulWidget {
 //   @override
@@ -19,7 +19,6 @@ import 'package:wiredash/wiredash.dart';
 // }
 
 class SettingPage extends StatelessWidget {
-
   // bool isSignedInWithApple =
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -69,7 +68,6 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Neumorphic(
       child: SettingsList(
         key: _scaffoldKey,
@@ -97,7 +95,7 @@ class SettingPage extends StatelessWidget {
             title: 'アカウント管理',
             tiles: [
               SettingsTile(
-                  title: '他のアカウントでサインインする',
+                  title: 'SNSログイン',
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.account_circle_outlined),
                   onPressed: (context) async {
@@ -107,7 +105,8 @@ class SettingPage extends StatelessWidget {
                     // await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
                     // await GithubAuthUtil.signIn(context)
                     //     .then((user) => setState(() => user2 = user));
-                    await Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
+                    await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignInPage()));
                   }),
               SettingsTile(
                 title: 'アカウント削除',
@@ -119,8 +118,7 @@ class SettingPage extends StatelessWidget {
                       builder: (context) {
                         return AlertDialog(
                           title: Text('危険です！'),
-                          content:
-                              Text('本当にアカウントを削除しますか？'),
+                          content: Text('本当にアカウントを削除しますか？'),
                           actions: <Widget>[
                             TextButton(
                                 onPressed: () => Navigator.pop(context),
@@ -137,26 +135,26 @@ class SettingPage extends StatelessWidget {
                 },
               ),
               SettingsTile(
-                title: 'アカウント名',
-                onPressed: (context) => Clipboard.setData(
-                  ClipboardData(
-                    text: currentUser!.uid.toString(),
-                  ),
-                ).then((_) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      key: _scaffoldKey,
-                      content: const Text('アカウント名がコピーされました！')),
-                  );
-                }),
-                subtitle: currentUser!.uid),
+                  title: 'アカウント名',
+                  onPressed: (context) => Clipboard.setData(
+                        ClipboardData(
+                          text: currentUser!.uid.toString(),
+                        ),
+                      ).then((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              key: _scaffoldKey,
+                              content: const Text('アカウント名がコピーされました！')),
+                        );
+                      }),
+                  subtitle: currentUser!.uid),
             ],
           ),
           SettingsSection(
             title: '開発者を応援する＾q＾',
             tiles: [
               SettingsTile(
-                  title: 'フィードバックを送る',
+                  title: 'フィードバック送信',
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.bug_report),
                   onPressed: (context) async {
@@ -167,6 +165,14 @@ class SettingPage extends StatelessWidget {
                     // await GithubAuthUtil.signIn(context)
                     //     .then((user) => setState(() => user2 = user));
                     Wiredash.of(context)!.show();
+                  }),
+              SettingsTile(
+                  title: '投げ銭',
+                  subtitle: '押',
+                  leading: NeumorphicIcon(Icons.attach_money_rounded),
+                  onPressed: (_) async {
+                    Navigator.pushNamed(_,
+                        '/iap');
                   }),
             ],
           ),
