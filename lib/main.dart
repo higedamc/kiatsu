@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
 import 'package:kiatsu/pages/dialog.dart';
@@ -20,12 +19,15 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:wiredash/wiredash.dart';
 
+import 'api/purchase_api.dart';
+
 /**
  * ! 破壊的変更の追加。
  * 詳細は => https://codeux.design/articles/manage-secrets-flutter-project/
  */
 Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await PurchaseApi.init();
   
   await Firebase.initializeApp();
     final appleSignInAvailable = await AppleSignInAvailable.check();
@@ -36,8 +38,8 @@ Future<void> startApp() async {
     ErrorWidget.builder = (FlutterErrorDetails details) {
       return Center(child: CircularProgressIndicator(backgroundColor: Colors.white,));
     };
-    // 後悔 できない環境変数の読み込み
-    await dotenv.load();
+    // 後悔 できない環境変数の読み込みみ
+    await dotenv.dotenv.load();
     SharedPreferences.getInstance().then((prefs) {
       // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
       runZonedGuarded(() async {
@@ -63,8 +65,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wiredash(
       navigatorKey: _navigatorKey,
-      projectId: env['WIREDASH_ID'].toString(),
-      secret: env['WIREDASH_SECRET'].toString(),
+      projectId: dotenv.dotenv.env['WIREDASH_ID'].toString(),
+      secret: dotenv.dotenv.env['WIREDASH_SECRET'].toString(),
       options: WiredashOptionsData(
         customTranslations: {
           // plに日本語の翻訳をオーバーライド
@@ -88,7 +90,7 @@ class MyApp extends StatelessWidget {
           '/home': (BuildContext context) => HomePage(),
           '/signpage': (BuildContext context) => SignInPage(),
           '/dialog': (BuildContext context) => Dialogs(),
-          '/iap': (BuildContext context) => IAPPage(key: UniqueKey()),
+          '/iap': (BuildContext context) => IAPScreen(),
         },
         debugShowCheckedModeBanner: false,
         home: SplashPage(),

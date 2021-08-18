@@ -19,7 +19,7 @@ class GetWeather {
     );
 
     if (result.isSuccessful) {
-      final rr = env['FIREBASE_API_KEY'];
+      final rr = dotenv.env['FIREBASE_API_KEY'];
       final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
