@@ -202,6 +202,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.2"
+  flutter_flavor:
+    dependency: "direct main"
+    description:
+      name: flutter_flavor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.3"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -535,7 +542,7 @@ packages:
       name: purchases_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.4.2"
+    version: "3.4.3"
   settings_ui:
     dependency: "direct main"
     description:

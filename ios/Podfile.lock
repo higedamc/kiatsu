@@ -358,7 +358,7 @@ PODS:
   - PromisesObjC (1.2.12)
   - Purchases (3.12.3):
     - PurchasesCoreSwift (= 3.12.3)
-  - purchases_flutter (3.4.2):
+  - purchases_flutter (3.4.3):
     - Flutter
     - PurchasesHybridCommon (= 1.8.2)
   - PurchasesCoreSwift (3.12.3)
@@ -500,7 +500,7 @@ SPEC CHECKSUMS:
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Purchases: e9839517aea4335136f3946ae228eecf5131cc25
-  purchases_flutter: f2ec4e984c0ff14ad94a83268accd88a60225a5b
+  purchases_flutter: 2a8ebacd11a1eeda45ce610c4a84e2e498f2ff34
   PurchasesCoreSwift: dd3fd55a9895abd7906a3842bd36c7f7539a99d1
   PurchasesHybridCommon: dec00f3b57c1b01d03f55c331d454eb559aa0be2
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410

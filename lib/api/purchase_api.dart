@@ -1,19 +1,23 @@
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
+
 
 class Coins {
   static const idCoins10 = '10_coins';
   static const idCoins100 = '100_coins';
+  static final _apiKey = dotenv.dotenv.env['REVENUECAT_SECRET_KEY'].toString();
 
   static const allIds = [idCoins10, idCoins100];
 }
 
 class PurchaseApi {
-  static const _apiKey = 'hEGjqaMrDIyByWbYGXSlPRcswbreVkgj';
-
+  
   static Future init() async {
+
     await Purchases.setDebugLogsEnabled(true);
-    await Purchases.setup(_apiKey, appUserId: 'testUser1');
+    await dotenv.dotenv.load(fileName: ".env");
+    await Purchases.setup(Coins._apiKey, appUserId: 'testUser1');
   }
 
   static Future<List<Offering>> fetchOffersByIds(List<String> ids) async {

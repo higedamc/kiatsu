@@ -172,7 +172,7 @@ class SettingPage extends StatelessWidget {
                   leading: NeumorphicIcon(Icons.attach_money_rounded),
                   onPressed: (_) async {
                     Navigator.pushNamed(_,
-                        '/iap');
+                        '/sub');
                   }),
             ],
           ),
