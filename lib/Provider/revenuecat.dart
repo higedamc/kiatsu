@@ -29,17 +29,17 @@ class RevenueCatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addCoinsPackage(Package package) {
-    switch (package.offeringIdentifier) {
-      case Coins.idCoins10:
-        coins += 10;
-        break;
-      default:
-        break;
-    }
+  // void addCoinsPackage(Package package) {
+  //   switch (package.offeringIdentifier) {
+  //     case Coins.idCoins10:
+  //       coins += 10;
+  //       break;
+  //     default:
+  //       break;
+  //   }
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   void spend10Coins() {
     coins -= 10;

@@ -4,11 +4,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 
 
 class Coins {
-  static const idCoins10 = '10_coins';
-  static const idCoins100 = '100_coins';
+  static const removeAds = 'kiatsu_120_remove_ads';
+  static const tipMe = 'kiatsu_120_remove_ads';
   static final _apiKey = dotenv.dotenv.env['REVENUECAT_SECRET_KEY'].toString();
 
-  static const allIds = [idCoins10, idCoins100];
+  static const allIds = [removeAds, tipMe];
 }
 
 class PurchaseApi {

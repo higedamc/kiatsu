@@ -95,7 +95,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
   Future fetchOffers() async {
     final offerings = await PurchaseApi.fetchOffers(all: false);
-
+    print(offerings);
     if (offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('No Plans Found'),
