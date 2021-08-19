@@ -1,48 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/pages/upsell_page.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-class IAPPage extends StatefulWidget {
-  const IAPPage({required Key key}) : super(key: key);
 
+
+
+class IAPScreen extends StatefulWidget {
+
+  // https://stackoverflow.com/questions/67401385/lateinitializationerror-field-data-has-not-been-initialized-got-error
   @override
   _IAPScreenState createState() => _IAPScreenState();
 }
 
-class _IAPScreenState extends State<IAPPage> {
-
-  // https://stackoverflow.com/questions/67401385/lateinitializationerror-field-data-has-not-been-initialized-got-error
+class _IAPScreenState extends State<IAPScreen> {
   PurchaserInfo? _purchaserInfo;
   late Offerings _offerings;
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // 初期化処理
-  // 購入情報・Offeringsの取得を行う
-  Future<void> initPlatformState() async {
-    await Purchases.setDebugLogsEnabled(true);
-
-    // SDK Keyは RevenueCatの各アプリのAPI Keysから取得できます。
-    // アプリで使用しているユーザーIDと紐づける場合は、
-    // await Purchases.setup("public_sdk_key", appUserId: "my_app_user_id");
-    await Purchases.setup('hEGjqaMrDIyByWbYGXSlPRcswbreVkgj', appUserId: "kiatsu"); 
-
-    final purchaserInfo = await Purchases.getPurchaserInfo();
-    final offerings = await Purchases.getOfferings();
-    print(purchaserInfo);
-    print(offerings);
-
-    if (!mounted) return;
-
-    setState(() {
-      _purchaserInfo = purchaserInfo;
-      _offerings = offerings;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

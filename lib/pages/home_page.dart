@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (result.isSuccessful) {
-      final rr = env['FIREBASE_API_KEY'];
+      final rr = dotenv.dotenv.env['FIREBASE_API_KEY'];
       final result = await Geolocation.lastKnownLocation();
       double lat = result.location.latitude;
       double lon = result.location.longitude;
@@ -534,6 +534,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () async {
                         await Navigator.of(context).pushNamed('/a');
+                        // await Navigator.of(context).pushNamed('/iap');
                       },
                     ),
                   ],

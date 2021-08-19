@@ -20,7 +20,7 @@ class SplashPage extends StatelessWidget {
 
   SplashPage() {
     final current = firebaseAuth.currentUser;
-    final pData = current!.providerData;
+    // final pData = current!.providerData;
     final CollectionReference users = firebaseStore.collection('users');
     if (!AppleAuthUtil.isSignedIn()) {
       signInAnon().then((UserCredential user) async {

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/auth/apple_signin_available.dart';
-import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/iap_page.dart';
@@ -44,7 +43,7 @@ Future<void> startApp() async {
       backgroundColor: Colors.white,
     ));
   };
-  // 公開できない環境変数の読み込み
+  // 後悔 できない環境変数の読み込みみ
   await dotenv.dotenv.load(fileName: ".env");
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
@@ -102,7 +101,6 @@ class MyApp extends StatelessWidget {
             '/dialog': (BuildContext context) => Dialogs(),
             '/iap': (BuildContext context) => IAPScreen(),
             '/sub': (BuildContext context) => SubscriptionsPage(),
-            '/con': (BuildContext context) => ConsumablesPage(),
           },
           debugShowCheckedModeBanner: false,
           home: SplashPage(),

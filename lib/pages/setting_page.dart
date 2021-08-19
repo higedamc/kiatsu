@@ -167,12 +167,12 @@ class SettingPage extends StatelessWidget {
                     Wiredash.of(context)!.show();
                   }),
               SettingsTile(
-                  title: '投げ銭',
+                  title: '広告削除',
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.attach_money_rounded),
                   onPressed: (_) async {
                     Navigator.pushNamed(_,
-                        '/iap');
+                        '/sub');
                   }),
             ],
           ),
