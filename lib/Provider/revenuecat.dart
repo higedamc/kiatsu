@@ -24,22 +24,25 @@ class RevenueCatProvider extends ChangeNotifier {
 
     final entitlements = purchaserInfo.entitlements.active.values.toList();
     _entitlement =
-        (entitlements.isEmpty ? Entitlement.free : Entitlement.pro);
+        entitlements.isEmpty ? Entitlement.free : Entitlement.pro;
 
     notifyListeners();
   }
 
-  // void addCoinsPackage(Package package) {
-  //   switch (package.offeringIdentifier) {
-  //     case Coins.idCoins10:
-  //       coins += 10;
-  //       break;
-  //     default:
-  //       break;
-  //   }
+  void addCoinsPackage(Package package) {
+    switch (package.offeringIdentifier) {
+      case Coins.removeAds:
+        coins += 10;
+        break;
+      case Coins.tipMe:
+        coins += 100;
+        break;
+      default:
+        break;
+    }
 
-  //   notifyListeners();
-  // }
+    notifyListeners();
+  }
 
   void spend10Coins() {
     coins -= 10;

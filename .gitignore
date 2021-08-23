@@ -147,3 +147,4 @@ ios/Podfile
 /ios/Runner/GoogleService-Info.plist
 ios/Podfile.lock
 android/keystore.properties
+pubspec.lock

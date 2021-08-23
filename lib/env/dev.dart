@@ -1,6 +1,5 @@
-
-import '../dev_main.dart';
+import 'package:kiatsu/dev_main.dart';
 
 void main() {
-  startApp();
+  devStartApp();
 }

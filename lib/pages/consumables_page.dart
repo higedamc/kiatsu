@@ -35,17 +35,17 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
               ),
               onPressed: isLoading ? null : fetchOffers,
             ),
-            // SizedBox(height: 20),
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     minimumSize: Size.fromHeight(50),
-            //   ),
-            //   child: Text(
-            //     'Spend 10 Coins',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   onPressed: isLoading ? null : spendCoins,
-            // ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                'Spend 10 Coins',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : spendCoins,
+            ),
           ],
         ),
       ),
@@ -92,7 +92,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
             if (isSuccess) {
               final provider =
                   Provider.of<RevenueCatProvider>(context, listen: false);
-              // provider.addCoinsPackage(package);
+              provider.addCoinsPackage(package);
             }
 
             Navigator.pop(context);

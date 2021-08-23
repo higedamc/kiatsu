@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
-import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/package_wrapper.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   @override
@@ -27,38 +27,15 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           children: [
             buildEntitlement(entitlement),
             SizedBox(height: 32),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size.fromHeight(50),
-                    ),
-                    child: Text(
-                      'See Plans',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    onPressed: isLoading ? null : fetchOffers,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size.fromHeight(50),
-                    ),
-                    child: Text(
-                      'Upgrade',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () => {
-                      Navigator.of(context).pushNamed('/con'),
-                    },
-                  ),
-                ),
-
-              ],
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                'See Plans',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers,
             )
           ],
         ),
@@ -73,6 +50,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           text: 'You are on Paid plan',
           icon: Icons.paid,
         );
+      case Entitlement.free:
       default:
         return buildEntitlementIcon(
           text: 'You are on Free plan',
@@ -95,7 +73,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
   Future fetchOffers() async {
     final offerings = await PurchaseApi.fetchOffers(all: false);
-    print(offerings);
+
     if (offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('No Plans Found'),
