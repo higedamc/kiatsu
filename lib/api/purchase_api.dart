@@ -39,6 +39,8 @@ class PurchaseApi {
         return offerings.all.values.toList();
       }
     } on PlatformException catch (e) {
+      print(e.code);
+      print(e.message);
       return [];
     }
   }

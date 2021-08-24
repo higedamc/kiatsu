@@ -31,8 +31,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size.fromHeight(50),
               ),
-              child: Text(
-                'See Plans',
+              child: const Text(
+                'プランを見る',
                 style: TextStyle(fontSize: 20),
               ),
               onPressed: isLoading ? null : fetchOffers,
@@ -47,13 +47,13 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     switch (entitlement) {
       case Entitlement.pro:
         return buildEntitlementIcon(
-          text: 'You are on Paid plan',
+          text: '有料プラン利用中',
           icon: Icons.paid,
         );
       case Entitlement.free:
       default:
         return buildEntitlementIcon(
-          text: 'You are on Free plan',
+          text: '無料プラン利用中',
           icon: Icons.lock,
         );
     }
@@ -76,7 +76,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
     if (offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('No Plans Found'),
+        content: Text('該当するプランが見つかりませんでした'),
       ));
     } else {
       final packages = offerings
@@ -88,8 +88,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
         context,
         (context) => PaywallWidget(
           packages: packages,
-          title: '⭐  Upgrade Your Plan',
-          description: 'Upgrade to a new plan to enjoy more benefits',
+          title: 'プランをアップグレードする＾q＾',
+          description: 'プランをアップグレードして特典を得る',
           onClickedPackage: (package) async {
             await PurchaseApi.purchasePackage(package);
 
