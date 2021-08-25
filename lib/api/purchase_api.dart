@@ -50,7 +50,9 @@ class PurchaseApi {
       await Purchases.purchasePackage(package);
 
       return true;
-    } catch (e) {
+    } on PlatformException catch (e) {
+      print(e.code);
+      print(e.message);
       return false;
     }
   }

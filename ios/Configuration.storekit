@@ -1,4 +1,22 @@
 {
+  "identifier" : "F4284887",
+  "nonRenewingSubscriptions" : [
+    {
+      "displayPrice" : "100",
+      "familyShareable" : false,
+      "internalID" : "452E3CE0",
+      "localizations" : [
+        {
+          "description" : "一ヶ月課金",
+          "displayName" : "一ヶ月課金",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "com.temporary.id",
+      "referenceName" : "Test Product Monthly",
+      "type" : "NonRenewingSubscription"
+    }
+  ],
   "products" : [
 
   ],
@@ -10,6 +28,6 @@
   ],
   "version" : {
     "major" : 1,
-    "minor" : 0
+    "minor" : 1
   }
 }

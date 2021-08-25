@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'Provider/revenuecat.dart';
 import 'api/purchase_api.dart';
 
-Future <void> devStartApp() async {
+Future startAppDev() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PurchaseApi.init();
@@ -51,10 +51,10 @@ class DevMyApp extends StatelessWidget {
 
 class DevMainPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _DevMainPageState createState() => _DevMainPageState();
 }
 
-class _MainPageState extends State<DevMainPage> {
+class _DevMainPageState extends State<DevMainPage> {
   int selectedIndex = 0;
   final children = [SubscriptionsPage(), ConsumablesPage()];
 
