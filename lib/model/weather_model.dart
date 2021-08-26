@@ -4,6 +4,10 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:kiatsu/utils/converter.dart';
+import 'package:kiatsu/utils/weather_icon_getter.dart';
+
 WeatherClass weatherFromJson(String str) =>
     WeatherClass.fromJson(json.decode(str));
 
@@ -23,7 +27,9 @@ class WeatherClass {
   int id;
   String name;
   int cod;
-
+  String iconCode;
+  int time;
+  List<WeatherClass> forecast;
 
   WeatherClass({
     required this.coord,
@@ -40,6 +46,9 @@ class WeatherClass {
     required this.name,
     required this.cod,
     required String pressure,
+    required this.iconCode,
+    required this.time,
+    required this.forecast,
   });
 
   factory WeatherClass.fromJson(Map<String, dynamic> json) => WeatherClass(
@@ -56,8 +65,13 @@ class WeatherClass {
         timezone: json["timezone"],
         id: json["id"],
         name: json["name"],
-        cod: json["cod"], pressure: '',
-      );
+        cod: json["cod"],
+        pressure: '',
+        iconCode: json['icon'],
+        time: json['time'],
+        forecast: List<WeatherClass>.from(
+            json["list"].map((x) => Forecasts.fromJson(x))),
+        );
 
   Map<String, dynamic> toJson() => {
         "coord": coord.toJson(),
@@ -73,13 +87,76 @@ class WeatherClass {
         "id": id,
         "name": name,
         "cod": cod,
+        "icon": iconCode,
+        "time": time,
+        "forecast": List<dynamic>.from(forecast.map((x) => x.toJson())),
       };
 
-  // factory WeatherClass.empty() {
-  //   return WeatherClass(
-  //     pressure: "", base: '', clouds: null, cod: null, coord: null,
-  //   );
+  // static List<WeatherClass> fromForecastJson(Map<String, dynamic> json) {
+  //   final weathers = List<WeatherClass>();
+  //   for (final item in json['list']) {
+  //     weathers.add(WeatherClass(
+  //         time: item['dt'],
+  //         iconCode: item['weather'][0]['icon']
+  //     ));
+  //   }
+  //   return weathers;
   // }
+
+  IconData getIconData() {
+    switch (this.iconCode) {
+      case '01d':
+        return WeatherIcons.clear_day;
+      case '01n':
+        return WeatherIcons.clear_night;
+      case '02d':
+        return WeatherIcons.few_clouds_day;
+      case '02n':
+        return WeatherIcons.few_clouds_day;
+      case '03d':
+      case '04d':
+        return WeatherIcons.clouds_day;
+      case '03n':
+      case '04n':
+        return WeatherIcons.clear_night;
+      case '09d':
+        return WeatherIcons.shower_rain_day;
+      case '09n':
+        return WeatherIcons.shower_rain_night;
+      case '10d':
+        return WeatherIcons.rain_day;
+      case '10n':
+        return WeatherIcons.rain_night;
+      case '11d':
+        return WeatherIcons.thunder_storm_day;
+      case '11n':
+        return WeatherIcons.thunder_storm_night;
+      case '13d':
+        return WeatherIcons.snow_day;
+      case '13n':
+        return WeatherIcons.snow_night;
+      case '50d':
+        return WeatherIcons.mist_day;
+      case '50n':
+        return WeatherIcons.mist_night;
+      default:
+        return WeatherIcons.clear_day;
+    }
+  }
+}
+
+class Forecasts {
+  int time;
+  String iconCode;
+
+  Forecasts({required this.time, required this.iconCode});
+
+  factory Forecasts.fromJson(Map<String, dynamic> json) => Forecasts(iconCode: json["icon"], time: json["dt"]);
+
+  Map<String, dynamic> toJson() => {
+    "dt": time,
+    "icon": iconCode,
+  };
 }
 
 class Clouds {
@@ -143,7 +220,6 @@ class Main {
         pressure: json["pressure"],
         humidity: json["humidity"],
       );
-  
 
   Map<String, dynamic> toJson() => {
         "temp": temp,
@@ -191,27 +267,23 @@ class WeatherElement {
   int id;
   String main;
   String description;
-  String icon;
 
   WeatherElement({
     required this.id,
     required this.main,
     required this.description,
-    required this.icon,
   });
 
   factory WeatherElement.fromJson(Map<String, dynamic> json) => WeatherElement(
         id: json["id"],
         main: json["main"],
         description: json["description"],
-        icon: json["icon"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "main": main,
         "description": description,
-        "icon": icon,
       };
 }
 
