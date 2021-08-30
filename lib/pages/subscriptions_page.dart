@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/pages/consumables_page.dart';
+import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/package_wrapper.dart';
+import 'package:purchases_flutter/purchaser_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   @override
@@ -14,7 +18,7 @@ class SubscriptionsPage extends StatefulWidget {
 
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
   bool isLoading = false;
-
+  
   Widget build(BuildContext context) {
     final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
 
@@ -27,20 +31,40 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           children: [
             buildEntitlement(entitlement),
             SizedBox(height: 32),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
-              ),
-              child: const Text(
-                'プランを見る',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: isLoading ? null : fetchOffers,
-            )
+            buildEntitlementText(entitlement),
           ],
         ),
       ),
     );
+  }
+
+  Widget buildEntitlementText(Entitlement entitlement) {
+    switch (entitlement) {
+      case Entitlement.pro:
+
+        return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                '詳しく見る',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers,
+            );
+      case Entitlement.free:
+
+        return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                'プランを見る',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers,
+            );
+    }
   }
 
   Widget buildEntitlement(Entitlement entitlement) {
@@ -70,6 +94,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           Text(text, style: TextStyle(fontSize: 24)),
         ],
       );
+
+  Future moveToConsumablesPage() async {
+    NavigationService().navigateTo(
+                MaterialPageRoute(builder:(context) => ConsumablesPage()));
+  }
 
   Future fetchOffers() async {
     final offerings = await PurchaseApi.fetchOffers(all: false);
