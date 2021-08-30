@@ -15,6 +15,7 @@ import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/wiredash_locale.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,12 +66,12 @@ Future<void> startApp() async {
 class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  // final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Wiredash(
-      navigatorKey: _navigatorKey,
+      navigatorKey: NavigationService().globalKey,
       projectId: dotenv.dotenv.env['WIREDASH_ID'].toString(),
       secret: dotenv.dotenv.env['WIREDASH_SECRET'].toString(),
       options: WiredashOptionsData(
@@ -84,7 +85,7 @@ class MyApp extends StatelessWidget {
       child: ChangeNotifierProvider(
         create: (contenxt) => RevenueCatProvider(),
         child: NeumorphicApp(
-          navigatorKey: _navigatorKey,
+          navigatorKey: NavigationService().globalKey,
           themeMode: ThemeMode.light,
           theme: NeumorphicThemeData(
             baseColor: Color(0xFFFFFFFF),
