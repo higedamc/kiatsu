@@ -5,13 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/Provider/revenuecat.dart';
+import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
+import 'package:kiatsu/utils/utils.dart';
+import 'package:kiatsu/widget/paywall_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
+
 
 // class SettingPage extends StatefulWidget {
 //   @override
@@ -22,6 +29,43 @@ class SettingPage extends StatelessWidget {
   // bool isSignedInWithApple =
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final Future<PurchaserInfo> purchaserInfo = Purchases.getPurchaserInfo();
+  
+
+  Future fetchOffers2(BuildContext context) async {
+    final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
+
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('プランが見つかりませんでした🥺'),
+      ));
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+
+      Utils.showSheet(
+        context,
+        (context) => PaywallWidget(
+          packages: packages,
+          title: 'プランをアップグレードする',
+          description: 'プランをアップグレードして特典を得る＾q＾',
+          onClickedPackage: (package) async {
+            final isSuccess = await PurchaseApi.purchasePackage(package);
+
+            if (isSuccess) {
+              final provider =
+                  Provider.of<RevenueCatProvider>(context, listen: false);
+              provider.addCoinsPackage(package);
+            }
+
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+  }
 
   // Future<UserCredential> signInAnon() async {
   //   UserCredential user = await firebaseAuth.signInAnonymously();
@@ -72,25 +116,25 @@ class SettingPage extends StatelessWidget {
       child: SettingsList(
         key: _scaffoldKey,
         sections: [
-          SettingsSection(
-            title: 'デバッグ用',
-            tiles: [
-              SettingsTile(
-                title: '強制クラッシュ',
-                subtitle: '押',
-                leading: NeumorphicIcon(Icons.language),
-                onPressed: (_) {
-                  FirebaseCrashlytics.instance.crash();
-                },
-              ),
-              // SettingsTile.switchTile(
-              //   title: 'Use fingerprint',
-              //   leading: Icon(Icons.fingerprint),
-              //   switchValue: value,
-              //   onToggle: (bool value) {},
-              // ),
-            ],
-          ),
+          // SettingsSection(
+          //   title: 'デバッグ用',
+          //   tiles: [
+          //     SettingsTile(
+          //       title: '強制クラッシュ',
+          //       subtitle: '押',
+          //       leading: NeumorphicIcon(Icons.language),
+          //       onPressed: (_) {
+          //         FirebaseCrashlytics.instance.crash();
+          //       },
+          //     ),
+          //     // SettingsTile.switchTile(
+          //     //   title: 'Use fingerprint',
+          //     //   leading: Icon(Icons.fingerprint),
+          //     //   switchValue: value,
+          //     //   onToggle: (bool value) {},
+          //     // ),
+          //   ],
+          // ),
           SettingsSection(
             title: 'アカウント管理',
             tiles: [
@@ -171,8 +215,8 @@ class SettingPage extends StatelessWidget {
                   subtitle: '押',
                   leading: NeumorphicIcon(Icons.attach_money_rounded),
                   onPressed: (_) async {
-                    Navigator.pushNamed(_,
-                        '/sub');
+                    // Navigator.pushNamed(_, '/buy');
+                    fetchOffers2(context);
                   }),
             ],
           ),

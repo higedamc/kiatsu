@@ -32,6 +32,17 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             buildEntitlement(entitlement),
             SizedBox(height: 32),
             buildEntitlementText(entitlement),
+            SizedBox(height: 32),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                'コインをもっとゲットする',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers2,
+            ),
           ],
         ),
       ),
@@ -98,6 +109,41 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   Future moveToConsumablesPage() async {
     NavigationService().navigateTo(
                 MaterialPageRoute(builder:(context) => ConsumablesPage()));
+  }
+
+    Future fetchOffers2() async {
+    final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
+
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('プランが見つかりませんでした🥺'),
+      ));
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+
+      Utils.showSheet(
+        context,
+        (context) => PaywallWidget(
+          packages: packages,
+          title: 'プランをアップグレードする＾q＾',
+          description: 'プランをアップグレードして特典を得る＾q＾',
+          onClickedPackage: (package) async {
+            final isSuccess = await PurchaseApi.purchasePackage(package);
+
+            if (isSuccess) {
+              final provider =
+                  Provider.of<RevenueCatProvider>(context, listen: false);
+              provider.addCoinsPackage(package);
+            }
+
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
   }
 
   Future fetchOffers() async {

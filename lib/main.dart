@@ -10,6 +10,7 @@ import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/iap_page.dart';
+import 'package:kiatsu/pages/purchase_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/splash_login.dart';
@@ -104,6 +105,7 @@ class MyApp extends StatelessWidget {
             '/iap': (BuildContext context) => IAPScreen(),
             '/sub': (BuildContext context) => SubscriptionsPage(),
             '/con': (BuildContext context) => ConsumablesPage(),
+            '/buy': (BuildContext context) => SubscriptionsPage(),
           },
           debugShowCheckedModeBanner: false,
           home: SplashPage(),
