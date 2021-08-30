@@ -50,7 +50,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 '詳しく見る',
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: isLoading ? null : fetchOffers,
+              onPressed: null,
             );
       case Entitlement.free:
 
