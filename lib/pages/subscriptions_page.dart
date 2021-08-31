@@ -32,17 +32,17 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             buildEntitlement(entitlement),
             SizedBox(height: 32),
             buildEntitlementText(entitlement),
-            SizedBox(height: 32),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
-              ),
-              child: Text(
-                'コインをもっとゲットする',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: isLoading ? null : fetchOffers2,
-            ),
+            // SizedBox(height: 32),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     minimumSize: Size.fromHeight(50),
+            //   ),
+            //   child: Text(
+            //     '他の機能を見てみる',
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            //   onPressed: isLoading ? null : fetchOffers2,
+            // ),
           ],
         ),
       ),
@@ -58,7 +58,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 minimumSize: Size.fromHeight(50),
               ),
               child: Text(
-                '詳しく見る',
+                '広告削除済みです',
                 style: TextStyle(fontSize: 20),
               ),
               onPressed: null,
@@ -73,7 +73,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 'プランを見る',
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: isLoading ? null : fetchOffers,
+              onPressed: isLoading ? null : fetchOffers2,
             );
     }
   }

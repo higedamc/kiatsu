@@ -34,8 +34,8 @@ class _RestoreButtonState extends State<RestoreButton> {
           // 過去の購入情報を取得
           final restoredInfo = await Purchases.restoreTransactions();
 
-          if (restoredInfo.entitlements.all['kiatsu_pro'] != null &&
-              restoredInfo.entitlements.all['kiatsu_pro']!.isActive) {
+          if (restoredInfo.entitlements.all['pro'] != null &&
+              restoredInfo.entitlements.all['pro']!.isActive) {
             
             // 復元完了時の処理を記載
             

@@ -18,7 +18,7 @@ class PurchaseButton extends StatelessWidget {
         try {
           // 購入処理
           final purchaserInfo = await Purchases.purchasePackage(package);
-          final isNoAds = purchaserInfo.entitlements.all['kiatsu_pro']!.isActive;
+          final isNoAds = purchaserInfo.entitlements.all['pro']!.isActive;
           if (isNoAds) {
             // 購入完了時の処理
 

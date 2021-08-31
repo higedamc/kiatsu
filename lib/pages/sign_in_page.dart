@@ -5,16 +5,18 @@ import 'package:apple_sign_in/apple_sign_in_button.dart' as app;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:kiatsu/auth/apple_signin_available.dart';
+import 'package:kiatsu/auth/apple_auth.dart';
+import 'package:kiatsu/auth/github_auth.dart';
+import 'package:kiatsu/auth/google_auth.dart';
+import 'package:kiatsu/auth/twitter_auth.dart';
+import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/pages/timeline.dart';
-import 'package:kiatsu/utils/apple_auth.dart';
-import 'package:kiatsu/utils/github_auth.dart';
-import 'package:kiatsu/utils/twitter_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:social_auth_buttons/res/buttons/apple_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/github_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/google_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/twitter_auth_button.dart';
+import 'package:social_auth_buttons/social_auth_buttons.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -83,6 +85,16 @@ class SignInPage extends StatelessWidget {
                           onPressed: () => {
                             TwitterAuthUtil.signInWithTwitter(context),
                           }),
+                      GoogleAuthButton(
+                        width: 280.0,
+                          height: 50.0,
+                          borderWidth: 1.0,
+                          padding: EdgeInsets.all(8.0),
+                          elevation: 2.0,
+                          borderRadius: 8.0,
+                          separator: 15.0,
+                          borderColor: Colors.black,
+                        onPressed: () => GoogleAuthUtil.signInWithGoogle(context)),
                     ],
                   ),
               )

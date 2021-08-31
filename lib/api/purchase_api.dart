@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
+
 
 
 class Coins {
@@ -14,11 +16,15 @@ class Coins {
 
 class PurchaseApi {
   
+  static User? getCurrentUser() => FirebaseAuth.instance.currentUser;
+
+  static final current = getCurrentUser();
+
   static Future init() async {
 
     await Purchases.setDebugLogsEnabled(true);
     await dotenv.dotenv.load(fileName: ".env");
-    await Purchases.setup(Coins._apiKey, appUserId: 'testUser1');
+    await Purchases.setup(Coins._apiKey, appUserId: current!.uid.toString());
   }
 
   static Future<List<Offering>> fetchOffersByIds(List<String> ids) async {
@@ -56,4 +62,9 @@ class PurchaseApi {
       return false;
     }
   }
+
+  static Future<PurchaserInfo> getCurrentPurchaser() async => Purchases.getPurchaserInfo();
+
+  // static bool isPurchased => purchasePac
+  
 }

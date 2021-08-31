@@ -5,7 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
-import 'package:kiatsu/auth/apple_signin_available.dart';
+import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
@@ -32,9 +32,10 @@ import 'api/purchase_api.dart';
  */
 Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PurchaseApi.init();
+ 
 
   await Firebase.initializeApp();
+  await PurchaseApi.init();
   final appleSignInAvailable = await AppleSignInAvailable.check();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
@@ -67,12 +68,12 @@ Future<void> startApp() async {
 class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
-  // final _navigatorKey = GlobalKey<NavigatorState>();
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Wiredash(
-      navigatorKey: NavigationService().globalKey,
+      navigatorKey: _navigatorKey,
       projectId: dotenv.dotenv.env['WIREDASH_ID'].toString(),
       secret: dotenv.dotenv.env['WIREDASH_SECRET'].toString(),
       options: WiredashOptionsData(
@@ -86,7 +87,7 @@ class MyApp extends StatelessWidget {
       child: ChangeNotifierProvider(
         create: (contenxt) => RevenueCatProvider(),
         child: NeumorphicApp(
-          navigatorKey: NavigationService().globalKey,
+          navigatorKey: _navigatorKey,
           themeMode: ThemeMode.light,
           theme: NeumorphicThemeData(
             baseColor: Color(0xFFFFFFFF),
@@ -102,10 +103,11 @@ class MyApp extends StatelessWidget {
             '/home': (BuildContext context) => HomePage(),
             '/signpage': (BuildContext context) => SignInPage(),
             '/dialog': (BuildContext context) => Dialogs(),
-            '/iap': (BuildContext context) => IAPScreen(),
+            '/iap': (BuildContext context) => IAPScreen(key: UniqueKey()),
             '/sub': (BuildContext context) => SubscriptionsPage(),
             '/con': (BuildContext context) => ConsumablesPage(),
-            '/buy': (BuildContext context) => SubscriptionsPage(),
+            '/subsc': (BuildContext context) => SubscriptionsPage(),
+            '/buy': (BuildContext context) => DevPurchasePage(),
           },
           debugShowCheckedModeBanner: false,
           home: SplashPage(),
