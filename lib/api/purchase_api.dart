@@ -8,10 +8,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 class Coins {
   // Entitlementsの設定
   static const removeAds = 'kiatsu_120_remove_ads';
+  // for iOS
+  static const removeAdsIOS = 'kiatsu_250_remove_ads';
   static const tipMe = 'tip_me';
   static final _apiKey = dotenv.dotenv.env['REVENUECAT_SECRET_KEY'].toString();
-
-  static const allIds = [removeAds, tipMe];
+  // Added some
+  static const allIds = [removeAds, tipMe, removeAdsIOS];
 }
 
 class PurchaseApi {
