@@ -1,24 +1,24 @@
 {
-  "identifier" : "F4284887",
+  "identifier" : "EC5FE2D7",
   "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
     {
-      "displayPrice" : "100",
+      "displayPrice" : "250",
       "familyShareable" : false,
-      "internalID" : "452E3CE0",
+      "internalID" : "4C1B9AF3",
       "localizations" : [
         {
-          "description" : "一ヶ月課金",
-          "displayName" : "一ヶ月課金",
+          "description" : "広告削除",
+          "displayName" : "広告削除",
           "locale" : "ja"
         }
       ],
-      "productID" : "com.temporary.id",
-      "referenceName" : "Test Product Monthly",
-      "type" : "NonRenewingSubscription"
+      "productID" : "kiatsu_120_remove_ads",
+      "referenceName" : "Remove Ads",
+      "type" : "NonConsumable"
     }
-  ],
-  "products" : [
-
   ],
   "settings" : {
 

@@ -103,7 +103,7 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
               )
-              : Center(child: Text('認証済')),
+              : appleSignInAvailable.isAvailable ? Text("") : Center(child: Text('認証済')),
           // サインアウトボタン
           // (AppleAuthUtil.isSignedIn()) ?
           // NeumorphicButton(
