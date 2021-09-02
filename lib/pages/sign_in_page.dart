@@ -94,11 +94,16 @@ class SignInPage extends StatelessWidget {
                           borderRadius: 8.0,
                           separator: 15.0,
                           borderColor: Colors.black,
-                        onPressed: () => GoogleAuthUtil.signInWithGoogle(context)),
+                        onPressed: () async => {
+                          GoogleAuthUtil.signInWithGoogle(context),
+                          Navigator.pop(context),
+                        }
+                        ),
+
                     ],
                   ),
               )
-              : Text(''),
+              : Center(child: Text('認証済')),
           // サインアウトボタン
           // (AppleAuthUtil.isSignedIn()) ?
           // NeumorphicButton(

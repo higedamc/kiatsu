@@ -83,7 +83,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
       case Entitlement.pro:
         return buildEntitlementIcon(
           text: '有料プラン利用中',
-          icon: Icons.paid,
+          icon: Icons.done, // ex. paid
         );
       case Entitlement.free:
       default:

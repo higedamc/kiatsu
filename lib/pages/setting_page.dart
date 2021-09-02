@@ -236,6 +236,7 @@ class SettingPage extends StatelessWidget {
                         // Navigator.pushNamed(_, '/buy');
                         //  Navigator.pushNamed(context, '/subsc');
                         fetchOffers2(context);
+                        Navigator.pop(context);
                         // Navigator.pushNamed(context, '/iap');
                       }),
                 ],

@@ -189,7 +189,7 @@ packages:
       name: fl_chart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.36.4"
+    version: "0.40.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -556,14 +556,14 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   purchases_flutter:
     dependency: "direct main"
     description:
       name: purchases_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.4.3"
+    version: "3.4.4"
   quiver:
     dependency: transitive
     description:
