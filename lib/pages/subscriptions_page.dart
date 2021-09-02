@@ -3,9 +3,13 @@ import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/pages/consumables_page.dart';
+import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/package_wrapper.dart';
+import 'package:purchases_flutter/purchaser_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   @override
@@ -14,7 +18,7 @@ class SubscriptionsPage extends StatefulWidget {
 
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
   bool isLoading = false;
-
+  
   Widget build(BuildContext context) {
     final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
 
@@ -27,55 +31,64 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           children: [
             buildEntitlement(entitlement),
             SizedBox(height: 32),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size.fromHeight(50),
-                    ),
-                    child: Text(
-                      'See Plans',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    onPressed: isLoading ? null : fetchOffers,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size.fromHeight(50),
-                    ),
-                    child: Text(
-                      'Upgrade',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () => {
-                      Navigator.of(context).pushNamed('/con'),
-                    },
-                  ),
-                ),
-
-              ],
-            )
+            buildEntitlementText(entitlement),
+            // SizedBox(height: 32),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     minimumSize: Size.fromHeight(50),
+            //   ),
+            //   child: Text(
+            //     '他の機能を見てみる',
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            //   onPressed: isLoading ? null : fetchOffers2,
+            // ),
           ],
         ),
       ),
     );
   }
 
+  Widget buildEntitlementText(Entitlement entitlement) {
+    switch (entitlement) {
+      case Entitlement.pro:
+
+        return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                '広告削除済みです',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: null,
+            );
+      case Entitlement.free:
+
+        return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                'プランを見る',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers2,
+            );
+    }
+  }
+
   Widget buildEntitlement(Entitlement entitlement) {
     switch (entitlement) {
       case Entitlement.pro:
         return buildEntitlementIcon(
-          text: 'You are on Paid plan',
-          icon: Icons.paid,
+          text: '有料プラン利用中',
+          icon: Icons.done, // ex. paid
         );
+      case Entitlement.free:
       default:
         return buildEntitlementIcon(
-          text: 'You are on Free plan',
+          text: '無料プラン利用中',
           icon: Icons.lock,
         );
     }
@@ -93,12 +106,17 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
         ],
       );
 
-  Future fetchOffers() async {
-    final offerings = await PurchaseApi.fetchOffers(all: false);
-    print(offerings);
+  Future moveToConsumablesPage() async {
+    NavigationService().navigateTo(
+                MaterialPageRoute(builder:(context) => ConsumablesPage()));
+  }
+
+    Future fetchOffers2() async {
+    final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
+
     if (offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('No Plans Found'),
+        content: Text('プランが見つかりませんでした🥺'),
       ));
     } else {
       final packages = offerings
@@ -110,8 +128,43 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
         context,
         (context) => PaywallWidget(
           packages: packages,
-          title: '⭐  Upgrade Your Plan',
-          description: 'Upgrade to a new plan to enjoy more benefits',
+          title: 'プランをアップグレードする＾q＾',
+          description: 'プランをアップグレードして特典を得る＾q＾',
+          onClickedPackage: (package) async {
+            final isSuccess = await PurchaseApi.purchasePackage(package);
+
+            if (isSuccess) {
+              final provider =
+                  Provider.of<RevenueCatProvider>(context, listen: false);
+              provider.addCoinsPackage(package);
+            }
+
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+  }
+
+  Future fetchOffers() async {
+    final offerings = await PurchaseApi.fetchOffers(all: false);
+
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('該当するプランが見つかりませんでした'),
+      ));
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+
+      Utils.showSheet(
+        context,
+        (context) => PaywallWidget(
+          packages: packages,
+          title: 'プランをアップグレードする＾q＾',
+          description: 'プランをアップグレードして特典を得る',
           onClickedPackage: (package) async {
             await PurchaseApi.purchasePackage(package);
 

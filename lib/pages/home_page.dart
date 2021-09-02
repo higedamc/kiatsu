@@ -10,6 +10,7 @@ import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:kiatsu/pages/timeline.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -30,7 +31,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime updatedAt = DateTime.now();
 
+
   late Future<WeatherClass> weather;
+  late final List<WeatherClass> weathers;
 
   String _res2 = '';
   var _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -374,7 +377,6 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  // _pienRate(context),
                                 ],
                               ),
                             ),

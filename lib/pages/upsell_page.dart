@@ -19,7 +19,7 @@ class UpsellPage extends StatelessWidget {
         // 今回はCustomタイプのPackageを作成したので、Package名を指定しています。
         // Monthlyなど、デフォルトで用意されているPackageを使う場合は
         // offering.monthlyで取得できます。
-        final noAdsPackage = offering.getPackage('Lifetime');
+        final noAdsPackage = offering.getPackage('kiatsu_pro_1m');
         if (noAdsPackage != null) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),

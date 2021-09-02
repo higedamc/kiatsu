@@ -1,111 +1,83 @@
-import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:kiatsu/Provider/revenuecat.dart';
-import 'package:kiatsu/auth/apple_signin_available.dart';
-import 'package:kiatsu/pages/dialog.dart';
-import 'package:kiatsu/pages/home_page.dart';
-import 'package:kiatsu/pages/iap_page.dart';
-import 'package:kiatsu/pages/setting_page.dart';
-import 'package:kiatsu/pages/sign_in_page.dart';
-import 'package:kiatsu/pages/splash_login.dart';
+import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
-import 'package:kiatsu/pages/timeline.dart';
-import 'package:kiatsu/utils/wiredash_locale.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
-import 'package:wiredash/wiredash.dart';
 
+import 'Provider/revenuecat.dart';
 import 'api/purchase_api.dart';
 
-/**
- * ! 破壊的変更の追加。
- * 詳細は => https://codeux.design/articles/manage-secrets-flutter-project/
- */
-Future<void> startApp() async {
+Future startAppDev() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await PurchaseApi.init();
 
-  await Firebase.initializeApp();
-  final appleSignInAvailable = await AppleSignInAvailable.check();
-
-  timeago.setLocaleMessages('ja', timeago.JaMessages());
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return Center(
-        child: CircularProgressIndicator(
-      backgroundColor: Colors.white,
-    ));
-  };
-  // 後悔 できない環境変数の読み込みみ
-  await dotenv.dotenv.load(fileName: ".env");
-  SharedPreferences.getInstance().then((prefs) {
-    // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
-    runZonedGuarded(() async {
-      runApp(
-        Provider<AppleSignInAvailable>.value(
-          child: MyApp(
-            prefs: prefs,
-            key: UniqueKey(),
-          ),
-          value: appleSignInAvailable,
-        ),
-      );
-    }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
-  });
+  runApp(DevMyApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({required Key key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
-  final _navigatorKey = GlobalKey<NavigatorState>();
+class DevMyApp extends StatelessWidget {
+  static final String title = 'Purchases';
 
   @override
   Widget build(BuildContext context) {
-    return Wiredash(
-      navigatorKey: _navigatorKey,
-      projectId: dotenv.dotenv.env['WIREDASH_ID'].toString(),
-      secret: dotenv.dotenv.env['WIREDASH_SECRET'].toString(),
-      options: WiredashOptionsData(
-        customTranslations: {
-          // plに日本語の翻訳をオーバーライド
-          const Locale.fromSubtags(languageCode: 'pl'):
-              const CustomTranslations(),
-        },
-        locale: const Locale('pl'),
-      ),
-      child: ChangeNotifierProvider(
-        create: (contenxt) => RevenueCatProvider(),
-        child: NeumorphicApp(
-          navigatorKey: _navigatorKey,
-          themeMode: ThemeMode.light,
-          theme: NeumorphicThemeData(
-            baseColor: Color(0xFFFFFFFF),
-            lightSource: LightSource.topLeft,
-            depth: 20,
-            intensity: 1,
+    const denimBlue = Color.fromRGBO(21, 30, 61, 1);
+    const accentColor = Colors.amber;
+
+    return ChangeNotifierProvider(
+      create: (context) => RevenueCatProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: title,
+        theme: ThemeData.dark().copyWith(
+          primaryColor: denimBlue,
+          scaffoldBackgroundColor: denimBlue,
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: denimBlue,
+            selectedItemColor: accentColor,
           ),
-          routes: {
-            '/a': (BuildContext context) => SettingPage(),
-            '/timeline': (BuildContext context) => Timeline(
-                  key: UniqueKey(),
-                ),
-            '/home': (BuildContext context) => HomePage(),
-            '/signpage': (BuildContext context) => SignInPage(),
-            '/dialog': (BuildContext context) => Dialogs(),
-            '/iap': (BuildContext context) => IAPScreen(),
-            '/sub': (BuildContext context) => SubscriptionsPage(),
-          },
-          debugShowCheckedModeBanner: false,
-          home: SplashPage(),
+          accentColor: accentColor,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              primary: accentColor,
+              onPrimary: Colors.black,
+            ),
+          ),
+          accentIconTheme: IconThemeData(color: accentColor),
         ),
+        home: DevMainPage(),
       ),
     );
   }
+}
+
+class DevMainPage extends StatefulWidget {
+  @override
+  _DevMainPageState createState() => _DevMainPageState();
+}
+
+class _DevMainPageState extends State<DevMainPage> {
+  int selectedIndex = 0;
+  final children = [SubscriptionsPage(), ConsumablesPage()];
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(DevMyApp.title),
+          centerTitle: true,
+        ),
+        body: children[selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: selectedIndex,
+          onTap: (index) => setState(() => selectedIndex = index),
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Subscription',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.monetization_on),
+              label: 'Consumable',
+            ),
+          ],
+        ),
+      );
 }

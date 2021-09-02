@@ -1,9 +1,16 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/pages/consumables_page.dart';
 
 import 'package:kiatsu/pages/home_page.dart';
-import 'package:kiatsu/utils/apple_auth.dart';
+import 'package:kiatsu/pages/iap_page.dart';
+import 'package:kiatsu/pages/subscriptions_page.dart';
+import 'package:kiatsu/pages/upsell_page.dart';
+import 'package:purchases_flutter/offering_wrapper.dart';
+import 'package:purchases_flutter/offerings_wrapper.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 // 匿名ログイン + スプラッシュスクリーンの実装
@@ -19,17 +26,12 @@ class SplashPage extends StatelessWidget {
   }
 
   SplashPage() {
-    final current = firebaseAuth.currentUser;
-    // final pData = current!.providerData;
+    final User? current = firebaseAuth.currentUser;
     final CollectionReference users = firebaseStore.collection('users');
-    if (!AppleAuthUtil.isSignedIn()) {
+    if (current == null) {
       signInAnon().then((UserCredential user) async {
         print('User ${user.user!.uid}');
-        await users
-            .doc(user.user!.uid)
-            .collection('votes')
-            .doc()
-            .set({
+        await users.doc(user.user!.uid).collection('votes').doc().set({
           'pien_rate': [
             {'cho_pien': 0, 'creaateAt': createdAt},
             {'pien': 0, 'createdAt': createdAt},
@@ -38,8 +40,10 @@ class SplashPage extends StatelessWidget {
           // 'location':
         });
         users.doc(user.user!.uid).set({'createdAt': createdAt});
+        // await PurchaseApi.init();
       });
     } else {
+    //   PurchaseApi.init();
       print('User Already Registered: $current');
     }
   }

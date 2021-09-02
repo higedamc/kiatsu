@@ -30,22 +30,22 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
                 minimumSize: Size.fromHeight(50),
               ),
               child: Text(
-                'Get More Coins',
+                'コインをもっとゲットする',
                 style: TextStyle(fontSize: 20),
               ),
               onPressed: isLoading ? null : fetchOffers,
             ),
-            // SizedBox(height: 20),
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     minimumSize: Size.fromHeight(50),
-            //   ),
-            //   child: Text(
-            //     'Spend 10 Coins',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   onPressed: isLoading ? null : spendCoins,
-            // ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                '10 コイン使う',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : spendCoins,
+            ),
           ],
         ),
       ),
@@ -61,7 +61,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
           ),
           SizedBox(height: 8),
           Text(
-            'You have $coins Coins',
+            '所有コイン: $coins 枚',
             style: TextStyle(fontSize: 24),
           ),
         ],
@@ -72,7 +72,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
 
     if (offerings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('No Plans Found'),
+        content: Text('プランが見つかりませんでした🥺'),
       ));
     } else {
       final packages = offerings
@@ -84,15 +84,15 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
         context,
         (context) => PaywallWidget(
           packages: packages,
-          title: '⭐  Upgrade Your Plan',
-          description: 'Upgrade to a new plan to enjoy more benefits',
+          title: 'プランをアップグレードする＾q＾',
+          description: 'プランをアップグレードして特典を得る＾q＾',
           onClickedPackage: (package) async {
             final isSuccess = await PurchaseApi.purchasePackage(package);
 
             if (isSuccess) {
               final provider =
                   Provider.of<RevenueCatProvider>(context, listen: false);
-              // provider.addCoinsPackage(package);
+              provider.addCoinsPackage(package);
             }
 
             Navigator.pop(context);

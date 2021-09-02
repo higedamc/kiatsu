@@ -5,13 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/Provider/revenuecat.dart';
+import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
+import 'package:kiatsu/utils/utils.dart';
+import 'package:kiatsu/widget/paywall_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
+// test1
+final currentPurchaser = PurchaseApi.getCurrentPurchaser();
 
 // class SettingPage extends StatefulWidget {
 //   @override
@@ -22,6 +30,49 @@ class SettingPage extends StatelessWidget {
   // bool isSignedInWithApple =
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // 購入済みbool
+  Future<bool> isPurchased() async {
+    PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
+    if(purchaseInfo.entitlements.all["pro"]!.isActive){
+      return true;
+    } else return false;
+  }
+  
+
+  Future fetchOffers2(BuildContext context) async {
+    final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
+
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('プランが見つかりませんでした🥺'),
+      ));
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+
+      Utils.showSheet(
+        context,
+        (context) => PaywallWidget(
+          packages: packages,
+          title: 'プランをアップグレードする',
+          description: 'プランをアップグレードして特典を得る＾q＾',
+          onClickedPackage: (package) async {
+            final isSuccess = await PurchaseApi.purchasePackage(package);
+
+            if (isSuccess) {
+              final provider =
+                  Provider.of<RevenueCatProvider>(context, listen: false);
+              provider.addCoinsPackage(package);
+            }
+
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+  }
 
   // Future<UserCredential> signInAnon() async {
   //   UserCredential user = await firebaseAuth.signInAnonymously();
@@ -69,114 +120,130 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Neumorphic(
-      child: SettingsList(
-        key: _scaffoldKey,
-        sections: [
-          SettingsSection(
-            title: 'デバッグ用',
-            tiles: [
-              SettingsTile(
-                title: '強制クラッシュ',
-                subtitle: '押',
-                leading: NeumorphicIcon(Icons.language),
-                onPressed: (_) {
-                  FirebaseCrashlytics.instance.crash();
-                },
-              ),
-              // SettingsTile.switchTile(
-              //   title: 'Use fingerprint',
-              //   leading: Icon(Icons.fingerprint),
-              //   switchValue: value,
-              //   onToggle: (bool value) {},
+      child: FutureBuilder<bool>(
+        future: isPurchased(),
+        builder: (context, snapshot) {
+          return SettingsList(
+            key: _scaffoldKey,
+            sections: [
+              // SettingsSection(
+              //   title: 'デバッグ用',
+              //   tiles: [
+              //     SettingsTile(
+              //       title: '強制クラッシュ',
+              //       subtitle: '押',
+              //       leading: NeumorphicIcon(Icons.language),
+              //       onPressed: (_) {
+              //         FirebaseCrashlytics.instance.crash();
+              //       },
+              //     ),
+              //     // SettingsTile.switchTile(
+              //     //   title: 'Use fingerprint',
+              //     //   leading: Icon(Icons.fingerprint),
+              //     //   switchValue: value,
+              //     //   onToggle: (bool value) {},
+              //     // ),
+              //   ],
               // ),
-            ],
-          ),
-          SettingsSection(
-            title: 'アカウント管理',
-            tiles: [
-              SettingsTile(
-                  title: 'SNSログイン',
-                  subtitle: '押',
-                  leading: NeumorphicIcon(Icons.account_circle_outlined),
-                  onPressed: (context) async {
-                    // print(AppleAuthUtil.isSignedIn().toString());
-                    // User user2 = AppleAuthUtil.getCurrentUser();
-                    // print(user2.toString());
-                    // await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
-                    // await GithubAuthUtil.signIn(context)
-                    //     .then((user) => setState(() => user2 = user));
-                    await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignInPage()));
-                  }),
-              SettingsTile(
-                title: 'アカウント削除',
-                subtitle: '押',
-                leading: NeumorphicIcon(Icons.language),
-                onPressed: (_) async {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('危険です！'),
-                          content: Text('本当にアカウントを削除しますか？'),
-                          actions: <Widget>[
-                            TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('Cancel')),
-                            TextButton(
-                                onPressed: () async {
-                                  await currentUser!.delete();
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('OK')),
-                          ],
-                        );
-                      });
-                },
-              ),
-              SettingsTile(
-                  title: 'アカウント名',
-                  onPressed: (context) => Clipboard.setData(
-                        ClipboardData(
-                          text: currentUser!.uid.toString(),
-                        ),
-                      ).then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              key: _scaffoldKey,
-                              content: const Text('アカウント名がコピーされました！')),
-                        );
+              SettingsSection(
+                title: 'アカウント管理',
+                tiles: [
+                  SettingsTile(
+                      title: 'SNSログイン',
+                      subtitle: '押',
+                      leading: NeumorphicIcon(Icons.account_circle_outlined),
+                      onPressed: (context) async {
+                        // print(AppleAuthUtil.isSignedIn().toString());
+                        // User user2 = AppleAuthUtil.getCurrentUser();
+                        // print(user2.toString());
+                        // await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
+                        // await GithubAuthUtil.signIn(context)
+                        //     .then((user) => setState(() => user2 = user));
+                        await Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignInPage()));
                       }),
-                  subtitle: currentUser!.uid),
+                  // SettingsTile(
+                  //   title: 'アカウント削除',
+                  //   subtitle: '押',
+                  //   leading: NeumorphicIcon(Icons.language),
+                  //   onPressed: (_) async {
+                  //     showDialog(
+                  //         context: context,
+                  //         builder: (context) {
+                  //           return AlertDialog(
+                  //             title: Text('危険です！'),
+                  //             content: Text('本当にアカウントを削除しますか？'),
+                  //             actions: <Widget>[
+                  //               TextButton(
+                  //                   onPressed: () => Navigator.pop(context),
+                  //                   child: Text('Cancel')),
+                  //               TextButton(
+                  //                   onPressed: () async {
+                  //                     await currentUser!.delete();
+                  //                     Navigator.of(context).pop();
+                  //                   },
+                  //                   child: Text('OK')),
+                  //             ],
+                  //           );
+                  //         });
+                  //   },
+                  // ),
+                  SettingsTile(
+                      title: 'アカウント名',
+                      onPressed: (context) => Clipboard.setData(
+                            ClipboardData(
+                              text: currentUser!.uid.toString(),
+                            ),
+                          ).then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  key: _scaffoldKey,
+                                  content: const Text('アカウント名がコピーされました！')),
+                            );
+                          }),
+                      subtitle: currentUser!.uid),
+                ],
+              ),
+              SettingsSection(
+                title: '開発者を応援する＾q＾',
+                tiles: [
+                  SettingsTile(
+                      title: 'フィードバック送信',
+                      subtitle: '押',
+                      leading: NeumorphicIcon(Icons.bug_report),
+                      onPressed: (context) async {
+                        // print(AppleAuthUtil.isSignedIn().toString());
+                        // User user2 = AppleAuthUtil.getCurrentUser();
+                        // print(user2.toString());
+                        // await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
+                        // await GithubAuthUtil.signIn(context)
+                        //     .then((user) => setState(() => user2 = user));
+                        Wiredash.of(context)!.show();
+                      }),
+                  snapshot.hasData ? SettingsTile(
+                      title: '広告解除済み',
+                      subtitle: '',
+                      leading: NeumorphicIcon(Icons.attach_money_rounded),
+                      onPressed: (_) async {
+                        // // Navigator.pushNamed(_, '/buy');
+                        // fetchOffers2(context);
+                      }) :
+                       SettingsTile(
+                      title: '有料機能',
+                      subtitle: '押',
+                      leading: NeumorphicIcon(Icons.attach_money_rounded),
+                      onPressed: (_) async {
+                        // Navigator.pushNamed(_, '/buy');
+                        //  Navigator.pushNamed(context, '/subsc');
+                        fetchOffers2(context);
+                        Navigator.pop(context);
+                        // Navigator.pushNamed(context, '/iap');
+                      }),
+                ],
+              ),
             ],
-          ),
-          SettingsSection(
-            title: '開発者を応援する＾q＾',
-            tiles: [
-              SettingsTile(
-                  title: 'フィードバック送信',
-                  subtitle: '押',
-                  leading: NeumorphicIcon(Icons.bug_report),
-                  onPressed: (context) async {
-                    // print(AppleAuthUtil.isSignedIn().toString());
-                    // User user2 = AppleAuthUtil.getCurrentUser();
-                    // print(user2.toString());
-                    // await AppleAuthUtil.signIn(context).then((_) => Navigator.of(context).pop());
-                    // await GithubAuthUtil.signIn(context)
-                    //     .then((user) => setState(() => user2 = user));
-                    Wiredash.of(context)!.show();
-                  }),
-              SettingsTile(
-                  title: '広告削除',
-                  subtitle: '押',
-                  leading: NeumorphicIcon(Icons.attach_money_rounded),
-                  onPressed: (_) async {
-                    Navigator.pushNamed(_,
-                        '/sub');
-                  }),
-            ],
-          ),
-        ],
+          );
+        }
       ),
     );
   }

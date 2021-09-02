@@ -12,20 +12,20 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.1.7+390
+version: 0.1.7+395
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   apple_sign_in: ^0.1.0
-  cloud_firestore: ^2.4.0
+  cloud_firestore: ^2.5.0
   crypto: ^3.0.1
   cupertino_icons: ^1.0.3
-  firebase_auth: ^3.0.1
-  firebase_core: ^1.4.0
-  firebase_crashlytics: ^2.1.1
-  fl_chart: ^0.36.1
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.5.0
+  firebase_crashlytics: ^2.2.0
+  fl_chart: ^0.40.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
@@ -40,11 +40,12 @@ dependencies:
   geopoint: ^1.0.0
   get_it: ^7.1.3
   github_sign_in: ^0.0.4
+  google_sign_in: ^5.0.7
   http: ^0.13.3
   modal_bottom_sheet: ^2.0.0
   package_info: ^2.0.0
   permission_handler: ^8.0.0+2
-  provider: ^5.0.0
+  provider: ^6.0.0
   purchases_flutter: ^3.4.3
   settings_ui: ^1.0.0
   share: ^2.0.1

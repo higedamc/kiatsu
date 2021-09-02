@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 WeatherClass weatherFromJson(String str) =>
     WeatherClass.fromJson(json.decode(str));
 
@@ -23,7 +25,6 @@ class WeatherClass {
   int id;
   String name;
   int cod;
-
 
   WeatherClass({
     required this.coord,
@@ -56,7 +57,8 @@ class WeatherClass {
         timezone: json["timezone"],
         id: json["id"],
         name: json["name"],
-        cod: json["cod"], pressure: '',
+        cod: json["cod"],
+        pressure: '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -74,12 +76,6 @@ class WeatherClass {
         "name": name,
         "cod": cod,
       };
-
-  // factory WeatherClass.empty() {
-  //   return WeatherClass(
-  //     pressure: "", base: '', clouds: null, cod: null, coord: null,
-  //   );
-  // }
 }
 
 class Clouds {
@@ -143,7 +139,6 @@ class Main {
         pressure: json["pressure"],
         humidity: json["humidity"],
       );
-  
 
   Map<String, dynamic> toJson() => {
         "temp": temp,
@@ -191,27 +186,23 @@ class WeatherElement {
   int id;
   String main;
   String description;
-  String icon;
 
   WeatherElement({
     required this.id,
     required this.main,
     required this.description,
-    required this.icon,
   });
 
   factory WeatherElement.fromJson(Map<String, dynamic> json) => WeatherElement(
         id: json["id"],
         main: json["main"],
         description: json["description"],
-        icon: json["icon"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "main": main,
         "description": description,
-        "icon": icon,
       };
 }
 
