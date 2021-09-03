@@ -1,7 +1,26 @@
 {
   "identifier" : "EC5FE2D7",
   "nonRenewingSubscriptions" : [
-
+    {
+      "displayPrice" : "100",
+      "familyShareable" : false,
+      "internalID" : "3D0F444C",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "機能解放",
+          "displayName" : "機能解放",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "kiatsu_pro_1m",
+      "referenceName" : "1 month subscription",
+      "type" : "NonRenewingSubscription"
+    }
   ],
   "products" : [
     {
@@ -17,6 +36,46 @@
       ],
       "productID" : "kiatsu_120_remove_ads",
       "referenceName" : "Remove Ads",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "250",
+      "familyShareable" : false,
+      "internalID" : "E4E1AD60",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "広告削除",
+          "displayName" : "広告削除",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "kiatsu_250_remove_ads",
+      "referenceName" : "Remove Ads For iOS",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "500",
+      "familyShareable" : false,
+      "internalID" : "2ED01C79",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "開発者へ投げ銭",
+          "displayName" : "投げ銭",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "tip_me",
+      "referenceName" : "Tip 500 JPY",
       "type" : "NonConsumable"
     }
   ],
