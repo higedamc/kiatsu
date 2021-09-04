@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/services/admob.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -30,7 +32,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime updatedAt = DateTime.now();
-
 
   late Future<WeatherClass> weather;
   late final List<WeatherClass> weathers;
@@ -376,8 +377,7 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                ],
+                                children: <Widget>[],
                               ),
                             ),
                             SizedBox(height: 40.0),
@@ -495,53 +495,65 @@ class _HomePageState extends State<HomePage> {
                         }
                       });
                 }),
-            bottomNavigationBar: BottomAppBar(
-              color: Colors.white,
-              notchMargin: 6.0,
-              shape: AutomaticNotchedShape(
-                  RoundedRectangleBorder(),
-                  StadiumBorder(
-                    side: BorderSide(),
-                  )),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(
-                        Icons.search_outlined,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        // Navigator.of(context).pushNamed('/timeline');
-                        // 未実装ダイアログ
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialogBox(
-                                title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                                descriptions: "この機能はまだ未実装です♡",
-                                text: "おけまる",
-                                key: UniqueKey(),
-                              );
-                            });
-                      },
+            bottomNavigationBar: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AdmobBanner(
+                    adUnitId: AdMobService().getBannerAdUnitId(),
+                    adSize: AdmobBannerSize(
+                        height: AdMobService().getHeight(context).toInt(),
+                        width: MediaQuery.of(context).size.width.toInt(),
+                        name: 'SMART_BANNER')),
+                BottomAppBar(
+                  color: Colors.white,
+                  notchMargin: 6.0,
+                  shape: AutomaticNotchedShape(
+                      RoundedRectangleBorder(),
+                      StadiumBorder(
+                        side: BorderSide(),
+                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.search_outlined,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            // Navigator.of(context).pushNamed('/timeline');
+                            // 未実装ダイアログ
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomDialogBox(
+                                    title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                                    descriptions: "この機能はまだ未実装です♡",
+                                    text: "おけまる",
+                                    key: UniqueKey(),
+                                  );
+                                });
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.home_outlined,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async {
+                            await Navigator.of(context).pushNamed('/a');
+                            // await Navigator.of(context).pushNamed('/iap');
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.home_outlined,
-                        color: Colors.black,
-                      ),
-                      onPressed: () async {
-                        await Navigator.of(context).pushNamed('/a');
-                        // await Navigator.of(context).pushNamed('/iap');
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           );
         });

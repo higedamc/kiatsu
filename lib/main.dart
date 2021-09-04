@@ -25,6 +25,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:wiredash/wiredash.dart';
 
 import 'api/purchase_api.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+
 
 /**
  * ! 破壊的変更の追加。
@@ -35,6 +37,7 @@ Future<void> startApp() async {
  
 
   await Firebase.initializeApp();
+  Admob.initialize();
   await PurchaseApi.init();
   final appleSignInAvailable = await AppleSignInAvailable.check();
 
