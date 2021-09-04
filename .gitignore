@@ -149,3 +149,4 @@ ios/Podfile.lock
 android/keystore.properties
 pubspec.lock
 ios/StoreKitTestCertificate.cer
+/ios/Runner/info.plist
