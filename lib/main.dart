@@ -36,12 +36,14 @@ Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
  
 
-  await Firebase.initializeApp();
-  Admob.initialize();
+  
+  
   await PurchaseApi.init();
+  await Firebase.initializeApp();
   final appleSignInAvailable = await AppleSignInAvailable.check();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
+  Admob.initialize();
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   ErrorWidget.builder = (FlutterErrorDetails details) {
