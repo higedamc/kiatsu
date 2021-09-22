@@ -12,7 +12,7 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.1.7+395
+version: 0.1.7+424
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -32,7 +32,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   flutter_flavor: ^3.0.3
   flutter_launcher_icons: ^0.9.0
-  flutter_neumorphic: ^3.1.0
+  
   flutter_slidable: ^0.6.0
   font_awesome_flutter: ^9.0.0
   geocoder: ^0.2.1
@@ -50,8 +50,17 @@ dependencies:
   purchases_flutter: ^3.4.3
   settings_ui: ^1.0.0
   share: ^2.0.1
-  shared_preferences: ^2.0.5
-  sign_in_with_apple: ^3.0.0
+  shared_preferences: ^2.0.7
+  # https://github.com/aboutyou/dart_packages/issues/213
+  sign_in_with_apple:
+    git:
+      url: git://github.com/aboutyou/dart_packages.git
+      ref: f38e0503e19d90daa2c2d69d444b38c4974a8fe5
+      path: packages/sign_in_with_apple
+  # https://github.com/Idean/Flutter-Neumorphic/issues/239
+  flutter_neumorphic:
+    git:
+      url: https://github.com/tsvillain/Flutter-Neumorphic.git
   social_auth_buttons: ^2.0.0-nullsafety.1
   splashscreen: ^1.2.0
   the_apple_sign_in: ^1.1.1

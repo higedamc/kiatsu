@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
@@ -9,7 +10,9 @@ import 'api/purchase_api.dart';
 Future startAppDev() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
   await PurchaseApi.init();
+  
 
   runApp(DevMyApp());
 }

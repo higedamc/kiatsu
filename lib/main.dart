@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/pages/consumables_page.dart';
@@ -37,9 +37,9 @@ Future<void> startApp() async {
  
 
   
-  
+   await Firebase.initializeApp();
   await PurchaseApi.init();
-  await Firebase.initializeApp();
+ 
   final appleSignInAvailable = await AppleSignInAvailable.check();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
@@ -91,12 +91,12 @@ class MyApp extends StatelessWidget {
       ),
       child: ChangeNotifierProvider(
         create: (contenxt) => RevenueCatProvider(),
-        child: NeumorphicApp(
+        child: neu.NeumorphicApp(
           navigatorKey: _navigatorKey,
           themeMode: ThemeMode.light,
-          theme: NeumorphicThemeData(
+          theme: neu.NeumorphicThemeData(
             baseColor: Color(0xFFFFFFFF),
-            lightSource: LightSource.topLeft,
+            lightSource: neu.LightSource.topLeft,
             depth: 20,
             intensity: 1,
           ),

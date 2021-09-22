@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
 import 'package:kiatsu/model/weather_model.dart';
@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           return Scaffold(
             key: _scaffoldKey,
-            appBar: NeumorphicAppBar(
+            appBar: neu.NeumorphicAppBar(
               centerTitle: true,
               title: const Text(
                 "",
@@ -233,10 +233,10 @@ class _HomePageState extends State<HomePage> {
                 /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
                 Builder(
                   builder: (context) => IconButton(
-                      icon: NeumorphicIcon(
+                      icon: neu.NeumorphicIcon(
                         Icons.notifications_outlined,
                         size: 25,
-                        style: NeumorphicStyle(color: Colors.black87),
+                        style: neu.NeumorphicStyle(color: Colors.black87),
                       ),
                       onPressed: () async {
                         // 未実装ダイアログ
@@ -273,15 +273,15 @@ class _HomePageState extends State<HomePage> {
                                 height: 85,
                                 width: double.maxFinite,
                                 child: Center(
-                                  child: NeumorphicText(
+                                  child: neu.NeumorphicText(
                                     snapshot.data!.main.pressure.toString(),
                                     // '999',
-                                    style: NeumorphicStyle(
+                                    style: neu.NeumorphicStyle(
                                       depth: 20,
                                       intensity: 1,
                                       color: Colors.black,
                                     ),
-                                    textStyle: NeumorphicTextStyle(
+                                    textStyle: neu.NeumorphicTextStyle(
                                         // color: Colors.white,
                                         fontWeight: FontWeight.w200,
                                         fontSize: 75.0),
@@ -294,14 +294,14 @@ class _HomePageState extends State<HomePage> {
                                 height: 70,
                                 width: double.maxFinite,
                                 child: Center(
-                                  child: NeumorphicText(
+                                  child: neu.NeumorphicText(
                                     'hPa',
-                                    style: NeumorphicStyle(
+                                    style: neu.NeumorphicStyle(
                                       depth: 20,
                                       intensity: 1,
                                       color: Colors.black,
                                     ),
-                                    textStyle: NeumorphicTextStyle(
+                                    textStyle: neu.NeumorphicTextStyle(
                                         fontWeight: FontWeight.w200,
                                         fontSize: 75.0),
                                   ),
@@ -315,34 +315,34 @@ class _HomePageState extends State<HomePage> {
                               child: snapshot.data!.weather[0].main
                                           .toString() ==
                                       'Clouds'
-                                  ? NeumorphicText(
+                                  ? neu.NeumorphicText(
                                       'Cloudy',
                                       style:
-                                          NeumorphicStyle(color: Colors.black),
-                                      textStyle: NeumorphicTextStyle(
+                                          neu.NeumorphicStyle(color: Colors.black),
+                                      textStyle: neu.NeumorphicTextStyle(
                                           fontWeight: FontWeight.w200,
                                           fontSize: 56.0),
                                     )
                                   : snapshot.data!.weather[0].main
                                               .toString() ==
                                           'Clear'
-                                      ? NeumorphicText(
+                                      ? neu.NeumorphicText(
                                           'Clear',
-                                          style: NeumorphicStyle(
+                                          style: neu.NeumorphicStyle(
                                             color: Colors.black,
                                           ),
-                                          textStyle: NeumorphicTextStyle(
+                                          textStyle: neu.NeumorphicTextStyle(
                                               fontWeight: FontWeight.w200,
                                               fontSize: 56.0),
                                         )
                                       : snapshot.data!.weather[0].main
                                                   .toString() ==
                                               'Clear Sky'
-                                          ? NeumorphicText(
+                                          ? neu.NeumorphicText(
                                               'Sunny',
-                                              style: NeumorphicStyle(
+                                              style: neu.NeumorphicStyle(
                                                   color: Colors.black),
-                                              textStyle: NeumorphicTextStyle(
+                                              textStyle: neu.NeumorphicTextStyle(
                                                   fontWeight: FontWeight.w200,
                                                   fontSize: 56.0),
                                             )
@@ -350,24 +350,24 @@ class _HomePageState extends State<HomePage> {
                                                       .data!.weather[0].main
                                                       .toString() ==
                                                   'Rain'
-                                              ? NeumorphicText(
+                                              ? neu.NeumorphicText(
                                                   'Rainy',
                                                   style:
-                                                      NeumorphicStyle(
+                                                      neu.NeumorphicStyle(
                                                           color: Colors.black),
                                                   textStyle:
-                                                      NeumorphicTextStyle(
+                                                      neu.NeumorphicTextStyle(
                                                           fontWeight:
                                                               FontWeight.w200,
                                                           fontSize: 56.0))
-                                              : NeumorphicText(
+                                              : neu.NeumorphicText(
                                                   snapshot.data!.weather[0].main
                                                       .toString(),
-                                                  style: NeumorphicStyle(
+                                                  style: neu.NeumorphicStyle(
                                                     color: Colors.black,
                                                   ),
                                                   textStyle:
-                                                      NeumorphicTextStyle(
+                                                      neu.NeumorphicTextStyle(
                                                           fontWeight:
                                                               FontWeight.w200,
                                                           fontSize: 56.0),
@@ -427,16 +427,16 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.w100)),
                             ),
                             Center(
-                              child: NeumorphicText(
+                              child: neu.NeumorphicText(
                                 "最終更新 - " +
                                     timeago
                                         .format(updatedAt, locale: 'ja')
                                         .toString(),
-                                style: NeumorphicStyle(
+                                style: neu.NeumorphicStyle(
                                   // height: 1, // 10だとちょうど下すれすれで良い感じ
                                   color: Colors.black,
                                 ),
-                                textStyle: NeumorphicTextStyle(),
+                                textStyle: neu.NeumorphicTextStyle(),
                               ),
                             ),
                             Center(
@@ -568,15 +568,15 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         ListTile(
             title: Center(
-              child: NeumorphicText(
+              child: neu.NeumorphicText(
                 "ぴえんなう？",
                 duration: Duration(microseconds: 200),
-                style: NeumorphicStyle(
+                style: neu.NeumorphicStyle(
                   depth: 20,
                   intensity: 1,
                   color: Colors.black,
                 ),
-                textStyle: NeumorphicTextStyle(
+                textStyle: neu.NeumorphicTextStyle(
                     fontWeight: FontWeight.w500, fontSize: 56.0),
               ),
             ),
@@ -607,13 +607,13 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 10),
-                  NeumorphicText(
+                  neu.NeumorphicText(
                     '超ぴえん',
                     duration: Duration(microseconds: 200),
-                    style: NeumorphicStyle(
+                    style: neu.NeumorphicStyle(
                       color: const Color(0xff333333),
                     ),
-                    textStyle: NeumorphicTextStyle(
+                    textStyle: neu.NeumorphicTextStyle(
                         fontWeight: FontWeight.w500, fontSize: 40),
                   ),
                 ]),
@@ -638,13 +638,13 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 10),
-                  NeumorphicText(
+                  neu.NeumorphicText(
                     'ぴえん',
                     duration: Duration(microseconds: 200),
-                    style: NeumorphicStyle(
+                    style: neu.NeumorphicStyle(
                       color: const Color(0xff333333),
                     ),
-                    textStyle: NeumorphicTextStyle(
+                    textStyle: neu.NeumorphicTextStyle(
                         fontWeight: FontWeight.w500, fontSize: 40),
                   ),
                 ]),
@@ -669,13 +669,13 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 10),
-                  NeumorphicText(
+                  neu.NeumorphicText(
                     'ぴえんじゃない',
                     duration: Duration(microseconds: 200),
-                    style: NeumorphicStyle(
+                    style: neu.NeumorphicStyle(
                       color: const Color(0xff333333),
                     ),
-                    textStyle: NeumorphicTextStyle(
+                    textStyle: neu.NeumorphicTextStyle(
                         fontWeight: FontWeight.w500, fontSize: 40),
                   ),
                 ]),

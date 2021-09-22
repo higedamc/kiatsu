@@ -10,7 +10,7 @@ class AdMobService {
       return dotenv.dotenv.env['ADMOB_UNIT_ID_ANDROID_TEST']; 
     } else if (Platform.isIOS) {
       // iOSの広告ユニットID
-      return dotenv.dotenv.env['ADMOB_UNIT_ID_IOS']; 
+      return dotenv.dotenv.env['ADMOB_UNIT_ID_IOS_TEST']; 
     }
     return null;
   }
@@ -20,6 +20,6 @@ class AdMobService {
     final height = MediaQuery.of(context).size.height;
     final percent = (height * 0.06).toDouble();
 
-    return percent;
+    return percent; 
   }
 }

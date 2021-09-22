@@ -10,46 +10,43 @@ class UpsellPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (offerings != null) {
-      // DashBoardでcurrent設定のOfferingを取得します。
-      final offering = offerings.current;
-      if (offering != null) {
-        
-        // Offeringに紐づいたPackageを取得します。
-        // 今回はCustomタイプのPackageを作成したので、Package名を指定しています。
-        // Monthlyなど、デフォルトで用意されているPackageを使う場合は
-        // offering.monthlyで取得できます。
-        final noAdsPackage = offering.getPackage('kiatsu_pro_1m');
-        if (noAdsPackage != null) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  
-                  // 課金アイテムの説明
-                  Text('アプリ内の広告が非表示になります'),
-                  const SizedBox(height: 10),
-                  
-                  // 購入ボタン
-                  PurchaseButton(
-                    package: noAdsPackage,
-                    label: '広告を削除', key: UniqueKey(),
-                  ),
-                  const SizedBox(height: 30),
+    final offering = offerings.current;
+    if (offering != null) {
+      
+      // Offeringに紐づいたPackageを取得します。
+      // 今回はCustomタイプのPackageを作成したので、Package名を指定しています。
+      // Monthlyなど、デフォルトで用意されているPackageを使う場合は
+      // offering.monthlyで取得できます。
+      final noAdsPackage = offering.getPackage('kiatsu_pro_1m');
+      if (noAdsPackage != null) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                
+                // 課金アイテムの説明
+                Text('アプリ内の広告が非表示になります'),
+                const SizedBox(height: 10),
+                
+                // 購入ボタン
+                PurchaseButton(
+                  package: noAdsPackage,
+                  label: '広告を削除', key: UniqueKey(),
+                ),
+                const SizedBox(height: 30),
 
-                  // 復元ボタンのガイド
-                  Text('すでにご購入いただいている場合は、下記の復元ボタンをタップしてください'),
-                  const SizedBox(height: 10),
+                // 復元ボタンのガイド
+                Text('すでにご購入いただいている場合は、下記の復元ボタンをタップしてください'),
+                const SizedBox(height: 10),
 
-                  // 復元ボタン
-                  RestoreButton(key: UniqueKey(),),
-                ],
-              ),
+                // 復元ボタン
+                RestoreButton(key: UniqueKey(),),
+              ],
             ),
-          );
-        }
+          ),
+        );
       }
     }
     return Center(

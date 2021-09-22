@@ -33,10 +33,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>GADApplicationIdentifier</key>
-    <string>ca-app-pub-3940256099942544/2934735716</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your location is required for this app</string>
 	<key>NSLocationAlwaysUsageDescription</key>

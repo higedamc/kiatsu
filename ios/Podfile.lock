@@ -354,7 +354,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
-  - cloud_firestore (2.5.1):
+  - cloud_firestore (2.5.3):
     - Firebase/Firestore (= 8.6.0)
     - firebase_core
     - Flutter
@@ -369,7 +369,7 @@ PODS:
   - Firebase/Firestore (8.6.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.6.0)
-  - firebase_auth (3.1.0):
+  - firebase_auth (3.1.1):
     - Firebase/Auth (= 8.6.0)
     - firebase_core
     - Flutter
@@ -523,11 +523,11 @@ PODS:
   - PromisesObjC (2.0.0)
   - Purchases (3.12.3):
     - PurchasesCoreSwift (= 3.12.3)
-  - purchases_flutter (3.4.4):
+  - purchases_flutter (3.4.5):
     - Flutter
-    - PurchasesHybridCommon (= 1.8.2)
+    - PurchasesHybridCommon (= 1.9.1)
   - PurchasesCoreSwift (3.12.3)
-  - PurchasesHybridCommon (1.8.2):
+  - PurchasesHybridCommon (1.9.1):
     - Purchases (= 3.12.3)
   - share (0.0.1):
     - Flutter
@@ -650,9 +650,9 @@ SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: 3280837bd2fdec18489ef93699527df4af4f177d
+  cloud_firestore: bb4fcf1d62a2bf48586fad7a7e9612f20a719cda
   Firebase: 21ac9f28b09a8bdfc005f34c984fca84e7e8786d
-  firebase_auth: 2dfa8e886191c24ddcf4da34463d47b72e6d19dc
+  firebase_auth: a5da789c2876fda3ad7407bd2828e502dfeebc42
   firebase_core: c21ac09a8d23afd3594b56ed786bad12e5266bba
   firebase_crashlytics: b0581024be6112af8821de61e5a37fdb292373f0
   FirebaseAuth: 223adeeb2262b417532e89bf06a960e3a0a1e9e4
@@ -661,7 +661,7 @@ SPEC CHECKSUMS:
   FirebaseCrashlytics: 58f8ecea7c799c61c50e8111d2e438424a8a1d2e
   FirebaseFirestore: 7b8bd72aff4d3ad91498343e81fdbaa994ce8abe
   FirebaseInstallations: ede6fb72bb6337914e5888b399271259d0c4910c
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_twitter_login: 1f670e60647cdf517ba20495e1b32046d9f22697
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
@@ -685,17 +685,17 @@ SPEC CHECKSUMS:
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   Purchases: e9839517aea4335136f3946ae228eecf5131cc25
-  purchases_flutter: a185b043da998d31662ef4a00941ea3e2eb1ccec
+  purchases_flutter: ff55c9a04b918dd20d20030d5b5f5a5859c28cb9
   PurchasesCoreSwift: dd3fd55a9895abd7906a3842bd36c7f7539a99d1
-  PurchasesHybridCommon: dec00f3b57c1b01d03f55c331d454eb559aa0be2
+  PurchasesHybridCommon: 1d98dd58935a4fa1009c6e17f8b740973147b899
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   streams_channel: 16855ffd0568eded9563b2fec6a1bfa94420b353
   the_apple_sign_in: 2e78c83cdb09eba07bb16dcc1f3bc12fcdc8263d
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: f10c0438b63bc24e6bbc207956dc27d16c4408f2
+PODFILE CHECKSUM: bd295fc198b245bb51189c8140d55e735c8dd822
 
-COCOAPODS: 1.11.0.beta.2
+COCOAPODS: 1.11.2
