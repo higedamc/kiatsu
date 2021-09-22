@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,12 +26,28 @@ class SplashPage extends StatelessWidget {
     return user;
   }
 
+  //参照: https://www.effata.co.jp/blog/5224
+  Future<void> showAppTrackingTransparency() async {
+    final TrackingStatus status =
+      await AppTrackingTransparency.trackingAuthorizationStatus;
+    if (status == TrackingStatus.notDetermined) {
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    }
+  }
+
+  Future<void> showCurrent() async {
+    final User? current = firebaseAuth.currentUser;
+    print('User Already Registered: $current');
+  }
+
   SplashPage() {
     final User? current = firebaseAuth.currentUser;
     final CollectionReference users = firebaseStore.collection('users');
+    
     if (current == null) {
       signInAnon().then((UserCredential user) async {
         print('User ${user.user!.uid}');
+        await showAppTrackingTransparency();
         await users.doc(user.user!.uid).collection('votes').doc().set({
           'pien_rate': [
             {'cho_pien': 0, 'creaateAt': createdAt},
@@ -44,7 +61,9 @@ class SplashPage extends StatelessWidget {
       });
     } else {
     //   PurchaseApi.init();
-      print('User Already Registered: $current');
+      // print('User Already Registered: $current');
+      // Ask App Not To Track表示のために強制的にprint挟んでawait実装笑
+      showCurrent().then((_) async => await showAppTrackingTransparency());
     }
   }
 
