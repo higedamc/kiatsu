@@ -9,11 +9,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
+import 'package:kiatsu/Provider/revenuecat.dart';
+import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/services/admob.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:wiredash/wiredash.dart';
@@ -32,7 +36,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime updatedAt = DateTime.now();
-
   late Future<WeatherClass> weather;
   late final List<WeatherClass> weathers;
 
@@ -209,8 +212,165 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
   }
 
+  getTimelineView(BuildContext context) {
+    return Navigator.of(context).pushNamed('/timeline');
+  }
+
+  Widget getListView() {
+    return Column(
+      children: <Widget>[
+        ListTile(
+            title: Center(
+              child: neu.NeumorphicText(
+                "ぴえんなう？",
+                duration: Duration(microseconds: 200),
+                style: neu.NeumorphicStyle(
+                  depth: 20,
+                  intensity: 1,
+                  color: Colors.black,
+                ),
+                textStyle: neu.NeumorphicTextStyle(
+                    fontWeight: FontWeight.w500, fontSize: 56.0),
+              ),
+            ),
+            onTap: () {
+              _hapticFeedback();
+            }),
+        SizedBox(
+          width: 100,
+          height: 100,
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            Navigator.of(context).pushNamed('/timeline');
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    '超ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    'ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.not_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    'ぴえんじゃない',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> alertDialog(BuildContext context) {
+    var alert = AlertDialog(
+      title: Text("ぴえん度が無事送信されました!"),
+      content: Text("これはテスト機能です＾ｑ＾"),
+    );
+    return showDialog(
+        context: context, builder: (BuildContext context) => alert);
+  }
+
+  Widget buildAdmob(Entitlement entitlement) {
+    switch (entitlement) {
+      case Entitlement.pro:
+                        return Container();
+      case Entitlement.free:
+      return AdmobBanner(
+                    adUnitId: AdMobService().getBannerAdUnitId(),
+                    adSize: AdmobBannerSize(
+                        height: AdMobService().getHeight(context).toInt(),
+                        width: MediaQuery.of(context).size.width.toInt(),
+                        name: 'SMART_BANNER'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<bool> isPurchased() async {
+    PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
+    if(purchaseInfo.entitlements.all["pro"]!.isActive){
+      return true;
+    } else return false;
+  }
+
+// final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
     return FutureBuilder<WeatherClass>(
         future: weather,
         builder: (context, snapshot) {
@@ -499,12 +659,19 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AdmobBanner(
-                    adUnitId: AdMobService().getBannerAdUnitId(),
-                    adSize: AdmobBannerSize(
-                        height: AdMobService().getHeight(context).toInt(),
-                        width: MediaQuery.of(context).size.width.toInt(),
-                        name: 'SMART_BANNER')),
+                // 課金状況に応じて広告表示がトグルされる
+                        // buildAdmob(entitlement),
+                        FutureBuilder<bool>(
+                          future: isPurchased(),
+                          builder: (context, snapshot) {
+                            return (snapshot.hasData) ?   Container() :              AdmobBanner(
+                                            adUnitId: AdMobService().getBannerAdUnitId(),
+                                            adSize: AdmobBannerSize(
+                            height: AdMobService().getHeight(context).toInt(),
+                            width: MediaQuery.of(context).size.width.toInt(),
+                            name: 'SMART_BANNER'));
+                          }
+                        ), 
                 BottomAppBar(
                   color: Colors.white,
                   notchMargin: 6.0,
@@ -558,148 +725,9 @@ class _HomePageState extends State<HomePage> {
           );
         });
   }
-
-  getTimelineView(BuildContext context) {
-    return Navigator.of(context).pushNamed('/timeline');
-  }
-
-  Widget getListView() {
-    return Column(
-      children: <Widget>[
-        ListTile(
-            title: Center(
-              child: neu.NeumorphicText(
-                "ぴえんなう？",
-                duration: Duration(microseconds: 200),
-                style: neu.NeumorphicStyle(
-                  depth: 20,
-                  intensity: 1,
-                  color: Colors.black,
-                ),
-                textStyle: neu.NeumorphicTextStyle(
-                    fontWeight: FontWeight.w500, fontSize: 56.0),
-              ),
-            ),
-            onTap: () {
-              _hapticFeedback();
-            }),
-        SizedBox(
-          width: 100,
-          height: 100,
-        ),
-        InkWell(
-          onTap: () async {
-            _hapticFeedback();
-            Navigator.of(context).pushNamed('/timeline');
-            DateTime today =
-                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            print(firebaseAuth.currentUser);
-            CollectionReference users = firebaseStore.collection('users');
-            await users
-                .doc(firebaseAuth.currentUser!.uid)
-                .collection('votes')
-                .doc(today.toString())
-                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
-          },
-          child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  neu.NeumorphicText(
-                    '超ぴえん',
-                    duration: Duration(microseconds: 200),
-                    style: neu.NeumorphicStyle(
-                      color: const Color(0xff333333),
-                    ),
-                    textStyle: neu.NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
-                  ),
-                ]),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            _hapticFeedback();
-            DateTime today =
-                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            print(firebaseAuth.currentUser);
-            CollectionReference users = firebaseStore.collection('users');
-            await users
-                .doc(firebaseAuth.currentUser!.uid)
-                .collection('votes')
-                .doc(today.toString())
-                .update({'pien_rate.pien': FieldValue.increment(1)});
-          },
-          child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  neu.NeumorphicText(
-                    'ぴえん',
-                    duration: Duration(microseconds: 200),
-                    style: neu.NeumorphicStyle(
-                      color: const Color(0xff333333),
-                    ),
-                    textStyle: neu.NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
-                  ),
-                ]),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            _hapticFeedback();
-            DateTime today =
-                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            print(firebaseAuth.currentUser);
-            CollectionReference users = firebaseStore.collection('users');
-            await users
-                .doc(firebaseAuth.currentUser!.uid)
-                .collection('votes')
-                .doc(today.toString())
-                .update({'pien_rate.not_pien': FieldValue.increment(1)});
-          },
-          child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  neu.NeumorphicText(
-                    'ぴえんじゃない',
-                    duration: Duration(microseconds: 200),
-                    style: neu.NeumorphicStyle(
-                      color: const Color(0xff333333),
-                    ),
-                    textStyle: neu.NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
-                  ),
-                ]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<void> alertDialog(BuildContext context) {
-    var alert = AlertDialog(
-      title: Text("ぴえん度が無事送信されました!"),
-      content: Text("これはテスト機能です＾ｑ＾"),
-    );
-    return showDialog(
-        context: context, builder: (BuildContext context) => alert);
-  }
 }
 
 class Record {
-  final String pienDo;
-  final int votes;
-  final DocumentReference reference;
-
   Record.fromMap(Map<String, dynamic> map, {required this.reference})
       : assert(map['pien_do'] != null),
         assert(map['votes'] != null),
@@ -708,6 +736,10 @@ class Record {
 
   Record.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snaps)
       : this.fromMap(snaps.data()!, reference: snaps.reference);
+
+  final String pienDo;
+  final DocumentReference reference;
+  final int votes;
 
   @override
   String toString() => "Record<$pienDo:$votes>";
