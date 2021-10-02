@@ -73,7 +73,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 'プランを見る',
                 style: TextStyle(fontSize: 20),
               ),
-              onPressed: isLoading ? null : fetchOffers2,
+              onPressed: isLoading ? null : fetchOffers,
             );
     }
   }
@@ -131,13 +131,13 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           title: 'プランをアップグレードする＾q＾',
           description: 'プランをアップグレードして特典を得る＾q＾',
           onClickedPackage: (package) async {
-            final isSuccess = await PurchaseApi.purchasePackage(package);
+            // final isSuccess = await PurchaseApi.purchasePackage(package);
 
-            if (isSuccess) {
-              final provider =
-                  Provider.of<RevenueCatProvider>(context, listen: false);
-              provider.addCoinsPackage(package);
-            }
+            // if (isSuccess) {
+            //   final provider =
+            //       Provider.of<RevenueCatProvider>(context, listen: false);
+            //   provider.addCoinsPackage(package);
+            // }
 
             Navigator.pop(context);
           },

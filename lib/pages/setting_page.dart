@@ -59,13 +59,13 @@ class SettingPage extends StatelessWidget {
           title: 'プランをアップグレードする',
           description: 'プランをアップグレードして特典を得る＾q＾',
           onClickedPackage: (package) async {
-            final isSuccess = await PurchaseApi.purchasePackage(package);
+            // final isSuccess = await PurchaseApi.purchasePackage(package);
 
-            if (isSuccess) {
-              final provider =
-                  Provider.of<RevenueCatProvider>(context, listen: false);
-              provider.addCoinsPackage(package);
-            }
+            // if (isSuccess) {
+            //   final provider =
+            //       Provider.of<RevenueCatProvider>(context, listen: false);
+            //   // provider.addCoinsPackage(package);
+            // }
 
             Navigator.pop(context);
           },
@@ -233,9 +233,9 @@ class SettingPage extends StatelessWidget {
                       subtitle: '押',
                       leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
                       onPressed: (_) async {
-                        // Navigator.pushNamed(_, '/buy');
-                        //  Navigator.pushNamed(context, '/subsc');
-                        fetchOffers2(context);
+                        Navigator.pushNamed(_, '/buy');
+                        //  await Navigator.pushNamed(context, '/subsc');
+                        // fetchOffers2(context);
                         Navigator.pop(context);
                         // Navigator.pushNamed(context, '/iap');
                       }),

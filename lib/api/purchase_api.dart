@@ -10,10 +10,11 @@ class Coins {
   static const removeAds = 'kiatsu_120_remove_ads';
   // for iOS
   static const removeAdsIOS = 'kiatsu_250_remove_ads';
-  static const tipMe = 'tip_me';
+  // static const tipMe = 'tip_me';
+  static const tipMe490 = 'tip_me_490';
   static final _apiKey = dotenv.dotenv.env['REVENUECAT_SECRET_KEY'].toString();
   // Added some
-  static const allIds = [removeAds, tipMe, removeAdsIOS];
+  static const allIds = [removeAds, removeAdsIOS, tipMe490];
 }
 
 class PurchaseApi {

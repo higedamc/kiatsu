@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:apple_sign_in/apple_id_request.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:apple_sign_in/scope.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 String generateNonce([int length = 32]) {
@@ -17,7 +13,7 @@ String generateNonce([int length = 32]) {
       .join();
 }
 
-/// Returns the sha256 hash of [input] in hex notation.
+/// SHA256のハッシュ値生成
 String sha256ofString(String input) {
   final bytes = utf8.encode(input);
   final digest = sha256.convert(bytes);
@@ -33,7 +29,7 @@ class AppleAuthUtil {
 
   // );
 
-  /// サインイン中か
+  /// サインインしてるかどうか
   static bool isSignedIn() => FirebaseAuth.instance.currentUser != null;
   /// 現在のユーザー情報
   static User? getCurrentUser() => FirebaseAuth.instance.currentUser;

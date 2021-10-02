@@ -87,13 +87,13 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
           title: 'プランをアップグレードする＾q＾',
           description: 'プランをアップグレードして特典を得る＾q＾',
           onClickedPackage: (package) async {
-            final isSuccess = await PurchaseApi.purchasePackage(package);
+            // final isSuccess = await PurchaseApi.purchasePackage(package);
 
-            if (isSuccess) {
-              final provider =
-                  Provider.of<RevenueCatProvider>(context, listen: false);
-              provider.addCoinsPackage(package);
-            }
+            // if (isSuccess) {
+            //   final provider =
+            //       Provider.of<RevenueCatProvider>(context, listen: false);
+            //   provider.addCoinsPackage(package);
+            // }
 
             Navigator.pop(context);
           },

@@ -77,6 +77,26 @@
       "productID" : "tip_me",
       "referenceName" : "Tip 500 JPY",
       "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "490",
+      "familyShareable" : false,
+      "internalID" : "F1F2F72F",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Thanks for buying me a coffee!:-)",
+          "displayName" : "投げ銭",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "tip_me_490",
+      "referenceName" : "Tip 490 JPY",
+      "type" : "Consumable"
     }
   ],
   "settings" : {
