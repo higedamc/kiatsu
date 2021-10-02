@@ -5,13 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kiatsu/Provider/revenuecat.dart';
+import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/utils/weather_request.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:wiredash/wiredash.dart';
@@ -30,8 +36,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime updatedAt = DateTime.now();
-
-
   late Future<WeatherClass> weather;
   late final List<WeatherClass> weathers;
 
@@ -208,14 +212,166 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
   }
 
+  getTimelineView(BuildContext context) {
+    return Navigator.of(context).pushNamed('/timeline');
+  }
+
+  Widget getListView() {
+    return Column(
+      children: <Widget>[
+        ListTile(
+            title: Center(
+              child: neu.NeumorphicText(
+                "ぴえんなう？",
+                duration: Duration(microseconds: 200),
+                style: neu.NeumorphicStyle(
+                  depth: 20,
+                  intensity: 1,
+                  color: Colors.black,
+                ),
+                textStyle: neu.NeumorphicTextStyle(
+                    fontWeight: FontWeight.w500, fontSize: 56.0),
+              ),
+            ),
+            onTap: () {
+              _hapticFeedback();
+            }),
+        SizedBox(
+          width: 100,
+          height: 100,
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            Navigator.of(context).pushNamed('/timeline');
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    '超ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    'ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.not_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    'ぴえんじゃない',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> alertDialog(BuildContext context) {
+    var alert = AlertDialog(
+      title: Text("ぴえん度が無事送信されました!"),
+      content: Text("これはテスト機能です＾ｑ＾"),
+    );
+    return showDialog(
+        context: context, builder: (BuildContext context) => alert);
+  }
+
+  Widget buildAdmob(Entitlement entitlement) {
+    switch (entitlement) {
+      case Entitlement.pro:
+                        return Container();
+      case Entitlement.free:
+      return Center(child: Text('＾q＾'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<bool> isPurchased() async {
+    PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
+    if(purchaseInfo.entitlements.all["pro"]!.isActive){
+      return true;
+    } else return false;
+  }
+
+// final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
     return FutureBuilder<WeatherClass>(
         future: weather,
         builder: (context, snapshot) {
           return Scaffold(
             key: _scaffoldKey,
-            appBar: NeumorphicAppBar(
+            appBar: neu.NeumorphicAppBar(
               centerTitle: true,
               title: const Text(
                 "",
@@ -232,10 +388,10 @@ class _HomePageState extends State<HomePage> {
                 /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
                 Builder(
                   builder: (context) => IconButton(
-                      icon: NeumorphicIcon(
+                      icon: neu.NeumorphicIcon(
                         Icons.notifications_outlined,
                         size: 25,
-                        style: NeumorphicStyle(color: Colors.black87),
+                        style: neu.NeumorphicStyle(color: Colors.black87),
                       ),
                       onPressed: () async {
                         // 未実装ダイアログ
@@ -272,15 +428,15 @@ class _HomePageState extends State<HomePage> {
                                 height: 85,
                                 width: double.maxFinite,
                                 child: Center(
-                                  child: NeumorphicText(
+                                  child: neu.NeumorphicText(
                                     snapshot.data!.main.pressure.toString(),
                                     // '999',
-                                    style: NeumorphicStyle(
+                                    style: neu.NeumorphicStyle(
                                       depth: 20,
                                       intensity: 1,
                                       color: Colors.black,
                                     ),
-                                    textStyle: NeumorphicTextStyle(
+                                    textStyle: neu.NeumorphicTextStyle(
                                         // color: Colors.white,
                                         fontWeight: FontWeight.w200,
                                         fontSize: 75.0),
@@ -293,14 +449,14 @@ class _HomePageState extends State<HomePage> {
                                 height: 70,
                                 width: double.maxFinite,
                                 child: Center(
-                                  child: NeumorphicText(
+                                  child: neu.NeumorphicText(
                                     'hPa',
-                                    style: NeumorphicStyle(
+                                    style: neu.NeumorphicStyle(
                                       depth: 20,
                                       intensity: 1,
                                       color: Colors.black,
                                     ),
-                                    textStyle: NeumorphicTextStyle(
+                                    textStyle: neu.NeumorphicTextStyle(
                                         fontWeight: FontWeight.w200,
                                         fontSize: 75.0),
                                   ),
@@ -314,34 +470,34 @@ class _HomePageState extends State<HomePage> {
                               child: snapshot.data!.weather[0].main
                                           .toString() ==
                                       'Clouds'
-                                  ? NeumorphicText(
+                                  ? neu.NeumorphicText(
                                       'Cloudy',
                                       style:
-                                          NeumorphicStyle(color: Colors.black),
-                                      textStyle: NeumorphicTextStyle(
+                                          neu.NeumorphicStyle(color: Colors.black),
+                                      textStyle: neu.NeumorphicTextStyle(
                                           fontWeight: FontWeight.w200,
                                           fontSize: 56.0),
                                     )
                                   : snapshot.data!.weather[0].main
                                               .toString() ==
                                           'Clear'
-                                      ? NeumorphicText(
+                                      ? neu.NeumorphicText(
                                           'Clear',
-                                          style: NeumorphicStyle(
+                                          style: neu.NeumorphicStyle(
                                             color: Colors.black,
                                           ),
-                                          textStyle: NeumorphicTextStyle(
+                                          textStyle: neu.NeumorphicTextStyle(
                                               fontWeight: FontWeight.w200,
                                               fontSize: 56.0),
                                         )
                                       : snapshot.data!.weather[0].main
                                                   .toString() ==
                                               'Clear Sky'
-                                          ? NeumorphicText(
+                                          ? neu.NeumorphicText(
                                               'Sunny',
-                                              style: NeumorphicStyle(
+                                              style: neu.NeumorphicStyle(
                                                   color: Colors.black),
-                                              textStyle: NeumorphicTextStyle(
+                                              textStyle: neu.NeumorphicTextStyle(
                                                   fontWeight: FontWeight.w200,
                                                   fontSize: 56.0),
                                             )
@@ -349,24 +505,24 @@ class _HomePageState extends State<HomePage> {
                                                       .data!.weather[0].main
                                                       .toString() ==
                                                   'Rain'
-                                              ? NeumorphicText(
+                                              ? neu.NeumorphicText(
                                                   'Rainy',
                                                   style:
-                                                      NeumorphicStyle(
+                                                      neu.NeumorphicStyle(
                                                           color: Colors.black),
                                                   textStyle:
-                                                      NeumorphicTextStyle(
+                                                      neu.NeumorphicTextStyle(
                                                           fontWeight:
                                                               FontWeight.w200,
                                                           fontSize: 56.0))
-                                              : NeumorphicText(
+                                              : neu.NeumorphicText(
                                                   snapshot.data!.weather[0].main
                                                       .toString(),
-                                                  style: NeumorphicStyle(
+                                                  style: neu.NeumorphicStyle(
                                                     color: Colors.black,
                                                   ),
                                                   textStyle:
-                                                      NeumorphicTextStyle(
+                                                      neu.NeumorphicTextStyle(
                                                           fontWeight:
                                                               FontWeight.w200,
                                                           fontSize: 56.0),
@@ -376,8 +532,7 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                ],
+                                children: <Widget>[],
                               ),
                             ),
                             SizedBox(height: 40.0),
@@ -427,16 +582,16 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.w100)),
                             ),
                             Center(
-                              child: NeumorphicText(
+                              child: neu.NeumorphicText(
                                 "最終更新 - " +
                                     timeago
                                         .format(updatedAt, locale: 'ja')
                                         .toString(),
-                                style: NeumorphicStyle(
+                                style: neu.NeumorphicStyle(
                                   // height: 1, // 10だとちょうど下すれすれで良い感じ
                                   color: Colors.black,
                                 ),
-                                textStyle: NeumorphicTextStyle(),
+                                textStyle: neu.NeumorphicTextStyle(),
                               ),
                             ),
                             Center(
@@ -495,199 +650,74 @@ class _HomePageState extends State<HomePage> {
                         }
                       });
                 }),
-            bottomNavigationBar: BottomAppBar(
-              color: Colors.white,
-              notchMargin: 6.0,
-              shape: AutomaticNotchedShape(
-                  RoundedRectangleBorder(),
-                  StadiumBorder(
-                    side: BorderSide(),
-                  )),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(
-                        Icons.search_outlined,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        // Navigator.of(context).pushNamed('/timeline');
-                        // 未実装ダイアログ
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialogBox(
-                                title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                                descriptions: "この機能はまだ未実装です♡",
-                                text: "おけまる",
-                                key: UniqueKey(),
-                              );
-                            });
-                      },
+            bottomNavigationBar: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 課金状況に応じて広告表示がトグルされる
+                        // buildAdmob(entitlement),
+                        FutureBuilder<bool>(
+                          future: isPurchased(),
+                          builder: (context, snapshot) {
+                            return (snapshot.hasData) ?   Container() : Container(child: Center(child: Text('＾q＾'),),);
+                          }
+                        ), 
+                BottomAppBar(
+                  color: Colors.white,
+                  notchMargin: 6.0,
+                  shape: AutomaticNotchedShape(
+                      RoundedRectangleBorder(),
+                      StadiumBorder(
+                        side: BorderSide(),
+                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.search_outlined,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            // Navigator.of(context).pushNamed('/timeline');
+                            // 未実装ダイアログ
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomDialogBox(
+                                    title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                                    descriptions: "この機能はまだ未実装です♡",
+                                    text: "おけまる",
+                                    key: UniqueKey(),
+                                  );
+                                });
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.home_outlined,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async {
+                            await Navigator.of(context).pushNamed('/a');
+                            // await Navigator.of(context).pushNamed('/iap');
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.home_outlined,
-                        color: Colors.black,
-                      ),
-                      onPressed: () async {
-                        await Navigator.of(context).pushNamed('/a');
-                        // await Navigator.of(context).pushNamed('/iap');
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           );
         });
   }
-
-  getTimelineView(BuildContext context) {
-    return Navigator.of(context).pushNamed('/timeline');
-  }
-
-  Widget getListView() {
-    return Column(
-      children: <Widget>[
-        ListTile(
-            title: Center(
-              child: NeumorphicText(
-                "ぴえんなう？",
-                duration: Duration(microseconds: 200),
-                style: NeumorphicStyle(
-                  depth: 20,
-                  intensity: 1,
-                  color: Colors.black,
-                ),
-                textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.w500, fontSize: 56.0),
-              ),
-            ),
-            onTap: () {
-              _hapticFeedback();
-            }),
-        SizedBox(
-          width: 100,
-          height: 100,
-        ),
-        InkWell(
-          onTap: () async {
-            _hapticFeedback();
-            Navigator.of(context).pushNamed('/timeline');
-            DateTime today =
-                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            print(firebaseAuth.currentUser);
-            CollectionReference users = firebaseStore.collection('users');
-            await users
-                .doc(firebaseAuth.currentUser!.uid)
-                .collection('votes')
-                .doc(today.toString())
-                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
-          },
-          child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  NeumorphicText(
-                    '超ぴえん',
-                    duration: Duration(microseconds: 200),
-                    style: NeumorphicStyle(
-                      color: const Color(0xff333333),
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
-                  ),
-                ]),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            _hapticFeedback();
-            DateTime today =
-                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            print(firebaseAuth.currentUser);
-            CollectionReference users = firebaseStore.collection('users');
-            await users
-                .doc(firebaseAuth.currentUser!.uid)
-                .collection('votes')
-                .doc(today.toString())
-                .update({'pien_rate.pien': FieldValue.increment(1)});
-          },
-          child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  NeumorphicText(
-                    'ぴえん',
-                    duration: Duration(microseconds: 200),
-                    style: NeumorphicStyle(
-                      color: const Color(0xff333333),
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
-                  ),
-                ]),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            _hapticFeedback();
-            DateTime today =
-                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
-            print(firebaseAuth.currentUser);
-            CollectionReference users = firebaseStore.collection('users');
-            await users
-                .doc(firebaseAuth.currentUser!.uid)
-                .collection('votes')
-                .doc(today.toString())
-                .update({'pien_rate.not_pien': FieldValue.increment(1)});
-          },
-          child: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  NeumorphicText(
-                    'ぴえんじゃない',
-                    duration: Duration(microseconds: 200),
-                    style: NeumorphicStyle(
-                      color: const Color(0xff333333),
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 40),
-                  ),
-                ]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<void> alertDialog(BuildContext context) {
-    var alert = AlertDialog(
-      title: Text("ぴえん度が無事送信されました!"),
-      content: Text("これはテスト機能です＾ｑ＾"),
-    );
-    return showDialog(
-        context: context, builder: (BuildContext context) => alert);
-  }
 }
 
 class Record {
-  final String pienDo;
-  final int votes;
-  final DocumentReference reference;
-
   Record.fromMap(Map<String, dynamic> map, {required this.reference})
       : assert(map['pien_do'] != null),
         assert(map['votes'] != null),
@@ -696,6 +726,10 @@ class Record {
 
   Record.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snaps)
       : this.fromMap(snaps.data()!, reference: snaps.reference);
+
+  final String pienDo;
+  final DocumentReference reference;
+  final int votes;
 
   @override
   String toString() => "Record<$pienDo:$votes>";

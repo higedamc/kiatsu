@@ -5,6 +5,8 @@ import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:provider/provider.dart';
 
+
+
 class ConsumablesPage extends StatefulWidget {
   @override
   _ConsumablesPageState createState() => _ConsumablesPageState();
