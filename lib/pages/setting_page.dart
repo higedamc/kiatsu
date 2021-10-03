@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/main.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
@@ -29,7 +31,7 @@ final currentPurchaser = PurchaseApi.getCurrentPurchaser();
 class SettingPage extends StatelessWidget {
   // bool isSignedInWithApple =
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final _scaffoldKey = GlobalKey<ScaffoldState>();
   // 購入済みbool
   Future<bool> isPurchased() async {
     PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
@@ -62,8 +64,9 @@ class SettingPage extends StatelessWidget {
             final isSuccess = await PurchaseApi.purchasePackage(package);
 
             if (isSuccess) {
-              final provider =
-                  Provider.of<RevenueCatProvider>(context, listen: false);
+              // final provider =
+              //     Provider.of<RevenueCatProvider>(context, listen: false);
+              final provider = useProvider(revenuecatProvider);
               provider.addCoinsPackage(package);
             }
 
@@ -124,7 +127,7 @@ class SettingPage extends StatelessWidget {
         future: isPurchased(),
         builder: (context, snapshot) {
           return SettingsList(
-            key: _scaffoldKey,
+            key: UniqueKey(),
             sections: [
               // SettingsSection(
               //   title: 'デバッグ用',
@@ -197,7 +200,7 @@ class SettingPage extends StatelessWidget {
                           ).then((_) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                  key: _scaffoldKey,
+                                  key: UniqueKey(),
                                   content: const Text('アカウント名がコピーされました！')),
                             );
                           }),

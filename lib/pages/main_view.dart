@@ -1,21 +1,54 @@
-import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kiatsu/api/purchase_api.dart';
+// import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+// import 'package:flutter_riverpod/src/provider.dart';
 import 'package:kiatsu/pages/consumables_page.dart';
-
+import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/iap_page.dart';
+import 'package:kiatsu/pages/purchase_page.dart';
+import 'package:kiatsu/pages/setting_page.dart';
+import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
-import 'package:kiatsu/pages/upsell_page.dart';
-import 'package:purchases_flutter/offering_wrapper.dart';
-import 'package:purchases_flutter/offerings_wrapper.dart';
+import 'package:kiatsu/pages/timeline.dart';
 import 'package:splashscreen/splashscreen.dart';
 
-// 匿名ログイン + スプラッシュスクリーンの実装
 
-class SplashPage extends StatelessWidget {
+
+class MainView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return NeumorphicApp(
+      themeMode: ThemeMode.light,
+      theme: NeumorphicThemeData(
+        baseColor: Color(0xFFFFFFFF),
+        lightSource: LightSource.topLeft,
+        depth: 20,
+        intensity: 1,
+      ),
+      routes: {
+        '/a': (BuildContext context) => SettingPage(),
+        '/timeline': (BuildContext context) => Timeline(
+              key: UniqueKey(),
+            ),
+        '/home': (BuildContext context) => HomePage(),
+        '/signpage': (BuildContext context) => SignInPage(),
+        '/dialog': (BuildContext context) => Dialogs(),
+        '/iap': (BuildContext context) => IAPScreen(key: UniqueKey()),
+        '/sub': (BuildContext context) => SubscriptionsPage(),
+        '/con': (BuildContext context) => ConsumablesPage(),
+        '/subsc': (BuildContext context) => SubscriptionsPage(),
+        '/buy': (BuildContext context) => DevPurchasePage(),
+      },
+      debugShowCheckedModeBanner: false,
+      home: SplashPage(),
+    );
+  }
+}
+
+class SplashPage extends MainView {
   final DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
