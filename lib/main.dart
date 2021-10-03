@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:hooks_riverpod/all.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/pages/main_view.dart';
@@ -89,6 +89,7 @@ class MyApp extends StatelessWidget {
         },
         locale: const Locale('pl'),
       ),
+
       child: MainView(),
     );
   }

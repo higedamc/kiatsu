@@ -715,6 +715,141 @@ class _HomePageState extends State<HomePage> {
           );
         });
   }
+
+  getTimelineView(BuildContext context) {
+    return Navigator.of(context).pushNamed('/timeline');
+  }
+
+  Widget getListView() {
+    return Column(
+      children: <Widget>[
+        ListTile(
+            title: Center(
+              child: neu.NeumorphicText(
+                "ぴえんなう？",
+                duration: Duration(microseconds: 200),
+                style: neu.NeumorphicStyle(
+                  depth: 20,
+                  intensity: 1,
+                  color: Colors.black,
+                ),
+                textStyle: neu.NeumorphicTextStyle(
+                    fontWeight: FontWeight.w500, fontSize: 56.0),
+              ),
+            ),
+            onTap: () {
+              _hapticFeedback();
+            }),
+        SizedBox(
+          width: 100,
+          height: 100,
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            Navigator.of(context).pushNamed('/timeline');
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.cho_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    '超ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    'ぴえん',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            _hapticFeedback();
+            DateTime today =
+                new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
+            print(firebaseAuth.currentUser);
+            CollectionReference users = firebaseStore.collection('users');
+            await users
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('votes')
+                .doc(today.toString())
+                .update({'pien_rate.not_pien': FieldValue.increment(1)});
+          },
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  neu.NeumorphicText(
+                    'ぴえんじゃない',
+                    duration: Duration(microseconds: 200),
+                    style: neu.NeumorphicStyle(
+                      color: const Color(0xff333333),
+                    ),
+                    textStyle: neu.NeumorphicTextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 40),
+                  ),
+                ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> alertDialog(BuildContext context) {
+    var alert = AlertDialog(
+      title: Text("ぴえん度が無事送信されました!"),
+      content: Text("これはテスト機能です＾ｑ＾"),
+    );
+    return showDialog(
+        context: context, builder: (BuildContext context) => alert);
+  }
 }
 
 class Record {
