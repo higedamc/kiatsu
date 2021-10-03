@@ -4,7 +4,7 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:kiatsu/utils/get_weather.dart';
@@ -26,7 +26,7 @@ class Timeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NeumorphicAppBar(
+      appBar: neu.NeumorphicAppBar(
         title: Text('お気持ち投稿の場'),
         centerTitle: true,
       ),
@@ -160,12 +160,12 @@ class Timeline extends StatelessWidget {
                                     // print(createdAt.toString());
                                     Navigator.of(context).pop();
                                   },
-                                  child: NeumorphicText(
+                                  child: neu.NeumorphicText(
                                     '押',
-                                    style: NeumorphicStyle(
+                                    style: neu.NeumorphicStyle(
                                       color: Colors.black87,
                                     ),
-                                    textStyle: NeumorphicTextStyle(
+                                    textStyle: neu.NeumorphicTextStyle(
                                       fontSize: 30,
                                     ),
                                   ));

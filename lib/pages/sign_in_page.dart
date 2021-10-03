@@ -4,7 +4,7 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:apple_sign_in/apple_sign_in_button.dart' as app;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/github_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
@@ -26,7 +26,7 @@ class SignInPage extends StatelessWidget {
     final appleSignInAvailable =
         Provider.of<AppleSignInAvailable>(context, listen: false);
     return Scaffold(
-      appBar: NeumorphicAppBar(
+      appBar: neu.NeumorphicAppBar(
         title: Text('アカウントページ'),
       ),
       body: Column(

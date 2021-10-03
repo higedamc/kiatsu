@@ -4,7 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
@@ -119,7 +119,7 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
+    return neu.Neumorphic(
       child: FutureBuilder<bool>(
         future: isPurchased(),
         builder: (context, snapshot) {
@@ -151,7 +151,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile(
                       title: 'SNSログイン',
                       subtitle: '押',
-                      leading: NeumorphicIcon(Icons.account_circle_outlined),
+                      leading: neu.NeumorphicIcon(Icons.account_circle_outlined),
                       onPressed: (context) async {
                         // print(AppleAuthUtil.isSignedIn().toString());
                         // User user2 = AppleAuthUtil.getCurrentUser();
@@ -210,7 +210,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile(
                       title: 'フィードバック送信',
                       subtitle: '押',
-                      leading: NeumorphicIcon(Icons.bug_report),
+                      leading: neu.NeumorphicIcon(Icons.bug_report),
                       onPressed: (context) async {
                         // print(AppleAuthUtil.isSignedIn().toString());
                         // User user2 = AppleAuthUtil.getCurrentUser();
@@ -223,7 +223,7 @@ class SettingPage extends StatelessWidget {
                   snapshot.hasData ? SettingsTile(
                       title: '広告解除済み',
                       subtitle: '',
-                      leading: NeumorphicIcon(Icons.attach_money_rounded),
+                      leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
                       onPressed: (_) async {
                         // // Navigator.pushNamed(_, '/buy');
                         // fetchOffers2(context);
@@ -231,7 +231,7 @@ class SettingPage extends StatelessWidget {
                        SettingsTile(
                       title: '有料機能',
                       subtitle: '押',
-                      leading: NeumorphicIcon(Icons.attach_money_rounded),
+                      leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
                       onPressed: (_) async {
                         // Navigator.pushNamed(_, '/buy');
                         //  Navigator.pushNamed(context, '/subsc');
