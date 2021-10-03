@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 
 WeatherClass weatherFromJson(String str) =>
     WeatherClass.fromJson(json.decode(str));

@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:apple_sign_in/apple_sign_in_button.dart' as app;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
@@ -10,7 +9,6 @@ import 'package:kiatsu/auth/github_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/utils/apple_signin_available.dart';
-import 'package:kiatsu/pages/timeline.dart';
 import 'package:provider/provider.dart';
 import 'package:social_auth_buttons/res/buttons/apple_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/github_auth_button.dart';

@@ -1,18 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/main.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
