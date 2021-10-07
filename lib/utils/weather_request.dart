@@ -6,17 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final weatherStateFuture = FutureProvider<List<WeatherClass>>((ref) async {
-  return fetchWeather();
-});
+class FetchWeatherClass {
+  // List<WeatherClass> parseWeather(String responseBody) {
+//   final list = json.decode(responseBody)['results'] as List<dynamic>;
+//   List<WeatherClass> weather = list.map((model) => WeatherClass.fromJson(model)).toList();
+//   return weather;
+// }
 
-List<WeatherClass> parseWeather(String responseBody) {
-  var list = json.decode(responseBody)['results'] as List<dynamic>;
-  List<WeatherClass> weather = list.map((model) => WeatherClass.fromJson(model)).toList();
-  return weather;
-}
-
-Future<List<WeatherClass>> fetchWeather() async {
+Future<WeatherClass> fetchWeather() async {
   final GeolocationResult result = await Geolocation.requestLocationPermission(
     permission: const LocationPermission(
       android: LocationPermissionAndroid.fine,
@@ -41,7 +38,8 @@ Future<List<WeatherClass>> fetchWeather() async {
   );
   final response = await http.get(uri);
   if (response.statusCode == 200)
-    return compute(parseWeather, response.body);
+    // return compute(parseWeather, response.body);
+    return WeatherClass.fromJson(json.decode(response.body));
   else
   throw Exception('Can\'t get weather');
 
@@ -83,4 +81,6 @@ Future<List<WeatherClass>> fetchWeather() async {
   //       break;
   //   }
   // }
+}
+
 }

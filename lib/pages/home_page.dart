@@ -5,12 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:geolocation/geolocation.dart' as geo;
 import 'package:geolocation/geolocation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:kiatsu/utils/get_weather.dart';
+import 'package:kiatsu/utils/providers.dart';
+import 'package:kiatsu/utils/refresher.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -22,12 +27,12 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
 final currentUser = firebaseAuth.currentUser;
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+// class HomePage extends StatefulWidget {
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
 
-class _HomePageState extends State<HomePage> {
+class HomePage extends HookWidget {
   DateTime updatedAt = DateTime.now();
   late Future<WeatherClass> weather;
   late final List<WeatherClass> weathers;
@@ -35,175 +40,28 @@ class _HomePageState extends State<HomePage> {
   String _res2 = '';
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
-    weather = getWeather();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   weather = getWeather();
+  // }
 
   void _hapticFeedback() {
     HapticFeedback.mediumImpact();
   }
 
-  Future<void> _refresher() async {
-    setState(() {
-      weather = getWeather();
-      updatedAt = new DateTime.now();
-    });
-  }
+  // Future<void> _refresher() async {
+  //   setState(() {
+  //     weather = getWeather();
+  //     updatedAt = new DateTime.now();
+  //   });
+  // }
 
-  Future<WeatherClass> getWeather() async {
-    var test;
-    final GeolocationResult result =
-        await Geolocation.requestLocationPermission(
-      permission: const geo.LocationPermission(
-        android: LocationPermissionAndroid.coarse,
-        ios: LocationPermissionIOS.always,
-      ),
-      openSettingsIfDenied: true,
-    );
+  
 
-    if (result.isSuccessful) {
-      final rr = dotenv.dotenv.env['FIREBASE_API_KEY'];
-      final result = await Geolocation.lastKnownLocation();
-      double lat = result.location.latitude;
-      double lon = result.location.longitude;
-      Map<String, String> queryParams = {
-        'lat': lat.toString(),
-        'lon': lon.toString(),
-        'APPID': rr.toString(),
-      };
-      var uri = Uri(
-        scheme: 'https',
-        host: 'api.openweathermap.org',
-        path: '/data/2.5/weather',
-        queryParameters: queryParams,
-      );
-      final response = await http.get(uri);
-      return WeatherClass.fromJson(jsonDecode(response.body));
-    } else {
-      switch (result.error.type) {
-        case geo.GeolocationResultErrorType.runtime:
-          showDialog(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  title: Text("Runtime Error"),
-                );
-              });
-          break;
-        case geo.GeolocationResultErrorType.locationNotFound:
-          showDialog(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  title: Text("Location Not Found"),
-                );
-              });
-          break;
-        case geo.GeolocationResultErrorType.serviceDisabled:
-          showDialog(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  title: Text("Service are disabled"),
-                );
-              });
-          break;
-        case geo.GeolocationResultErrorType.permissionNotGranted:
-          showDialog(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  title: Text("Permission For Location Not Granted"),
-                );
-              });
-          break;
-        case geo.GeolocationResultErrorType.permissionDenied:
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("kiatsuへようこそ！"),
-                  content: Text('さぁ、はじめましょう。'),
-                  actions: <Widget>[
-                    TextButton(
-                        child: Text("OK"),
-                        onPressed: () async {
-                          await _refresher();
-                          // 1回の実行じゃ何故か戻らないのでawaitで2回実行させるというクソ仕様なので誰か直して＾q＾
-                          await _goBack();
-                          await _goBack();
-                        }),
-                  ],
-                );
-              });
-          break;
-        case geo.GeolocationResultErrorType.playServicesUnavailable:
-          switch (
-              result.error.additionalInfo as GeolocationAndroidPlayServices) {
-            case geo.GeolocationAndroidPlayServices.missing:
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text("Something went wrong with Play Services"),
-                    );
-                  });
-              break;
-            case geo.GeolocationAndroidPlayServices.updating:
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text("Something went wrong with Play Services"),
-                    );
-                  });
-              break;
-            case geo.GeolocationAndroidPlayServices.versionUpdateRequired:
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text("Play Services gotta be updated"),
-                    );
-                  });
-              break;
-            case geo.GeolocationAndroidPlayServices.disabled:
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text("Play Services are disabled"),
-                    );
-                  });
-              break;
-            case geo.GeolocationAndroidPlayServices.invalid:
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text("Something went wrong with Play Services"),
-                    );
-                  });
-              break;
-          }
-          break;
-      }
-      showDialog(
-          context: context,
-          builder: (context) {
-            return SimpleDialog(
-              title: Text("Something went wrong with Play Services"),
-            );
-          });
-    }
-    return test;
-  }
-
-  Future<void> _goBack() async {
-    Navigator.pop(context);
-  }
+  // Future<void> _goBack() async {
+  //   Navigator.pop();
+  // }
 
   getTimelineView(BuildContext context) {
     return Navigator.of(context).pushNamed('/timeline');
@@ -236,7 +94,7 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () async {
             _hapticFeedback();
-            Navigator.of(context).pushNamed('/timeline');
+            // Navigator.of(context).pushNamed('/timeline');
             DateTime today =
                 new DateTime(updatedAt.year, updatedAt.month, updatedAt.day);
             print(firebaseAuth.currentUser);
@@ -351,6 +209,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      weather = GetWeather() as Future<WeatherClass>;
+    });
     Future<bool> isPurchased() async {
     PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
     if(purchaseInfo.entitlements.all["pro"]!.isActive){
@@ -402,9 +263,9 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             ),
-            body: FutureBuilder<WeatherClass>(
-                future: weather,
-                builder: (context, snapshot) {
+            body: Consumer(
+                builder: (context, watch, child) {
+                  final Refresher refresher = context.read(refresherProvider.notifier);
                   if (snapshot.hasError) print(snapshot.error);
                   if (snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.done) {
@@ -412,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                       key: GlobalKey(),
                       child: RefreshIndicator(
                         color: Colors.black,
-                        onRefresh: () => _refresher(),
+                        onRefresh: () => refresher.refresher(),
                         child: ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           children: <Widget>[
@@ -610,7 +471,7 @@ class _HomePageState extends State<HomePage> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FutureBuilder<WeatherClass>(
-                future: getWeather(),
+                future: weather,
                 builder: (context, snapshot) {
                   return FloatingActionButton(
                       backgroundColor: Colors.white,
@@ -637,7 +498,7 @@ class _HomePageState extends State<HomePage> {
                             content: const Text("先に情報を読み込んでね＾ｑ＾"),
                             action: SnackBarAction(
                               label: '読込',
-                              onPressed: () => _refresher(),
+                              onPressed: () => null,
                             ),
                           ));
                         }
