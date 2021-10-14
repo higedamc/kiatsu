@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:apple_sign_in/apple_id_request.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:apple_sign_in/scope.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 String generateNonce([int length = 32]) {

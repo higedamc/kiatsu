@@ -4,8 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/pages/main_view.dart';
+import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/utils/wiredash_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -14,8 +16,8 @@ import 'package:wiredash/wiredash.dart';
 
 import 'api/purchase_api.dart';
 
-final revenuecatProvider = ChangeNotifierProvider.autoDispose<RevenueCatProvider>(
-  (ref) => RevenueCatProvider());
+// final revenuecatProvider = ChangeNotifierProvider.autoDispose<RevenueCatProvider>(
+//   (ref) => RevenueCatProvider());
 
 
 
@@ -29,7 +31,7 @@ Future<void> startApp() async {
 
   await Firebase.initializeApp();
   await PurchaseApi.init();
-  // final appleSignInAvailable = await AppleSignInAvailable.check();
+  final appleSignInAvailable = await AppleSignInAvailable.check();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
