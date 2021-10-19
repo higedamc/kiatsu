@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/main.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';

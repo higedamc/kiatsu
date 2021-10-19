@@ -1,7 +1,7 @@
 
 
-import '../dev_main.dart';
+// import '../dev_main.dart';
 
-void main() {
-  startAppDev();
-}
+// void main() {
+//   startAppDev();
+// }

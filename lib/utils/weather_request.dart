@@ -30,6 +30,7 @@ Future<WeatherClass> fetchWeather() async {
     ),
     openSettingsIfDenied: true,
   );
+  print('result');
   final rr = dotenv.env['FIREBASE_API_KEY'];
   final result2 = await Geolocation.lastKnownLocation();
   double lat = result2.location.latitude;

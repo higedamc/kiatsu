@@ -428,6 +428,8 @@ PODS:
     - Toast
   - geocoder (0.0.1):
     - Flutter
+  - geocoding (1.0.5):
+    - Flutter
   - geolocation (0.0.1):
     - Flutter
     - streams_channel
@@ -536,6 +538,7 @@ DEPENDENCIES:
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoder (from `.symlinks/plugins/geocoder/ios`)
+  - geocoding (from `.symlinks/plugins/geocoding/ios`)
   - geolocation (from `.symlinks/plugins/geolocation/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -599,6 +602,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   geocoder:
     :path: ".symlinks/plugins/geocoder/ios"
+  geocoding:
+    :path: ".symlinks/plugins/geocoding/ios"
   geolocation:
     :path: ".symlinks/plugins/geolocation/ios"
   geolocator_apple:
@@ -645,6 +650,7 @@ SPEC CHECKSUMS:
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
+  geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
   geolocation: c194aabfd0f48cd7d6041afa8ba6542aa5714dc2
   geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
   google_sign_in: c5cecea71f3be43282263550556e311c4cc03582

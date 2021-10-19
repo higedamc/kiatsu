@@ -5,7 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kiatsu/Provider/revenuecat.dart';
+// import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/pages/main_view.dart';
 import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/utils/wiredash_locale.dart';
@@ -15,6 +15,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:wiredash/wiredash.dart';
 
 import 'api/purchase_api.dart';
+
+// https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
 // final revenuecatProvider = ChangeNotifierProvider.autoDispose<RevenueCatProvider>(
 //   (ref) => RevenueCatProvider());

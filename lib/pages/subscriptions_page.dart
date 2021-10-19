@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/pages/consumables_page.dart';
+import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
