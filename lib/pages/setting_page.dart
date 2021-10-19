@@ -15,8 +15,10 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
 // test1
 final currentPurchaser = PurchaseApi.getCurrentPurchaser();
+final _navigatorKey = GlobalKey<NavigatorState>();
 
 class SettingPage extends StatelessWidget {
+   
   @override
   Widget build(BuildContext context) {
     return neu.Neumorphic(
@@ -40,14 +42,30 @@ class SettingPage extends StatelessWidget {
                         ClipboardData(
                           text: currentUser!.uid.toString(),
                         ),
-                      ).then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              key: UniqueKey(),
-                              content: const Text('アカウント名がコピーされました！')),
-                        );
-                      }),
+                      ),
                   subtitle: currentUser!.uid),
+                  SettingsTile(
+                  title: 'アカウント削除',
+                  onPressed: (context) async => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('危険です！'),
+                          content: Text('本当にアカウントを削除しますか？'),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('Cancel')),
+                            TextButton(
+                                onPressed: () async {
+                                  await currentUser!.delete();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK')),
+                          ],
+                        );
+                      })
+              ),
             ],
           ),
           SettingsSection(

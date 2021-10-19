@@ -60,7 +60,7 @@ class SplashPage extends MainView {
     final CollectionReference users = firebaseStore.collection('users');
     if (current == null) {
       signInAnon().then((UserCredential user) async {
-        print('User ${user.user!.uid}');
+        print('New User Registered: ${user.user!.uid}');
         await users.doc(user.user!.uid).collection('votes').doc().set({
           'pien_rate': [
             {'cho_pien': 0, 'creaateAt': createdAt},
