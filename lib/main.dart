@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kiatsu/pages/main_view.dart';
 import 'package:kiatsu/utils/apple_signin_available.dart';
-import 'package:kiatsu/utils/wiredash_locale.dart';
+import 'package:kiatsu/l18n/wiredash_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;

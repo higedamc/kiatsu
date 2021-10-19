@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/github_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
@@ -21,8 +22,8 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _auth = FirebaseAuth.instance;
     final now = _auth.currentUser;
-    final appleSignInAvailable =
-        Provider.of<AppleSignInAvailable>(context, listen: false);
+    // ToDO: AppleAuthのboolが起動するか初期化して確認
+    // ToDo: 上記確認後GitHubのIssueを閉じる
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: Text('アカウントページ'),
@@ -30,7 +31,7 @@ class SignInPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          (appleSignInAvailable.isAvailable && now!.isAnonymous)
+          (Platform.isIOS && now!.isAnonymous)
               ? AppleAuthButton(
                   width: 280.0,
                   height: 50.0,
@@ -101,18 +102,18 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
               )
-              : appleSignInAvailable.isAvailable ? Text("") : Center(child: Text('認証済')),
+              : Platform.isIOS ? Text("") : Center(child: Text('認証済')),
           // サインアウトボタン
-          // (AppleAuthUtil.isSignedIn()) ?
-          // NeumorphicButton(
-          //   tooltip: 'サインアウトする',
-          //   style: NeumorphicStyle(
-          //     color: Colors.black,
-          //   ),
-          //   onPressed: () => {
-          //     AppleAuthUtil.signOut(),
-          //   },
-          // ) : Center(),
+          (AppleAuthUtil.isSignedIn()) ?
+          NeumorphicButton(
+            tooltip: 'サインアウトする',
+            style: NeumorphicStyle(
+              color: Colors.black,
+            ),
+            onPressed: () => {
+              AppleAuthUtil.signOut(),
+            },
+          ) : Center(),
         ],
       ),
     );

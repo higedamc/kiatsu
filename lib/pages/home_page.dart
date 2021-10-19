@@ -34,9 +34,6 @@ class HomePage extends ConsumerWidget {
         .getWeather(cityName);
   }
 
-  void _hapticFeedback() {
-    HapticFeedback.mediumImpact();
-  }
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -123,9 +120,7 @@ class HomePage extends ConsumerWidget {
                             return Container();
                           },
                           loading: () => Container(
-                            child: Center(
-                              child: const Text('FETCHING DATA...'),
-                            ),
+                            
                           ),
                           success: (data) => NeumorphicText(
                             data.main!.pressure.toString(),
@@ -140,9 +135,7 @@ class HomePage extends ConsumerWidget {
                             ),
                           ),
                           orElse: () => Container(
-                            child: Center(
-                              child: const Text('FETCHING DATA...'),
-                            ),
+                            
                           ),
                         );
                       },
@@ -184,9 +177,9 @@ class HomePage extends ConsumerWidget {
                       return Container();
                     },
                     loading: () => Container(
-                      child: Center(
-                        child: const Text('FETCHING DATA...'),
-                      ),
+                      // child: Center(
+                      //   child: const Text('FETCHING DATA...'),
+                      // ),
                     ),
                     success: (data) => Container(
                       height: 140,
