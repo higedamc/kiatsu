@@ -4,8 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:kiatsu/Provider/revenuecat.dart';
 import 'package:kiatsu/pages/main_view.dart';
 import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/utils/wiredash_locale.dart';
@@ -23,17 +21,19 @@ import 'api/purchase_api.dart';
 
 
 
-/**
- * ! 破壊的変更の追加。
- * 詳細は => https://codeux.design/articles/manage-secrets-flutter-project/
- */
+// 参照: https://codeux.design/articles/manage-secrets-flutter-project/
+
+
+
 Future<void> startApp() async {
+  // final _navigatorKey = GlobalKey<NavigatorState>();
+
   WidgetsFlutterBinding.ensureInitialized();
  
 
   await Firebase.initializeApp();
+  // final appleSignInAvailable = await AppleSignInAvailable.check();
   await PurchaseApi.init();
-  final appleSignInAvailable = await AppleSignInAvailable.check();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
@@ -55,7 +55,6 @@ Future<void> startApp() async {
             prefs: prefs,
             key: UniqueKey(),
           ),
-          // value: appleSignInAvailable,
         ),
       );
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
@@ -63,9 +62,12 @@ Future<void> startApp() async {
 }
 
 class MyApp extends StatelessWidget {
+
+  
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
   final _navigatorKey = GlobalKey<NavigatorState>();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,11 @@ class MyApp extends StatelessWidget {
         locale: const Locale('pl'),
       ),
 
-      child: MainView(),
+      child: MaterialApp(
+        navigatorKey: _navigatorKey,
+        debugShowCheckedModeBanner: false,
+        home: MainView(),
+      ),
     );
   }
 }

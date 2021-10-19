@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:kiatsu/pages/consumables_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/iap_page.dart';
@@ -13,9 +12,10 @@ import 'package:kiatsu/pages/subscriptions_page.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:splashscreen/splashscreen.dart';
 
-
+import 'consumables_page.dart';
 
 class MainView extends StatelessWidget {
+ 
   @override
   Widget build(BuildContext context) {
     return NeumorphicApp(
@@ -40,7 +40,6 @@ class MainView extends StatelessWidget {
         '/subsc': (BuildContext context) => SubscriptionsPage(),
         '/buy': (BuildContext context) => DevPurchasePage(),
       },
-      debugShowCheckedModeBanner: false,
       home: SplashPage(),
     );
   }
@@ -56,7 +55,7 @@ class SplashPage extends MainView {
     return user;
   }
 
-  SplashPage() {
+  SplashPage()  {
     final User? current = firebaseAuth.currentUser;
     final CollectionReference users = firebaseStore.collection('users');
     if (current == null) {
