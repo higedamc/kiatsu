@@ -32,6 +32,7 @@ dependencies:
   flutter_flavor: ^3.0.3
   flutter_hooks: ^0.18.0
   flutter_launcher_icons: ^0.9.0
+  flutter_line_sdk: ^2.0.0
   flutter_neumorphic:
     git:
       url: https://github.com/tsvillain/Flutter-Neumorphic.git
@@ -92,6 +93,7 @@ flutter:
   assets:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
+    - assets/images/line.png
     # - images/
     - assets/
     - .env

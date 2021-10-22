@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:wiredash/wiredash.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 
 import 'api/purchase_api.dart';
 
@@ -29,8 +30,9 @@ Future<void> startApp() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
 
   WidgetsFlutterBinding.ensureInitialized();
+  
  
-
+  
   await Firebase.initializeApp();
   // final appleSignInAvailable = await AppleSignInAvailable.check();
   await PurchaseApi.init();
@@ -46,6 +48,9 @@ Future<void> startApp() async {
   };
   // 公開できない環境変数の読み込み
   await dotenv.dotenv.load(fileName: ".env");
+  LineSDK.instance.setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString()).then((_) {
+    print('LINE SDK GOT SET UP');
+  });
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {

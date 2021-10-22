@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
@@ -16,6 +15,9 @@ import 'package:social_auth_buttons/res/buttons/github_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/google_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/twitter_auth_button.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
+
+
 
 class SignInPage extends StatelessWidget {
   @override
@@ -33,8 +35,8 @@ class SignInPage extends StatelessWidget {
         children: [
           (Platform.isIOS && now!.isAnonymous)
               ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AppleAuthButton(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AppleAuthButton(
                     width: 280.0,
                     height: 50.0,
                     borderWidth: 1.0,
@@ -52,15 +54,17 @@ class SignInPage extends StatelessWidget {
                       }
                     },
                   ),
-              )
+                )
               : Column(
                   children: [
-                    (Platform.isAndroid) ? Text('') : Center(child: Text('認証済')),
+                    (Platform.isAndroid)
+                        ? Text('')
+                        : Center(child: Text('認証済')),
                   ],
                 ),
           (now!.isAnonymous)
               ? Center(
-                child: Column(
+                  child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -90,13 +94,13 @@ class SignInPage extends StatelessWidget {
                             separator: 15.0,
                             borderColor: Colors.black,
                             onPressed: () => {
-                              TwitterAuthUtil.signInWithTwitter(context),
-                            }),
+                                  TwitterAuthUtil.signInWithTwitter(context),
+                                }),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GoogleAuthButton(
-                          width: 280.0,
+                            width: 280.0,
                             height: 50.0,
                             borderWidth: 1.0,
                             padding: EdgeInsets.all(8.0),
@@ -104,17 +108,59 @@ class SignInPage extends StatelessWidget {
                             borderRadius: 8.0,
                             separator: 15.0,
                             borderColor: Colors.black,
-                          onPressed: () async => {
-                            GoogleAuthUtil.signInWithGoogle(context),
-                            Navigator.pop(context),
-                          }
-                          ),
+                            onPressed: () async => {
+                                  GoogleAuthUtil.signInWithGoogle(context),
+                                  Navigator.pop(context),
+                                }),
                       ),
-
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                        width: 280,
+                        height: 50,
+                          child: 
+                          // ElevatedButton(
+                          //   child: const Text('Sign in with LINE',
+                          //   style: TextStyle(fontSize: 18)),
+                          //   style: ElevatedButton.styleFrom(
+                          //     // maximumSize: ,
+                          //     primary: Colors.green[600],
+                          //     onPrimary: Colors.white,
+                          //     shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.circular(10),
+                          //     ),
+                          //   ),
+                          //   onPressed: () async {
+                          //     final result = LineSDK.instance.login();
+                          //     print(result.toString());
+                          //   },
+                          // ),
+                          ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                          primary: Colors.green[600],
+                              onPrimary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: EdgeInsets.fromLTRB(1, 10, 50, 10),
+                          ),
+                          onPressed: () async {
+                          final result = LineSDK.instance.login();
+                          },
+                           icon: Image.asset('assets/images/line.png'),
+                           label: Padding(
+                             padding: const EdgeInsets.fromLTRB(11, 1, 1, 1),
+                             child: Text('Sign in with LINE',
+                              style: TextStyle(fontSize: 18),),
+                           ),),
+                        ),
+                      ),
                     ],
                   ),
-              )
-              : Platform.isIOS ? Text("") : Center(child: Text('認証済')),
+                )
+              : Platform.isIOS
+                  ? Text("")
+                  : Center(child: Text('認証済')),
           // サインアウトボタン
           // (AppleAuthUtil.isSignedIn()) ?
           // NeumorphicButton(

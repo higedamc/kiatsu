@@ -417,6 +417,9 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (< 3.0, >= 1.2)
   - Flutter (1.0.0)
+  - flutter_line_sdk (2.0.0):
+    - Flutter
+    - LineSDKSwift (~> 5.3)
   - flutter_twitter_login (0.0.1):
     - Flutter
     - TwitterCore (~> 3.2.0)
@@ -492,6 +495,9 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.0)
   - leveldb-library (1.22.1)
+  - LineSDKSwift (5.8.0):
+    - LineSDKSwift/Core (= 5.8.0)
+  - LineSDKSwift/Core (5.8.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -534,6 +540,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
+  - flutter_line_sdk (from `.symlinks/plugins/flutter_line_sdk/ios`)
   - flutter_twitter_login (from `.symlinks/plugins/flutter_twitter_login/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -572,6 +579,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - leveldb-library
+    - LineSDKSwift
     - nanopb
     - PromisesObjC
     - Purchases
@@ -594,6 +602,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
   Flutter:
     :path: Flutter
+  flutter_line_sdk:
+    :path: ".symlinks/plugins/flutter_line_sdk/ios"
   flutter_twitter_login:
     :path: ".symlinks/plugins/flutter_twitter_login/ios"
   flutter_webview_plugin:
@@ -646,6 +656,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: e722ba956610c45d368d9787689e2aa41b809e68
   FirebaseInstallations: 2563cb18a723ef9c6ef18318a49519b75dce613c
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_line_sdk: e906ffa756c0ab01a3fd9c3dbe1c26e0092de3ff
   flutter_twitter_login: 1f670e60647cdf517ba20495e1b32046d9f22697
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
@@ -662,6 +673,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  LineSDKSwift: 07caae66911f77d1ccf9e650e4da4020d737ecc7
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
@@ -680,6 +692,6 @@ SPEC CHECKSUMS:
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: f10c0438b63bc24e6bbc207956dc27d16c4408f2
+PODFILE CHECKSUM: 965f1c4264bd06de7f43dd3bc0a47800b35315c8
 
 COCOAPODS: 1.11.2
