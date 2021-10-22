@@ -7,9 +7,6 @@ import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:purchases_flutter/package_wrapper.dart';
-import 'package:purchases_flutter/purchaser_info_wrapper.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   @override
@@ -32,17 +29,17 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             buildEntitlement(entitlement),
             SizedBox(height: 32),
             buildEntitlementText(entitlement),
-            // SizedBox(height: 32),
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     minimumSize: Size.fromHeight(50),
-            //   ),
-            //   child: Text(
-            //     '他の機能を見てみる',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   onPressed: isLoading ? null : fetchOffers2,
-            // ),
+            SizedBox(height: 32),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+              ),
+              child: Text(
+                '他の機能を見てみる',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers2,
+            ),
           ],
         ),
       ),

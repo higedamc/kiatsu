@@ -10,38 +10,40 @@ import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/providers/revenuecat.dart';
+import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 import 'consumables_page.dart';
 
 class MainView extends StatelessWidget {
- 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicApp(
-      themeMode: ThemeMode.light,
-      theme: NeumorphicThemeData(
-        baseColor: Color(0xFFFFFFFF),
-        lightSource: LightSource.topLeft,
-        depth: 20,
-        intensity: 1,
-      ),
-      routes: {
-        '/a': (BuildContext context) => SettingPage(),
-        '/timeline': (BuildContext context) => Timeline(
-              key: UniqueKey(),
-            ),
-        '/home': (BuildContext context) => HomePage(),
-        '/signpage': (BuildContext context) => SignInPage(),
-        '/dialog': (BuildContext context) => Dialogs(),
-        '/iap': (BuildContext context) => IAPScreen(key: UniqueKey()),
-        '/sub': (BuildContext context) => SubscriptionsPage(),
-        '/con': (BuildContext context) => ConsumablesPage(),
-        '/subsc': (BuildContext context) => SubscriptionsPage(),
-        '/buy': (BuildContext context) => DevPurchasePage(),
-      },
-      home: SplashPage(),
-    );
+    return ChangeNotifierProvider(
+        create: (BuildContext context) => RevenueCatProvider(),
+        child: NeumorphicApp(
+          themeMode: ThemeMode.light,
+          theme: NeumorphicThemeData(
+            baseColor: Color(0xFFFFFFFF),
+            lightSource: LightSource.topLeft,
+            depth: 20,
+            intensity: 1,
+          ),
+          routes: {
+            '/a': (BuildContext context) => SettingPage(),
+            '/timeline': (BuildContext context) => Timeline(
+                  key: UniqueKey(),
+                ),
+            '/home': (BuildContext context) => HomePage(),
+            '/signpage': (BuildContext context) => SignInPage(),
+            '/dialog': (BuildContext context) => Dialogs(),
+            '/iap': (BuildContext context) => IAPScreen(key: UniqueKey()),
+            '/sub': (BuildContext context) => SubscriptionsPage(),
+            '/con': (BuildContext context) => ConsumablesPage(),
+            '/buy': (BuildContext context) => DevPurchasePage(),
+          },
+          home: SplashPage(),
+        ));
   }
 }
 
@@ -55,7 +57,7 @@ class SplashPage extends MainView {
     return user;
   }
 
-  SplashPage()  {
+  SplashPage() {
     final User? current = firebaseAuth.currentUser;
     final CollectionReference users = firebaseStore.collection('users');
     if (current == null) {
@@ -73,7 +75,7 @@ class SplashPage extends MainView {
         // await PurchaseApi.init();
       });
     } else {
-    //   PurchaseApi.init();
+      //   PurchaseApi.init();
       print('User Already Registered: $current');
     }
   }

@@ -5,7 +5,6 @@ import 'package:kiatsu/providers/weather_notifier.dart';
 import 'package:kiatsu/repository/weather_repository.dart';
 import 'package:http/http.dart' as http;
 
-final revenuecatProvider = ChangeNotifierProvider((_) => RevenueCatProvider());
 
 final weatherClientProvider = Provider.autoDispose<WeatherRepository>(
     (ref) => WeatherRepositoryImpl(http.Client()));

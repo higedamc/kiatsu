@@ -15,10 +15,8 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
 // test1
 final currentPurchaser = PurchaseApi.getCurrentPurchaser();
-final _navigatorKey = GlobalKey<NavigatorState>();
 
 class SettingPage extends StatelessWidget {
-   
   @override
   Widget build(BuildContext context) {
     return neu.Neumorphic(
@@ -30,7 +28,7 @@ class SettingPage extends StatelessWidget {
               SettingsTile(
                   title: 'SNSログイン',
                   subtitle: '押',
-                  leading: neu.NeumorphicIcon(Icons.account_circle_outlined),
+                  // leading: neu.NeumorphicIcon(Icons.account_circle_outlined),
                   onPressed: (context) async {
   
                     await Navigator.push(context,
@@ -74,7 +72,7 @@ class SettingPage extends StatelessWidget {
               SettingsTile(
                   title: 'フィードバック送信',
                   subtitle: '押',
-                  leading: neu.NeumorphicIcon(Icons.bug_report),
+                  // leading: neu.NeumorphicIcon(Icons.bug_report),
                   onPressed: (context) async {
                     Wiredash.of(context)!.show();
                   }),
@@ -87,16 +85,16 @@ class SettingPage extends StatelessWidget {
               //           // // Navigator.pushNamed(_, '/buy');
               //           // fetchOffers2(context);
               //         })
-              //     : SettingsTile(
-              //         title: '有料機能',
-              //         subtitle: '押',
-              //         leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
-              //         onPressed: (_) async {
-              //           // Navigator.pushNamed(_, '/buy');
-              //           //  Navigator.pushNamed(context, '/subsc');
-              //           Navigator.pop(context);
-              //           // Navigator.pushNamed(context, '/iap');
-              //         }),
+                  // : 
+                  SettingsTile(
+                      title: '有料機能',
+                      subtitle: '押',
+                      leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
+                      onPressed: (_) async {
+                        // Navigator.pushNamed(_, '/iap');
+                         Navigator.pushNamed(context, '/buy');
+                        // Navigator.pop(context);
+                      }),
             ],
           ),
         ],

@@ -32,24 +32,27 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           (Platform.isIOS && now!.isAnonymous)
-              ? AppleAuthButton(
-                  width: 280.0,
-                  height: 50.0,
-                  borderWidth: 1.0,
-                  padding: EdgeInsets.all(8.0),
-                  elevation: 2.0,
-                  borderRadius: 8.0,
-                  separator: 15.0,
-                  borderColor: Colors.black,
-                  onPressed: () async {
-                    if (now.isAnonymous) {
-                      await AppleAuthUtil.forceLink(context);
-                      print(now.uid);
-                    } else {
-                      print('Apple IDでサイン済み');
-                    }
-                  },
-                )
+              ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AppleAuthButton(
+                    width: 280.0,
+                    height: 50.0,
+                    borderWidth: 1.0,
+                    padding: EdgeInsets.all(8.0),
+                    elevation: 2.0,
+                    borderRadius: 8.0,
+                    separator: 15.0,
+                    borderColor: Colors.black,
+                    onPressed: () async {
+                      if (now.isAnonymous) {
+                        await AppleAuthUtil.forceLink(context);
+                        print(now.uid);
+                      } else {
+                        print('Apple IDでサイン済み');
+                      }
+                    },
+                  ),
+              )
               : Column(
                   children: [
                     (Platform.isAndroid) ? Text('') : Center(child: Text('認証済')),
@@ -59,61 +62,70 @@ class SignInPage extends StatelessWidget {
               ? Center(
                 child: Column(
                     children: [
-                      GithubAuthButton(
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GithubAuthButton(
+                            width: 280.0,
+                            height: 50.0,
+                            borderWidth: 1.0,
+                            padding: EdgeInsets.all(8.0),
+                            elevation: 2.0,
+                            borderRadius: 8.0,
+                            separator: 15.0,
+                            borderColor: Colors.black,
+                            text: 'Sign in with GitHub',
+                            onPressed: () => {
+                                  GithubAuthUtil.signInWithGithub(context),
+                                }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TwitterAuthButton(
+                            width: 280.0,
+                            height: 50.0,
+                            borderWidth: 1.0,
+                            padding: EdgeInsets.all(8.0),
+                            elevation: 2.0,
+                            borderRadius: 8.0,
+                            separator: 15.0,
+                            borderColor: Colors.black,
+                            onPressed: () => {
+                              TwitterAuthUtil.signInWithTwitter(context),
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GoogleAuthButton(
                           width: 280.0,
-                          height: 50.0,
-                          borderWidth: 1.0,
-                          padding: EdgeInsets.all(8.0),
-                          elevation: 2.0,
-                          borderRadius: 8.0,
-                          separator: 15.0,
-                          borderColor: Colors.black,
-                          text: 'Sign in with GitHub',
-                          onPressed: () => {
-                                GithubAuthUtil.signInWithGithub(context),
-                              }),
-                      TwitterAuthButton(
-                          width: 280.0,
-                          height: 50.0,
-                          borderWidth: 1.0,
-                          padding: EdgeInsets.all(8.0),
-                          elevation: 2.0,
-                          borderRadius: 8.0,
-                          separator: 15.0,
-                          borderColor: Colors.black,
-                          onPressed: () => {
-                            TwitterAuthUtil.signInWithTwitter(context),
-                          }),
-                      GoogleAuthButton(
-                        width: 280.0,
-                          height: 50.0,
-                          borderWidth: 1.0,
-                          padding: EdgeInsets.all(8.0),
-                          elevation: 2.0,
-                          borderRadius: 8.0,
-                          separator: 15.0,
-                          borderColor: Colors.black,
-                        onPressed: () async => {
-                          GoogleAuthUtil.signInWithGoogle(context),
-                          Navigator.pop(context),
-                        }
-                        ),
+                            height: 50.0,
+                            borderWidth: 1.0,
+                            padding: EdgeInsets.all(8.0),
+                            elevation: 2.0,
+                            borderRadius: 8.0,
+                            separator: 15.0,
+                            borderColor: Colors.black,
+                          onPressed: () async => {
+                            GoogleAuthUtil.signInWithGoogle(context),
+                            Navigator.pop(context),
+                          }
+                          ),
+                      ),
 
                     ],
                   ),
               )
               : Platform.isIOS ? Text("") : Center(child: Text('認証済')),
           // サインアウトボタン
-          (AppleAuthUtil.isSignedIn()) ?
-          NeumorphicButton(
-            tooltip: 'サインアウトする',
-            style: NeumorphicStyle(
-              color: Colors.black,
-            ),
-            onPressed: () => {
-              AppleAuthUtil.signOut(),
-            },
-          ) : Center(),
+          // (AppleAuthUtil.isSignedIn()) ?
+          // NeumorphicButton(
+          //   tooltip: 'サインアウトする',
+          //   style: NeumorphicStyle(
+          //     color: Colors.black,
+          //   ),
+          //   onPressed: () => {
+          //     AppleAuthUtil.signOut(),
+          //   },
+          // ) : Center(),
         ],
       ),
     );
