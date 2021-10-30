@@ -33,7 +33,7 @@ class SignInPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          (Platform.isIOS && now!.isAnonymous)
+          (Platform.isIOS && now == null)
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AppleAuthButton(
@@ -46,9 +46,10 @@ class SignInPage extends StatelessWidget {
                     separator: 15.0,
                     borderColor: Colors.black,
                     onPressed: () async {
-                      if (now.isAnonymous) {
-                        await AppleAuthUtil.forceLink(context);
-                        print(now.uid);
+                      if (now == null) {
+                        // await AppleAuthUtil.forceLink(context);
+                        await AppleAuthUtil.signInWithApple();
+                        print(now?.uid);
                       } else {
                         print('Apple IDでサイン済み');
                       }
@@ -62,7 +63,7 @@ class SignInPage extends StatelessWidget {
                         : Center(child: Text('認証済')),
                   ],
                 ),
-          (now!.isAnonymous)
+          (now == null)
               ? Center(
                   child: Column(
                     children: [

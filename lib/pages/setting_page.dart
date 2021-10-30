@@ -35,13 +35,37 @@ class SettingPage extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => SignInPage()));
                   }),
               SettingsTile(
-                  title: 'アカウント名',
+                  title: 'アカウント',
                   onPressed: (context) => Clipboard.setData(
                         ClipboardData(
-                          text: currentUser!.uid.toString(),
+                          text: currentUser?.uid.toString(),
                         ),
                       ),
-                  subtitle: currentUser!.uid),
+                  subtitle: currentUser != null
+                      ? currentUser?.uid.toString()
+                      : '未登録'),
+                  SettingsTile(
+                  title: 'サインアウト',
+                  onPressed: (context) async => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('危険です！'),
+                          content: Text('本当にアカウントを削除しますか？'),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('Cancel')),
+                            TextButton(
+                                onPressed: () async {
+                                  await FirebaseAuth.instance.signOut();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK')),
+                          ],
+                        );
+                      })
+              ),
                   SettingsTile(
                   title: 'アカウント削除',
                   onPressed: (context) async => showDialog(
@@ -89,7 +113,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile(
                       title: '有料機能',
                       subtitle: '押',
-                      leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
+                      // leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
                       onPressed: (_) async {
                         // Navigator.pushNamed(_, '/iap');
                          Navigator.pushNamed(context, '/buy');

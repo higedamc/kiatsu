@@ -48,36 +48,36 @@ class MainView extends StatelessWidget {
 }
 
 class SplashPage extends MainView {
-  final DateTime createdAt = new DateTime.now();
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+  // final DateTime createdAt = new DateTime.now();
+  // final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  // final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 
-  Future<UserCredential> signInAnon() async {
-    UserCredential user = await firebaseAuth.signInAnonymously();
-    return user;
-  }
+  // Future<UserCredential> signInAnon() async {
+  //   UserCredential user = await firebaseAuth.signInAnonymously();
+  //   return user;
+  // }
 
   SplashPage() {
-    final User? current = firebaseAuth.currentUser;
-    final CollectionReference users = firebaseStore.collection('users');
-    if (current == null) {
-      signInAnon().then((UserCredential user) async {
-        print('New User Registered: ${user.user!.uid}');
-        await users.doc(user.user!.uid).collection('votes').doc().set({
-          'pien_rate': [
-            {'cho_pien': 0, 'creaateAt': createdAt},
-            {'pien': 0, 'createdAt': createdAt},
-            {'not_pien': 0, 'createdAt': createdAt}
-          ],
-          // 'location':
-        });
-        users.doc(user.user!.uid).set({'createdAt': createdAt});
-        // await PurchaseApi.init();
-      });
-    } else {
-      //   PurchaseApi.init();
-      print('User Already Registered: $current');
-    }
+    // final User? current = firebaseAuth.currentUser;
+    // final CollectionReference users = firebaseStore.collection('users');
+    // if (current == null) {
+    //   signInAnon().then((UserCredential user) async {
+    //     print('New User Registered: ${user.user!.uid}');
+    //     await users.doc(user.user!.uid).collection('votes').doc().set({
+    //       'pien_rate': [
+    //         {'cho_pien': 0, 'creaateAt': createdAt},
+    //         {'pien': 0, 'createdAt': createdAt},
+    //         {'not_pien': 0, 'createdAt': createdAt}
+    //       ],
+    //       // 'location':
+    //     });
+    //     users.doc(user.user!.uid).set({'createdAt': createdAt});
+    //     // await PurchaseApi.init();
+    //   });
+    // } else {
+    //   //   PurchaseApi.init();
+    //   print('User Already Registered: $current');
+    // }
   }
 
   @override
