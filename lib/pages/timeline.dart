@@ -145,7 +145,7 @@ class Timeline extends ConsumerWidget {
                         child: Consumer(builder: (context, watch, child) {
                           final weatherState =
                               watch(weatherStateNotifierProvider);
-                          return weatherState.maybeWhen(
+                          return weatherState.when(
                               initial: () {
                                 Future.delayed(
                                     Duration.zero,
@@ -180,7 +180,18 @@ class Timeline extends ConsumerWidget {
                                     ),
                                   )),
                               loading: () => Container(),
-                              orElse: () => Container());
+                              error: (String? message) {
+                                return SnackBar(
+                                  content: Text(message.toString()),
+                                  action: SnackBarAction(
+                                    label: 'OK',
+                                    onPressed: () {
+                                      // Some code to undo the change.
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                );
+                              });
                         }),
                       ),
                     ],

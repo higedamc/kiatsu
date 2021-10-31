@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/utils/providers.dart';
+import 'package:purchases_flutter/purchaser_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -34,10 +37,17 @@ class HomePage extends ConsumerWidget {
         .getWeather(cityName);
   }
 
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final cityName = watch(cityNameProvider).state;
+    // Future<bool> isPurchased() async {
+    //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
+    //   if (purchaseInfo.entitlements.all["pro"]!.isActive) {
+    //     return true;
+    //   } else
+    //     return false;
+    // }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: NeumorphicAppBar(
@@ -119,9 +129,7 @@ class HomePage extends ConsumerWidget {
                                     ));
                             return Container();
                           },
-                          loading: () => Container(
-                            
-                          ),
+                          loading: () => Container(),
                           success: (data) => NeumorphicText(
                             data.main!.pressure.toString(),
                             style: NeumorphicStyle(
@@ -134,9 +142,7 @@ class HomePage extends ConsumerWidget {
                               fontSize: 75.0,
                             ),
                           ),
-                          orElse: () => Container(
-                            
-                          ),
+                          orElse: () => Container(),
                         );
                       },
                     ),
@@ -177,10 +183,10 @@ class HomePage extends ConsumerWidget {
                       return Container();
                     },
                     loading: () => Container(
-                      // child: Center(
-                      //   child: const Text('FETCHING DATA...'),
-                      // ),
-                    ),
+                        // child: Center(
+                        //   child: const Text('FETCHING DATA...'),
+                        // ),
+                        ),
                     success: (data) => Container(
                       height: 140,
                       alignment: Alignment.center,
@@ -342,54 +348,65 @@ class HomePage extends ConsumerWidget {
             // if (snapshot.hasData)
             await Navigator.of(context).pushNamed('/timeline');
           }),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        notchMargin: 6.0,
-        shape: AutomaticNotchedShape(
-            RoundedRectangleBorder(),
-            StadiumBorder(
-              side: BorderSide(),
-            )),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.search_outlined,
-                  color: Colors.black,
+      bottomNavigationBar: Container(
+        child: BottomAppBar(
+          color: Colors.white,
+          notchMargin: 6.0,
+          shape: AutomaticNotchedShape(
+              RoundedRectangleBorder(),
+              StadiumBorder(
+                side: BorderSide(),
+              )),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.search_outlined,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    // Navigator.of(context).pushNamed('/timeline');
+                    // 未実装ダイアログ
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialogBox(
+                            title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                            descriptions: "この機能はまだ未実装です♡",
+                            text: "おけまる",
+                            key: UniqueKey(),
+                          );
+                        });
+                  },
                 ),
-                onPressed: () {
-                  // Navigator.of(context).pushNamed('/timeline');
-                  // 未実装ダイアログ
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomDialogBox(
-                          title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                          descriptions: "この機能はまだ未実装です♡",
-                          text: "おけまる",
-                          key: UniqueKey(),
-                        );
-                      });
-                },
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.home_outlined,
-                  color: Colors.black,
+                IconButton(
+                  icon: const Icon(
+                    Icons.home_outlined,
+                    color: Colors.black,
+                  ),
+                  onPressed: () async {
+                    await Navigator.of(context).pushNamed('/a');
+                  },
                 ),
-                onPressed: () async {
-                  await Navigator.of(context).pushNamed('/a');
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+Widget buildAdmob(Entitlement entitlement) {
+  switch (entitlement) {
+    case Entitlement.pro:
+      return Container();
+    case Entitlement.free:
+      return Center(child: Text('＾q＾'));
   }
 }
 
