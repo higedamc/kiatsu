@@ -4,6 +4,8 @@
 
 <img src="https://github.com/higedamc/kiatsu/blob/master/screenshots/IMG_2924.jpg">
 
+[![Codemagic build status](https://api.codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/status_badge.svg)](https://codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/latest_build)
+
 シンプルな気圧測定アプリ / A simple application for meteoropathy
 
 # How To Use
