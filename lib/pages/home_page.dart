@@ -24,6 +24,7 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
 final currentUser = firebaseAuth.currentUser;
 
+
 class HomePage extends ConsumerWidget {
   late final String? cityName;
   final DateTime updatedAt = DateTime.now();
@@ -39,6 +40,12 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+  //   Future<bool> isPurchased() async {
+  //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
+  //   if(purchaseInfo.entitlements.all["pro"]!.isActive){
+  //     return true;
+  //   } else return false;
+  // }
     final cityName = watch(cityNameProvider).state;
     // Future<bool> isPurchased() async {
     //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();

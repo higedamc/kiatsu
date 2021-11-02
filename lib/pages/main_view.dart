@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
-import 'package:kiatsu/pages/iap_page.dart';
 import 'package:kiatsu/pages/purchase_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
@@ -37,10 +36,9 @@ class MainView extends StatelessWidget {
             '/home': (BuildContext context) => HomePage(),
             '/signpage': (BuildContext context) => SignInPage(),
             '/dialog': (BuildContext context) => Dialogs(),
-            '/iap': (BuildContext context) => IAPScreen(key: UniqueKey()),
             '/sub': (BuildContext context) => SubscriptionsPage(),
             '/con': (BuildContext context) => ConsumablesPage(),
-            '/buy': (BuildContext context) => DevPurchasePage(),
+            '/dev': (BuildContext context) => DevPurchasePage(),
           },
           home: SplashPage(),
         ));

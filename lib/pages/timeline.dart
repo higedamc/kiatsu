@@ -184,10 +184,8 @@ class Timeline extends ConsumerWidget {
                                 return SnackBar(
                                   content: Text(message.toString()),
                                   action: SnackBarAction(
-                                    label: 'OK',
+                                    label: 'りょ',
                                     onPressed: () {
-                                      // Some code to undo the change.
-                                      Navigator.pop(context);
                                     },
                                   ),
                                 );

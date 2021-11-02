@@ -114,9 +114,9 @@ class SettingPage extends StatelessWidget {
                       title: '有料機能',
                       subtitle: '押',
                       // leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
-                      onPressed: (_) async {
+                      onPressed: (context) async {
                         // Navigator.pushNamed(_, '/iap');
-                         Navigator.pushNamed(context, '/buy');
+                         Navigator.pushNamed(context, '/dev');
                         // Navigator.pop(context);
                       }),
             ],
