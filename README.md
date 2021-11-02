@@ -22,7 +22,7 @@ TWITTER_SECRET_KEY='YOUR_SECRET_KEY'
 ```
 3. env配下のproduction.dartを起動
 
-# 今後実装する機能 / Future Feature1
+# 今後実装する機能 / Future Feature2
 
 - [ ] 全国気圧ヒートマップ
 - [ ] 1週間分の気圧変化チャート
