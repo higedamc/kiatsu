@@ -19,6 +19,8 @@ import 'custom_dialog_box.dart';
  * 詳細は => https://github.com/Meshkat-Shadik/WeatherApp
  */
 
+// TODO: #107 StoreKitTestCertificate.cerを追加
+
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
