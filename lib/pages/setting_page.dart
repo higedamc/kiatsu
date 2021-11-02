@@ -51,8 +51,8 @@ class SettingPage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('危険です！'),
-                          content: Text('本当にアカウントを削除しますか？'),
+                          title: Text('確認'),
+                          content: Text('サインアウトしますか？'),
                           actions: <Widget>[
                             TextButton(
                                 onPressed: () => Navigator.pop(context),
@@ -74,6 +74,7 @@ class SettingPage extends StatelessWidget {
                       builder: (context) {
                         return AlertDialog(
                           title: Text('危険です！'),
+                          // TODO: 下記の変更をcommitする
                           content: Text('本当にアカウントを削除しますか？'),
                           actions: <Widget>[
                             TextButton(

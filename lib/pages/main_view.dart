@@ -47,7 +47,7 @@ class MainView extends StatelessWidget {
 
 class SplashPage extends MainView {
   // final DateTime createdAt = new DateTime.now();
-  // final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   // final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 
   // Future<UserCredential> signInAnon() async {
@@ -56,7 +56,7 @@ class SplashPage extends MainView {
   // }
 
   SplashPage() {
-    // final User? current = firebaseAuth.currentUser;
+    final User? current = firebaseAuth.currentUser;
     // final CollectionReference users = firebaseStore.collection('users');
     // if (current == null) {
     //   signInAnon().then((UserCredential user) async {
@@ -76,6 +76,9 @@ class SplashPage extends MainView {
     //   //   PurchaseApi.init();
     //   print('User Already Registered: $current');
     // }
+    if (current != null) {
+      print(current.uid);
+    }
   }
 
   @override
