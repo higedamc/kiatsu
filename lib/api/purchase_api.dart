@@ -11,9 +11,10 @@ class Coins {
   // for iOS
   static const removeAdsIOS = 'kiatsu_250_remove_ads';
   static const tipMe = 'tip_me';
+  static const subsc = 'kiatsu_pro_1m';
   static final _apiKey = dotenv.dotenv.env['REVENUECAT_SECRET_KEY'].toString();
   // Added some
-  static const allIds = [removeAds, tipMe, removeAdsIOS];
+  static const allIds = [removeAds, tipMe, removeAdsIOS, subsc];
 }
 
 class PurchaseApi {
@@ -22,7 +23,7 @@ class PurchaseApi {
 
   static final current = getCurrentUser();
 
-  static Future init() async {
+  static Future<void> init() async {
 
     await Purchases.setDebugLogsEnabled(true);
     await dotenv.dotenv.load(fileName: ".env");

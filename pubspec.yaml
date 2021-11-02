@@ -18,6 +18,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  admob_flutter: ^1.0.1
   apple_sign_in: ^0.1.0
   cloud_firestore: ^2.5.0
   crypto: ^3.0.1
@@ -32,6 +33,7 @@ dependencies:
   flutter_flavor: ^3.0.3
   flutter_hooks: ^0.18.0
   flutter_launcher_icons: ^0.9.0
+  flutter_line_sdk: ^2.0.0
   flutter_neumorphic:
     git:
       url: https://github.com/tsvillain/Flutter-Neumorphic.git
@@ -92,6 +94,7 @@ flutter:
   assets:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
+    - assets/images/line.png
     # - images/
     - assets/
     - .env
