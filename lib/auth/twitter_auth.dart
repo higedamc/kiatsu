@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_twitter_login/flutter_twitter_login.dart' show TwitterLogin, TwitterSession;
+import 'package:twitter_login/twitter_login.dart';
 
 // TODO: #106 twitter_loginに乗り換え
 class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
 
-    consumerKey: dotenv.env['TWITTER_CONSUMER_KEY'].toString(),
-    consumerSecret: dotenv.env['TWITTER_SECRET_KEY'].toString(),
+    apiKey: dotenv.env['TWITTER_CONSUMER_KEY'].toString(),
+    apiSecretKey: dotenv.env['TWITTER_SECRET_KEY'].toString(),
+    redirectURI: 'twitterkit-qIQKdcDM2rworcBDbaHbYb7PO://',
 
 
   );
@@ -29,15 +30,15 @@ class TwitterAuthUtil {
   }
 
   static Future<UserCredential> signInWithTwitter(BuildContext context) async {
-    final _user = FirebaseAuth.instance.currentUser;
-    final result = await _twitter.authorize();
-    final TwitterSession session = result.session;
+    // final _user = FirebaseAuth.instance.currentUser;
+    final newUser = FirebaseAuth.instance;
+    final session = await _twitter.login();
 
     final AuthCredential twitterAuthCredential =
         TwitterAuthProvider.credential(
-          accessToken: session.token,
-          secret: session.secret,
+          accessToken: session.authToken.toString(),
+          secret: session.authTokenSecret.toString(),
         );
-    return await _user!.linkWithCredential(twitterAuthCredential);
+    return await newUser.signInWithCredential(twitterAuthCredential);
   }
 }
