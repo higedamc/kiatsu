@@ -1,0 +1,1 @@
+enum Entitlement { free, pro }

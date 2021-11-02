@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart' show TwitterLogin, TwitterSession;
 
-
+// TODO: #106 twitter_loginに乗り換え
 class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
 
-    consumerKey: env['TWITTER_CONSUMER_KEY'],
-    consumerSecret: env['TWITTER_SECRET_KEY'],
+    consumerKey: dotenv.env['TWITTER_CONSUMER_KEY'].toString(),
+    consumerSecret: dotenv.env['TWITTER_SECRET_KEY'].toString(),
 
 
   );

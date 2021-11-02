@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:github_sign_in/github_sign_in.dart' show GitHubSignIn;
+import 'package:github_sign_in/github_sign_in.dart';
 
 class GithubAuthUtil {
   static final GitHubSignIn _github = GitHubSignIn(
-    clientId: env['GITHUB_CLIENT_ID'],
-    clientSecret: env['GITHUB_CLIENT_SECRET'],
-    redirectUrl: env['FIREBASE_REDIRECT_URL'],
+    clientId: dotenv.env['GITHUB_CLIENT_ID'].toString(),
+    clientSecret: dotenv.env['GITHUB_CLIENT_SECRET'].toString(),
+    redirectUrl: dotenv.env['FIREBASE_REDIRECT_URL'].toString(),
   );
 
   /// サインイン中か

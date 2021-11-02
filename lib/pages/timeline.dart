@@ -4,11 +4,10 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:kiatsu/model/weather_model.dart';
-import 'package:kiatsu/utils/get_weather.dart';
-
+import 'package:kiatsu/utils/providers.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -19,21 +18,26 @@ Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
     .snapshots();
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
-final weather = GetWeather().getWeather();
 
-class Timeline extends StatelessWidget {
+void submitCityName(BuildContext context, String cityName) async {
+  await context
+      .read(weatherStateNotifierProvider.notifier)
+      .getWeather(cityName);
+}
+
+class Timeline extends ConsumerWidget {
   Timeline({required Key key}) : super(key: key);
+  late final String? cityName;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
-      appBar: NeumorphicAppBar(
+      appBar: neu.NeumorphicAppBar(
         title: Text('お気持ち投稿の場'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(
@@ -55,25 +59,22 @@ class Timeline extends StatelessWidget {
                       margin: EdgeInsets.all(10.0),
                       padding: EdgeInsets.all(2.0),
                       child: Column(children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.cloud_circle,
-                                size: 40,
-                                color: Colors.black,
-                              ),
-                              title: Text(
-                                  docSnapshot.data()!['comment'].toString(),
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.black)),
-                              subtitle: Text(
-                                (docSnapshot.data()!['location'].toString() ==
-                                        "null")
-                                    ? "電子の海"
-                                    : docSnapshot
-                                        .data()!['location']
-                                        .toString(),
-                              ),
-                            ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.cloud_circle,
+                            size: 40,
+                            color: Colors.black,
+                          ),
+                          title: Text(docSnapshot.data()!['comment'].toString(),
+                              style: TextStyle(
+                                  fontSize: 18.0, color: Colors.black)),
+                          subtitle: Text(
+                            (docSnapshot.data()!['location'].toString() ==
+                                    "null")
+                                ? "電子の海"
+                                : docSnapshot.data()!['location'].toString(),
+                          ),
+                        ),
                       ]),
                     ),
                     actions: <Widget>[
@@ -141,10 +142,20 @@ class Timeline extends StatelessWidget {
                       Positioned(
                         top: 140,
                         right: 1,
-                        child: FutureBuilder<WeatherClass>(
-                            future: weather,
-                            builder: (context, snapshot) {
-                              return TextButton(
+                        child: Consumer(builder: (context, watch, child) {
+                          final weatherState =
+                              watch(weatherStateNotifierProvider);
+                          return weatherState.when(
+                              initial: () {
+                                Future.delayed(
+                                    Duration.zero,
+                                    () => submitCityName(
+                                          context,
+                                          cityName.toString(),
+                                        ));
+                                return Container();
+                              },
+                              success: (data) => TextButton(
                                   onPressed: () async {
                                     await users
                                         .doc(currentUser!.uid)
@@ -154,22 +165,32 @@ class Timeline extends StatelessWidget {
                                       'comment': _editor.text,
                                       'createdAt': createdAt,
                                       'userId': currentUser!.uid,
-                                      'location':
-                                          snapshot.data!.name.toString(),
+                                      'location': data.name.toString(),
                                     });
                                     // print(createdAt.toString());
                                     Navigator.of(context).pop();
                                   },
-                                  child: NeumorphicText(
+                                  child: neu.NeumorphicText(
                                     '押',
-                                    style: NeumorphicStyle(
+                                    style: neu.NeumorphicStyle(
                                       color: Colors.black87,
                                     ),
-                                    textStyle: NeumorphicTextStyle(
+                                    textStyle: neu.NeumorphicTextStyle(
                                       fontSize: 30,
                                     ),
-                                  ));
-                            }),
+                                  )),
+                              loading: () => Container(),
+                              error: (String? message) {
+                                return SnackBar(
+                                  content: Text(message.toString()),
+                                  action: SnackBarAction(
+                                    label: 'りょ',
+                                    onPressed: () {
+                                    },
+                                  ),
+                                );
+                              });
+                        }),
                       ),
                     ],
                   )),

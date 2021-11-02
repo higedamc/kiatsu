@@ -12,42 +12,53 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.1.7+383
+version: 0.1.8+445
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  flutter_twitter_login:
-    git:
-      url: git://github.com/eudangeld/flutter_twitter_login.git
+  admob_flutter: ^1.0.1
   apple_sign_in: ^0.1.0
-  cloud_firestore: ^2.1.0
+  cloud_firestore: ^2.5.0
   crypto: ^3.0.1
   cupertino_icons: ^1.0.3
-  firebase_auth: ^1.1.4
-  firebase_core: ^1.1.1
-  firebase_crashlytics: ^2.0.3
-  fl_chart: ^0.36.1
-  flutter_dotenv: ^4.0.0-nullsafety.1
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.5.0
+  firebase_crashlytics: ^2.2.0
+  fl_chart: ^0.40.0
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^5.0.2
+  flutter_flavor: ^3.0.3
+  flutter_hooks: ^0.18.0
   flutter_launcher_icons: ^0.9.0
-  flutter_neumorphic: ^3.1.0
+  flutter_line_sdk: ^2.0.0
+  flutter_neumorphic:
+    git:
+      url: https://github.com/tsvillain/Flutter-Neumorphic.git
+  flutter_riverpod: ^0.14.0+3
   flutter_slidable: ^0.6.0
+  fluttertoast: ^8.0.8
   font_awesome_flutter: ^9.0.0
+  freezed_annotation: ^0.14.2
   geocoder: ^0.2.1
+  geocoding: ^2.0.1
   geolocation: ^1.1.2
   geolocator: ^7.0.3
-  geopoint: ^0.8.0
+  geopoint: ^1.0.0
   get_it: ^7.1.3
   github_sign_in: ^0.0.4
+  google_sign_in: ^5.0.7
+  hooks_riverpod: ^0.14.0+5
   http: ^0.13.3
+  meta: ^1.7.0
   modal_bottom_sheet: ^2.0.0
   package_info: ^2.0.0
   permission_handler: ^8.0.0+2
-  provider: ^5.0.0
-  purchases_flutter: ^3.2.2
+  provider: ^6.0.0
+  purchases_flutter: ^3.4.3
+  riverpod: ^0.14.0+3
   settings_ui: ^1.0.0
   share: ^2.0.1
   shared_preferences: ^2.0.5
@@ -59,8 +70,14 @@ dependencies:
   wiredash: ^0.7.0+1
 
 dev_dependencies:
+  build_runner: ^2.0.5
   flutter_test:
     sdk: flutter
+  flutter_twitter_login:
+    git:
+      url: git://github.com/eudangeld/flutter_twitter_login.git
+  freezed: ^0.14.2
+  json_serializable: ^4.1.3
 flutter_icons:
   android: "launcher_icon"
   ios: true
@@ -77,9 +94,11 @@ flutter:
   assets:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
+    - assets/images/line.png
     # - images/
     - assets/
     - .env
+
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg

@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:apple_sign_in/apple_id_request.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:apple_sign_in/scope.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 String generateNonce([int length = 32]) {
@@ -24,7 +20,6 @@ String sha256ofString(String input) {
   return digest.toString();
 }
 
-
 class AppleAuthUtil {
   // static final AppleSignIn _appleSignIn = AppleSignIn(
   //   // clientId: '********',
@@ -35,12 +30,11 @@ class AppleAuthUtil {
 
   /// サインイン中か
   static bool isSignedIn() => FirebaseAuth.instance.currentUser != null;
+
   /// 現在のユーザー情報
   static User? getCurrentUser() => FirebaseAuth.instance.currentUser;
   // emailが認証済みかどうか
   static bool isEmailVerified() => getCurrentUser()!.emailVerified == true;
-
-  
 
   /// サインアウト
   static void signOut() => FirebaseAuth.instance.signOut();
@@ -52,14 +46,14 @@ class AppleAuthUtil {
     return credential.user;
     // return user;
   }
+
   static Future<void> forceLink(BuildContext context) async {
     final _auth = FirebaseAuth.instance;
     final _user = _auth.currentUser;
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
 
-
-      
+    try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -73,18 +67,33 @@ class AppleAuthUtil {
         rawNonce: rawNonce,
       );
 
-      await _user!.linkWithCredential(oAuthCredential);
+      await _user?.linkWithCredential(oAuthCredential);
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      if (e.code == 'account-exists-with-different-credential' ||
+          e.code == 'credential-already-in-use') {
+        // User canceled the sign-in flow.
+        String? email = e.email;
+        AuthCredential? pendingCredential = e.credential;
+        List<String?> userSignInMethods =
+            await FirebaseAuth.instance.fetchSignInMethodsForEmail(email!);
+        if (userSignInMethods.contains('apple.com')) {
+          // User has a different sign-in method.
+          await _user!
+              .linkWithCredential(pendingCredential!);
+        }
+      } else {
+        print(e.code);
+      }
+    }
   }
 
-
   static Future<UserCredential> signInWithApple() async {
-    
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
     var userCredential;
     // Request credential for the currently signed in Apple account.
     try {
-      
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -98,14 +107,32 @@ class AppleAuthUtil {
         rawNonce: rawNonce,
       );
 
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
       print(userCredential);
-
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       print(e.toString());
+      if (e.code == 'account-exists-with-different-credential') {
+        // User canceled the sign-in flow.
+        String? email = e.email;
+        AuthCredential? pendingCredential = e.credential;
+        List<String?> userSignInMethods =
+            await FirebaseAuth.instance.fetchSignInMethodsForEmail(email!);
+        if (userSignInMethods.contains('apple.com')) {
+          // User has a different sign-in method.
+          await FirebaseAuth.instance.currentUser!
+              .reauthenticateWithCredential(pendingCredential!);
+        } else {
+          // User has a different sign-in method.
+          // ...
+        }
+
+        print('User canceled the sign-in flow.');
+      } else {
+        print(e.code);
+      }
     }
     print('サインインされました');
     return userCredential;
   }
-
 }
