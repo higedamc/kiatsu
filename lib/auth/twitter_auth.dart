@@ -7,8 +7,8 @@ import 'package:flutter_twitter_login/flutter_twitter_login.dart' show TwitterLo
 class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
 
-    consumerKey: dotenv.env['TWITTER_CONSUMER_KEY'],
-    consumerSecret: dotenv.env['TWITTER_SECRET_KEY'],
+    consumerKey: dotenv.env['TWITTER_CONSUMER_KEY'].toString(),
+    consumerSecret: dotenv.env['TWITTER_SECRET_KEY'].toString(),
 
 
   );

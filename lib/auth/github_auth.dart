@@ -5,9 +5,9 @@ import 'package:github_sign_in/github_sign_in.dart';
 
 class GithubAuthUtil {
   static final GitHubSignIn _github = GitHubSignIn(
-    clientId: dotenv.env['GITHUB_CLIENT_ID'],
-    clientSecret: dotenv.env['GITHUB_CLIENT_SECRET'],
-    redirectUrl: dotenv.env['FIREBASE_REDIRECT_URL'],
+    clientId: dotenv.env['GITHUB_CLIENT_ID'].toString(),
+    clientSecret: dotenv.env['GITHUB_CLIENT_SECRET'].toString(),
+    redirectUrl: dotenv.env['FIREBASE_REDIRECT_URL'].toString(),
   );
 
   /// サインイン中か
