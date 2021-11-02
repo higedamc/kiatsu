@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart' show TwitterLogin, TwitterSession;
 
-
+// TODO: #106 twitter_loginに乗り換え
 class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/pages/custom_dialog_box.dart';
 
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -110,14 +111,25 @@ class SettingPage extends StatelessWidget {
               //           // fetchOffers2(context);
               //         })
                   // : 
+                  // TODO: 有料機能を一時的に無効化する
                   SettingsTile(
                       title: '有料機能',
                       subtitle: '押',
                       // leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
                       onPressed: (context) async {
                         // Navigator.pushNamed(_, '/iap');
-                         Navigator.pushNamed(context, '/dev');
+                        //  Navigator.pushNamed(context, '/dev');
                         // Navigator.pop(context);
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialogBox(
+                            title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                            descriptions: "この機能はまだ未実装です♡",
+                            text: "おけまる",
+                            key: UniqueKey(),
+                          );
+                        });
                       }),
             ],
           ),
