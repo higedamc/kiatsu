@@ -34,5 +34,3 @@ TWITTER_SECRET_KEY='YOUR_SECRET_KEY'
 ## Contact
 
 [フィードバック](<mailto:jstache@tutanota.com>)
-
-Test3

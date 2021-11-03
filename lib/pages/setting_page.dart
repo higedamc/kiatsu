@@ -74,7 +74,6 @@ class SettingPage extends StatelessWidget {
                       builder: (context) {
                         return AlertDialog(
                           title: Text('危険です！'),
-                          // TODO: 下記の変更をcommitする
                           content: Text('本当にアカウントを削除しますか？'),
                           actions: <Widget>[
                             TextButton(
@@ -112,7 +111,6 @@ class SettingPage extends StatelessWidget {
               //           // fetchOffers2(context);
               //         })
                   // : 
-                  // TODO: 有料機能を一時的に無効化する
                   SettingsTile(
                       title: '有料機能',
                       subtitle: '押',
