@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/utils/providers.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser!.uid;
+final user = firebaseAuth.currentUser;
 Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
     .collectionGroup('comments')
     .orderBy('createdAt', descending: true)
@@ -40,10 +42,7 @@ class Timeline extends ConsumerWidget {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
-            return Center(
-                child: CircularProgressIndicator(
-              backgroundColor: Colors.blue,
-            ));
+            return Center(child: Text('この機能を使うにはログインする必要があります'));
           return ListView(
             children: snapshot.data.docs.map<Widget>(
                 (DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
@@ -78,7 +77,7 @@ class Timeline extends ConsumerWidget {
                       ]),
                     ),
                     actions: <Widget>[
-                      if (docSnapshot.data()!.containsValue(currentUser!.uid))
+                      if (docSnapshot.data()!.containsValue(currentUser?.uid))
                         IconSlideAction(
                           caption: '削除',
                           color: Colors.red[700],
@@ -108,93 +107,111 @@ class Timeline extends ConsumerWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            final DateTime createdAt = new DateTime.now();
-            var _editor = TextEditingController();
-            showDialog(
-              context: context,
-              builder: (context) => Dialog(
-                  backgroundColor: Colors.transparent,
-                  insetPadding: EdgeInsets.all(10),
-                  child: Stack(
-                    // ignore: deprecated_member_use
-                    overflow: Overflow.visible,
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white),
-                        padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          controller: _editor,
-                          cursorWidth: 2,
-                          cursorColor: Colors.grey,
-                          decoration: InputDecoration(
-                            hintText: '自由にコメントしてね🥺',
-                            border: InputBorder.none,
+            if (user == null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => SignInPage(),
+                      //   ),
+                      // );
+                      Navigator.pushNamed(context, '/sign');
+                    },
+                  ),
+                  content: Text('ログインしていないため使用できません。設定画面を開きますか?')));
+            }
+            if (user != null) {
+              final DateTime createdAt = new DateTime.now();
+              var _editor = TextEditingController();
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                    backgroundColor: Colors.transparent,
+                    insetPadding: EdgeInsets.all(10),
+                    child: Stack(
+                      // ignore: deprecated_member_use
+                      overflow: Overflow.visible,
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white),
+                          padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+                          child: TextField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            controller: _editor,
+                            cursorWidth: 2,
+                            cursorColor: Colors.grey,
+                            decoration: InputDecoration(
+                              hintText: '自由にコメントしてね🥺',
+                              border: InputBorder.none,
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 140,
-                        right: 1,
-                        child: Consumer(builder: (context, watch, child) {
-                          final weatherState =
-                              watch(weatherStateNotifierProvider);
-                          return weatherState.when(
-                              initial: () {
-                                Future.delayed(
-                                    Duration.zero,
-                                    () => submitCityName(
-                                          context,
-                                          cityName.toString(),
-                                        ));
-                                return Container();
-                              },
-                              success: (data) => TextButton(
-                                  onPressed: () async {
-                                    await users
-                                        .doc(currentUser!.uid)
-                                        .collection('comments')
-                                        .doc()
-                                        .set({
-                                      'comment': _editor.text,
-                                      'createdAt': createdAt,
-                                      'userId': currentUser!.uid,
-                                      'location': data.name.toString(),
-                                    });
-                                    // print(createdAt.toString());
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: neu.NeumorphicText(
-                                    '押',
-                                    style: neu.NeumorphicStyle(
-                                      color: Colors.black87,
-                                    ),
-                                    textStyle: neu.NeumorphicTextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  )),
-                              loading: () => Container(),
-                              error: (String? message) {
-                                return SnackBar(
-                                  content: Text(message.toString()),
-                                  action: SnackBarAction(
-                                    label: 'りょ',
-                                    onPressed: () {
+                        Positioned(
+                          top: 140,
+                          right: 1,
+                          child: Consumer(builder: (context, watch, child) {
+                            final weatherState =
+                                watch(weatherStateNotifierProvider);
+                            return weatherState.when(
+                                initial: () {
+                                  Future.delayed(
+                                      Duration.zero,
+                                      () => submitCityName(
+                                            context,
+                                            cityName.toString(),
+                                          ));
+                                  return Container();
+                                },
+                                success: (data) => TextButton(
+                                    onPressed: () async {
+                                      await users
+                                          .doc(currentUser!.uid)
+                                          .collection('comments')
+                                          .doc()
+                                          .set({
+                                        'comment': _editor.text,
+                                        'createdAt': createdAt,
+                                        'userId': currentUser!.uid,
+                                        'location': data.name.toString(),
+                                      });
+                                      // print(createdAt.toString());
+                                      Navigator.of(context).pop();
                                     },
-                                  ),
-                                );
-                              });
-                        }),
-                      ),
-                    ],
-                  )),
-            );
+                                    child: neu.NeumorphicText(
+                                      '押',
+                                      style: neu.NeumorphicStyle(
+                                        color: Colors.black87,
+                                      ),
+                                      textStyle: neu.NeumorphicTextStyle(
+                                        fontSize: 30,
+                                      ),
+                                    )),
+                                loading: () => Container(),
+                                error: (String? message) {
+                                  return SnackBar(
+                                    content: Text(message.toString()),
+                                    action: SnackBarAction(
+                                      label: 'りょ',
+                                      onPressed: () {},
+                                    ),
+                                  );
+                                });
+                          }),
+                        ),
+                      ],
+                    )),
+              );
+            }
+            
           },
         ),
       ),

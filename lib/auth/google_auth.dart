@@ -7,6 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 // 参考: https://qiita.com/smiler5617/items/f94fdc1afe088586715b
 
+// TODO: 本リリースまでに実装する
+
 class GoogleAuthUtil {
   // static final GoogleSignIn _google = GoogleSignIn(
 

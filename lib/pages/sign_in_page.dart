@@ -8,6 +8,7 @@ import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/github_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
+import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:provider/provider.dart';
 import 'package:social_auth_buttons/res/buttons/apple_auth_button.dart';
@@ -48,7 +49,7 @@ class SignInPage extends StatelessWidget {
                     onPressed: () async {
                       if (now == null) {
                         // await AppleAuthUtil.forceLink(context);
-                        await AppleAuthUtil.signInWithApple();
+                        await AppleAuthUtil.signInWithApple(context);
                         print(now?.uid);
                       } else {
                         print('Apple IDでサイン済み');
@@ -146,7 +147,18 @@ class SignInPage extends StatelessWidget {
                               padding: EdgeInsets.fromLTRB(1, 10, 50, 10),
                           ),
                           onPressed: () async {
-                          final result = LineSDK.instance.login();
+                          // final result = LineSDK.instance.login();
+                          showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialogBox(
+                            title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                            descriptions: "この機能はまだ未実装です♡",
+                            text: "おけまる",
+                            key: UniqueKey(),
+                          );
+                        });
+
                           },
                            icon: Image.asset('assets/images/line.png'),
                            label: Padding(

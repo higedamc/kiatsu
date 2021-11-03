@@ -34,7 +34,7 @@ class MainView extends StatelessWidget {
                   key: UniqueKey(),
                 ),
             '/home': (BuildContext context) => HomePage(),
-            '/signpage': (BuildContext context) => SignInPage(),
+            '/sign': (BuildContext context) => SignInPage(),
             '/dialog': (BuildContext context) => Dialogs(),
             '/sub': (BuildContext context) => SubscriptionsPage(),
             '/con': (BuildContext context) => ConsumablesPage(),

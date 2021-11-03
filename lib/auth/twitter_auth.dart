@@ -35,8 +35,10 @@ class TwitterAuthUtil {
     );
     (session.status == TwitterLoginStatus.cancelledByUser)
         ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('ログインがキャンセルされました。アプリを終了してください'),
-      ))
-        : await newUser.signInWithCredential(twitterAuthCredential);
+            content: Text('ログインがキャンセルされました。'),
+          ))
+        : newUser
+            .signInWithCredential(twitterAuthCredential)
+            .then((_) async => Navigator.pop(context));
   }
 }

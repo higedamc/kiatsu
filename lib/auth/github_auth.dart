@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:github_sign_in/github_sign_in.dart';
 
+// TODO: ログインキャンセル時のエラーハンドリングをする
+// TODO: 本リリースまでに実装する
+
 class GithubAuthUtil {
   static final GitHubSignIn _github = GitHubSignIn(
     clientId: dotenv.env['GITHUB_CLIENT_ID'].toString(),
