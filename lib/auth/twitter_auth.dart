@@ -25,6 +25,8 @@ class TwitterAuthUtil {
     return credential?.user;
   }
 
+  // TODO: #113 Firebaseにアカウントが登録されない問題を修正する
+  // TODO: 実機での動作確認
   static Future<UserCredential?> signInWithTwitter(BuildContext context) async {
     // final _user = FirebaseAuth.instance.currentUser;
     final newUser = FirebaseAuth.instance;

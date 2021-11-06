@@ -59,17 +59,32 @@ class Timeline extends ConsumerWidget {
                       padding: EdgeInsets.all(2.0),
                       child: Column(children: [
                         ListTile(
-                          leading: Icon(
-                            Icons.cloud_circle,
-                            size: 40,
-                            color: Colors.black,
-                          ),
+                          leading: (docSnapshot
+                                  .data()!
+                                  .containsValue(currentUser?.uid))
+                              ? CircleAvatar(
+                                  radius: 20.0,
+                                  child: ClipRRect(
+                                    // TODO: Firestoreにアップロードした画像を表示するようにする
+                                    child: Image.asset('assets/model.jpg'),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.cloud_circle,
+                                  size: 44.0,
+                                  color: Colors.black,
+                                ),
                           title: Text(docSnapshot.data()!['comment'].toString(),
                               style: TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
                           subtitle: Text(
                             (docSnapshot.data()!['location'].toString() ==
-                                    "null")
+                                        "null" ||
+                                    docSnapshot
+                                            .data()!['location']
+                                            .toString() ==
+                                        'Cupertino')
                                 ? "電子の海"
                                 : docSnapshot.data()!['location'].toString(),
                           ),
@@ -98,123 +113,106 @@ class Timeline extends ConsumerWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: () {},
-        child: IconButton(
-          icon: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            if (user == null) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  action: SnackBarAction(
-                    label: 'OK',
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => SignInPage(),
-                      //   ),
-                      // );
-                      Navigator.pushNamed(context, '/sign');
-                    },
-                  ),
-                  content: Text('ログインしていないため使用できません。設定画面を開きますか?')));
-            }
-            if (user != null) {
-              final DateTime createdAt = new DateTime.now();
-              var _editor = TextEditingController();
-              showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                    backgroundColor: Colors.transparent,
-                    insetPadding: EdgeInsets.all(10),
-                    child: Stack(
-                      // ignore: deprecated_member_use
-                      overflow: Overflow.visible,
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          height: 200,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white),
-                          padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
-                          child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            controller: _editor,
-                            cursorWidth: 2,
-                            cursorColor: Colors.grey,
-                            decoration: InputDecoration(
-                              hintText: '自由にコメントしてね🥺',
-                              border: InputBorder.none,
+      floatingActionButton: (user == null)
+          ? null
+          : FloatingActionButton(
+              backgroundColor: Colors.black,
+              onPressed: () {},
+              child: IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  final DateTime createdAt = new DateTime.now();
+                  var _editor = TextEditingController();
+                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                        backgroundColor: Colors.transparent,
+                        insetPadding: EdgeInsets.all(10),
+                        child: Stack(
+                          // ignore: deprecated_member_use
+                          overflow: Overflow.visible,
+                          alignment: Alignment.center,
+                          children: <Widget>[
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.white),
+                              padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+                              child: TextField(
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                controller: _editor,
+                                cursorWidth: 2,
+                                cursorColor: Colors.grey,
+                                decoration: InputDecoration(
+                                  hintText: '自由にコメントしてね🥺',
+                                  border: InputBorder.none,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 140,
-                          right: 1,
-                          child: Consumer(builder: (context, watch, child) {
-                            final weatherState =
-                                watch(weatherStateNotifierProvider);
-                            return weatherState.when(
-                                initial: () {
-                                  Future.delayed(
-                                      Duration.zero,
-                                      () => submitCityName(
-                                            context,
-                                            cityName.toString(),
-                                          ));
-                                  return Container();
-                                },
-                                success: (data) => TextButton(
-                                    onPressed: () async {
-                                      await users
-                                          .doc(currentUser!.uid)
-                                          .collection('comments')
-                                          .doc()
-                                          .set({
-                                        'comment': _editor.text,
-                                        'createdAt': createdAt,
-                                        'userId': currentUser!.uid,
-                                        'location': data.name.toString(),
-                                      });
-                                      // print(createdAt.toString());
-                                      Navigator.of(context).pop();
+                            Positioned(
+                              top: 140,
+                              right: 1,
+                              child: Consumer(builder: (context, watch, child) {
+                                final weatherState =
+                                    watch(weatherStateNotifierProvider);
+                                return weatherState.when(
+                                    initial: () {
+                                      Future.delayed(
+                                          Duration.zero,
+                                          () => submitCityName(
+                                                context,
+                                                cityName.toString(),
+                                              ));
+                                      return Container();
                                     },
-                                    child: neu.NeumorphicText(
-                                      '押',
-                                      style: neu.NeumorphicStyle(
-                                        color: Colors.black87,
-                                      ),
-                                      textStyle: neu.NeumorphicTextStyle(
-                                        fontSize: 30,
-                                      ),
-                                    )),
-                                loading: () => Container(),
-                                error: (String? message) {
-                                  return SnackBar(
-                                    content: Text(message.toString()),
-                                    action: SnackBarAction(
-                                      label: 'りょ',
-                                      onPressed: () {},
-                                    ),
-                                  );
-                                });
-                          }),
-                        ),
-                      ],
-                    )),
-              );
-            }
-            
-          },
-        ),
-      ),
+                                    success: (data) => TextButton(
+                                        onPressed: () async {
+                                          await users
+                                              .doc(currentUser!.uid)
+                                              .collection('comments')
+                                              .doc()
+                                              .set({
+                                            'comment': _editor.text,
+                                            'createdAt': createdAt,
+                                            'userId': currentUser!.uid,
+                                            'location': data.name.toString(),
+                                          });
+                                          // print(createdAt.toString());
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: neu.NeumorphicText(
+                                          '押',
+                                          style: neu.NeumorphicStyle(
+                                            color: Colors.black87,
+                                          ),
+                                          textStyle: neu.NeumorphicTextStyle(
+                                            fontSize: 30,
+                                          ),
+                                        )),
+                                    loading: () => Container(),
+                                    error: (String? message) {
+                                      return SnackBar(
+                                        content: Text(message.toString()),
+                                        action: SnackBarAction(
+                                          label: 'りょ',
+                                          onPressed: () {},
+                                        ),
+                                      );
+                                    });
+                              }),
+                            ),
+                          ],
+                        )),
+                  );
+                },
+              ),
+            ),
     );
   }
 }
