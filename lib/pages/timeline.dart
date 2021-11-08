@@ -65,8 +65,7 @@ class Timeline extends ConsumerWidget {
                               ? CircleAvatar(
                                   radius: 20.0,
                                   child: ClipRRect(
-                                    // TODO: Firestoreにアップロードした画像を表示するようにする
-                                    child: Image.asset('assets/model.jpg'),
+                                    child: Image.network(user!.providerData.first.photoURL!),
                                     borderRadius: BorderRadius.circular(50.0),
                                   ),
                                 )

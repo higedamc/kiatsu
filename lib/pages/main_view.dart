@@ -78,6 +78,8 @@ class SplashPage extends MainView {
     // }
     if (current != null) {
       print(current.uid);
+      print(current.photoURL);
+      print(current.providerData.first.photoURL);
     }
   }
 
