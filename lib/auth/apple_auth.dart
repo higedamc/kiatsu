@@ -87,7 +87,7 @@ class AppleAuthUtil {
     }
   }
 
-  // TODO: サインインがうまくいくか (Firebaseに反映されるか) 検証する
+  // TODO: サインインがうまくいくか (Firebaseに反映されるか) 実機で検証する
   static Future<UserCredential> signInWithApple(BuildContext context) async {
     final _auth = FirebaseAuth.instance;
     final _user = _auth.currentUser;

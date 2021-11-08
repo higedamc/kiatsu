@@ -51,11 +51,11 @@ class SettingPage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('確認'),
+                          title: Text('自動的にアプリが終了します'),
                           content: Text('サインアウトしますか？'),
                           actions: <Widget>[
                             TextButton(
-                                onPressed: () => Navigator.pop(context),
+                                onPressed: () => SystemNavigator.pop(),
                                 child: Text('Cancel')),
                             TextButton(
                                 onPressed: () async {
