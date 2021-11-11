@@ -40,6 +40,7 @@ class Timeline extends ConsumerWidget {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(child: Text('この機能を使うにはログインする必要があります'));

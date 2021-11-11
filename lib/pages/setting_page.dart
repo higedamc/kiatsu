@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,9 @@ import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
+
+
+//TODO: #115 サインアップ時に設定ページの表示が更新されるようにする
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -31,7 +36,6 @@ class SettingPage extends StatelessWidget {
                   subtitle: '押',
                   // leading: neu.NeumorphicIcon(Icons.account_circle_outlined),
                   onPressed: (context) async {
-  
                     await Navigator.push(context,
                         MaterialPageRoute(builder: (context) => SignInPage()));
                   }),
@@ -45,29 +49,40 @@ class SettingPage extends StatelessWidget {
                   subtitle: currentUser != null
                       ? currentUser?.uid.toString()
                       : '未登録'),
-                  SettingsTile(
+                      // TODO: サインアウトの挙動の実装が微妙なので本チャンで実装するか迷う
+              SettingsTile(
                   title: 'サインアウト',
                   onPressed: (context) async => showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('自動的にアプリが終了します'),
+                          title: Text('自動的にアプリが終了します (iOSを除く)'),
                           content: Text('サインアウトしますか？'),
                           actions: <Widget>[
                             TextButton(
-                                onPressed: () => SystemNavigator.pop(),
+                                onPressed: () => Navigator.pop(context),
                                 child: Text('Cancel')),
                             TextButton(
                                 onPressed: () async {
                                   await FirebaseAuth.instance.signOut();
-                                  Navigator.of(context).pop();
+                                  (!Platform.isIOS)
+                                      ? await SystemNavigator.pop()
+                                      : AlertDialog(
+                                          title: Text('iPhoneユーザーの方へ'),
+                                          content: Text('上にスワイプして手動でアプリを終了させてください'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text('OK'))
+                                          ],
+                                        );
                                 },
                                 child: Text('OK')),
                           ],
                         );
-                      })
-              ),
-                  SettingsTile(
+                      })),
+              SettingsTile(
                   title: 'アカウント削除',
                   onPressed: (context) async => showDialog(
                       context: context,
@@ -82,13 +97,12 @@ class SettingPage extends StatelessWidget {
                             TextButton(
                                 onPressed: () async {
                                   await currentUser!.delete();
-                                  Navigator.of(context).pop();
+                                  await SystemNavigator.pop();
                                 },
                                 child: Text('OK')),
                           ],
                         );
-                      })
-              ),
+                      })),
             ],
           ),
           SettingsSection(
@@ -110,16 +124,16 @@ class SettingPage extends StatelessWidget {
               //           // // Navigator.pushNamed(_, '/buy');
               //           // fetchOffers2(context);
               //         })
-                  // : 
-                  SettingsTile(
-                      title: '有料機能',
-                      subtitle: '押',
-                      // leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
-                      onPressed: (context) async {
-                        // Navigator.pushNamed(_, '/iap');
-                        //  Navigator.pushNamed(context, '/dev');
-                        // Navigator.pop(context);
-                        showDialog(
+              // :
+              SettingsTile(
+                  title: '有料機能',
+                  subtitle: '押',
+                  // leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
+                  onPressed: (context) async {
+                    // Navigator.pushNamed(_, '/iap');
+                    //  Navigator.pushNamed(context, '/dev');
+                    // Navigator.pop(context);
+                    showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return CustomDialogBox(
@@ -129,7 +143,7 @@ class SettingPage extends StatelessWidget {
                             key: UniqueKey(),
                           );
                         });
-                      }),
+                  }),
             ],
           ),
         ],

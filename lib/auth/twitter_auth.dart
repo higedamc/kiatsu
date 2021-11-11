@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -29,8 +30,11 @@ class TwitterAuthUtil {
   // TODO: 実機での動作確認
   static Future<UserCredential?> signInWithTwitter(BuildContext context) async {
     // final _user = FirebaseAuth.instance.currentUser;
+    final createdAt =  DateTime.now();
     final newUser = FirebaseAuth.instance;
     final session = await _twitter.login();
+    final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
+    final CollectionReference users = firebaseStore.collection('users');
     final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
       accessToken: session.authToken.toString(),
       secret: session.authTokenSecret.toString(),
@@ -50,8 +54,9 @@ class TwitterAuthUtil {
             final firebaseUser = authResult.user;
             await firebaseUser?.updatePhotoURL(photoUrl);
             // await firebaseUser?.updateEmail(email!);
+            await users.doc(authResult.user!.uid).set({'createdAt': createdAt});
             print(
-                'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser');
+                'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser, createdAt: $createdAt');
                 Navigator.pop(context);
           });
   }

@@ -20,6 +20,7 @@ import 'custom_dialog_box.dart';
  */
 
 // TODO: #107 StoreKitTestCertificate.cerを追加
+// TODO: #114 ダッシュボード機能の実装
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
