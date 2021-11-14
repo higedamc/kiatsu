@@ -83,7 +83,7 @@ class SettingPage extends StatelessWidget {
                         );
                       })),
               SettingsTile(
-                  title: 'アカウント削除',
+                  title: '退会',
                   onPressed: (context) async => showDialog(
                       context: context,
                       builder: (context) {
