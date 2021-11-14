@@ -29,7 +29,7 @@ apply plugin: 'com.google.gms.google-services'
 def keystorePropertiesFile = rootProject.file("key.properties") 
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -41,8 +41,8 @@ android {
 
     defaultConfig {
         applicationId "com.kiatsu.app"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -53,10 +53,16 @@ android {
         release {
             if (keystorePropertiesFile.exists()) {
                 def keystoreProperties = new Properties()
-                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                // def keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                keystorePropertiesFile = rootProject.file('key.properties')
+                if (keystorePropertiesFile.exists()) {
+                    keystorePropertiesFile.withReader('UTF-8') { reader ->
+                        keystoreProperties.load(reader)
+                    }
+                }
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
-                storeFile file(keystoreProperties['storeFile'])
+                storeFile file(keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']): null)
                 storePassword keystoreProperties['storePassword']
             }
         }

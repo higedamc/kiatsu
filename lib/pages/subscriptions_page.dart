@@ -8,6 +8,9 @@ import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:provider/provider.dart';
 
+//TODO: #117 iOS版のサブスク機能が動くようにする
+//TODO: #116 課金後課金情報が消えてしまうので課金情報を更新する
+
 class SubscriptionsPage extends StatefulWidget {
   @override
   _SubscriptionsPageState createState() => _SubscriptionsPageState();
@@ -30,16 +33,16 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             SizedBox(height: 32),
             buildEntitlementText(entitlement),
             SizedBox(height: 32),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
-              ),
-              child: Text(
-                '他の機能を見てみる',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: isLoading ? null : fetchOffers2,
-            ),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     minimumSize: Size.fromHeight(50),
+            //   ),
+            //   child: Text(
+            //     '他の機能を見てみる',
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            //   onPressed: isLoading ? null : fetchOffers2,
+            // ),
           ],
         ),
       ),

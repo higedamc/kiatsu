@@ -130,19 +130,20 @@ class SettingPage extends StatelessWidget {
                   subtitle: '押',
                   // leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
                   onPressed: (context) async {
-                    // Navigator.pushNamed(_, '/iap');
+                    // Navigator.pushNamed(context, '/con');
+                    Navigator.pushNamed(context, '/sub');
                     //  Navigator.pushNamed(context, '/dev');
                     // Navigator.pop(context);
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialogBox(
-                            title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                            descriptions: "この機能はまだ未実装です♡",
-                            text: "おけまる",
-                            key: UniqueKey(),
-                          );
-                        });
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return CustomDialogBox(
+                    //         title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                    //         descriptions: "この機能はまだ未実装です♡",
+                    //         text: "おけまる",
+                    //         key: UniqueKey(),
+                    //       );
+                    //     });
                   }),
             ],
           ),
