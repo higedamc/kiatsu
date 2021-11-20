@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:github_sign_in/github_sign_in.dart';
 
-// TODO: ログインキャンセル時のエラーハンドリングをする
+// TODO: #121 ログインキャンセル時のエラーハンドリングをする
+// TODO: #122 そもそもログインできない問題をどうにかする
 // TODO: 本リリースまでに実装する
 
 class GithubAuthUtil {
@@ -29,12 +30,12 @@ class GithubAuthUtil {
   }
 
   static Future<UserCredential> signInWithGithub(BuildContext context) async {
-    final result = await _github.signIn(context);
+    final GitHubSignInResult? result = await _github.signIn(context);
 
-    final AuthCredential githubAuthCredential =
-        GithubAuthProvider.credential(result.token);
+    final AuthCredential? githubAuthCredential =
+        GithubAuthProvider.credential(result!.token!);
 
     return await FirebaseAuth.instance
-        .signInWithCredential(githubAuthCredential);
+        .signInWithCredential(githubAuthCredential!);
   }
 }

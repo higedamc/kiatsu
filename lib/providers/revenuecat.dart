@@ -3,8 +3,8 @@ import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-class RevenueCatProvider extends ChangeNotifier {
-  RevenueCatProvider() {
+class RevenueCat extends ChangeNotifier {
+  RevenueCat() {
     init();
   }
 

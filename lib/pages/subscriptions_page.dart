@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 //TODO: #117 iOS版のサブスク機能が動くようにする
 //TODO: #116 課金後課金情報が消えてしまうので課金情報を更新する
+//TODO: RevenueCatに移行する
 
 class SubscriptionsPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   bool isLoading = false;
   
   Widget build(BuildContext context) {
-    final entitlement = Provider.of<RevenueCatProvider>(context).entitlement;
+    final entitlement = Provider.of<RevenueCat>(context).entitlement;
 
     return Scaffold(
       body: Container(
@@ -135,7 +136,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
             if (isSuccess) {
               final provider =
-                  Provider.of<RevenueCatProvider>(context, listen: false);
+                  Provider.of<RevenueCat>(context, listen: false);
               provider.addCoinsPackage(package);
             }
 

@@ -19,7 +19,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (BuildContext context) => RevenueCatProvider(),
+        create: (BuildContext context) => RevenueCat(),
         child: NeumorphicApp(
           themeMode: ThemeMode.light,
           theme: NeumorphicThemeData(
@@ -45,6 +45,7 @@ class MainView extends StatelessWidget {
   }
 }
 
+//TODO: #119 Splashscreenをnullableなものに変える
 class SplashPage extends MainView {
   // final DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;

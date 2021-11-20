@@ -17,7 +17,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final coins = Provider.of<RevenueCatProvider>(context).coins;
+    final coins = Provider.of<RevenueCat>(context).coins;
 
     return Scaffold(
       body: Container(
@@ -93,7 +93,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
 
             if (isSuccess) {
               final provider =
-                  Provider.of<RevenueCatProvider>(context, listen: false);
+                  Provider.of<RevenueCat>(context, listen: false);
               provider.addCoinsPackage(package);
             }
 
@@ -105,7 +105,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
   }
 
   void spendCoins() {
-    final provider = Provider.of<RevenueCatProvider>(context, listen: false);
+    final provider = Provider.of<RevenueCat>(context, listen: false);
 
     provider.spend10Coins();
   }

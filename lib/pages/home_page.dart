@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/model/entitlement.dart';
-import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/utils/providers.dart';
-import 'package:purchases_flutter/purchaser_info_wrapper.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -35,21 +32,21 @@ class HomePage extends ConsumerWidget {
   final String? _res2 = '';
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void submitCityName(BuildContext context, String cityName) async {
-    await context
+  void submitCityName(BuildContext context, String cityName, WidgetRef ref) async {
+    await ref
         .read(weatherStateNotifierProvider.notifier)
         .getWeather(cityName);
   }
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
   //   Future<bool> isPurchased() async {
   //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
   //   if(purchaseInfo.entitlements.all["pro"]!.isActive){
   //     return true;
   //   } else return false;
   // }
-    final cityName = watch(cityNameProvider).state;
+    final cityName = ref.watch(cityNameProvider);
     // Future<bool> isPurchased() async {
     //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
     //   if (purchaseInfo.entitlements.all["pro"]!.isActive) {
@@ -66,11 +63,11 @@ class HomePage extends ConsumerWidget {
           "",
         ),
         leading: Consumer(builder: (context, watch, child) {
-          final weatherState = watch(weatherStateNotifierProvider);
+          final weatherState = ref.watch(weatherStateNotifierProvider);
           return weatherState.maybeWhen(
               initial: () {
                 Future.delayed(
-                    Duration.zero, () => submitCityName(context, cityName));
+                    Duration.zero, () => submitCityName(context, cityName, ref));
                 return Container();
               },
               loading: () => Container(),
@@ -113,8 +110,8 @@ class HomePage extends ConsumerWidget {
         child: RefreshIndicator(
           color: Colors.black,
           onRefresh: () async {
-            return await context
-                .refresh(weatherStateNotifierProvider.notifier)
+            return await 
+                ref.refresh(weatherStateNotifierProvider.notifier)
                 .getWeather(cityName.toString());
           },
           child: ListView(
@@ -128,7 +125,7 @@ class HomePage extends ConsumerWidget {
                     child: Consumer(
                       builder: (context, watch, child) {
                         final weatherState =
-                            watch(weatherStateNotifierProvider);
+                            ref.watch(weatherStateNotifierProvider);
                         return weatherState.maybeWhen(
                           initial: () {
                             Future.delayed(
@@ -136,6 +133,7 @@ class HomePage extends ConsumerWidget {
                                 () => submitCityName(
                                       context,
                                       cityName.toString(),
+                                      ref,
                                     ));
                             return Container();
                           },
@@ -180,7 +178,7 @@ class HomePage extends ConsumerWidget {
               SizedBox(height: 1.0),
               Consumer(
                 builder: (context, watch, child) {
-                  final weatherState = watch(weatherStateNotifierProvider);
+                  final weatherState = ref.watch(weatherStateNotifierProvider);
                   return weatherState.maybeWhen(
                     initial: () {
                       Future.delayed(
@@ -188,6 +186,7 @@ class HomePage extends ConsumerWidget {
                         () => submitCityName(
                           context,
                           cityName.toString(),
+                          ref,
                         ),
                       );
                       return Container();
@@ -262,12 +261,12 @@ class HomePage extends ConsumerWidget {
               SizedBox(height: 40.0),
               Consumer(
                 builder: (context, watch, child) {
-                  final weatherState = watch(weatherStateNotifierProvider);
+                  final weatherState = ref.watch(weatherStateNotifierProvider);
                   return weatherState.maybeWhen(
                     initial: () {
                       Future.delayed(
                         Duration.zero,
-                        () => submitCityName(context, cityName.toString()),
+                        () => submitCityName(context, cityName.toString(), ref),
                       );
                       return Container();
                     },

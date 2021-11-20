@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/utils/providers.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -21,17 +20,16 @@ Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
 
-void submitCityName(BuildContext context, String cityName) async {
-  await context
-      .read(weatherStateNotifierProvider.notifier)
-      .getWeather(cityName);
+void submitCityName(
+    BuildContext context, String cityName, WidgetRef ref) async {
+  await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
 }
 
 class Timeline extends ConsumerWidget {
   Timeline({required Key key}) : super(key: key);
   late final String? cityName;
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: Text('お気持ち投稿の場'),
@@ -40,7 +38,7 @@ class Timeline extends ConsumerWidget {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
+          // TODO: #123 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(child: Text('この機能を使うにはログインする必要があります'));
@@ -53,8 +51,27 @@ class Timeline extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(30.0)),
                   elevation: 10,
                   child: Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
+                    startActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      extentRatio: 0.25,
+                      children: [
+                        SlidableAction(
+                            icon: Icons.delete,
+                            label: '削除',
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            onPressed: (_) {
+                              if (docSnapshot
+                                  .data()!
+                                  .containsValue(currentUser?.uid))
+                                users
+                                    .doc(currentUser!.uid)
+                                    .collection('comments')
+                                    .doc(docSnapshot.id)
+                                    .delete();
+                            })
+                      ],
+                    ),
                     child: Container(
                       margin: EdgeInsets.all(10.0),
                       padding: EdgeInsets.all(2.0),
@@ -66,7 +83,8 @@ class Timeline extends ConsumerWidget {
                               ? CircleAvatar(
                                   radius: 20.0,
                                   child: ClipRRect(
-                                    child: Image.network(user!.providerData.first.photoURL!),
+                                    child: Image.network(
+                                        user!.providerData.first.photoURL!),
                                     borderRadius: BorderRadius.circular(50.0),
                                   ),
                                 )
@@ -91,21 +109,6 @@ class Timeline extends ConsumerWidget {
                         ),
                       ]),
                     ),
-                    actions: <Widget>[
-                      if (docSnapshot.data()!.containsValue(currentUser?.uid))
-                        IconSlideAction(
-                          caption: '削除',
-                          color: Colors.red[700],
-                          icon: Icons.delete,
-                          onTap: () => {
-                            users
-                                .doc(currentUser!.uid)
-                                .collection('comments')
-                                .doc(docSnapshot.id)
-                                .delete()
-                          },
-                        ),
-                    ],
                   ),
                 ),
               );
@@ -160,15 +163,13 @@ class Timeline extends ConsumerWidget {
                               right: 1,
                               child: Consumer(builder: (context, watch, child) {
                                 final weatherState =
-                                    watch(weatherStateNotifierProvider);
+                                    ref.watch(weatherStateNotifierProvider);
                                 return weatherState.when(
                                     initial: () {
                                       Future.delayed(
                                           Duration.zero,
-                                          () => submitCityName(
-                                                context,
-                                                cityName.toString(),
-                                              ));
+                                          () => submitCityName(context,
+                                              cityName.toString(), ref));
                                       return Container();
                                     },
                                     success: (data) => TextButton(
