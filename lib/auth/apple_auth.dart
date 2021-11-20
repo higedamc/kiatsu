@@ -84,7 +84,7 @@ class AppleAuthUtil {
     final _auth = FirebaseAuth.instance;
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce!);
-    var userCredential;
+    
     // Request credential for the currently signed in Apple account.
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -119,6 +119,5 @@ class AppleAuthUtil {
           : print(e.code);
     }
     print('サインインされました');
-    return userCredential;
   }
 }

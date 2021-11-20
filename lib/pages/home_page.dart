@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -32,7 +32,7 @@ class HomePage extends riv.ConsumerWidget {
   final DateTime updatedAt = DateTime.now();
 
   final String? _res2 = '';
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void submitCityName(
       BuildContext context, String cityName, riv.WidgetRef ref) async {
@@ -44,7 +44,7 @@ class HomePage extends riv.ConsumerWidget {
     final entitlement = Provider.of<RevenueCat>(context).entitlement;
     final cityName = ref.watch(cityNameProvider);
     return Scaffold(
-      key: _scaffoldKey,
+      // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
         centerTitle: true,
         title: const Text(
@@ -403,6 +403,7 @@ class HomePage extends riv.ConsumerWidget {
 }
 
 Widget buildAdmob(Entitlement entitlement) {
+  //TODO: #125 dispose()を呼び出す処理を書く
   final BannerAd myBanner = BannerAd(
     adUnitId: 'ca-app-pub-3940256099942544/6300978111',
     size: AdSize.banner,

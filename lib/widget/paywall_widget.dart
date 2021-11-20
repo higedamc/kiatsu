@@ -61,7 +61,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
     final product = package.product;
 
     return Card(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).colorScheme.secondary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

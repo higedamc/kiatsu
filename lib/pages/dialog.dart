@@ -18,7 +18,7 @@ class _DialogsState extends State<Dialogs> {
       ),
       body: Container(
         child: Center(
-          child: RaisedButton(
+          child: ElevatedButton(
               onPressed: (){
                 showDialog(context: context,
                   builder: (BuildContext context){

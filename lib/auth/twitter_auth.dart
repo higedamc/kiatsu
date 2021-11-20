@@ -8,7 +8,7 @@ class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
     apiKey: dotenv.env['TWITTER_CONSUMER_KEY'].toString(),
     apiSecretKey: dotenv.env['TWITTER_SECRET_KEY'].toString(),
-    redirectURI: 'twitterkit-qIQKdcDM2rworcBDbaHbYb7PO://',
+    redirectURI: dotenv.env['TWITTER_REDIRECT_URI'].toString(),
   );
 
   /// サインイン中か

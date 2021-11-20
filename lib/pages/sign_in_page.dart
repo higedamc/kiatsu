@@ -9,14 +9,11 @@ import 'package:kiatsu/auth/github_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
-import 'package:kiatsu/utils/apple_signin_available.dart';
-import 'package:provider/provider.dart';
 import 'package:social_auth_buttons/res/buttons/apple_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/github_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/google_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/twitter_auth_button.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
-import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 
 
 

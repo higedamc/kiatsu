@@ -5,7 +5,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/pages/main_view.dart';
-import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
