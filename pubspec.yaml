@@ -21,9 +21,6 @@ module:
   androidX: true
 
 dependencies:
-  admob_flutter:
-    git:
-      url: https://github.com/kmcgill88/admob_flutter.git
   cloud_firestore: ^3.1.0
   crypto: ^3.0.1
   cupertino_icons: ^1.0.3
@@ -47,6 +44,7 @@ dependencies:
   freezed_annotation: ^1.0.0
   geolocator: ^7.7.1
   github_sign_in: ^0.0.5-dev.3
+  google_mobile_ads: ^1.0.0
   google_sign_in: ^5.0.7
   http: ^0.13.3
   is_first_run: ^1.0.0
@@ -93,7 +91,6 @@ flutter:
     # - images/
     - assets/
     - .env
-
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg

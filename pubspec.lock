@@ -8,15 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "30.0.0"
-  admob_flutter:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "97b3f14bcf99344f9e5ae0f8913f1ee4a1b881ff"
-      url: "https://github.com/kmcgill88/admob_flutter.git"
-    source: git
-    version: "2.0.0-nullsafety.1"
   analyzer:
     dependency: transitive
     description:
@@ -461,6 +452,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  google_mobile_ads:
+    dependency: "direct main"
+    description:
+      name: google_mobile_ads
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   google_sign_in:
     dependency: "direct main"
     description:

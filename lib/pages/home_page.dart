@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/providers/revenuecat.dart';
+import 'package:kiatsu/utils/providers.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kiatsu/model/entitlement.dart';
-import 'package:kiatsu/utils/providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -24,37 +27,22 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
 final currentUser = firebaseAuth.currentUser;
 
-
-class HomePage extends ConsumerWidget {
+class HomePage extends riv.ConsumerWidget {
   late final String? cityName;
   final DateTime updatedAt = DateTime.now();
 
   final String? _res2 = '';
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void submitCityName(BuildContext context, String cityName, WidgetRef ref) async {
-    await ref
-        .read(weatherStateNotifierProvider.notifier)
-        .getWeather(cityName);
+  void submitCityName(
+      BuildContext context, String cityName, riv.WidgetRef ref) async {
+    await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-  //   Future<bool> isPurchased() async {
-  //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
-  //   if(purchaseInfo.entitlements.all["pro"]!.isActive){
-  //     return true;
-  //   } else return false;
-  // }
+  Widget build(BuildContext context, riv.WidgetRef ref) {
+    final entitlement = Provider.of<RevenueCat>(context).entitlement;
     final cityName = ref.watch(cityNameProvider);
-    // Future<bool> isPurchased() async {
-    //   PurchaserInfo purchaseInfo = await Purchases.getPurchaserInfo();
-    //   if (purchaseInfo.entitlements.all["pro"]!.isActive) {
-    //     return true;
-    //   } else
-    //     return false;
-    // }
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: NeumorphicAppBar(
@@ -66,8 +54,8 @@ class HomePage extends ConsumerWidget {
           final weatherState = ref.watch(weatherStateNotifierProvider);
           return weatherState.maybeWhen(
               initial: () {
-                Future.delayed(
-                    Duration.zero, () => submitCityName(context, cityName, ref));
+                Future.delayed(Duration.zero,
+                    () => submitCityName(context, cityName, ref));
                 return Container();
               },
               loading: () => Container(),
@@ -110,8 +98,8 @@ class HomePage extends ConsumerWidget {
         child: RefreshIndicator(
           color: Colors.black,
           onRefresh: () async {
-            return await 
-                ref.refresh(weatherStateNotifierProvider.notifier)
+            return await ref
+                .refresh(weatherStateNotifierProvider.notifier)
                 .getWeather(cityName.toString());
           },
           child: ListView(
@@ -344,7 +332,11 @@ class HomePage extends ConsumerWidget {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w100),
                 ),
-              )
+              ),
+              SizedBox(
+                height: 70.0,
+              ),
+              buildAdmob(entitlement),
             ],
           ),
         ),
@@ -411,11 +403,27 @@ class HomePage extends ConsumerWidget {
 }
 
 Widget buildAdmob(Entitlement entitlement) {
+  final BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
+  myBanner.load();
+  final AdWidget adWidget = AdWidget(ad: myBanner);
+  final Container adContainer = Container(
+    alignment: Alignment.center,
+    child: adWidget,
+    width: myBanner.size.width.toDouble(),
+    height: myBanner.size.height.toDouble(),
+  );
   switch (entitlement) {
     case Entitlement.pro:
       return Container();
     case Entitlement.free:
-      return Center(child: Text('＾q＾'));
+      return Center(
+        child: adContainer,
+      );
   }
 }
 

@@ -12,7 +12,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:wiredash/wiredash.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'api/purchase_api.dart';
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
@@ -30,7 +30,7 @@ Future<void> startApp() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
 
   WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize();
+  MobileAds.instance.initialize();
   
  
   
