@@ -135,9 +135,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             final isSuccess = await PurchaseApi.purchasePackage(package);
 
             if (isSuccess) {
-              final provider =
-                  Provider.of<RevenueCat>(context, listen: false);
-              provider.addCoinsPackage(package);
+              // final provider =
+              //     Provider.of<RevenueCat>(context, listen: false);
+              // provider.addCoinsPackage(package);
+              Future.delayed(Duration(seconds: 3));
+              Navigator.pop(context);
             }
 
             Navigator.pop(context);

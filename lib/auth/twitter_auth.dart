@@ -8,7 +8,7 @@ class TwitterAuthUtil {
   static final TwitterLogin _twitter = TwitterLogin(
     apiKey: dotenv.env['TWITTER_CONSUMER_KEY'].toString(),
     apiSecretKey: dotenv.env['TWITTER_SECRET_KEY'].toString(),
-    redirectURI: dotenv.env['TWITTER_REDIRECT_URI'].toString(),
+    redirectURI: dotenv.env['TWITTER_REDIRECT_URL'].toString(),
   );
 
   /// サインイン中か
@@ -58,6 +58,8 @@ class TwitterAuthUtil {
             print(
                 'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser, createdAt: $createdAt');
                 Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('ログインされました。')));
           });
   }
 }
