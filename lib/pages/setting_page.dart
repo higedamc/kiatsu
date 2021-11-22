@@ -15,6 +15,7 @@ import 'package:wiredash/wiredash.dart';
 
 
 //TODO: #115 サインアップ時に設定ページの表示が更新されるようにする
+//TODO: Android版の文字の色を変える
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;

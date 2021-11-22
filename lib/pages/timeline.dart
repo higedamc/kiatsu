@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/utils/providers.dart';
@@ -172,30 +173,54 @@ class Timeline extends ConsumerWidget {
                                               cityName.toString(), ref));
                                       return Container();
                                     },
-                                    success: (data) => TextButton(
-                                        onPressed: () async {
-                                          await users
-                                              .doc(currentUser!.uid)
-                                              .collection('comments')
-                                              .doc()
-                                              .set({
-                                            'comment': _editor.text,
-                                            'createdAt': createdAt,
-                                            'userId': currentUser!.uid,
-                                            'location': data.name.toString(),
-                                          });
-                                          // print(createdAt.toString());
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: neu.NeumorphicText(
-                                          '押',
-                                          style: neu.NeumorphicStyle(
-                                            color: Colors.black87,
+                                    success: (data) => ElevatedButton(
+                                          // style: ButtonStyle(
+                                          //   backgroundColor: MaterialStateProperty.all(Colors.black38),
+                                          // ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.white,
+                                            onPrimary: Colors.black,
+                                            shape: const CircleBorder(
+                                              side: BorderSide(
+                                                color: Colors.black,
+                                                width: 1,
+                                                style: BorderStyle.solid,
+                                              ),
+                                            ),
                                           ),
-                                          textStyle: neu.NeumorphicTextStyle(
-                                            fontSize: 30,
+
+                                          onPressed: () async {
+                                            (_editor.text.isEmpty) ?
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                          title: Text(
+                                                              'コメントを入力してください')))
+                                            : await users
+                                                .doc(currentUser!.uid)
+                                                .collection('comments')
+                                                .doc()
+                                                .set({
+                                              'comment': _editor.text,
+                                              'createdAt': createdAt,
+                                              'userId': currentUser!.uid,
+                                              'location': data.name.toString(),
+                                            });
+                                          },
+                                          child: NeumorphicText(
+                                            '押',
+                                            // textAlign: TextAlign.center,
+                                            style: NeumorphicStyle(
+                                                depth: 20,
+                                                intensity: 0.5,
+                                                color: Colors.white),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
-                                        )),
+                                        ),
                                     loading: () => Container(),
                                     error: (String? message) {
                                       return SnackBar(

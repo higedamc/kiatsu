@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/model/entitlement.dart';
@@ -85,7 +86,7 @@ class HomePage extends riv.ConsumerWidget {
                         return CustomDialogBox(
                           title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
                           descriptions: "この機能はまだ未実装です♡",
-                          text: "おけまる",
+                          text: "押",
                           key: UniqueKey(),
                         );
                       });
@@ -378,7 +379,7 @@ class HomePage extends riv.ConsumerWidget {
                           return CustomDialogBox(
                             title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
                             descriptions: "この機能はまだ未実装です♡",
-                            text: "おけまる",
+                            text: "押",
                             key: UniqueKey(),
                           );
                         });
@@ -404,11 +405,36 @@ class HomePage extends riv.ConsumerWidget {
 
 Widget buildAdmob(Entitlement entitlement) {
   //TODO: #125 dispose()を呼び出す処理を書く
+  // 参考URL: https://uedive.net/2021/5410/flutter2-gad/
+  String getTestBannerUnitID() {
+    String testBannerUnitId = '';
+    if (Platform.isIOS) {
+      testBannerUnitId = 'ca-app-pub-3940256099942544/2934735716';
+    } else if (Platform.isAndroid) {
+      testBannerUnitId = 'ca-app-pub-3940256099942544/6300978111';
+    }
+    return testBannerUnitId;
+  }
   final BannerAd myBanner = BannerAd(
-    adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+    adUnitId: getTestBannerUnitID(),
     size: AdSize.banner,
     request: AdRequest(),
-    listener: BannerAdListener(),
+    listener: 
+    // BannerAdListener(),
+    BannerAdListener(
+    // 広告が正常にロードされたときに呼ばれます。
+    onAdLoaded: (Ad ad) => print('バナー広告がロードされました。'),
+    // 広告のロードが失敗した際に呼ばれます。
+    onAdFailedToLoad: (Ad ad, LoadAdError error) {
+      print('バナー広告のロードに失敗しました。: $error');
+    },
+    // 広告が開かれたときに呼ばれます。
+    onAdOpened: (Ad ad) => print('バナー広告が開かれました。'),
+    // 広告が閉じられたときに呼ばれます。
+    onAdClosed: (Ad ad) => print('バナー広告が閉じられました。'),
+    // ユーザーがアプリを閉じるときに呼ばれます。
+    // onApplicationExit: (Ad ad) => print('ユーザーがアプリを離れました。'),
+  ),
   );
   myBanner.load();
   final AdWidget adWidget = AdWidget(ad: myBanner);
