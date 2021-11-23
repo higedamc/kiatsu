@@ -39,7 +39,7 @@ class Timeline extends ConsumerWidget {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // TODO: #123 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
+          // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData)
             return Center(child: Text('この機能を使うにはログインする必要があります'));
@@ -52,27 +52,8 @@ class Timeline extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(30.0)),
                   elevation: 10,
                   child: Slidable(
-                    startActionPane: ActionPane(
-                      motion: const DrawerMotion(),
-                      extentRatio: 0.25,
-                      children: [
-                        SlidableAction(
-                            icon: Icons.delete,
-                            label: '削除',
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            onPressed: (_) {
-                              if (docSnapshot
-                                  .data()!
-                                  .containsValue(currentUser?.uid))
-                                users
-                                    .doc(currentUser!.uid)
-                                    .collection('comments')
-                                    .doc(docSnapshot.id)
-                                    .delete();
-                            })
-                      ],
-                    ),
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
                     child: Container(
                       margin: EdgeInsets.all(10.0),
                       padding: EdgeInsets.all(2.0),
@@ -110,6 +91,21 @@ class Timeline extends ConsumerWidget {
                         ),
                       ]),
                     ),
+                    actions: <Widget>[
+                      if (docSnapshot.data()!.containsValue(currentUser?.uid))
+                        IconSlideAction(
+                          caption: '削除',
+                          color: Colors.red[700],
+                          icon: Icons.delete,
+                          onTap: () => {
+                            users
+                                .doc(currentUser!.uid)
+                                .collection('comments')
+                                .doc(docSnapshot.id)
+                                .delete()
+                          },
+                        ),
+                    ],
                   ),
                 ),
               );
@@ -169,8 +165,11 @@ class Timeline extends ConsumerWidget {
                                     initial: () {
                                       Future.delayed(
                                           Duration.zero,
-                                          () => submitCityName(context,
-                                              cityName.toString(), ref));
+                                          () => submitCityName(
+                                                context,
+                                                cityName.toString(),
+                                                ref,
+                                              ));
                                       return Container();
                                     },
                                     success: (data) => ElevatedButton(
@@ -190,23 +189,26 @@ class Timeline extends ConsumerWidget {
                                           ),
 
                                           onPressed: () async {
-                                            (_editor.text.isEmpty) ?
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                          title: Text(
-                                                              'コメントを入力してください')))
-                                            : await users
-                                                .doc(currentUser!.uid)
-                                                .collection('comments')
-                                                .doc()
-                                                .set({
-                                              'comment': _editor.text,
-                                              'createdAt': createdAt,
-                                              'userId': currentUser!.uid,
-                                              'location': data.name.toString(),
-                                            });
+                                            (_editor.text.isEmpty)
+                                                ? showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                            title: Text(
+                                                                'コメントを入力してください')))
+                                                : await users
+                                                    .doc(currentUser!.uid)
+                                                    .collection('comments')
+                                                    .doc()
+                                                    .set({
+                                                    'comment': _editor.text,
+                                                    'createdAt': createdAt,
+                                                    'userId': currentUser!.uid,
+                                                    'location':
+                                                        data.name.toString(),
+                                                  });
+                                            // print(createdAt.toString());
+                                            Navigator.of(context).pop();
                                           },
                                           child: NeumorphicText(
                                             '押',
