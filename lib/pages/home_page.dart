@@ -406,6 +406,7 @@ class HomePage extends riv.ConsumerWidget {
 Widget buildAdmob(Entitlement entitlement) {
   //TODO: #125 dispose()を呼び出す処理を書く
   // 参考URL: https://uedive.net/2021/5410/flutter2-gad/
+  //TODO: #128 端末のサイズに合わせて自動で広告のサイズを変更する処理を書く
   String getTestBannerUnitID() {
     String testBannerUnitId = '';
     if (Platform.isIOS) {

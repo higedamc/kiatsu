@@ -14,18 +14,17 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final uid = firebaseAuth.currentUser!.uid;
 final user = firebaseAuth.currentUser;
+final currentUser = firebaseAuth.currentUser;
+final CollectionReference users = firebaseStore.collection('users');
 Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
     .collectionGroup('comments')
     .orderBy('createdAt', descending: true)
     .snapshots();
-final currentUser = firebaseAuth.currentUser;
-final CollectionReference users = firebaseStore.collection('users');
 
 void submitCityName(
     BuildContext context, String cityName, WidgetRef ref) async {
   await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
 }
-
 class Timeline extends ConsumerWidget {
   Timeline({required Key key}) : super(key: key);
   late final String? cityName;
@@ -65,7 +64,7 @@ class Timeline extends ConsumerWidget {
                               ? CircleAvatar(
                                   radius: 20.0,
                                   child: ClipRRect(
-                                    child: Image.network(
+                                    child: user?.providerData.first.photoURL == null ? null : Image.network(
                                         user!.providerData.first.photoURL!),
                                     borderRadius: BorderRadius.circular(50.0),
                                   ),

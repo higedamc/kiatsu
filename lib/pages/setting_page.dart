@@ -176,7 +176,7 @@ class SettingPage extends StatelessWidget {
                     ),
                     SettingsSection(
                       
-                      
+                      //TODO: #129 端末のサイズに合わせてバージョンの表示する位置を固定する処理を書く
                       titlePadding: EdgeInsets.fromLTRB(168, 0, 0, 0),
                       title: 'v ' + (snapshot.data?.version ?? '0.0.0'),
                       tiles: [

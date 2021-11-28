@@ -84,7 +84,7 @@ class AppleAuthUtil {
     final _auth = FirebaseAuth.instance;
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce!);
-    
+
     // Request credential for the currently signed in Apple account.
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -100,7 +100,7 @@ class AppleAuthUtil {
         rawNonce: rawNonce,
       );
 
-      _auth.signInWithCredential(oAuthCredential).then((authResult) async {
+      return _auth.signInWithCredential(oAuthCredential).then((authResult) async {
         final displayName = authResult.user?.displayName;
         final email = authResult.user?.email;
         final photoUrl = authResult.user?.photoURL;
@@ -111,11 +111,13 @@ class AppleAuthUtil {
         await firebaseUser?.updateEmail(email!);
         print(
             'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser');
+
+        // return _auth.signInWithCredential(oAuthCredential);
       });
     } on SignInWithAppleAuthorizationException catch (e) {
       (e.code == AuthorizationErrorCode.canceled)
-          ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('ログインがキャンセルされました。')))
+          ? ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('ログインがキャンセルされました。')))
           : print(e.code);
     }
     print('サインインされました');

@@ -32,10 +32,11 @@ class TwitterAuthUtil {
     // final _user = FirebaseAuth.instance.currentUser;
     final createdAt =  DateTime.now();
     final newUser = FirebaseAuth.instance;
-    final session = await _twitter.login();
+    
     final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
     final CollectionReference users = firebaseStore.collection('users');
-    final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
+    final authResult = await _twitter.login().then((session) {
+      final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
       accessToken: session.authToken.toString(),
       secret: session.authTokenSecret.toString(),
     );
@@ -61,5 +62,9 @@ class TwitterAuthUtil {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('ログインされました。')));
           });
+      
+
+    });
+    return authResult;
   }
 }
