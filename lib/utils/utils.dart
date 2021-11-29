@@ -6,7 +6,7 @@ class Utils {
         useRootNavigator: true,
         isDismissible: true,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
         ),
         context: context,

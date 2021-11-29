@@ -42,7 +42,7 @@ Future<void> startApp() async {
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   ErrorWidget.builder = (FlutterErrorDetails details) {
-    return Center(
+    return const Center(
         child: CircularProgressIndicator(
       backgroundColor: Colors.white,
     ));

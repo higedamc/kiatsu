@@ -41,7 +41,7 @@ class TwitterAuthUtil {
       secret: session.authTokenSecret.toString(),
     );
     (session.status == TwitterLoginStatus.cancelledByUser)
-        ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('ログインがキャンセルされました。'),
           ))
         : newUser
@@ -59,7 +59,7 @@ class TwitterAuthUtil {
             print(
                 'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser, createdAt: $createdAt');
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('ログインされました。')));
           });
       

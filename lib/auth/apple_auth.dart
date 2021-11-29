@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 //TODO: #120 null安全にする
 
 String? generateNonce([int length = 32]) {
-  final charset =
+  const charset =
       '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
   final random = Random.secure();
   return List.generate(length, (_) => charset[random.nextInt(charset.length)])
@@ -52,11 +53,16 @@ class AppleAuthUtil {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+            clientId: dotenv.env['FIREBASE_AUTH_CLIENT_ID']!,
+            redirectUri: Uri.parse(
+                'https://us-central1-apple-auth-server.cloudfunctions.net/hige')),
         nonce: nonce,
       );
 
       final oAuthCredential = OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
         rawNonce: rawNonce,
       );
       await _user?.linkWithCredential(oAuthCredential);
@@ -92,15 +98,22 @@ class AppleAuthUtil {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+            clientId: dotenv.env['FIREBASE_AUTH_CLIENT_ID']!,
+            redirectUri: Uri.parse(
+                'https://us-central1-apple-auth-server.cloudfunctions.net/hige')),
         nonce: nonce,
       );
 
       final oAuthCredential = OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
         rawNonce: rawNonce,
       );
 
-      return _auth.signInWithCredential(oAuthCredential).then((authResult) async {
+      return _auth
+          .signInWithCredential(oAuthCredential)
+          .then((authResult) async {
         final displayName = authResult.user?.displayName;
         final email = authResult.user?.email;
         final photoUrl = authResult.user?.photoURL;
@@ -117,9 +130,10 @@ class AppleAuthUtil {
     } on SignInWithAppleAuthorizationException catch (e) {
       (e.code == AuthorizationErrorCode.canceled)
           ? ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('ログインがキャンセルされました。')))
+              .showSnackBar(const SnackBar(content: Text('ログインがキャンセルされました。')))
           : print(e.code);
     }
+    Navigator.pop(context);
     print('サインインされました');
   }
 }

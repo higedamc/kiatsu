@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 
 
 class ConsumablesPage extends StatefulWidget {
+  const ConsumablesPage({Key? key}) : super(key: key);
+
   @override
   _ConsumablesPageState createState() => _ConsumablesPageState();
 }
@@ -21,28 +23,28 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             buildCoins(coins),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
+                minimumSize: const Size.fromHeight(50),
               ),
-              child: Text(
+              child: const Text(
                 'コインをもっとゲットする',
                 style: TextStyle(fontSize: 20),
               ),
               onPressed: isLoading ? null : fetchOffers,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
+                minimumSize: const Size.fromHeight(50),
               ),
-              child: Text(
+              child: const Text(
                 '10 コイン使う',
                 style: TextStyle(fontSize: 20),
               ),
@@ -61,10 +63,10 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
             color: Colors.yellow.shade800,
             size: 100,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             '所有コイン: $coins 枚',
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
           ),
         ],
       );
@@ -73,7 +75,7 @@ class _ConsumablesPageState extends State<ConsumablesPage> {
     final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
 
     if (offerings.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('プランが見つかりませんでした🥺'),
       ));
     } else {

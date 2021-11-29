@@ -23,7 +23,7 @@ class DemoAppState extends State<DemoApp> {
             child: Column(
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.share),
+                  icon: const Icon(Icons.share),
                   onPressed: () {
                     Share.share('test');
                   },

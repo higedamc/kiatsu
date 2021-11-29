@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/purchase_page.dart';
@@ -9,36 +10,42 @@ import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:splashscreen/splashscreen.dart';
 
 import 'consumables_page.dart';
 
+// final pageIdProvider = StateProvider((ref) => 0);
+
 class MainView extends StatelessWidget {
+  const MainView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return provider.ChangeNotifierProvider(
         create: (BuildContext context) => RevenueCat(),
         child: NeumorphicApp(
+          debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
-          theme: NeumorphicThemeData(
+          theme: const NeumorphicThemeData(
             baseColor: Color(0xFFFFFFFF),
             lightSource: LightSource.topLeft,
             depth: 20,
             intensity: 1,
           ),
           routes: {
-            '/a': (BuildContext context) => SettingPage(),
+            '/a': (BuildContext context) => const SettingPage(),
             '/timeline': (BuildContext context) => Timeline(
                   key: UniqueKey(),
                 ),
             '/home': (BuildContext context) => HomePage(),
-            '/sign': (BuildContext context) => SignInPage(),
-            '/dialog': (BuildContext context) => Dialogs(),
-            '/sub': (BuildContext context) => SubscriptionsPage(),
-            '/con': (BuildContext context) => ConsumablesPage(),
-            '/dev': (BuildContext context) => DevPurchasePage(),
+            '/sign': (BuildContext context) => const SignInPage(),
+            '/dialog': (BuildContext context) => const Dialogs(),
+            '/sub': (BuildContext context) => const SubscriptionsPage(),
+            '/con': (BuildContext context) => const ConsumablesPage(),
+            '/dev': (BuildContext context) => const DevPurchasePage(),
           },
+
           home: SplashPage(),
         ));
   }
@@ -55,7 +62,7 @@ class SplashPage extends MainView {
   //   return user;
   // }
 
-  SplashPage() {
+  SplashPage({Key? key}) : super(key: key) {
     final User? current = firebaseAuth.currentUser;
     // final CollectionReference users = firebaseStore.collection('users');
     // if (current == null) {
@@ -89,7 +96,7 @@ class SplashPage extends MainView {
       loaderColor: Colors.black,
       seconds: 2,
       navigateAfterSeconds: HomePage(),
-      image: new Image.asset('assets/images/face.png'),
+      image: Image.asset('assets/images/face.png'),
       photoSize: 100.0,
     );
   }

@@ -35,18 +35,18 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
               left: Constants.padding,
               top: Constants.avatarRadius + Constants.padding,
               right: Constants.padding,
               bottom: Constants.padding),
-          margin: EdgeInsets.only(top: Constants.avatarRadius),
+          margin: const EdgeInsets.only(top: Constants.avatarRadius),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
               borderRadius: BorderRadius.circular(Constants.padding),
-              boxShadow: [
-                BoxShadow(
+              boxShadow: const [
+               BoxShadow(
                     color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
               ]),
           child: Column(
@@ -63,24 +63,24 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
               //     fontSize: 20,
               //      fontWeight: FontWeight.w600,
               //   ),),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               NeumorphicText(
                 widget.descriptions,
                 textAlign: TextAlign.center,
-                style: NeumorphicStyle(
+                style: const NeumorphicStyle(
                     depth: 0, intensity: 0, color: Colors.black54),
                 textStyle: NeumorphicTextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
+             const SizedBox(
                 height: 22,
               ),
               Align(
-                alignment: Alignment(1.2, 5.0),
+                alignment: const Alignment(1.2, 5.0),
                 child: ElevatedButton(
                   // style: ButtonStyle(
                   //   backgroundColor: MaterialStateProperty.all(Colors.black38),
@@ -103,7 +103,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                   child: NeumorphicText(
                     widget.text,
                     // textAlign: TextAlign.center,
-                    style: NeumorphicStyle(
+                    style: const NeumorphicStyle(
                         depth: 20, intensity: 0.5, color: Colors.white),
                     textStyle: NeumorphicTextStyle(
                       fontSize: 20,
@@ -123,7 +123,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             radius: Constants.avatarRadius,
             child: ClipRRect(
                 borderRadius:
-                    BorderRadius.all(Radius.circular(Constants.avatarRadius)),
+                    const BorderRadius.all(Radius.circular(Constants.avatarRadius)),
                 child: Image.asset("assets/model.jpg")),
           ),
         ),

@@ -8,7 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:kiatsu/utils/providers.dart';
+import 'package:kiatsu/providers/providers.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -32,7 +32,7 @@ class Timeline extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
-        title: Text('お気持ち投稿の場'),
+        title: const Text('お気持ち投稿の場'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -40,8 +40,9 @@ class Timeline extends ConsumerWidget {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
           if (snapshot.hasError) print(snapshot.error);
-          if (!snapshot.hasData)
-            return Center(child: Text('この機能を使うにはログインする必要があります'));
+          if (!snapshot.hasData) {
+            return const Center(child: Text('この機能を使うにはログインする必要があります'));
+          }
           return ListView(
             children: snapshot.data.docs.map<Widget>(
                 (DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
@@ -51,11 +52,11 @@ class Timeline extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(30.0)),
                   elevation: 10,
                   child: Slidable(
-                    actionPane: SlidableDrawerActionPane(),
+                    actionPane: const SlidableDrawerActionPane(),
                     actionExtentRatio: 0.25,
                     child: Container(
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.all(2.0),
+                      margin: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Column(children: [
                         ListTile(
                           leading: (docSnapshot
@@ -69,13 +70,13 @@ class Timeline extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(50.0),
                                   ),
                                 )
-                              : Icon(
+                              : const Icon(
                                   Icons.cloud_circle,
                                   size: 44.0,
                                   color: Colors.black,
                                 ),
                           title: Text(docSnapshot.data()!['comment'].toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18.0, color: Colors.black)),
                           subtitle: Text(
                             (docSnapshot.data()!['location'].toString() ==
@@ -118,18 +119,18 @@ class Timeline extends ConsumerWidget {
               backgroundColor: Colors.black,
               onPressed: () {},
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add,
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  final DateTime createdAt = new DateTime.now();
+                  final DateTime createdAt = DateTime.now();
                   var _editor = TextEditingController();
                   showDialog(
                     context: context,
                     builder: (context) => Dialog(
                         backgroundColor: Colors.transparent,
-                        insetPadding: EdgeInsets.all(10),
+                        insetPadding: const EdgeInsets.all(10),
                         child: Stack(
                           // ignore: deprecated_member_use
                           overflow: Overflow.visible,
@@ -141,14 +142,14 @@ class Timeline extends ConsumerWidget {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.white),
-                              padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+                              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
                               child: TextField(
                                 keyboardType: TextInputType.multiline,
                                 maxLines: null,
                                 controller: _editor,
                                 cursorWidth: 2,
                                 cursorColor: Colors.grey,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: '自由にコメントしてね🥺',
                                   border: InputBorder.none,
                                 ),
@@ -192,7 +193,7 @@ class Timeline extends ConsumerWidget {
                                                 ? showDialog(
                                                     context: context,
                                                     builder: (context) =>
-                                                        AlertDialog(
+                                                        const AlertDialog(
                                                             title: Text(
                                                                 'コメントを入力してください')))
                                                 : await users
@@ -212,7 +213,7 @@ class Timeline extends ConsumerWidget {
                                           child: NeumorphicText(
                                             '押',
                                             // textAlign: TextAlign.center,
-                                            style: NeumorphicStyle(
+                                            style: const NeumorphicStyle(
                                                 depth: 20,
                                                 intensity: 0.5,
                                                 color: Colors.white),

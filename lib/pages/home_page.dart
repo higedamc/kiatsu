@@ -4,7 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
-import 'package:kiatsu/utils/providers.dart';
+import 'package:kiatsu/providers/providers.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +28,7 @@ final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
 final currentUser = firebaseAuth.currentUser;
 
+//TODO: #130 コンストラクターにkeyを渡す
 class HomePage extends riv.ConsumerWidget {
   late final String? cityName;
   final DateTime updatedAt = DateTime.now();
@@ -42,7 +43,8 @@ class HomePage extends riv.ConsumerWidget {
 
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
-    final entitlement = Provider.of<RevenueCat>(context).entitlement;
+    // final entitlement = Provider.of<RevenueCat>(context).entitlement;
+    final entitlement = ref.watch(revenueCatProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
     return Scaffold(
       // key: _scaffoldKey,
@@ -61,7 +63,7 @@ class HomePage extends riv.ConsumerWidget {
               },
               loading: () => Container(),
               success: (data) => IconButton(
-                    icon: Icon(Icons.share_outlined),
+                    icon: const Icon(Icons.share_outlined),
                     onPressed: () {
                       Share.share(data.main!.pressure.toString() +
                           'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
@@ -76,7 +78,7 @@ class HomePage extends riv.ConsumerWidget {
                 icon: NeumorphicIcon(
                   Icons.notifications_outlined,
                   size: 25,
-                  style: NeumorphicStyle(color: Colors.black87),
+                  style: const NeumorphicStyle(color: Colors.black87),
                 ),
                 onPressed: () async {
                   // 未実装ダイアログ
@@ -107,7 +109,7 @@ class HomePage extends riv.ConsumerWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             children: <Widget>[
               Center(
-                child: Container(
+                child: SizedBox(
                   height: 85,
                   width: double.maxFinite,
                   child: Center(
@@ -129,7 +131,7 @@ class HomePage extends riv.ConsumerWidget {
                           loading: () => Container(),
                           success: (data) => NeumorphicText(
                             data.main!.pressure.toString(),
-                            style: NeumorphicStyle(
+                            style: const NeumorphicStyle(
                               depth: 20,
                               intensity: 1,
                               color: Colors.black,
@@ -147,13 +149,13 @@ class HomePage extends riv.ConsumerWidget {
                 ),
               ),
               Center(
-                child: Container(
+                child: SizedBox(
                   height: 70,
                   width: double.maxFinite,
                   child: Center(
                     child: NeumorphicText(
                       'hPa',
-                      style: NeumorphicStyle(
+                      style: const NeumorphicStyle(
                         depth: 20,
                         intensity: 1,
                         color: Colors.black,
@@ -164,7 +166,7 @@ class HomePage extends riv.ConsumerWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 1.0),
+              const SizedBox(height: 1.0),
               Consumer(
                 builder: (context, watch, child) {
                   final weatherState = ref.watch(weatherStateNotifierProvider);
@@ -191,14 +193,14 @@ class HomePage extends riv.ConsumerWidget {
                       child: data.weather![0].main.toString() == 'Clouds'
                           ? NeumorphicText(
                               'Cloudy',
-                              style: NeumorphicStyle(color: Colors.black),
+                              style: const NeumorphicStyle(color: Colors.black),
                               textStyle: NeumorphicTextStyle(
                                   fontWeight: FontWeight.w200, fontSize: 56.0),
                             )
                           : data.weather![0].main.toString() == 'Clear'
                               ? NeumorphicText(
                                   'Clear',
-                                  style: NeumorphicStyle(
+                                  style: const NeumorphicStyle(
                                     color: Colors.black,
                                   ),
                                   textStyle: NeumorphicTextStyle(
@@ -209,21 +211,21 @@ class HomePage extends riv.ConsumerWidget {
                                   ? NeumorphicText(
                                       'Sunny',
                                       style:
-                                          NeumorphicStyle(color: Colors.black),
+                                          const NeumorphicStyle(color: Colors.black),
                                       textStyle: NeumorphicTextStyle(
                                           fontWeight: FontWeight.w200,
                                           fontSize: 56.0),
                                     )
                                   : data.weather![0].main.toString() == 'Rain'
                                       ? NeumorphicText('Rainy',
-                                          style: NeumorphicStyle(
+                                          style: const NeumorphicStyle(
                                               color: Colors.black),
                                           textStyle: NeumorphicTextStyle(
                                               fontWeight: FontWeight.w200,
                                               fontSize: 56.0))
                                       : NeumorphicText(
                                           data.weather![0].main.toString(),
-                                          style: NeumorphicStyle(
+                                          style: const NeumorphicStyle(
                                             color: Colors.black,
                                           ),
                                           textStyle: NeumorphicTextStyle(
@@ -231,10 +233,8 @@ class HomePage extends riv.ConsumerWidget {
                                               fontSize: 56.0),
                                         ),
                     ),
-                    orElse: () => Container(
-                      child: Center(
-                        child: const Text('FETCHING DATA...'),
-                      ),
+                    orElse: () => const Center(
+                      child: Text('FETCHING DATA...'),
                     ),
                   );
                 },
@@ -242,12 +242,12 @@ class HomePage extends riv.ConsumerWidget {
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
+                  children: const <Widget>[
                     // _pienRate(context),
                   ],
                 ),
               ),
-              SizedBox(height: 40.0),
+              const SizedBox(height: 40.0),
               Consumer(
                 builder: (context, watch, child) {
                   final weatherState = ref.watch(weatherStateNotifierProvider);
@@ -259,10 +259,8 @@ class HomePage extends riv.ConsumerWidget {
                       );
                       return Container();
                     },
-                    loading: () => Container(
-                      child: Center(
-                        child: const Text('FETCHING DATA...'),
-                      ),
+                    loading: () => const Center(
+                      child: Text('FETCHING DATA...'),
                     ),
                     success: (data) => Center(
                       child: data.main!.pressure! <= 1000
@@ -287,8 +285,8 @@ class HomePage extends riv.ConsumerWidget {
                                         color: Colors.black,
                                       ),
                                     )
-                                  : Center(
-                                      child: const Text(
+                                  : const Center(
+                                      child: Text(
                                       '',
                                       style: TextStyle(
                                         fontSize: 28.5,
@@ -296,31 +294,29 @@ class HomePage extends riv.ConsumerWidget {
                                       ),
                                     )),
                     ),
-                    orElse: () => Container(
-                      child: Center(
-                        child: const Text('FETCHING DATA...'),
-                      ),
+                    orElse: () => const Center(
+                      child: Text('FETCHING DATA...'),
                     ),
                   );
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10.0,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24.0,
               ),
               Center(
                 // 5日分の天気データ
                 child: Text(_res2!,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black, fontWeight: FontWeight.w100)),
               ),
               Center(
                 child: NeumorphicText(
                   "最終更新 - " +
                       timeago.format(updatedAt, locale: 'ja').toString(),
-                  style: NeumorphicStyle(
+                  style: const NeumorphicStyle(
                     // height: 1, // 10だとちょうど下すれすれで良い感じ
                     color: Colors.black,
                   ),
@@ -330,11 +326,11 @@ class HomePage extends riv.ConsumerWidget {
               Center(
                 child: Text(
                   _res2!,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w100),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 70.0,
               ),
               buildAdmob(entitlement),
@@ -350,52 +346,50 @@ class HomePage extends riv.ConsumerWidget {
             // if (snapshot.hasData)
             await Navigator.of(context).pushNamed('/timeline');
           }),
-      bottomNavigationBar: Container(
-        child: BottomAppBar(
-          color: Colors.white,
-          notchMargin: 6.0,
-          shape: AutomaticNotchedShape(
-              RoundedRectangleBorder(),
-              StadiumBorder(
-                side: BorderSide(),
-              )),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.search_outlined,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    // Navigator.of(context).pushNamed('/timeline');
-                    // 未実装ダイアログ
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialogBox(
-                            title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                            descriptions: "この機能はまだ未実装です♡",
-                            text: "押",
-                            key: UniqueKey(),
-                          );
-                        });
-                  },
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        notchMargin: 6.0,
+        shape: const AutomaticNotchedShape(
+            RoundedRectangleBorder(),
+            StadiumBorder(
+              side: BorderSide(),
+            )),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.search_outlined,
+                  color: Colors.black,
                 ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.home_outlined,
-                    color: Colors.black,
-                  ),
-                  onPressed: () async {
-                    await Navigator.of(context).pushNamed('/a');
-                  },
+                onPressed: () {
+                  // Navigator.of(context).pushNamed('/timeline');
+                  // 未実装ダイアログ
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomDialogBox(
+                          title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
+                          descriptions: "この機能はまだ未実装です♡",
+                          text: "押",
+                          key: UniqueKey(),
+                        );
+                      });
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.home_outlined,
+                  color: Colors.black,
                 ),
-              ],
-            ),
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed('/a');
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -419,7 +413,7 @@ Widget buildAdmob(Entitlement entitlement) {
   final BannerAd myBanner = BannerAd(
     adUnitId: getTestBannerUnitID(),
     size: AdSize.banner,
-    request: AdRequest(),
+    request: const AdRequest(),
     listener: 
     // BannerAdListener(),
     BannerAdListener(

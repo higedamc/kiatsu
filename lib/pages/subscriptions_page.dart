@@ -10,9 +10,10 @@ import 'package:provider/provider.dart';
 
 //TODO: #117 iOS版のサブスク機能が動くようにする
 //TODO: #116 課金後課金情報が消えてしまうので課金情報を更新する
-//TODO: RevenueCatに移行する
 
 class SubscriptionsPage extends StatefulWidget {
+  const SubscriptionsPage({Key? key}) : super(key: key);
+
   @override
   _SubscriptionsPageState createState() => _SubscriptionsPageState();
 }
@@ -20,20 +21,21 @@ class SubscriptionsPage extends StatefulWidget {
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
   bool isLoading = false;
   
+  @override
   Widget build(BuildContext context) {
     final entitlement = Provider.of<RevenueCat>(context).entitlement;
 
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             buildEntitlement(entitlement),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             buildEntitlementText(entitlement),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             // ElevatedButton(
             //   style: ElevatedButton.styleFrom(
             //     minimumSize: Size.fromHeight(50),
@@ -56,9 +58,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
         return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
+                minimumSize: const Size.fromHeight(50),
               ),
-              child: Text(
+              child: const Text(
                 '広告削除済みです',
                 style: TextStyle(fontSize: 20),
               ),
@@ -68,9 +70,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
         return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: Size.fromHeight(50),
+                minimumSize: const Size.fromHeight(50),
               ),
-              child: Text(
+              child: const Text(
                 'プランを見る',
                 style: TextStyle(fontSize: 20),
               ),
@@ -102,21 +104,21 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
       Column(
         children: [
           Icon(icon, size: 100),
-          SizedBox(height: 8),
-          Text(text, style: TextStyle(fontSize: 24)),
+          const SizedBox(height: 8),
+          Text(text, style: const TextStyle(fontSize: 24)),
         ],
       );
 
   Future moveToConsumablesPage() async {
     NavigationService().navigateTo(
-                MaterialPageRoute(builder:(context) => ConsumablesPage()));
+                MaterialPageRoute(builder:(context) => const ConsumablesPage()));
   }
 
     Future fetchOffers2() async {
     final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
 
     if (offerings.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('プランが見つかりませんでした🥺'),
       ));
     } else {
@@ -138,7 +140,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               // final provider =
               //     Provider.of<RevenueCat>(context, listen: false);
               // provider.addCoinsPackage(package);
-              Future.delayed(Duration(seconds: 3));
+              Future.delayed(const Duration(seconds: 3));
               Navigator.pop(context);
             }
 
@@ -153,7 +155,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     final offerings = await PurchaseApi.fetchOffers(all: false);
 
     if (offerings.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('該当するプランが見つかりませんでした'),
       ));
     } else {
