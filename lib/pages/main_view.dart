@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/purchase_page.dart';
@@ -36,9 +35,9 @@ class MainView extends StatelessWidget {
           routes: {
             '/a': (BuildContext context) => const SettingPage(),
             '/timeline': (BuildContext context) => Timeline(
-                  key: UniqueKey(),
+                  key: UniqueKey(), cityName: '',
                 ),
-            '/home': (BuildContext context) => HomePage(),
+            '/home': (BuildContext context) => HomePage(cityName: '', key: UniqueKey(),),
             '/sign': (BuildContext context) => const SignInPage(),
             '/dialog': (BuildContext context) => const Dialogs(),
             '/sub': (BuildContext context) => const SubscriptionsPage(),
@@ -95,7 +94,7 @@ class SplashPage extends MainView {
     return SplashScreen(
       loaderColor: Colors.black,
       seconds: 2,
-      navigateAfterSeconds: HomePage(),
+      navigateAfterSeconds: HomePage(cityName: '', key: UniqueKey(),),
       image: Image.asset('assets/images/face.png'),
       photoSize: 100.0,
     );

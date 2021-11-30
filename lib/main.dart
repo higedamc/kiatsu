@@ -48,7 +48,7 @@ Future<void> startApp() async {
     ));
   };
   // 公開できない環境変数の読み込み
-  await dotenv.dotenv.load(fileName: ".env");
+  await dotenv.dotenv.load(fileName: '.env');
   LineSDK.instance.setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString()).then((_) {
     print('LINE SDK GOT SET UP');
   });
@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: MainView(),
+        home: const MainView(),
       ),
     );
   }

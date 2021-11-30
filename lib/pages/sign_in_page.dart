@@ -153,9 +153,9 @@ class SignInPage extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return CustomDialogBox(
-                            title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                            descriptions: "この機能はまだ未実装です♡",
-                            text: "おけまる",
+                            title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                            descriptions: 'この機能はまだ未実装です♡',
+                            text: 'おけまる',
                             key: UniqueKey(),
                           );
                         });
@@ -173,7 +173,7 @@ class SignInPage extends StatelessWidget {
                   ),
                 )
               : Platform.isIOS
-                  ? const Text("")
+                  ? const Text('')
                   : const Center(child: Text('認証済')),
           // サインアウトボタン
           // (AppleAuthUtil.isSignedIn()) ?

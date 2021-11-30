@@ -26,7 +26,7 @@ class PurchaseApi {
   static Future<void> init() async {
 
     await Purchases.setDebugLogsEnabled(true);
-    await dotenv.dotenv.load(fileName: ".env");
+    await dotenv.dotenv.load(fileName: '.env');
     await Purchases.setup(Coins._apiKey, appUserId: current?.uid.toString());
   }
 

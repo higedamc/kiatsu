@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
 void main() {
-  runApp(DemoApp());
+  runApp(const DemoApp());
 }
 
 class DemoApp extends StatefulWidget {
+  const DemoApp({Key? key}) : super(key: key);
+
   @override
   DemoAppState createState() => DemoAppState();
 }

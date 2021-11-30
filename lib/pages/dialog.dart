@@ -14,7 +14,7 @@ class _DialogsState extends State<Dialogs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Custom Dialog In Flutter"),
+        title: const Text('Custom Dialog In Flutter'),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -24,14 +24,14 @@ class _DialogsState extends State<Dialogs> {
               showDialog(context: context,
                 builder: (BuildContext context){
                 return CustomDialogBox(
-                  title: "Custom Dialog Demo",
-                  descriptions: "Hii all this is a custom dialog in flutter and  you will be use in your flutter applications",
-                  text: "Yes", key: UniqueKey(),
+                  title: 'Custom Dialog Demo',
+                  descriptions: 'Hii all this is a custom dialog in flutter and  you will be use in your flutter applications',
+                  text: 'Yes', key: UniqueKey(),
                 );
                 }
               );
             },
-          child: const Text("Custom Dialog"),
+          child: const Text('Custom Dialog'),
 
         ),
       ),

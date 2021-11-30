@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/model/entitlement.dart';
-import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,29 +29,32 @@ final CollectionReference users = firebaseStore.collection('users');
 final currentUser = firebaseAuth.currentUser;
 
 //TODO: #130 コンストラクターにkeyを渡す
-class HomePage extends riv.ConsumerWidget {
-  late final String? cityName;
+class HomePage extends riv.ConsumerWidget { 
+  final String? cityName;
   final DateTime updatedAt = DateTime.now();
 
   final String? _res2 = '';
+
+  HomePage({this.cityName, Key? key}) : super(key: key);
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void submitCityName(
-      BuildContext context, String cityName, riv.WidgetRef ref) async {
-    await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
+      BuildContext context, String? cityName, riv.WidgetRef ref) async {
+    await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName!);
   }
 
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
-    // final entitlement = Provider.of<RevenueCat>(context).entitlement;
-    final entitlement = ref.watch(revenueCatProvider).entitlement;
+    final entitlement = Provider.of<RevenueCat>(context).entitlement;
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    // final entitlement = ref.watch(revenueCatProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
     return Scaffold(
       // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
         centerTitle: true,
         title: const Text(
-          "",
+          '',
         ),
         leading: Consumer(builder: (context, watch, child) {
           final weatherState = ref.watch(weatherStateNotifierProvider);
@@ -86,9 +89,9 @@ class HomePage extends riv.ConsumerWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return CustomDialogBox(
-                          title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                          descriptions: "この機能はまだ未実装です♡",
-                          text: "押",
+                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                          descriptions: 'この機能はまだ未実装です♡',
+                          text: '押',
                           key: UniqueKey(),
                         );
                       });
@@ -280,7 +283,7 @@ class HomePage extends riv.ConsumerWidget {
                                 )
                               : data.main!.pressure! <= 1010
                                   ? const Text(
-                                      "CHOI-YABAME",
+                                      'CHOI-YABAME',
                                       style: TextStyle(
                                         color: Colors.black,
                                       ),
@@ -314,7 +317,7 @@ class HomePage extends riv.ConsumerWidget {
               ),
               Center(
                 child: NeumorphicText(
-                  "最終更新 - " +
+                  '最終更新 - ' +
                       timeago.format(updatedAt, locale: 'ja').toString(),
                   style: const NeumorphicStyle(
                     // height: 1, // 10だとちょうど下すれすれで良い感じ
@@ -333,7 +336,18 @@ class HomePage extends riv.ConsumerWidget {
               const SizedBox(
                 height: 70.0,
               ),
-              buildAdmob(entitlement),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: deviceHeight * 0.34,
+                        child: buildAdmob(entitlement)),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -372,9 +386,9 @@ class HomePage extends riv.ConsumerWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return CustomDialogBox(
-                          title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                          descriptions: "この機能はまだ未実装です♡",
-                          text: "押",
+                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                          descriptions: 'この機能はまだ未実装です♡',
+                          text: '押',
                           key: UniqueKey(),
                         );
                       });

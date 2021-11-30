@@ -46,12 +46,12 @@ class WeatherRepositoryImpl implements WeatherRepository {
         final weatherData = WeatherClass.fromJson(parsedData);
         return weatherData;
       } else if (response.statusCode == 404) {
-        throw Failure("データが見つかりませんでした🥺");
+        throw Failure('データが見つかりませんでした🥺');
       } else {
-        throw Failure("ネットワークまたはGPSエラーです＾q＾");
+        throw Failure('ネットワークまたはGPSエラーです＾q＾');
       }
     } on SocketException {
-      throw Failure("ネットワークまたはGPSエラーです＾q＾");
+      throw Failure('ネットワークまたはGPSエラーです＾q＾');
     }
   }
 }

@@ -124,7 +124,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             child: ClipRRect(
                 borderRadius:
                     const BorderRadius.all(Radius.circular(Constants.avatarRadius)),
-                child: Image.asset("assets/model.jpg")),
+                child: Image.asset('assets/model.jpg')),
           ),
         ),
       ],

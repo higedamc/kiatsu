@@ -16,6 +16,7 @@ final uid = firebaseAuth.currentUser!.uid;
 final user = firebaseAuth.currentUser;
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
+
 Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
     .collectionGroup('comments')
     .orderBy('createdAt', descending: true)
@@ -25,11 +26,13 @@ void submitCityName(
     BuildContext context, String cityName, WidgetRef ref) async {
   await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
 }
+
 class Timeline extends ConsumerWidget {
-  Timeline({required Key key}) : super(key: key);
-  late final String? cityName;
+  const Timeline({required this.cityName, required Key key}) : super(key: key);
+  final String? cityName;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authUser = ref.watch(authStateChangesProvider).asData?.value;
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('お気持ち投稿の場'),
@@ -39,12 +42,13 @@ class Timeline extends ConsumerWidget {
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
-          if (snapshot.hasError) print(snapshot.error);
+          if (user == null) print(snapshot.error);
           if (!snapshot.hasData) {
             return const Center(child: Text('この機能を使うにはログインする必要があります'));
           }
           return ListView(
-            children: snapshot.data.docs.map<Widget>(
+            // TODO: ここの処理を全部Riverpod化する
+            children: snapshot.data?.docs.map<Widget>(
                 (DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
               return GestureDetector(
                 child: Card(
@@ -65,8 +69,11 @@ class Timeline extends ConsumerWidget {
                               ? CircleAvatar(
                                   radius: 20.0,
                                   child: ClipRRect(
-                                    child: user?.providerData.first.photoURL == null ? null : Image.network(
-                                        user!.providerData.first.photoURL!),
+                                    child: user?.providerData.first.photoURL ==
+                                            null
+                                        ? null
+                                        : Image.network(
+                                            user!.providerData.first.photoURL!),
                                     borderRadius: BorderRadius.circular(50.0),
                                   ),
                                 )
@@ -80,12 +87,12 @@ class Timeline extends ConsumerWidget {
                                   fontSize: 18.0, color: Colors.black)),
                           subtitle: Text(
                             (docSnapshot.data()!['location'].toString() ==
-                                        "null" ||
+                                        'null' ||
                                     docSnapshot
                                             .data()!['location']
                                             .toString() ==
                                         'Cupertino')
-                                ? "電子の海"
+                                ? '電子の海'
                                 : docSnapshot.data()!['location'].toString(),
                           ),
                         ),
@@ -142,7 +149,8 @@ class Timeline extends ConsumerWidget {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.white),
-                              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 50, 20, 20),
                               child: TextField(
                                 keyboardType: TextInputType.multiline,
                                 maxLines: null,
