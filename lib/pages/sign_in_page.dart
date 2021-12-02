@@ -34,8 +34,11 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //TODO: #131 Androidでのログイン時の処理をどうするか決める
-          (Platform.isIOS || Platform.isAndroid && now == null)
-              ? Padding(
+          (now == null)
+              ? Center(
+                  child: Column(
+                    children: [
+                      Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AppleAuthButton(
                     width: 280.0,
@@ -57,18 +60,7 @@ class SignInPage extends StatelessWidget {
                       }
                     },
                   ),
-                )
-              : Column(
-                  children: [
-                    (Platform.isAndroid)
-                        ? const Text('')
-                        : const Center(child: Text('認証済')),
-                  ],
                 ),
-          (now == null)
-              ? Center(
-                  child: Column(
-                    children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GithubAuthButton(
@@ -172,9 +164,7 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
                 )
-              : Platform.isIOS
-                  ? const Text('')
-                  : const Center(child: Text('認証済')),
+              : const Center(child: Text('認証済')),
           // サインアウトボタン
           // (AppleAuthUtil.isSignedIn()) ?
           // NeumorphicButton(

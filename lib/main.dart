@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kiatsu/pages/main_view.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,9 +58,14 @@ Future<void> startApp() async {
     runZonedGuarded(() async {
       runApp(
         ProviderScope(
-          child: MyApp(
-            prefs: prefs,
-            key: UniqueKey(),
+          child: ScreenUtilInit(
+            designSize: const Size(375, 812),
+            builder: () {
+              return MyApp(
+                prefs: prefs,
+                key: UniqueKey(),
+              );
+            }
           ),
         ),
       );

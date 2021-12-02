@@ -32,7 +32,7 @@ class Timeline extends ConsumerWidget {
   final String? cityName;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authStateChangesProvider).asData?.value;
+    // final authUser = ref.watch(authStateChangesProvider).asData?.value;
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('お気持ち投稿の場'),

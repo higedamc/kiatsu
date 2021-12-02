@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/providers/providers.dart';
@@ -317,6 +318,7 @@ class HomePage extends riv.ConsumerWidget {
               ),
               Center(
                 child: NeumorphicText(
+                  //TODO: #132 更新時間が気圧更新時に更新されない問題を修正する
                   '最終更新 - ' +
                       timeago.format(updatedAt, locale: 'ja').toString(),
                   style: const NeumorphicStyle(
@@ -341,8 +343,8 @@ class HomePage extends riv.ConsumerWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      Container(
-                        height: deviceHeight * 0.34,
+                      SizedBox(
+                        height: deviceHeight.w * 0.22,
                         child: buildAdmob(entitlement)),
                     ],
                   ),

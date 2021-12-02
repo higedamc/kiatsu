@@ -39,6 +39,7 @@ dependencies:
       url: https://github.com/tsvillain/Flutter-Neumorphic.git
       publish_to: none
   flutter_riverpod: ^1.0.0
+  flutter_screenutil: ^5.0.1
   flutter_slidable: ^0.6.0
   fluttertoast: ^8.0.8
   font_awesome_flutter: ^9.0.0
