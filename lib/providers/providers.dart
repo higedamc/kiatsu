@@ -18,7 +18,7 @@ final weatherStateNotifierProvider =
 //backup use for textEditingController
 final cityNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
-final revenueCatProvider = ChangeNotifierProvider((ref) => RevenueCat());
+final revenueCatProvider = ChangeNotifierProvider.autoDispose((ref) => RevenueCat());
 
 
 ///参考URL: https://gist.github.com/elvan/24356a02d4faa8b8946a62806e947df4

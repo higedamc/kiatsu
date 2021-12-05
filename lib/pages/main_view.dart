@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
-import 'package:kiatsu/pages/purchase_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
@@ -12,7 +11,6 @@ import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:splashscreen/splashscreen.dart';
 
-import 'consumables_page.dart';
 
 // final pageIdProvider = StateProvider((ref) => 0);
 
@@ -41,8 +39,6 @@ class MainView extends StatelessWidget {
             '/sign': (BuildContext context) => const SignInPage(),
             '/dialog': (BuildContext context) => const Dialogs(),
             '/sub': (BuildContext context) => const SubscriptionsPage(),
-            '/con': (BuildContext context) => const ConsumablesPage(),
-            '/dev': (BuildContext context) => const DevPurchasePage(),
           },
 
           home: SplashPage(),

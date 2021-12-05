@@ -17,6 +17,10 @@ class GoogleAuthUtil {
   /// サインアウト
   static void signOut() => FirebaseAuth.instance.signOut();
 
+  static final googleSignIn = GoogleSignIn(scopes: [
+    'email'
+  ]);
+
   /// サインイン
   static Future<User?> signIn(BuildContext context) async {
     final UserCredential? credential = await signInWithGoogle(context);
@@ -24,24 +28,29 @@ class GoogleAuthUtil {
   }
 
   static Future<UserCredential?> signInWithGoogle(BuildContext context) async {
-    // final _user = FirebaseAuth.instance.currentUser;
     final newUser = FirebaseAuth.instance;
     final createdAt = DateTime.now();
     final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
     final CollectionReference collection = firebaseStore.collection('users');
 
-    final GoogleSignInAccount googleUser =
-        await GoogleSignIn().signIn() as GoogleSignInAccount;
+    try {
+      final GoogleSignInAccount? googleUser =
+        await googleSignIn.signIn();
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-    final AuthCredential googleAuthCredential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+    final googleAuthCredential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
     );
 
-    return await newUser
+    // final AuthCredential googleAuthCredential = GoogleAuthProvider.credential(
+    //   accessToken: googleAuth.accessToken,
+    //   idToken: googleAuth.idToken,
+    // );
+
+    return newUser
         .signInWithCredential(googleAuthCredential)
         .then((result) async {
       final displayName = result.user?.displayName;
@@ -60,5 +69,10 @@ class GoogleAuthUtil {
         'providerData': providerData,
       });
     });
+    } on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+      return null;
+    }
   }
 }

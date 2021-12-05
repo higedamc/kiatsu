@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/pages/custom_dialog_box.dart';
 
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/providers/providers.dart';
@@ -61,18 +62,20 @@ class SettingPage extends ConsumerWidget {
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const SignInPage()));
+                                        builder: (context) =>
+                                            const SignInPage()));
                               }),
                           SettingsTile(
                               title: 'アカウント',
                               onPressed: (context) => Clipboard.setData(
                                     ClipboardData(
-                                      text: user != null ? user.uid.toString() : '',
+                                      text: user != null
+                                          ? user.uid.toString()
+                                          : '',
                                     ),
                                   ),
-                              subtitle: user != null
-                                  ? user.uid.toString()
-                                  : '未登録'),
+                              subtitle:
+                                  user != null ? user.uid.toString() : '未登録'),
                           // TODO: サインアウトの挙動の実装が微妙なので本チャンで実装するか迷う
                           SettingsTile(
                               title: 'サインアウト',
@@ -154,19 +157,23 @@ class SettingPage extends ConsumerWidget {
                               subtitle: '押',
                               onPressed: (context) async {
                                 // Navigator.pushNamed(context, '/con');
-                                Navigator.pushNamed(context, '/sub');
+                                user == null
+                                    ?  
+                                    showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CustomDialogBox(
+                                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                        descriptions: 'この機能を使うにはログインが必要です♡',
+                                        text: 'りょ',
+                                        key: UniqueKey(),
+                                      );
+                                    })
+                                    // Navigator.pushNamed(context, '/sub')
+                                    : Navigator.pushNamed(context, '/sub');
                                 //  Navigator.pushNamed(context, '/dev');
                                 // Navigator.pop(context);
-                                // showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return CustomDialogBox(
-                                //         title: "てへぺろ☆(ゝω･)vｷｬﾋﾟ",
-                                //         descriptions: "この機能はまだ未実装です♡",
-                                //         text: "おけまる",
-                                //         key: UniqueKey(),
-                                //       );
-                                //     });
+                               
                               }),
                         ],
                       ),

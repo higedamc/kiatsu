@@ -14,6 +14,7 @@ import 'package:wiredash/wiredash.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'api/purchase_api.dart';
+import 'package:adapty_flutter/adapty_flutter.dart';
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
@@ -30,6 +31,7 @@ Future<void> startApp() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
 
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.dotenv.load(fileName: '.env');
   MobileAds.instance.initialize();
   
  
@@ -38,6 +40,7 @@ Future<void> startApp() async {
   
   // final appleSignInAvailable = await AppleSignInAvailable.check();
   await PurchaseApi.init();
+  // Adapty.activate();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
@@ -48,8 +51,7 @@ Future<void> startApp() async {
       backgroundColor: Colors.white,
     ));
   };
-  // 公開できない環境変数の読み込み
-  await dotenv.dotenv.load(fileName: '.env');
+  
   LineSDK.instance.setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString()).then((_) {
     print('LINE SDK GOT SET UP');
   });

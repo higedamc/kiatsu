@@ -21,7 +21,6 @@ import 'custom_dialog_box.dart';
  * 詳細は => https://github.com/Meshkat-Shadik/WeatherApp
  */
 
-// TODO: #107 StoreKitTestCertificate.cerを追加
 // TODO: #114 ダッシュボード機能の実装
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -46,9 +45,9 @@ class HomePage extends riv.ConsumerWidget {
 
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
-    final entitlement = Provider.of<RevenueCat>(context).entitlement;
+    // final entitlement = Provider.of<RevenueCat>(context).entitlement;
     final double deviceHeight = MediaQuery.of(context).size.height;
-    // final entitlement = ref.watch(revenueCatProvider).entitlement;
+    final entitlement = ref.watch(revenueCatProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
     return Scaffold(
       // key: _scaffoldKey,
@@ -100,258 +99,248 @@ class HomePage extends riv.ConsumerWidget {
           )
         ],
       ),
-      body: Container(
-        key: GlobalKey(),
-        child: RefreshIndicator(
-          color: Colors.black,
-          onRefresh: () async {
-            return await ref
-                .refresh(weatherStateNotifierProvider.notifier)
-                .getWeather(cityName.toString());
-          },
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: <Widget>[
-              Center(
-                child: SizedBox(
-                  height: 85,
-                  width: double.maxFinite,
-                  child: Center(
-                    child: Consumer(
-                      builder: (context, watch, child) {
-                        final weatherState =
-                            ref.watch(weatherStateNotifierProvider);
-                        return weatherState.maybeWhen(
-                          initial: () {
-                            Future.delayed(
-                                Duration.zero,
-                                () => submitCityName(
-                                      context,
-                                      cityName.toString(),
-                                      ref,
-                                    ));
-                            return Container();
-                          },
-                          loading: () => Container(),
-                          success: (data) => NeumorphicText(
-                            data.main!.pressure.toString(),
-                            style: const NeumorphicStyle(
-                              depth: 20,
-                              intensity: 1,
-                              color: Colors.black,
-                            ),
-                            textStyle: NeumorphicTextStyle(
-                              fontWeight: FontWeight.w200,
-                              fontSize: 75.0,
-                            ),
-                          ),
-                          orElse: () => Container(),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              Center(
-                child: SizedBox(
-                  height: 70,
-                  width: double.maxFinite,
-                  child: Center(
-                    child: NeumorphicText(
-                      'hPa',
-                      style: const NeumorphicStyle(
-                        depth: 20,
-                        intensity: 1,
-                        color: Colors.black,
-                      ),
-                      textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.w200, fontSize: 75.0),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 1.0),
-              Consumer(
-                builder: (context, watch, child) {
-                  final weatherState = ref.watch(weatherStateNotifierProvider);
-                  return weatherState.maybeWhen(
-                    initial: () {
-                      Future.delayed(
-                        Duration.zero,
-                        () => submitCityName(
-                          context,
-                          cityName.toString(),
-                          ref,
-                        ),
-                      );
-                      return Container();
-                    },
-                    loading: () => Container(
-                        // child: Center(
-                        //   child: const Text('FETCHING DATA...'),
-                        // ),
-                        ),
-                    success: (data) => Container(
-                      height: 140,
-                      alignment: Alignment.center,
-                      child: data.weather![0].main.toString() == 'Clouds'
-                          ? NeumorphicText(
-                              'Cloudy',
-                              style: const NeumorphicStyle(color: Colors.black),
-                              textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.w200, fontSize: 56.0),
-                            )
-                          : data.weather![0].main.toString() == 'Clear'
-                              ? NeumorphicText(
-                                  'Clear',
-                                  style: const NeumorphicStyle(
-                                    color: Colors.black,
-                                  ),
-                                  textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 56.0),
-                                )
-                              : data.weather![0].main.toString() == 'Clear Sky'
-                                  ? NeumorphicText(
-                                      'Sunny',
-                                      style:
-                                          const NeumorphicStyle(color: Colors.black),
-                                      textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.w200,
-                                          fontSize: 56.0),
-                                    )
-                                  : data.weather![0].main.toString() == 'Rain'
-                                      ? NeumorphicText('Rainy',
-                                          style: const NeumorphicStyle(
-                                              color: Colors.black),
-                                          textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.w200,
-                                              fontSize: 56.0))
-                                      : NeumorphicText(
-                                          data.weather![0].main.toString(),
-                                          style: const NeumorphicStyle(
-                                            color: Colors.black,
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.w200,
-                                              fontSize: 56.0),
-                                        ),
-                    ),
-                    orElse: () => const Center(
-                      child: Text('FETCHING DATA...'),
-                    ),
-                  );
-                },
-              ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const <Widget>[
-                    // _pienRate(context),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40.0),
-              Consumer(
-                builder: (context, watch, child) {
-                  final weatherState = ref.watch(weatherStateNotifierProvider);
-                  return weatherState.maybeWhen(
-                    initial: () {
-                      Future.delayed(
-                        Duration.zero,
-                        () => submitCityName(context, cityName.toString(), ref),
-                      );
-                      return Container();
-                    },
-                    loading: () => const Center(
-                      child: Text('FETCHING DATA...'),
-                    ),
-                    success: (data) => Center(
-                      child: data.main!.pressure! <= 1000
-                          ? Text(
-                              'DEADLY',
-                              style: TextStyle(
-                                  color: Colors.redAccent[700],
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 80.0),
-                            )
-                          : data.main!.pressure! <= 1008
-                              ? const Text(
-                                  'YABAME',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                )
-                              : data.main!.pressure! <= 1010
-                                  ? const Text(
-                                      'CHOI-YABAME',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    )
-                                  : const Center(
-                                      child: Text(
-                                      '',
-                                      style: TextStyle(
-                                        fontSize: 28.5,
-                                        color: Colors.black,
-                                      ),
-                                    )),
-                    ),
-                    orElse: () => const Center(
-                      child: Text('FETCHING DATA...'),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              Center(
-                // 5日分の天気データ
-                child: Text(_res2!,
-                    style: const TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w100)),
-              ),
-              Center(
-                child: NeumorphicText(
-                  //TODO: #132 更新時間が気圧更新時に更新されない問題を修正する
-                  '最終更新 - ' +
-                      timeago.format(updatedAt, locale: 'ja').toString(),
-                  style: const NeumorphicStyle(
-                    // height: 1, // 10だとちょうど下すれすれで良い感じ
-                    color: Colors.black,
-                  ),
-                  textStyle: NeumorphicTextStyle(),
-                ),
-              ),
-              Center(
-                child: Text(
-                  _res2!,
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w100),
-                ),
-              ),
-              const SizedBox(
-                height: 70.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+      body: RefreshIndicator(
+        color: Colors.black,
+        onRefresh: () async {
+          return await ref
+              .refresh(weatherStateNotifierProvider.notifier)
+              .getWeather(cityName.toString());
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: <Widget>[
+            Center(
+              child: SizedBox(
+                height: 85,
+                width: double.maxFinite,
                 child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: deviceHeight.w * 0.22,
-                        child: buildAdmob(entitlement)),
-                    ],
+                  child: Consumer(
+                    builder: (context, watch, child) {
+                      final weatherState =
+                          ref.watch(weatherStateNotifierProvider);
+                      return weatherState.maybeWhen(
+                        initial: () {
+                          Future.delayed(
+                              Duration.zero,
+                              () => submitCityName(
+                                    context,
+                                    cityName.toString(),
+                                    ref,
+                                  ));
+                          return Container();
+                        },
+                        loading: () => Container(),
+                        success: (data) => NeumorphicText(
+                          data.main!.pressure.toString(),
+                          style: const NeumorphicStyle(
+                            depth: 20,
+                            intensity: 1,
+                            color: Colors.black,
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.w200,
+                            fontSize: 75.0,
+                          ),
+                        ),
+                        orElse: () => Container(),
+                      );
+                    },
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Center(
+              child: SizedBox(
+                height: 70,
+                width: double.maxFinite,
+                child: Center(
+                  child: NeumorphicText(
+                    'hPa',
+                    style: const NeumorphicStyle(
+                      depth: 20,
+                      intensity: 1,
+                      color: Colors.black,
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.w200, fontSize: 75.0),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 1.0),
+            Consumer(
+              builder: (context, watch, child) {
+                final weatherState = ref.watch(weatherStateNotifierProvider);
+                return weatherState.maybeWhen(
+                  initial: () {
+                    Future.delayed(
+                      Duration.zero,
+                      () => submitCityName(
+                        context,
+                        cityName.toString(),
+                        ref,
+                      ),
+                    );
+                    return Container();
+                  },
+                  loading: () => Container(
+                      // child: Center(
+                      //   child: const Text('FETCHING DATA...'),
+                      // ),
+                      ),
+                  success: (data) => Container(
+                    height: 140,
+                    alignment: Alignment.center,
+                    child: data.weather![0].main.toString() == 'Clouds'
+                        ? NeumorphicText(
+                            'Cloudy',
+                            style: const NeumorphicStyle(color: Colors.black),
+                            textStyle: NeumorphicTextStyle(
+                                fontWeight: FontWeight.w200, fontSize: 56.0),
+                          )
+                        : data.weather![0].main.toString() == 'Clear'
+                            ? NeumorphicText(
+                                'Clear',
+                                style: const NeumorphicStyle(
+                                  color: Colors.black,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.w200,
+                                    fontSize: 56.0),
+                              )
+                            : data.weather![0].main.toString() == 'Clear Sky'
+                                ? NeumorphicText(
+                                    'Sunny',
+                                    style:
+                                        const NeumorphicStyle(color: Colors.black),
+                                    textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: 56.0),
+                                  )
+                                : data.weather![0].main.toString() == 'Rain'
+                                    ? NeumorphicText('Rainy',
+                                        style: const NeumorphicStyle(
+                                            color: Colors.black),
+                                        textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.w200,
+                                            fontSize: 56.0))
+                                    : NeumorphicText(
+                                        data.weather![0].main.toString(),
+                                        style: const NeumorphicStyle(
+                                          color: Colors.black,
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.w200,
+                                            fontSize: 56.0),
+                                      ),
+                  ),
+                  orElse: () => const Center(
+                    child: Text('FETCHING DATA...'),
+                  ),
+                );
+              },
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const <Widget>[
+                  // _pienRate(context),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40.0),
+            Consumer(
+              builder: (context, watch, child) {
+                final weatherState = ref.watch(weatherStateNotifierProvider);
+                return weatherState.maybeWhen(
+                  initial: () {
+                    Future.delayed(
+                      Duration.zero,
+                      () => submitCityName(context, cityName.toString(), ref),
+                    );
+                    return Container();
+                  },
+                  loading: () => const Center(
+                    child: Text('FETCHING DATA...'),
+                  ),
+                  success: (data) => Center(
+                    child: data.main!.pressure! <= 1000
+                        ? Text(
+                            'DEADLY',
+                            style: TextStyle(
+                                color: Colors.redAccent[700],
+                                fontWeight: FontWeight.w500,
+                                fontSize: 80.0),
+                          )
+                        : data.main!.pressure! <= 1008
+                            ? const Text(
+                                'YABAME',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              )
+                            : data.main!.pressure! <= 1010
+                                ? const Text(
+                                    'CHOI-YABAME',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : const Center(
+                                    child: Text(
+                                    '',
+                                    style: TextStyle(
+                                      fontSize: 28.5,
+                                      color: Colors.black,
+                                    ),
+                                  )),
+                  ),
+                  orElse: () => const Center(
+                    child: Text('FETCHING DATA...'),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            const SizedBox(
+              height: 24.0,
+            ),
+            Center(
+              // 5日分の天気データ
+              child: Text(_res2!,
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w100)),
+            ),
+            Center(
+              child: NeumorphicText(
+                //TODO: #132 更新時間が気圧更新時に更新されない問題を修正する
+                '最終更新 - ' +
+                    timeago.format(updatedAt, locale: 'ja').toString(),
+                style: const NeumorphicStyle(
+                  // height: 1, // 10だとちょうど下すれすれで良い感じ
+                  color: Colors.black,
+                ),
+                textStyle: NeumorphicTextStyle(),
+              ),
+            ),
+            Center(
+              child: Text(
+                _res2!,
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w100),
+              ),
+            ),
+            const SizedBox(
+              height: 70.0,
+            ),
+            Center(
+              child: SizedBox(
+                height: deviceHeight.w * 0.1,
+                child: buildAdmob(entitlement)),
+            ),
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

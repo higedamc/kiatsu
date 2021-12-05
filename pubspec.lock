@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "30.0.0"
+  adapty_flutter:
+    dependency: "direct main"
+    description:
+      name: adapty_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
   analyzer:
     dependency: transitive
     description:

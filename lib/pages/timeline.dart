@@ -8,11 +8,12 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-final uid = firebaseAuth.currentUser!.uid;
+final uid = firebaseAuth.currentUser?.uid;
 final user = firebaseAuth.currentUser;
 final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
@@ -41,11 +42,12 @@ class Timeline extends ConsumerWidget {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: collectionStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
-          if (user == null) print(snapshot.error);
+           // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
+           if (user == null) print(snapshot.error);
           if (!snapshot.hasData) {
-            return const Center(child: Text('この機能を使うにはログインする必要があります'));
-          }
+             return const Center(child: Text('この機能はログインしているユーザーのみ使用できます'));
+
+           }
           return ListView(
             // TODO: ここの処理を全部Riverpod化する
             children: snapshot.data?.docs.map<Widget>(
@@ -120,20 +122,29 @@ class Timeline extends ConsumerWidget {
           );
         },
       ),
-      floatingActionButton: (user == null)
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Colors.black,
-              onPressed: () {},
-              child: IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  final DateTime createdAt = DateTime.now();
-                  var _editor = TextEditingController();
-                  showDialog(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: () {},
+        child: IconButton(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            final DateTime createdAt = DateTime.now();
+            final _editor = TextEditingController();
+            (uid == null)
+                ? showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialogBox(
+                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                        descriptions: 'この機能はログインしているユーザーのみ使用できます',
+                        text: 'りょ',
+                        key: UniqueKey(),
+                      );
+                    })
+                : showDialog(
                     context: context,
                     builder: (context) => Dialog(
                         backgroundColor: Colors.transparent,
@@ -166,7 +177,7 @@ class Timeline extends ConsumerWidget {
                             Positioned(
                               top: 140,
                               right: 1,
-                              child: Consumer(builder: (context, watch, child) {
+                              child: Consumer(builder: (context, ref, child) {
                                 final weatherState =
                                     ref.watch(weatherStateNotifierProvider);
                                 return weatherState.when(
@@ -246,9 +257,9 @@ class Timeline extends ConsumerWidget {
                           ],
                         )),
                   );
-                },
-              ),
-            ),
+          },
+        ),
+      ),
     );
   }
 }
