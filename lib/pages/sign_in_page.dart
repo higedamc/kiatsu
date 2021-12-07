@@ -7,6 +7,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/github_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
+import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:social_auth_buttons/res/buttons/apple_auth_button.dart';
@@ -125,16 +126,18 @@ class SignInPage extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(1, 10, 50, 10),
                             ),
                             onPressed: () async {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CustomDialogBox(
-                                      title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                      descriptions: 'この機能はまだ未実装です♡',
-                                      text: 'おけまる',
-                                      key: UniqueKey(),
-                                    );
-                                  });
+                              await LineAuthUtil.signIn(context);
+                              Navigator.pop(context);
+                              // showDialog(
+                              //     context: context,
+                              //     builder: (BuildContext context) {
+                              //       return CustomDialogBox(
+                              //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                              //         descriptions: 'この機能はまだ未実装です♡',
+                              //         text: 'おけまる',
+                              //         key: UniqueKey(),
+                              //       );
+                              //     });
                             },
                             icon: Image.asset('assets/images/line.png'),
                             label: const Padding(

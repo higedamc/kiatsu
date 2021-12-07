@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/providers/providers.dart';
-import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,7 +55,7 @@ class HomePage extends riv.ConsumerWidget {
         title: const Text(
           '',
         ),
-        leading: Consumer(builder: (context, watch, child) {
+        leading: Consumer(builder: (context, watch, chmustache40ild) {
           final weatherState = ref.watch(weatherStateNotifierProvider);
           return weatherState.maybeWhen(
               initial: () {

@@ -216,7 +216,8 @@ class Timeline extends ConsumerWidget {
                                                             title: Text(
                                                                 'コメントを入力してください')))
                                                 : await users
-                                                    .doc(currentUser!.uid)
+                                                    .doc(currentUser
+                                                    !.uid)
                                                     .collection('comments')
                                                     .doc()
                                                     .set({
