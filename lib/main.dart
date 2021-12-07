@@ -3,17 +3,18 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kiatsu/pages/main_view.dart';
-import 'package:kiatsu/utils/apple_signin_available.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:wiredash/wiredash.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
-import 'package:admob_flutter/admob_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'api/purchase_api.dart';
+import 'package:adapty_flutter/adapty_flutter.dart';
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
@@ -30,7 +31,8 @@ Future<void> startApp() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
 
   WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize();
+  await dotenv.dotenv.load(fileName: '.env');
+  MobileAds.instance.initialize();
   
  
   
@@ -38,18 +40,18 @@ Future<void> startApp() async {
   
   // final appleSignInAvailable = await AppleSignInAvailable.check();
   await PurchaseApi.init();
+  // Adapty.activate();
 
   timeago.setLocaleMessages('ja', timeago.JaMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   ErrorWidget.builder = (FlutterErrorDetails details) {
-    return Center(
+    return const Center(
         child: CircularProgressIndicator(
       backgroundColor: Colors.white,
     ));
   };
-  // 公開できない環境変数の読み込み
-  await dotenv.dotenv.load(fileName: ".env");
+  
   LineSDK.instance.setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString()).then((_) {
     print('LINE SDK GOT SET UP');
   });
@@ -58,9 +60,14 @@ Future<void> startApp() async {
     runZonedGuarded(() async {
       runApp(
         ProviderScope(
-          child: MyApp(
-            prefs: prefs,
-            key: UniqueKey(),
+          child: ScreenUtilInit(
+            designSize: const Size(375, 812),
+            builder: () {
+              return MyApp(
+                prefs: prefs,
+                key: UniqueKey(),
+              );
+            }
           ),
         ),
       );
@@ -94,7 +101,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: MainView(),
+        home: const MainView(),
       ),
     );
   }

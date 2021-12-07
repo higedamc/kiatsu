@@ -1,20 +1,24 @@
+//TODO: はるのんのエラーハンドリングの記事参考にRevenueCatのエラーハンドリングをする
+
+//参考URL: https://zenn.dev/harunonsystem/articles/flutter_firebase_auth_error_handling
+
 enum PurchasesErrorCode {
-  UnknownError,
-  PurchaseCancelledError,
-  StoreProblemError,
-  PurchaseNotAllowedError,
-  PurchaseInvalidError,
-  ProductNotAvailableForPurchaseError,
-  ProductAlreadyPurchasedError,
-  ReceiptAlreadyInUseError,
-  InvalidReceiptError,
-  MissingReceiptFileError,
-  NetworkError,
-  InvalidCredentialsError,
-  UnexpectedBackendResponseError,
-  ReceiptInUseByOtherSubscriberError,
-  InvalidAppUserIdError,
-  OperationAlreadyInProgressError,
-  UnknownBackendError,
-  InsufficientPermissionsError
+  unknownError,
+  purchaseCancelledError,
+  storeProblemError,
+  purchaseNotAllowedError,
+  purchaseInvalidError,
+  productNotAvailableForPurchaseError,
+  productAlreadyPurchasedError,
+  receiptAlreadyInUseError,
+  invalidReceiptError,
+  missingReceiptFileError,
+  networkError,
+  invalidCredentialsError,
+  unexpectedBackendResponseError,
+  receiptInUseByOtherSubscriberError,
+  invalidAppUserIdError,
+  operationAlreadyInProgressError,
+  unknownBackendError,
+  insufficientPermissionsError
 }

@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-class RevenueCat extends ChangeNotifier {
-  RevenueCat() {
+// TODO: ちゃんと動くように実装する
+class TimeAgo extends ChangeNotifier {
+  TimeAgo() {
     init();
   }
 

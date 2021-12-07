@@ -1,50 +1,52 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
-import 'package:kiatsu/pages/purchase_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:splashscreen/splashscreen.dart';
 
-import 'consumables_page.dart';
+
+// final pageIdProvider = StateProvider((ref) => 0);
 
 class MainView extends StatelessWidget {
+  const MainView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (BuildContext context) => RevenueCatProvider(),
+    return provider.ChangeNotifierProvider(
+        create: (BuildContext context) => RevenueCat(),
         child: NeumorphicApp(
+          debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
-          theme: NeumorphicThemeData(
+          theme: const NeumorphicThemeData(
             baseColor: Color(0xFFFFFFFF),
             lightSource: LightSource.topLeft,
             depth: 20,
             intensity: 1,
           ),
           routes: {
-            '/a': (BuildContext context) => SettingPage(),
+            '/a': (BuildContext context) => const SettingPage(),
             '/timeline': (BuildContext context) => Timeline(
-                  key: UniqueKey(),
+                  key: UniqueKey(), cityName: '',
                 ),
-            '/home': (BuildContext context) => HomePage(),
-            '/signpage': (BuildContext context) => SignInPage(),
-            '/dialog': (BuildContext context) => Dialogs(),
-            '/sub': (BuildContext context) => SubscriptionsPage(),
-            '/con': (BuildContext context) => ConsumablesPage(),
-            '/dev': (BuildContext context) => DevPurchasePage(),
+            '/home': (BuildContext context) => HomePage(cityName: '', key: UniqueKey(),),
+            '/sign': (BuildContext context) => const SignInPage(),
+            '/dialog': (BuildContext context) => const Dialogs(),
+            '/sub': (BuildContext context) => const SubscriptionsPage(),
           },
+
           home: SplashPage(),
         ));
   }
 }
 
+//TODO: #119 Splashscreenをnullableなものに変える
 class SplashPage extends MainView {
   // final DateTime createdAt = new DateTime.now();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -55,7 +57,7 @@ class SplashPage extends MainView {
   //   return user;
   // }
 
-  SplashPage() {
+  SplashPage({Key? key}) : super(key: key) {
     final User? current = firebaseAuth.currentUser;
     // final CollectionReference users = firebaseStore.collection('users');
     // if (current == null) {
@@ -78,6 +80,8 @@ class SplashPage extends MainView {
     // }
     if (current != null) {
       print(current.uid);
+      print(current.photoURL);
+      print(current.providerData.first.photoURL);
     }
   }
 
@@ -86,8 +90,8 @@ class SplashPage extends MainView {
     return SplashScreen(
       loaderColor: Colors.black,
       seconds: 2,
-      navigateAfterSeconds: HomePage(),
-      image: new Image.asset('assets/images/face.png'),
+      navigateAfterSeconds: HomePage(cityName: '', key: UniqueKey(),),
+      image: Image.asset('assets/images/face.png'),
       photoSize: 100.0,
     );
   }
