@@ -4,6 +4,8 @@
 
 <img src="https://github.com/higedamc/kiatsu/blob/master/screenshots/IMG_2924.jpg">
 
+[![Codemagic build status](https://api.codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/status_badge.svg)](https://codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/latest_build)
+
 シンプルな気圧測定アプリ / A simple application for meteoropathy
 
 # How To Use
@@ -20,7 +22,7 @@ TWITTER_SECRET_KEY='YOUR_SECRET_KEY'
 ```
 3. env配下のproduction.dartを起動
 
-# 今後実装する機能 / Future Feature
+# 今後実装する機能 / Future Features
 
 - [ ] 全国気圧ヒートマップ
 - [ ] 1週間分の気圧変化チャート

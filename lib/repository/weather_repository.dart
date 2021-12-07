@@ -4,8 +4,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:geocode/geocode.dart';
 
 import 'failures.dart';
+
+//TODO: Android版で天気情報が取得できない問題をなんとかする
 
 abstract class WeatherRepository {
   Future<WeatherClass> getWeather (String cityName);
@@ -14,6 +17,7 @@ abstract class WeatherRepository {
 class WeatherRepositoryImpl implements WeatherRepository {
   final http.Client _client;
   WeatherRepositoryImpl(this._client);
+  // final GeoCode geoCode = GeoCode();
 
   @override
   Future<WeatherClass> getWeather(String cityName) async {
@@ -42,12 +46,12 @@ class WeatherRepositoryImpl implements WeatherRepository {
         final weatherData = WeatherClass.fromJson(parsedData);
         return weatherData;
       } else if (response.statusCode == 404) {
-        throw Failure("データが見つかりませんでした🥺");
+        throw Failure('データが見つかりませんでした🥺');
       } else {
-        throw Failure("ネットワークまたはGPSエラーです＾q＾");
+        throw Failure('ネットワークまたはGPSエラーです＾q＾');
       }
     } on SocketException {
-      throw Failure("ネットワークまたはGPSエラーです＾q＾");
+      throw Failure('ネットワークまたはGPSエラーです＾q＾');
     }
   }
 }
