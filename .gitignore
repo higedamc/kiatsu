@@ -148,5 +148,3 @@ ios/Podfile
 ios/Podfile.lock
 android/keystore.properties
 pubspec.lock
-ios/StoreKitTestCertificate.cer
-/ios/StoreKitTestCertificate.cer
