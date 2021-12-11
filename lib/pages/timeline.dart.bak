@@ -1,49 +1,38 @@
-import 'dart:convert';
+import 'dart:async';
+import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
 
-//TODO: Firestore関連の処理のRiverpod化
+//参考URL:　https://www.fixes.pub/program/178538.html
+
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-final currentUser = firebaseAuth.currentUser;
 final uid = firebaseAuth.currentUser?.uid;
+final user = firebaseAuth.currentUser;
+final currentUser = firebaseAuth.currentUser;
 final CollectionReference users = firebaseStore.collection('users');
-final CollectionReference<Map<String, dynamic>> test =
-    users.doc(uid).collection('comments');
-// final fuckMe = users.doc(uid).collection('comments').doc().id;
-// final ahe = firebaseStore
-//     .collection('users')
-//     .doc(uid)
-//     .collection('comments')
-//     .where('userId', isEqualTo: uid)
-//     .get()
-//     .then((QuerySnapshot snapshot) => {
-//           snapshot.docs.forEach((DocumentSnapshot document) {
-//             print(document.data().toString());
-//           })
-//         });
 
-// final docRef = users.doc(uid);
-// final docSnap = docRef.get();
+Stream<QuerySnapshot<Map<String, dynamic>>> collectionStream = firebaseStore
+    .collectionGroup('comments')
+    .orderBy('createdAt', descending: true)
+    .snapshots();
 
-class Timeline2 extends ConsumerWidget {
-  const Timeline2({required this.cityName, required Key key}) : super(key: key);
+void submitCityName(
+    BuildContext context, String cityName, WidgetRef ref) async {
+  await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
+}
 
+class Timeline extends ConsumerWidget {
+  const Timeline({required this.cityName, required Key key}) : super(key: key);
   final String? cityName;
-
-  void submitCityName(
-      BuildContext context, String cityName, WidgetRef ref) async {
-    await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -51,62 +40,101 @@ class Timeline2 extends ConsumerWidget {
         title: const Text('お気持ち投稿の場'),
         centerTitle: true,
       ),
-      body: ref.watch(collectionStreamProvider).when(
-          data: (data) {
-            print(data.length);
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return data[index]['userId'] != ''
-                    ? GestureDetector(
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          elevation: 10,
-                          child: Slidable(
-                            actionPane: const SlidableDrawerActionPane(),
-                            actionExtentRatio: 0.25,
-                            child: Container(
-                              margin: const EdgeInsets.all(10.0),
-                              padding: const EdgeInsets.all(2.0),
-                              child: Column(children: [
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.cloud_circle,
-                                    size: 44.0,
-                                    color: Colors.black,
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: collectionStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          // TODO: 非ログイン時に投稿ボタンを消してTLだけ見れるような実装にしたい
+          if (snapshot.hasError) print(snapshot.error);
+          if (!snapshot.hasData) {
+            return const Center(
+                child: CircularProgressIndicator(
+              backgroundColor: Colors.blue,
+            ));
+          }
+          return ListView(
+            // TODO: ここの処理を全部Riverpod化する
+            children: snapshot.data?.docs.map<Widget>(
+                (DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
+              return GestureDetector(
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  elevation: 10,
+                  child: Slidable(
+                    actionPane: const SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.25,
+                    child: Container(
+                      margin: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(2.0),
+                      child: Column(children: [
+                        ListTile(
+                          leading: (docSnapshot
+                                  .data()!
+                                  .containsValue(currentUser?.uid))
+                              ? CircleAvatar(
+                                  radius: 20.0,
+                                  child: ClipRRect(
+                                    child: user?.providerData.first.photoURL ==
+                                            null
+                                        ? null
+                                        : Image.network(
+                                            user!.providerData.first.photoURL!),
+                                    borderRadius: BorderRadius.circular(50.0),
                                   ),
-                                  title: Text(data[index]['comment'].toString(),
-                                      style: const TextStyle(
-                                          fontSize: 18.0, color: Colors.black)),
-                                  subtitle: const Text('電子の海'),
+                                )
+                              : const Icon(
+                                  Icons.cloud_circle,
+                                  size: 44.0,
+                                  color: Colors.black,
                                 ),
-                              ]),
-                            ),
-                            actions: <Widget>[
-                              if (data[index]['userId']
-                                  .contains(currentUser?.uid))
-                                IconSlideAction(
-                                    caption: '削除',
-                                    color: Colors.red[700],
-                                    icon: Icons.delete,
-                                    onTap: () async {
-                                      test
-                                          .doc(data[index]['commentId'])
-                                          .delete();
-                                      // });
-                                      // });
-                                    }),
-                            ],
+                          title: Text(docSnapshot.data()!['comment'].toString(),
+                              style: const TextStyle(
+                                  fontSize: 18.0, color: Colors.black)),
+                          subtitle: Text(
+                            (docSnapshot.data()!['location'].toString() ==
+                                        'null' ||
+                                    docSnapshot
+                                            .data()!['location']
+                                            .toString() ==
+                                        'Cupertino')
+                                ? '電子の海'
+                                : docSnapshot.data()!['location'].toString(),
                           ),
                         ),
-                      )
-                    : Container();
-              },
-            );
-          },
-          error: (err, stack) => Center(child: Text(err.toString())),
-          loading: () => const Center(child: CircularProgressIndicator())),
+                      ]),
+                    ),
+                    actions: <Widget>[
+                      if (docSnapshot.data()!.containsValue(currentUser?.uid))
+                        IconSlideAction(
+                          caption: '削除',
+                          color: Colors.red[700],
+                          icon: Icons.delete,
+                          onTap: () => {
+                            users
+                                .doc(currentUser!.uid)
+                                .collection('comments')
+                                .doc(docSnapshot.id)
+                                .delete()
+                            // showDialog(
+                            //         context: context,
+                            //         builder: (BuildContext context) {
+                            //           return CustomDialogBox(
+                            //             title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                            //             descriptions: docSnapshot.reference.path,
+                            //             text: 'りょ',
+                            //             key: UniqueKey(),
+                            //           );
+                            //         })
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {},
@@ -193,19 +221,6 @@ class Timeline2 extends ConsumerWidget {
                                           ),
 
                                           onPressed: () async {
-                                            // var collection = FirebaseFirestore
-                                            //     .instance
-                                            //     .collection('comments');
-                                            var docRef = await users
-                                                .doc(currentUser!.uid)
-                                                .collection('comments')
-                                                .add({
-                                              'comment': _editor.text,
-                                              'createdAt': createdAt,
-                                              'userId': currentUser!.uid,
-                                              'location': data.name.toString(),
-                                            });
-                                            // var documentId = docRef.id;
                                             (_editor.text.isEmpty)
                                                 ? showDialog(
                                                     context: context,
@@ -213,30 +228,28 @@ class Timeline2 extends ConsumerWidget {
                                                         const AlertDialog(
                                                             title: Text(
                                                                 'コメントを入力してください')))
-                                                : docRef;
-                                            var documentId = docRef.id;
-                                            await users
-                                                .doc(currentUser!.uid)
-                                                .collection('comments')
-                                                .doc(documentId)
-                                                .update({
-                                              'comment': _editor.text,
-                                              'createdAt': createdAt,
-                                              'userId': currentUser!.uid,
-                                              'location': data.name.toString(),
-                                              'commentId': documentId,
-                                            });
+                                                : await users
+                                                    .doc(currentUser!.uid)
+                                                    .collection('comments')
+                                                    .doc()
+                                                    .set({
+                                                    'comment': _editor.text,
+                                                    'createdAt': createdAt,
+                                                    'userId': currentUser!.uid,
+                                                    'location':
+                                                        data.name.toString(),
+                                                  });
                                             // print(createdAt.toString());
                                             Navigator.of(context).pop();
                                           },
-                                          child: neu.NeumorphicText(
+                                          child: NeumorphicText(
                                             '押',
                                             // textAlign: TextAlign.center,
-                                            style: const neu.NeumorphicStyle(
+                                            style: const NeumorphicStyle(
                                                 depth: 20,
                                                 intensity: 0.5,
                                                 color: Colors.white),
-                                            textStyle: neu.NeumorphicTextStyle(
+                                            textStyle: NeumorphicTextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w700,
                                             ),

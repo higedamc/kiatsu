@@ -6,6 +6,7 @@ import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
+import 'package:kiatsu/pages/timeline.dart.bak';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart' as provider;
@@ -39,9 +40,11 @@ class MainView extends StatelessWidget {
                   cityName: '',
                   key: UniqueKey(),
                 ),
+            '/timeline2': (BuildContext context) =>
+                Timeline2(cityName: '', key: UniqueKey()),
             '/sign': (BuildContext context) => const SignInPage(),
             '/dialog': (BuildContext context) => const Dialogs(),
-            '/sub': (BuildContext context) => const SubscriptionsPage(),
+            '/sub': (BuildContext context) => const SubscriptionsPage()
           },
           home: SplashPage(),
         ));

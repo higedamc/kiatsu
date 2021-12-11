@@ -14,18 +14,13 @@ import 'package:wiredash/wiredash.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'api/purchase_api.dart';
-import 'package:adapty_flutter/adapty_flutter.dart';
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
 // final revenuecatProvider = ChangeNotifierProvider.autoDispose<RevenueCatProvider>(
 //   (ref) => RevenueCatProvider());
 
-
-
 // 参照: https://codeux.design/articles/manage-secrets-flutter-project/
-
-
 
 Future<void> startApp() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
@@ -33,11 +28,9 @@ Future<void> startApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.dotenv.load(fileName: '.env');
   MobileAds.instance.initialize();
-  
- 
-  
+
   await Firebase.initializeApp();
-  
+
   // final appleSignInAvailable = await AppleSignInAvailable.check();
   await PurchaseApi.init();
   // Adapty.activate();
@@ -51,8 +44,10 @@ Future<void> startApp() async {
       backgroundColor: Colors.white,
     ));
   };
-  
-  LineSDK.instance.setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString()).then((_) {
+
+  LineSDK.instance
+      .setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString())
+      .then((_) {
     print('LINE SDK GOT SET UP');
   });
   SharedPreferences.getInstance().then((prefs) {
@@ -61,14 +56,13 @@ Future<void> startApp() async {
       runApp(
         ProviderScope(
           child: ScreenUtilInit(
-            designSize: const Size(375, 812),
-            builder: () {
-              return MyApp(
-                prefs: prefs,
-                key: UniqueKey(),
-              );
-            }
-          ),
+              designSize: const Size(375, 812),
+              builder: () {
+                return MyApp(
+                  prefs: prefs,
+                  key: UniqueKey(),
+                );
+              }),
         ),
       );
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
@@ -76,12 +70,9 @@ Future<void> startApp() async {
 }
 
 class MyApp extends StatelessWidget {
-
-  
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
   final _navigatorKey = GlobalKey<NavigatorState>();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +88,6 @@ class MyApp extends StatelessWidget {
         },
         locale: const Locale('pl'),
       ),
-
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
