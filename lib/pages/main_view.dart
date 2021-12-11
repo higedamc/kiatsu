@@ -11,7 +11,6 @@ import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:splashscreen/splashscreen.dart';
 
-
 // final pageIdProvider = StateProvider((ref) => 0);
 
 class MainView extends StatelessWidget {
@@ -33,14 +32,17 @@ class MainView extends StatelessWidget {
           routes: {
             '/a': (BuildContext context) => const SettingPage(),
             '/timeline': (BuildContext context) => Timeline(
-                  key: UniqueKey(), cityName: '',
+                  key: UniqueKey(),
+                  cityName: '',
                 ),
-            '/home': (BuildContext context) => HomePage(cityName: '', key: UniqueKey(),),
+            '/home': (BuildContext context) => HomePage(
+                  cityName: '',
+                  key: UniqueKey(),
+                ),
             '/sign': (BuildContext context) => const SignInPage(),
             '/dialog': (BuildContext context) => const Dialogs(),
             '/sub': (BuildContext context) => const SubscriptionsPage(),
           },
-
           home: SplashPage(),
         ));
   }
@@ -90,7 +92,10 @@ class SplashPage extends MainView {
     return SplashScreen(
       loaderColor: Colors.black,
       seconds: 2,
-      navigateAfterSeconds: HomePage(cityName: '', key: UniqueKey(),),
+      navigateAfterSeconds: HomePage(
+        cityName: '',
+        key: UniqueKey(),
+      ),
       image: Image.asset('assets/images/face.png'),
       photoSize: 100.0,
     );
