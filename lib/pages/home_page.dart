@@ -101,9 +101,12 @@ class HomePage extends riv.ConsumerWidget {
       body: RefreshIndicator(
         color: Colors.black,
         onRefresh: () async {
-          return await ref
+          final DateTime updatedAt = DateTime.now();
+          await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName.toString());
+              '最終更新 - ' +
+                    timeago.format(updatedAt, locale: 'ja').toString();
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -348,7 +351,7 @@ class HomePage extends riv.ConsumerWidget {
           child: const Text('＾ｑ＾'),
           onPressed: () async {
             // if (snapshot.hasData)
-            await Navigator.of(context).pushNamed('/timeline');
+            await Navigator.of(context).pushNamed('/timeline2');
           }),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -454,5 +457,5 @@ Widget buildAdmob(Entitlement entitlement) {
 }
 
 getTimelineView(BuildContext context) {
-  return Navigator.of(context).pushNamed('/timeline');
+  return Navigator.of(context).pushNamed('/timeline2');
 }

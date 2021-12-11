@@ -30,12 +30,12 @@ class GithubAuthUtil {
   }
 
   static Future<UserCredential?> signInWithGithub(BuildContext context) async {
-    final result = await _github?.signIn(context);
+    final GitHubSignInResult? result = await _github?.signIn(context);
 
-    final githubAuthCredential =
+    final AuthCredential? githubAuthCredential =
         GithubAuthProvider.credential(result!.token!);
 
     return await FirebaseAuth.instance
-        .signInWithCredential(githubAuthCredential);
+        .signInWithCredential(githubAuthCredential!);
   }
 }
