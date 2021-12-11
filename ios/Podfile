@@ -31,7 +31,8 @@ target 'Runner' do
   use_frameworks!
   # platform :ios, '10.0'
   use_modular_headers!
-
+  # Firebaseのビルドが遅い時のおまじない
+  # pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '8.9.1'
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

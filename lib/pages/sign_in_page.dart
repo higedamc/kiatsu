@@ -60,22 +60,23 @@ class SignInPage extends StatelessWidget {
                           },
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: GithubAuthButton(
-                      //       width: 280.0,
-                      //       height: 50.0,
-                      //       borderWidth: 1.0,
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       elevation: 2.0,
-                      //       borderRadius: 8.0,
-                      //       separator: 15.0,
-                      //       borderColor: Colors.black,
-                      //       text: 'Sign in with GitHub',
-                      //       onPressed: () => {
-                      //             GithubAuthUtil.signInWithGithub(context),
-                      //           }),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GithubAuthButton(
+                            width: 280.0,
+                            height: 50.0,
+                            borderWidth: 1.0,
+                            padding: const EdgeInsets.all(8.0),
+                            elevation: 2.0,
+                            borderRadius: 8.0,
+                            separator: 15.0,
+                            borderColor: Colors.black,
+                            text: 'Sign in with GitHub',
+                            onPressed: () async => {
+                                  GithubAuthUtil.signInWithGithub(context),
+                                  Navigator.pop(context),
+                                }),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TwitterAuthButton(
