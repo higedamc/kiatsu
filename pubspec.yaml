@@ -12,7 +12,7 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.2.1+491
+version: 0.2.2+496
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
