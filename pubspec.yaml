@@ -57,7 +57,10 @@ dependencies:
   pal_widgets: ^0.2.0
   provider: ^6.0.0
   purchases_flutter: ^3.4.3
-  settings_ui: ^1.0.0
+  settings_ui: 
+    git:
+      url: https://github.com/higedamc/flutter-settings-ui.git
+      publish_to: none
   share: ^2.0.1
   shared_preferences: ^2.0.5
   sign_in_with_apple: ^3.0.0

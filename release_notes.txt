@@ -4,3 +4,4 @@ v0.2.1
 - firebase_options.dart追加
 - GitHub Authを一時的に無効化
 - Firebase関連のパッケージを最新にアップデート
+- スプラッシュスクリーンのパッケージをnull安全なモノに変更
