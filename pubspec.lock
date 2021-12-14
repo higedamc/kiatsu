@@ -812,10 +812,12 @@ packages:
   settings_ui:
     dependency: "direct main"
     description:
-      name: settings_ui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: "23a08e958612d7c368294287e1a3813aaf410428"
+      url: "https://github.com/higedamc/flutter-settings-ui.git"
+    source: git
+    version: "1.0.1"
   share:
     dependency: "direct main"
     description:
