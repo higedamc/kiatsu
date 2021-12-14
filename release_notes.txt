@@ -1,7 +1,4 @@
-v0.2.1
+v0.2.2
 
-- Flutter 2.8.0に移行
-- firebase_options.dart追加
-- GitHub Authを一時的に無効化
-- Firebase関連のパッケージを最新にアップデート
-- スプラッシュスクリーンのパッケージをnull安全なモノに変更
+- fix: アプリが起動しない問題を修正
+- fix: SNSでログインできない問題を修正
