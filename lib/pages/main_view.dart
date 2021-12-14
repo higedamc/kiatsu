@@ -10,7 +10,7 @@ import 'package:kiatsu/pages/timeline.dart.bak';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart' as provider;
-import 'package:splashscreen/splashscreen.dart';
+import 'package:splash_screen_view/SplashScreenView.dart';
 
 // final pageIdProvider = StateProvider((ref) => 0);
 
@@ -92,15 +92,17 @@ class SplashPage extends MainView {
 
   @override
   Widget build(BuildContext context) {
-    return SplashScreen(
-      loaderColor: Colors.black,
-      seconds: 2,
-      navigateAfterSeconds: HomePage(
-        cityName: '',
-        key: UniqueKey(),
+    return SplashScreenView(
+      navigateRoute: HomePage(),
+      duration: 3000,
+      imageSize: 130,
+      imageSrc: 'assets/images/face.png',
+      text: 'Kiatsu',
+      textType: TextType.NormalText,
+      textStyle: const TextStyle(
+        fontSize: 30.0,
       ),
-      image: Image.asset('assets/images/face.png'),
-      photoSize: 100.0,
+      backgroundColor: Colors.white,
     );
   }
 }
