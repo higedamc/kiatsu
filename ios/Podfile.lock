@@ -353,11 +353,11 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
-  - cloud_firestore (3.1.0):
+  - cloud_firestore (3.1.4):
     - Firebase/Firestore (= 8.9.0)
     - firebase_core
     - Flutter
-  - cloud_functions (3.2.0):
+  - cloud_functions (3.2.3):
     - Firebase/Functions (= 8.9.0)
     - firebase_core
     - Flutter
@@ -375,14 +375,14 @@ PODS:
   - Firebase/Functions (8.9.0):
     - Firebase/CoreOnly
     - FirebaseFunctions (~> 8.9.0)
-  - firebase_auth (3.2.0):
+  - firebase_auth (3.3.3):
     - Firebase/Auth (= 8.9.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.10.0):
+  - firebase_core (1.10.5):
     - Firebase/CoreOnly (= 8.9.0)
     - Flutter
-  - firebase_crashlytics (2.3.0):
+  - firebase_crashlytics (2.4.3):
     - Firebase/Crashlytics (= 8.9.0)
     - firebase_core
     - Flutter
@@ -536,14 +536,14 @@ PODS:
   - path_provider_ios (0.0.1):
     - Flutter
   - PromisesObjC (2.0.0)
-  - Purchases (3.13.0):
-    - PurchasesCoreSwift (= 3.13.0)
-  - purchases_flutter (3.7.0):
+  - Purchases (3.13.1):
+    - PurchasesCoreSwift (= 3.13.1)
+  - purchases_flutter (3.8.0):
     - Flutter
-    - PurchasesHybridCommon (= 1.11.0)
-  - PurchasesCoreSwift (3.13.0)
-  - PurchasesHybridCommon (1.11.0):
-    - Purchases (= 3.13.0)
+    - PurchasesHybridCommon (= 1.11.1)
+  - PurchasesCoreSwift (3.13.1)
+  - PurchasesHybridCommon (1.11.1):
+    - Purchases (= 3.13.1)
   - share (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -554,8 +554,6 @@ PODS:
     - Flutter
   - Toast (4.0.0)
   - twitter_login (0.0.1):
-    - Flutter
-  - url_launcher (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
@@ -581,7 +579,6 @@ DEPENDENCIES:
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - the_apple_sign_in (from `.symlinks/plugins/the_apple_sign_in/ios`)
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
@@ -658,8 +655,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/the_apple_sign_in/ios"
   twitter_login:
     :path: ".symlinks/plugins/twitter_login/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
@@ -669,12 +664,12 @@ SPEC CHECKSUMS:
   adapty_flutter: 662cc5419f5c3a3ad7cd42aa7902df1c57b1339d
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: 2cff0618e560f435fc05da5c94c2d213eb7ba640
-  cloud_functions: 3bd5f46b238980ffb8a3d530039ced116e2244e3
+  cloud_firestore: c978a55e0bfc675cdc2291ef7670a69695cc663a
+  cloud_functions: 786d5b5ebbb7b16daa9d4a2e302a76816cadf42f
   Firebase: 13d8d96499e2635428d5bf0ec675df21f95d9a95
-  firebase_auth: 0d56cc4d105ff70d1547a7fcb10ee574ad05adf5
-  firebase_core: f770e033e790657b3505f04be4cb24c482912f11
-  firebase_crashlytics: ed8c1d66dc407d617cbed798f05a5d9115da7494
+  firebase_auth: fe3a1deb12ebd850295344234abc15588d086baf
+  firebase_core: dfcae4c150a5e24436a0b7677c470478a234d5bf
+  firebase_crashlytics: 6713843d68feb3cefa1471e20dfaa72b934d6db8
   FirebaseAuth: 2b78b2a32c07b3ecfa4970bdf1d3632b8304099b
   FirebaseCore: 599ee609343eaf4941bd188f85e3aa077ffe325b
   FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
@@ -704,19 +699,18 @@ SPEC CHECKSUMS:
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  Purchases: a545d402454bc9395495cceaf0e893360670e0ad
-  purchases_flutter: f2c2865aa83c7a094ca067a6834395b0de5573d2
-  PurchasesCoreSwift: e7f7267a6dc526da226baad19c61e8977fa664b4
-  PurchasesHybridCommon: cc91e9f07061de603a355f174cf92fb89f333a92
+  Purchases: 2693d6444609de044ab25fcda9561bef038f24da
+  purchases_flutter: 214d452aaf860496aeee822487eafcdd962fab33
+  PurchasesCoreSwift: ca55f9ef671f89abed133775dd9e53f55007828d
+  PurchasesHybridCommon: a0313de4f31fbaf137518b2686ccdca4c91dd2b4
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   the_apple_sign_in: 2e78c83cdb09eba07bb16dcc1f3bc12fcdc8263d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   twitter_login: 2794db69b7640681171b17b3c2c84ad9dfb4a57f
-  url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
-PODFILE CHECKSUM: 83cfebef099c712bc5850fc2ae1022129e77d2f6
+PODFILE CHECKSUM: fe5caeb486198d5cbabbce67dc93bf322103bc7a
 
 COCOAPODS: 1.11.2

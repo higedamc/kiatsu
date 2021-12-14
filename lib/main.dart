@@ -14,6 +14,10 @@ import 'package:wiredash/wiredash.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'api/purchase_api.dart';
+// Import the generated file
+import 'firebase_options.dart';
+
+//TODO: WIREDASHのAPIエラー直す
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
@@ -29,7 +33,9 @@ Future<void> startApp() async {
   await dotenv.dotenv.load(fileName: '.env');
   MobileAds.instance.initialize();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // final appleSignInAvailable = await AppleSignInAvailable.check();
   await PurchaseApi.init();
