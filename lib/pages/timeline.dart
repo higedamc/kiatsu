@@ -1,16 +1,17 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kiatsu/model/dev_id.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 //TODO: Firestore関連の処理のRiverpod化
+//TODO: リアクション機能実装したい
+
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
@@ -18,24 +19,9 @@ final uid = firebaseAuth.currentUser?.uid;
 final CollectionReference users = firebaseStore.collection('users');
 final CollectionReference<Map<String, dynamic>> test =
     users.doc(uid).collection('comments');
-// final fuckMe = users.doc(uid).collection('comments').doc().id;
-// final ahe = firebaseStore
-//     .collection('users')
-//     .doc(uid)
-//     .collection('comments')
-//     .where('userId', isEqualTo: uid)
-//     .get()
-//     .then((QuerySnapshot snapshot) => {
-//           snapshot.docs.forEach((DocumentSnapshot document) {
-//             print(document.data().toString());
-//           })
-//         });
 
-// final docRef = users.doc(uid);
-// final docSnap = docRef.get();
-
-class Timeline2 extends ConsumerWidget {
-  const Timeline2({required this.cityName, required Key key}) : super(key: key);
+class Timeline extends ConsumerWidget {
+  const Timeline({required this.cityName, required Key key}) : super(key: key);
 
   final String? cityName;
 
@@ -71,21 +57,67 @@ class Timeline2 extends ConsumerWidget {
                               padding: const EdgeInsets.all(2.0),
                               child: Column(children: [
                                 ListTile(
-                                  leading: const Icon(
-                                    Icons.cloud_circle,
-                                    size: 44.0,
-                                    color: Colors.black,
-                                  ),
+                                  //TODO: ここなんかもっと上手い書き方ないですかね（）
+                                  leading: data[index]['userId'] ==
+                                              DevIds().dev1 ||
+                                          data[index]['userId'] == DevIds().dev2
+                                      ? const Text(
+                                          'Dev',
+                                          style: TextStyle(
+                                            fontWeight: neu.FontWeight.bold,
+                                          ),
+                                        )
+                                      : null,
+                                  // leading:
+                                  //     data[index]['userId'] == currentUser?.uid
+                                  //         ? CircleAvatar(
+                                  //             radius: 20.0,
+                                  //             child: ClipRRect(
+                                  //               child: currentUser?.providerData
+                                  //                           .first.photoURL ==
+                                  //                       null
+                                  //                   ? const Icon(
+                                  //                       Icons.cloud_circle,
+                                  //                       size: 44.0,
+                                  //                       color: Colors.black,
+                                  //                     )
+                                  //                   : Image.network(currentUser!
+                                  //                       .providerData
+                                  //                       .first
+                                  //                       .photoURL!),
+                                  //               borderRadius:
+                                  //                   BorderRadius.circular(50.0),
+                                  //             ),
+                                  //           )
+                                  //         : CircleAvatar(
+                                  //             radius: 20.0,
+                                  //             child: ClipRRect(
+                                  //               child: Image.network(currentUser!
+                                  //                       .providerData
+                                  //                       .first
+                                  //                       .photoURL!),
+                                  //               borderRadius:
+                                  //                   BorderRadius.circular(50.0),
+                                  //             ),
+                                  //           ),
                                   title: Text(data[index]['comment'].toString(),
                                       style: const TextStyle(
                                           fontSize: 18.0, color: Colors.black)),
-                                  subtitle: const Text('電子の海'),
+                                  subtitle: Text(
+                                    (data[index]['location'].toString() ==
+                                                'null' ||
+                                            data[index]['location']
+                                                    .toString() ==
+                                                'Cupertino')
+                                        ? '電子の海'
+                                        : data[index]['location'].toString(),
+                                  ),
                                 ),
                               ]),
                             ),
                             actions: <Widget>[
                               if (data[index]['userId']
-                                  .contains(currentUser?.uid))
+                                  ?.contains(currentUser?.uid))
                                 IconSlideAction(
                                     caption: '削除',
                                     color: Colors.red[700],
@@ -193,11 +225,29 @@ class Timeline2 extends ConsumerWidget {
                                           ),
 
                                           onPressed: () async {
+                                            var status = await Permission
+                                                .location
+                                                .request();
+                                            if (status !=
+                                                PermissionStatus.granted) {
+                                              // 一度もリクエストしてないので権限のリクエスト.
+                                              status = await Permission.location
+                                                  .request();
+                                            }
+                                            // 権限がない場合の処理.
+                                            // if (
+                                            //     status.isDenied ||
+                                            //     status.isRestricted ||
+                                            //     status.isPermanentlyDenied) {
+                                            //   // 端末の設定画面へ遷移.
+                                            //   await openAppSettings();
+                                            //   return;
+                                            // }
                                             // var collection = FirebaseFirestore
                                             //     .instance
                                             //     .collection('comments');
-                                            var docRef = await users
-                                                .doc(currentUser!.uid)
+                                            final docRef = await users
+                                                .doc(currentUser?.uid)
                                                 .collection('comments')
                                                 .add({
                                               'comment': _editor.text,
@@ -214,7 +264,7 @@ class Timeline2 extends ConsumerWidget {
                                                             title: Text(
                                                                 'コメントを入力してください')))
                                                 : docRef;
-                                            var documentId = docRef.id;
+                                            final documentId = docRef.id;
                                             await users
                                                 .doc(currentUser!.uid)
                                                 .collection('comments')
@@ -243,14 +293,9 @@ class Timeline2 extends ConsumerWidget {
                                           ),
                                         ),
                                     loading: () => Container(),
-                                    error: (String? message) {
-                                      return SnackBar(
-                                        content: Text(message.toString()),
-                                        action: SnackBarAction(
-                                          label: 'りょ',
-                                          onPressed: () {},
-                                        ),
-                                      );
+                                    error: (String? error) {
+                                      print(error);
+                                      return Container();
                                     });
                               }),
                             ),

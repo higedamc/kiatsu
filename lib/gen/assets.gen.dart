@@ -3,47 +3,59 @@
 ///  FlutterGen
 /// *****************************************************
 
+// ignore_for_file: directives_ordering,unnecessary_import
+
 import 'package:flutter/widgets.dart';
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/face.png
+  AssetGenImage get face => const AssetGenImage('assets/images/face.png');
+
+  /// File path: assets/images/kiatsu_logo_invert.jpg
   AssetGenImage get kiatsuLogoInvert =>
       const AssetGenImage('assets/images/kiatsu_logo_invert.jpg');
+
+  /// File path: assets/images/line.png
+  AssetGenImage get line => const AssetGenImage('assets/images/line.png');
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const String macosxwheel = 'assets/macosxwheel.flr';
+  static const String meteor = 'assets/meteor.flr';
+  static const AssetGenImage model = AssetGenImage('assets/model.jpg');
+  static const String modelPng = 'assets/model.png.bak';
 }
 
 class AssetGenImage extends AssetImage {
-  const AssetGenImage(String assetName)
-      : _assetName = assetName,
-        super(assetName);
-  final String _assetName;
+  const AssetGenImage(String assetName) : super(assetName);
 
   Image image({
-    required ImageFrameBuilder frameBuilder,
-    required ImageLoadingBuilder loadingBuilder,
-    required ImageErrorWidgetBuilder errorBuilder,
-    required String semanticLabel,
+    Key? key,
+    ImageFrameBuilder? frameBuilder,
+    ImageLoadingBuilder? loadingBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    String? semanticLabel,
     bool excludeFromSemantics = false,
-    required double width,
-    required double height,
-    required Color color,
-    required BlendMode colorBlendMode,
-    required BoxFit fit,
+    double? width,
+    double? height,
+    Color? color,
+    BlendMode? colorBlendMode,
+    BoxFit? fit,
     AlignmentGeometry alignment = Alignment.center,
     ImageRepeat repeat = ImageRepeat.noRepeat,
-    required Rect centerSlice,
+    Rect? centerSlice,
     bool matchTextDirection = false,
     bool gaplessPlayback = false,
     bool isAntiAlias = false,
     FilterQuality filterQuality = FilterQuality.low,
   }) {
     return Image(
+      key: key,
       image: this,
       frameBuilder: frameBuilder,
       loadingBuilder: loadingBuilder,
@@ -65,5 +77,5 @@ class AssetGenImage extends AssetImage {
     );
   }
 
-  String get path => _assetName;
+  String get path => assetName;
 }

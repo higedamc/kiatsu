@@ -30,8 +30,8 @@ void submitCityName(
   await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
 }
 
-class Timeline extends ConsumerWidget {
-  const Timeline({required this.cityName, required Key key}) : super(key: key);
+class TimelineOriginal extends ConsumerWidget {
+  const TimelineOriginal({required this.cityName, required Key key}) : super(key: key);
   final String? cityName;
   @override
   Widget build(BuildContext context, WidgetRef ref) {

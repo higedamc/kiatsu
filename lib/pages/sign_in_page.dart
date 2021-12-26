@@ -126,18 +126,18 @@ class SignInPage extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(1, 10, 50, 10),
                             ),
                             onPressed: () async {
-                              // await LineAuthUtil.signIn(context);
-                              // Navigator.pop(context);
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CustomDialogBox(
-                                      title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                      descriptions: 'この機能はまだ未実装です♡',
-                                      text: 'りょ',
-                                      key: UniqueKey(),
-                                    );
-                                  });
+                              await LineAuthUtil.signIn(context);
+                              Navigator.pop(context);
+                              // showDialog(
+                              //     context: context,
+                              //     builder: (BuildContext context) {
+                              //       return CustomDialogBox(
+                              //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                              //         descriptions: 'この機能はまだ未実装です♡',
+                              //         text: 'りょ',
+                              //         key: UniqueKey(),
+                              //       );
+                              //     });
                             },
                             icon: Image.asset('assets/images/line.png'),
                             label: const Padding(

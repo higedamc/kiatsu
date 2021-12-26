@@ -25,30 +25,38 @@ class LineAuthUtil {
   }
 
   static Future<UserCredential?> signInWithLine(BuildContext context) async {
-    UserCredential? result2;
-
     try {
-      final LoginResult result = await LineSDK.instance.login(
-        option: LoginOption(false, 'aggressive'),
-      );
-      final lineUserId = result.userProfile?.userId;
+      final result = await LineSDK.instance.login(
+          // option: LoginOption(false, 'aggressive'),
+          );
       // final lineUserProfile = result.userProfile;
+      // final lineUserId = lineUserProfile?.userId;
+      final lineUserId = result.userProfile?.userId;
 
-      final calls =
-          FirebaseFunctions.instanceFor().httpsCallable('fetchCustomToken');
-      final response = await calls.call({
+      print(lineUserId.toString());
+
+      final callable = FirebaseFunctions.instanceFor(region: 'asia-east2')
+          .httpsCallable('fetchCustomToken',
+          options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
+      final response = await callable.call({
         'userId': lineUserId,
       });
-      final result2 = await FirebaseAuth.instance
-          .signInWithCustomToken(response.data['customToken']);
-
-      return result2;
-    } on PlatformException catch (e) {
+      return await FirebaseAuth.instance
+          .signInWithCustomToken(response.data['customToken'])
+          .then((authResult) async {
+        final firebaseUser = authResult.user;
+        print(firebaseUser);
+        print(firebaseUser?.uid);
+      });
+    } on FirebaseAuthException catch (e) {
       var message = 'エラーが発生しました';
       if (e.code == '3063') {
         message = 'キャンセルしました';
       }
-      throw PlatformException(code: e.code, message: message);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.code),
+      ));
+      throw FirebaseAuthException(code: e.code, message: message);
     }
   }
 }

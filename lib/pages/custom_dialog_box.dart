@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/const/constants.dart';
+import 'package:kiatsu/gen/assets.gen.dart';
 
 class CustomDialogBox extends StatefulWidget {
   final String title, descriptions, text;
@@ -124,7 +125,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             child: ClipRRect(
                 borderRadius:
                     const BorderRadius.all(Radius.circular(Constants.avatarRadius)),
-                child: Image.asset('assets/model.jpg')),
+                child: Image.asset(Assets.model.path)),
           ),
         ),
       ],

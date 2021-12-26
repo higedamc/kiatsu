@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,6 +51,7 @@ Future<void> startApp() async {
       backgroundColor: Colors.white,
     ));
   };
+
 
   LineSDK.instance
       .setup(dotenv.dotenv.env['LINE_CHANNEL_ID'].toString())

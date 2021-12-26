@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
@@ -12,6 +13,7 @@ import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/providers/providers.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -41,6 +43,7 @@ class SettingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final loggedIn = ref.watch(authProvider);
     final user = ref.watch(authStateChangesProvider).asData?.value;
+    String? pass = dotenv.env['TWITTER_PASSWORD'];
     return neu.Neumorphic(
       child: Column(
         children: <Widget>[
@@ -70,7 +73,7 @@ class SettingPage extends ConsumerWidget {
                                     ClipboardData(
                                       text: user != null
                                           ? user.uid.toString()
-                                          : '',
+                                          : pass,
                                     ),
                                   ),
                               subtitle:
@@ -129,6 +132,17 @@ class SettingPage extends ConsumerWidget {
                                       ],
                                     );
                                   })),
+                          //         SettingsTile(
+                          //           title: '権限許可',
+                          //   onPressed: (context) async {
+                          //     var status = await Permission.location.request();
+                          //     if (status != PermissionStatus.granted) {
+                          //       // 一度もリクエストしてないので権限のリクエスト.
+                          //       status = await Permission.location.request();
+                          //     }
+                          //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されました')));
+                          //   },
+                          // ),
                         ],
                       ),
                       SettingsSection(
@@ -155,31 +169,30 @@ class SettingPage extends ConsumerWidget {
                               title: '有料機能',
                               subtitle: '押',
                               onPressed: (context) async {
-                                // Navigator.pushNamed(context, '/con');
-                                user == null
-                                    ?  
-                                    showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return CustomDialogBox(
-                                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                        descriptions: 'この機能を使うにはログインが必要です♡',
-                                        text: 'りょ',
-                                        key: UniqueKey(),
-                                      );
-                                    })
-                                    : showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return CustomDialogBox(
-                                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                        descriptions: 'この機能はベータ版のため使用できません♡',
-                                        text: 'りょ',
-                                        key: UniqueKey(),
-                                      );
-                                    });
-                                    // Navigator.pushNamed(context, '/sub');
-                               
+                                // user == null
+                                //     ?
+                                //     showDialog(
+                                //     context: context,
+                                //     builder: (BuildContext context) {
+                                //       return CustomDialogBox(
+                                //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                //         descriptions: 'この機能を使うにはログインが必要です♡',
+                                //         text: 'りょ',
+                                //         key: UniqueKey(),
+                                //       );
+                                //     })
+                                //     : showDialog(
+                                //     context: context,
+                                //     builder: (BuildContext context) {
+                                //       return CustomDialogBox(
+                                //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                //         descriptions: 'この機能はベータ版のため使用できません♡',
+                                //         text: 'りょ',
+                                //         key: UniqueKey(),
+                                //       );
+                                //     });
+                                Navigator.pushNamed(context, '/sub');
+                                // Navigator.pushNamed(context, '/test');
                               }),
                         ],
                       ),
