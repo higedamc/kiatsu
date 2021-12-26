@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string></string>
+			<string>authorize</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>twitterkit-qIQKdcDM2rworcBDbaHbYb7PO://</string>
+				<string>line3rdp.com.kiatsu.app</string>
 			</array>
 		</dict>
 	</array>

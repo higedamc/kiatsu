@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:kiatsu/gen/assets.gen.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
+import 'package:kiatsu/pages/purchase_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
-import 'package:kiatsu/pages/timeline.dart.bak';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:provider/provider.dart' as provider;
@@ -32,19 +32,18 @@ class MainView extends StatelessWidget {
           ),
           routes: {
             '/a': (BuildContext context) => const SettingPage(),
-            '/timeline': (BuildContext context) => Timeline(
-                  key: UniqueKey(),
-                  cityName: '',
-                ),
             '/home': (BuildContext context) => HomePage(
                   cityName: '',
                   key: UniqueKey(),
                 ),
-            '/timeline2': (BuildContext context) =>
-                Timeline2(cityName: '', key: UniqueKey()),
             '/sign': (BuildContext context) => const SignInPage(),
             '/dialog': (BuildContext context) => const Dialogs(),
-            '/sub': (BuildContext context) => const SubscriptionsPage()
+            '/sub': (BuildContext context) => const SubscriptionsPage(),
+            '/timeline': (BuildContext context) => Timeline(
+                  cityName: '',
+                  key: UniqueKey(),
+                ),
+            '/test': (BuildContext context) => const PurchasePage(),
           },
           home: SplashPage(),
         ));
@@ -94,9 +93,9 @@ class SplashPage extends MainView {
   Widget build(BuildContext context) {
     return SplashScreenView(
       navigateRoute: HomePage(),
-      duration: 3000,
+      duration: 1500,
       imageSize: 130,
-      imageSrc: 'assets/images/face.png',
+      imageSrc: Assets.images.face.path,
       text: 'Kiatsu',
       textType: TextType.NormalText,
       textStyle: const TextStyle(

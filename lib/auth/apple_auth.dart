@@ -121,7 +121,6 @@ class AppleAuthUtil {
         final providerData = authResult.user?.providerData;
         final firebaseUser = authResult.user;
         await firebaseUser?.updatePhotoURL(photoUrl);
-        await firebaseUser?.updateEmail(email!);
         print(
             'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser');
 

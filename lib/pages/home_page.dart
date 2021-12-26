@@ -351,7 +351,7 @@ class HomePage extends riv.ConsumerWidget {
           child: const Text('＾ｑ＾'),
           onPressed: () async {
             // if (snapshot.hasData)
-            await Navigator.of(context).pushNamed('/timeline2');
+            await Navigator.of(context).pushNamed('/timeline');
           }),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,

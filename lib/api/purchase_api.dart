@@ -71,7 +71,7 @@ class PurchaseApi {
     }
   }
 
-  static Future<PurchaserInfo> getCurrentPurchaser() async => Purchases.getPurchaserInfo();
+  static Future<PurchaserInfo> getCurrentPurchaser() async => await Purchases.getPurchaserInfo();
 
   // static bool isPurchased => purchasePac
   

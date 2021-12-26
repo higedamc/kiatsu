@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/providers/providers.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/utils.dart';
@@ -18,6 +20,18 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 //TODO: #117 iOS版のサブスク機能が動くようにする
 //TODO: #116 課金後課金情報が消えてしまうので課金情報を更新する
+
+class Coins {
+  // Entitlementsの設定
+  // static const removeAds = 'kiatsu_120_remove_ads';
+  // for iOS
+  static const removeAdsIOS = 'kiatsu_250_remove_ads';
+  static const tipMe = 'tip_me_490';
+  static const subsc = 'kiatsu_pro_1m';
+  static final _apiKey = dotenv.env['REVENUECAT_SECRET_KEY'].toString();
+  // Added some
+  static const allIds = [removeAdsIOS, tipMe, subsc];
+}
 
 class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);
@@ -32,6 +46,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   @override
   Widget build(BuildContext context) {
     final entitlement = Provider.of<RevenueCat>(context).entitlement;
+
+    // RevenueCat().updatePurchaseStatus();
+    // final current = PurchaseApi.getCurrentPurchaser();
+
+    // print(current.toString());
     // final entitlement = ref.watch(revenueCatProvider).entitlement;
 
     return Scaffold(
@@ -40,7 +59,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget> [
+          children: <Widget>[
             buildEntitlement(entitlement),
             const SizedBox(height: 32),
             buildEntitlementText(entitlement),
@@ -48,23 +67,49 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             buildRestoreButton(entitlement),
             const SizedBox(height: 32),
 
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     minimumSize: Size.fromHeight(50),
-            //   ),
-            //   child: Text(
-            //     '他の機能を見てみる',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            //   onPressed: isLoading ? null : fetchOffers2,
-            // ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: const Text(
+                '他の機能を見てみる',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers2,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text(
+                  'Get UserInfo',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () async {
+                  // await RevenueCat().updatePurchaseStatus();
+                  // final current = await Purchases.getPurchaserInfo();
+                  // print(current.toString());
+                  // await waiter();
+                }),
           ],
         ),
       ),
     );
   }
 
+  Future<void> waiter () async {
+    return Future.delayed(Duration.zero, () async {
+      // PurchaseApi.init();
+      await Purchases.setup(Coins._apiKey, appUserId: currentUser?.uid.toString());
+
+    });
+  }
+
+  
+
+
   Widget buildEntitlementText(Entitlement entitlement) {
+    // waiter();
     switch (entitlement) {
       case Entitlement.pro:
         return ElevatedButton(
@@ -92,67 +137,64 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   }
 
   Widget buildRestoreButton(Entitlement entitlement) {
+    // waiter();
     switch (entitlement) {
       case Entitlement.pro:
         return const Center();
       case Entitlement.free:
         return ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size.fromHeight(50),
-          ),
-          child: const Text(
-            '購入を復元',
-            style: TextStyle(fontSize: 20),
-          ),
-          onPressed: () async {
-            final PurchaserInfo restoredInfo = await Purchases.restoreTransactions();
-            print(restoredInfo);
-            if (restoredInfo.entitlements.all['pro'] != null &&
-              restoredInfo.entitlements.all['pro']!.isActive) {
-            
-            
-            
-            // 復元完了のポップアップ
-            final result = await showDialog<int>(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('確認'),
-                  content: Text('復元が完了しました。'),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      child: const Text('OK'),
-                      onPressed: () async {
-                        Navigator.of(context).pop(1);
-                      } 
-                    ),
-                  ],
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(50),
+            ),
+            child: const Text(
+              '購入を復元',
+              style: TextStyle(fontSize: 20),
+              //The receipt is missing
+            ),
+            onPressed: () async {
+              final PurchaserInfo restoredInfo =
+                  await Purchases.restoreTransactions();
+              print(restoredInfo);
+              if (restoredInfo.entitlements.all['pro'] != null &&
+                  restoredInfo.entitlements.all['pro']!.isActive) {
+                // 復元完了のポップアップ
+                final result = await showDialog<int>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('確認'),
+                      content: Text('復元が完了しました。'),
+                      actions: <Widget>[
+                        ElevatedButton(
+                            child: const Text('OK'),
+                            onPressed: () async {
+                              Navigator.of(context).pop(1);
+                            }),
+                      ],
+                    );
+                  },
                 );
-              },
-            );
-          } else {
-            // 購入情報が見つからない場合
-            final result = await showDialog<int>(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('確認'),
-                  content: Text('過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。'),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      child: const Text('OK'),
-                      onPressed: () => Navigator.of(context).pop(1),
-                    ),
-                  ],
+              } else {
+                // 購入情報が見つからない場合
+                final result = await showDialog<int>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('確認'),
+                      content: Text('過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。'),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          child: const Text('OK'),
+                          onPressed: () => Navigator.of(context).pop(1),
+                        ),
+                      ],
+                    );
+                  },
                 );
-              },
-            );
-          }
-
-          }
-        );
+              }
+            });
     }
   }
 
@@ -207,7 +249,6 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           onClickedPackage: (package) async {
             await PurchaseApi.purchasePackage(package);
             Navigator.pop(context);
-
           },
         ),
       );

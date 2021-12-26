@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/api_state.dart';
+import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/providers/puchase_notifier.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/providers/weather_notifier.dart';
 import 'package:kiatsu/repository/weather_repository.dart';
@@ -49,4 +51,9 @@ final documentStreamProvider = StreamProvider.autoDispose((ref) {
   final stream =
       FirebaseFirestore.instance.collection('comments').doc().get().asStream();
   return stream.map((snapshot) => snapshot.data());
+});
+
+final entitlementProvider =
+    StateNotifierProvider.autoDispose<PurchaseNotifier, List<Entitlement>>((ref) {
+  return PurchaseNotifier();
 });
