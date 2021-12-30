@@ -13,7 +13,6 @@ import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/providers/providers.dart';
 import 'package:package_info/package_info.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
 

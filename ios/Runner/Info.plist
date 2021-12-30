@@ -43,10 +43,10 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationUsageDescription</key>
-	<string>This shit uses this shit!Yes!</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your location is required for this app</string>
+	<key>NSLocationUsageDescription</key>
+	<string>This shit uses this shit!Yes!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses location to forecast the weather.</string>
 	<key>UILaunchStoryboardName</key>
