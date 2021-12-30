@@ -7,7 +7,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/model/dev_id.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 //TODO: Firestore関連の処理のRiverpod化
 //TODO: リアクション機能実装したい
@@ -225,15 +224,15 @@ class Timeline extends ConsumerWidget {
                                           ),
 
                                           onPressed: () async {
-                                            var status = await Permission
-                                                .location
-                                                .request();
-                                            if (status !=
-                                                PermissionStatus.granted) {
-                                              // 一度もリクエストしてないので権限のリクエスト.
-                                              status = await Permission.location
-                                                  .request();
-                                            }
+                                            // var status = await Permission
+                                            //     .location
+                                            //     .request();
+                                            // if (status !=
+                                            //     PermissionStatus.granted) {
+                                            //   // 一度もリクエストしてないので権限のリクエスト.
+                                            //   status = await Permission.location
+                                            //       .request();
+                                            // }
                                             // 権限がない場合の処理.
                                             // if (
                                             //     status.isDenied ||
