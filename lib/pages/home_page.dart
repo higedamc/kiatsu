@@ -62,6 +62,7 @@ class HomePage extends riv.ConsumerWidget {
                 Future.delayed(Duration.zero,
                     () => submitCityName(context, cityName, ref));
                 return Container();
+
               },
               loading: () => Container(),
               success: (data) => IconButton(
@@ -71,7 +72,9 @@ class HomePage extends riv.ConsumerWidget {
                           'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
                     },
                   ),
-              orElse: () => Container());
+              orElse: () {
+                    return Container();
+              });
         }),
         actions: <Widget>[
           /** Builder がないと「Navigatorを含むコンテクストが必要」って怒られる */
@@ -101,7 +104,7 @@ class HomePage extends riv.ConsumerWidget {
       body: RefreshIndicator(
         color: Colors.black,
         onRefresh: () async {
-          final DateTime updatedAt = DateTime.now();
+           DateTime updatedAt = DateTime.now();
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName.toString());
@@ -236,9 +239,10 @@ class HomePage extends riv.ConsumerWidget {
                                             fontSize: 56.0),
                                       ),
                   ),
-                  orElse: () => const Center(
-                    child: Text('FETCHING DATA...'),
-                  ),
+                  orElse: () => Container(),
+                //   const Center(
+                //     child: Text('FETCHING DATA...'),
+                //   ),
                 );
               },
             ),
@@ -266,6 +270,7 @@ class HomePage extends riv.ConsumerWidget {
                     child: Text('FETCHING DATA...'),
                   ),
                   success: (data) => Center(
+                    //TODO: #146 ユーザーに表示する合わせてヤバさレベルを変えるようにする
                     child: data.main!.pressure! <= 1000
                         ? Text(
                             'DEADLY',
@@ -274,26 +279,40 @@ class HomePage extends riv.ConsumerWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 80.0),
                           )
+                        
+                        : data.main!.pressure! <= 1005 ? Text(
+                            'DANGEROUS',
+                            style: TextStyle(
+                                color: Colors.redAccent[400],
+                                fontWeight: FontWeight.w500,
+                                fontSize: 60.0),
+                          )
+
                         : data.main!.pressure! <= 1008
                             ? const Text(
                                 'YABAME',
                                 style: TextStyle(
                                   color: Colors.black,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.normal,
                                 ),
                               )
                             : data.main!.pressure! <= 1010
                                 ? const Text(
-                                    'CHOI-YABAME',
+                                    'YABAME-KAMO',
                                     style: TextStyle(
                                       color: Colors.black,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w200,
                                     ),
                                   )
                                 : const Center(
                                     child: Text(
-                                    '',
+                                    'KAITEKI',
                                     style: TextStyle(
                                       fontSize: 28.5,
                                       color: Colors.black,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   )),
                   ),
