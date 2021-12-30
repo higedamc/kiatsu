@@ -181,17 +181,18 @@ class SettingPage extends ConsumerWidget {
                                 //         key: UniqueKey(),
                                 //       );
                                 //     })
-                                //     : showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return CustomDialogBox(
-                                //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                //         descriptions: 'この機能はベータ版のため使用できません♡',
-                                //         text: 'りょ',
-                                //         key: UniqueKey(),
-                                //       );
-                                //     });
-                                Navigator.pushNamed(context, '/sub');
+                                // :
+                                    showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CustomDialogBox(
+                                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                        descriptions: 'この機能はベータ版のため使用できません♡',
+                                        text: 'りょ',
+                                        key: UniqueKey(),
+                                      );
+                                    });
+                                // Navigator.pushNamed(context, '/sub');
                                 // Navigator.pushNamed(context, '/test');
                               }),
                         ],
