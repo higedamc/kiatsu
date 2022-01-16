@@ -29,7 +29,7 @@ class LineAuthUtil {
       final result = await LineSDK.instance.login(
           // option: LoginOption(false, 'aggressive'),
           );
-      // final lineUserProfile = result.userProfile;
+      //final lineUserProfile = result.userProfile;
       final lineUserId = result.userProfile?.userId;
       // final displayName = result.userProfile?.displayName;
 
@@ -41,13 +41,18 @@ class LineAuthUtil {
           options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
       final response = await callable.call({
         'userId': lineUserId.toString(),
-        // 'profile': lineUserProfile,
+        //'profile': lineUserProfile,
+        // 'displayName': displayName,
       });
       return await FirebaseAuth.instance
           .signInWithCustomToken(response.data['customToken'])
           .then((authResult) async {
         final firebaseUser = authResult.user;
+        final updatedDisplayName = authResult.user?.updateDisplayName(firebaseUser.toString());
+
         print(firebaseUser);
+        // print(displayName);
+        print('username is updated: $updatedDisplayName'.toString());
         print(firebaseUser?.uid);
       });
     } on FirebaseAuthException catch (e) {
