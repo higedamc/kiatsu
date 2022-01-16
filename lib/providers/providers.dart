@@ -53,7 +53,7 @@ final documentStreamProvider = StreamProvider.autoDispose((ref) {
   return stream.map((snapshot) => snapshot.data());
 });
 
-final entitlementProvider =
-    StateNotifierProvider.autoDispose<PurchaseNotifier, List<Entitlement>>((ref) {
-  return PurchaseNotifier();
-});
+// final entitlementProvider =
+//     StateNotifierProvider.autoDispose<PurchaseNotifier, List<Entitlement>>((ref) {
+//   return PurchaseNotifier();
+// });

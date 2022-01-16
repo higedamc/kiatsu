@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
+import 'package:kiatsu/auth/line/auth_manager.dart';
 import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
@@ -15,11 +17,11 @@ import 'package:social_auth_buttons/res/buttons/google_auth_button.dart';
 import 'package:social_auth_buttons/res/buttons/twitter_auth_button.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final _auth = FirebaseAuth.instance;
     final now = _auth.currentUser;
     // ToDO: AppleAuthのboolが起動するか初期化して確認
@@ -127,6 +129,7 @@ class SignInPage extends StatelessWidget {
                             ),
                             onPressed: () async {
                               await LineAuthUtil.signIn(context);
+                              // await ref.read(authManagerProvider).signInWithLine();
                               Navigator.pop(context);
                               // showDialog(
                               //     context: context,

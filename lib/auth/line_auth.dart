@@ -30,16 +30,18 @@ class LineAuthUtil {
           // option: LoginOption(false, 'aggressive'),
           );
       // final lineUserProfile = result.userProfile;
-      // final lineUserId = lineUserProfile?.userId;
       final lineUserId = result.userProfile?.userId;
+      // final displayName = result.userProfile?.displayName;
 
       print(lineUserId.toString());
+      // print(lineUserProfile.toString());
 
-      final callable = FirebaseFunctions.instanceFor(region: 'asia-east2')
-          .httpsCallable('fetchCustomToken',
+      final callable = FirebaseFunctions.instanceFor(region: 'us-central1')
+          .httpsCallable('customTokenGetter',
           options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
       final response = await callable.call({
-        'userId': lineUserId,
+        'userId': lineUserId.toString(),
+        // 'profile': lineUserProfile,
       });
       return await FirebaseAuth.instance
           .signInWithCustomToken(response.data['customToken'])
@@ -52,6 +54,7 @@ class LineAuthUtil {
       var message = 'エラーが発生しました';
       if (e.code == '3063') {
         message = 'キャンセルしました';
+        print(message);
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.code),

@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -465,14 +466,16 @@ Widget buildAdmob(Entitlement entitlement) {
     width: myBanner.size.width.toDouble(),
     height: myBanner.size.height.toDouble(),
   );
-  switch (entitlement) {
-    case Entitlement.pro:
-      return Container();
-    case Entitlement.free:
-      return Center(
-        child: adContainer,
-      );
-  }
+  return entitlement == Entitlement.free ? adContainer : Container();
+
+  // switch (entitlement) {
+  //   case Entitlement.pro:
+  //     return Container();
+  //   case Entitlement.free:
+  //     return Center(
+  //       child: adContainer,
+  //     );
+  // }
 }
 
 getTimelineView(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:adapty_flutter/adapty_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -181,17 +182,19 @@ class SettingPage extends ConsumerWidget {
                                 //       );
                                 //     })
                                 // :
-                                    showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return CustomDialogBox(
-                                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                        descriptions: 'この機能はベータ版のため使用できません♡',
-                                        text: 'りょ',
-                                        key: UniqueKey(),
-                                      );
-                                    });
-                                // Navigator.pushNamed(context, '/sub');
+                                    // showDialog(
+                                    // context: context,
+                                    // builder: (BuildContext context) {
+                                    //   return CustomDialogBox(
+                                    //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                    //     descriptions: 'この機能はベータ版のため使用できません♡',
+                                    //     text: 'りょ',
+                                    //     key: UniqueKey(),
+                                    //   );
+                                //     // });
+                                Navigator.pushNamed(context, '/sub');
+                                // Adapty.activate();
+                                // await Adapty.getPaywalls();
                                 // Navigator.pushNamed(context, '/test');
                               }),
                         ],
