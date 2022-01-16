@@ -18,7 +18,7 @@ class RevenueCat extends ChangeNotifier {
 
   Future updatePurchaseStatus() async {
     final purchaserInfo = await Purchases.getPurchaserInfo();
-
+    print(purchaserInfo);
     final entitlements = purchaserInfo.entitlements.active.values.toList();
     _entitlement =
         entitlements.isEmpty ? Entitlement.free : Entitlement.pro;

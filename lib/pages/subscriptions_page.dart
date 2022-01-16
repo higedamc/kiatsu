@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/pages/timeline.dart';
@@ -27,77 +28,33 @@ class Coins {
   // for iOS
   static const removeAdsIOS = 'kiatsu_250_remove_ads';
   static const tipMe = 'tip_me_490';
-  static const subsc = 'kiatsu_pro_1m';
   static final _apiKey = dotenv.env['REVENUECAT_SECRET_KEY'].toString();
   // Added some
-  static const allIds = [removeAdsIOS, tipMe, subsc];
+  static const allIds = [removeAdsIOS, tipMe];
 }
 
-class SubscriptionsPage extends StatefulWidget {
+// class SubscriptionsPage extends StatefulWidget {
+//   const SubscriptionsPage({Key? key}) : super(key: key);
+
+//   @override
+//   _SubscriptionsPageState createState() => _SubscriptionsPageState();
+// }
+
+class SubscriptionsPage extends ConsumerWidget {
+  final bool isLoading = false;
+
   const SubscriptionsPage({Key? key}) : super(key: key);
 
   @override
-  _SubscriptionsPageState createState() => _SubscriptionsPageState();
-}
-
-class _SubscriptionsPageState extends State<SubscriptionsPage> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final entitlement = Provider.of<RevenueCat>(context).entitlement;
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final entitlement = Provider.of<RevenueCat>(context).entitlement;
 
     // RevenueCat().updatePurchaseStatus();
     // final current = PurchaseApi.getCurrentPurchaser();
 
     // print(current.toString());
-    // final entitlement = ref.watch(revenueCatProvider).entitlement;
-
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            buildEntitlement(entitlement),
-            const SizedBox(height: 32),
-            buildEntitlementText(entitlement),
-            const SizedBox(height: 32),
-            buildRestoreButton(entitlement),
-            const SizedBox(height: 32),
-
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-              ),
-              child: const Text(
-                '他の機能を見てみる',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: isLoading ? null : fetchOffers2,
-            ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text(
-                  'Get UserInfo',
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () async {
-                  // await RevenueCat().updatePurchaseStatus();
-                  // final current = await Purchases.getPurchaserInfo();
-                  // print(current.toString());
-                  // await waiter();
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> waiter () async {
+    final entitlement = ref.watch(revenueCatProvider).entitlement;
+    Future<void> waiter () async {
     return Future.delayed(Duration.zero, () async {
       // PurchaseApi.init();
       await Purchases.setup(Coins._apiKey, appUserId: currentUser?.uid.toString());
@@ -105,14 +62,42 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     });
   }
 
-  
+  Future fetchOffers() async {
+    final offerings = await PurchaseApi.fetchOffers(all: true);
+
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('該当するプランが見つかりませんでした'),
+      ));
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+
+      Utils.showSheet(
+        context,
+        (context) => PaywallWidget(
+          packages: packages,
+          title: 'プランをアップグレードする＾q＾',
+          description: 'プランをアップグレードして特典を得る',
+          onClickedPackage: (package) async {
+            await PurchaseApi.purchasePackage(package);
+
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+  }
 
 
   Widget buildEntitlementText(Entitlement entitlement) {
     // waiter();
     switch (entitlement) {
       case Entitlement.pro:
-        return ElevatedButton(
+        return 
+        ElevatedButton(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(50),
           ),
@@ -198,6 +183,18 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     }
   }
 
+  Widget buildEntitlementIcon({
+    required String text,
+    required IconData icon,
+  }) =>
+      Column(
+        children: [
+          Icon(icon, size: 100),
+          const SizedBox(height: 8),
+          Text(text, style: const TextStyle(fontSize: 24)),
+        ],
+      );
+
   Widget buildEntitlement(Entitlement entitlement) {
     switch (entitlement) {
       case Entitlement.pro:
@@ -214,17 +211,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     }
   }
 
-  Widget buildEntitlementIcon({
-    required String text,
-    required IconData icon,
-  }) =>
-      Column(
-        children: [
-          Icon(icon, size: 100),
-          const SizedBox(height: 8),
-          Text(text, style: const TextStyle(fontSize: 24)),
-        ],
-      );
+  
 
   Future fetchOffers2() async {
     final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
@@ -269,32 +256,51 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     }
   }
 
-  Future fetchOffers() async {
-    final offerings = await PurchaseApi.fetchOffers(all: true);
+  
 
-    if (offerings.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('該当するプランが見つかりませんでした'),
-      ));
-    } else {
-      final packages = offerings
-          .map((offer) => offer.availablePackages)
-          .expand((pair) => pair)
-          .toList();
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            buildEntitlement(entitlement),
+            const SizedBox(height: 32),
+            buildEntitlementText(entitlement),
+            const SizedBox(height: 32),
+            buildRestoreButton(entitlement),
+            const SizedBox(height: 32),
 
-      Utils.showSheet(
-        context,
-        (context) => PaywallWidget(
-          packages: packages,
-          title: 'プランをアップグレードする＾q＾',
-          description: 'プランをアップグレードして特典を得る',
-          onClickedPackage: (package) async {
-            await PurchaseApi.purchasePackage(package);
-
-            Navigator.pop(context);
-          },
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: const Text(
+                '他の機能を見てみる',
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: isLoading ? null : fetchOffers2,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text(
+                  'Get UserInfo',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () async {
+                  // await RevenueCat().updatePurchaseStatus();
+                  // final current = await Purchases.getPurchaserInfo();
+                  // print(current.toString());
+                  // await waiter();
+                }),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
+
+  
 }
