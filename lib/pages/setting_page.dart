@@ -9,11 +9,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:package_info/package_info.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -25,7 +28,7 @@ final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
 // test1
-final currentPurchaser = PurchaseApi.getCurrentPurchaser();
+// final currentPurchaser = PurchaseApi.getCurrentPurchaser();
 
 final userProvider = StateProvider((ref) {
   return FirebaseAuth.instance.currentUser;
@@ -35,6 +38,34 @@ final userProvider = StateProvider((ref) {
 //    	final packageInfo = await PackageInfo.fromPlatform();
 //    	return packageInfo.version;
 //  }
+
+class Coins {
+  // Entitlementsの設定
+  // static const removeAds = 'kiatsu_120_remove_ads';
+  // for iOS
+  static const removeAdsIOS = 'kiatsu_250_remove_ads';
+  static const tipMe = 'tip_me_490';
+  static final _apiKey = dotenv.env['REVENUECAT_SECRET_KEY'].toString();
+  // Added some
+  static const allIds = [removeAdsIOS, tipMe];
+}
+
+Future<void> waiter(WidgetRef ref) async {
+  // return Future.delayed(Duration.zero, () async {
+  //   // PurchaseApi.init();
+  //   await Purchases.setup(Coins._apiKey,
+  //       appUserId: currentUser?.uid.toString());
+  // });
+  final testt = ref.watch(authManagerProvider);
+  if (testt.isLoggedIn) {
+    await Purchases.setup(Coins._apiKey,
+        appUserId: currentUser?.uid.toString());
+  }
+  // await Purchases.setup(
+  //   Coins._apiKey,
+  //   appUserId: currentUser?.uid.toString(),
+  // );
+}
 
 class SettingPage extends ConsumerWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -90,8 +121,9 @@ class SettingPage extends ConsumerWidget {
                                       content: const Text('サインアウトしますか？'),
                                       actions: <Widget>[
                                         TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                            },
                                             child: const Text('Cancel')),
                                         TextButton(
                                             onPressed: () async {
@@ -102,9 +134,26 @@ class SettingPage extends ConsumerWidget {
                                                       .then((_) => exit(0))
                                                   : FirebaseAuth.instance
                                                       .signOut()
-                                                      .then((_) =>
-                                                          SystemNavigator
-                                                              .pop());
+                                                      .then((_) async {
+                                                      try {
+                                                        await Purchases
+                                                            .logOut();
+                                                      } catch (e) {
+                                                        if (e == 22) {
+                                                          Navigator.pop(
+                                                              context);
+                                                        }
+                                                      }
+                                                      // final purchaserInfo = await Purchases.getPurchaserInfo();
+                                                      // print(purchaserInfo);
+                                                      // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
+
+                                                      // // if (purchaserInfo != null) {
+                                                      //    null : await Purchases.logOut();
+                                                      // // }
+
+                                                      Navigator.pop(context);
+                                                    });
                                             },
                                             child: const Text('OK')),
                                       ],
@@ -153,7 +202,7 @@ class SettingPage extends ConsumerWidget {
                               subtitle: '押',
                               // leading: neu.NeumorphicIcon(Icons.bug_report),
                               onPressed: (context) async {
-                                Wiredash.of(context)!.show();
+                                Wiredash.of(context)?.show();
                               }),
                           // snapshot.hasData
                           //     ? SettingsTile(
@@ -169,30 +218,35 @@ class SettingPage extends ConsumerWidget {
                               title: '有料機能',
                               subtitle: '押',
                               onPressed: (context) async {
-                                // user == null
-                                //     ?
-                                //     showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return CustomDialogBox(
-                                //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                //         descriptions: 'この機能を使うにはログインが必要です♡',
-                                //         text: 'りょ',
-                                //         key: UniqueKey(),
-                                //       );
-                                //     })
+                                if (user == null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialogBox(
+                                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                          descriptions: 'この機能を使うにはログインが必要です♡',
+                                          text: 'りょ',
+                                          key: UniqueKey(),
+                                        );
+                                      });
+                                } else if (user != null) {
+                                  // await waiter(ref);
+                                  Navigator.pushNamed(context, '/sub');
+                                }
+                                // ?
+
                                 // :
-                                    // showDialog(
-                                    // context: context,
-                                    // builder: (BuildContext context) {
-                                    //   return CustomDialogBox(
-                                    //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                    //     descriptions: 'この機能はベータ版のため使用できません♡',
-                                    //     text: 'りょ',
-                                    //     key: UniqueKey(),
-                                    //   );
+                                // showDialog(
+                                // context: context,
+                                // builder: (BuildContext context) {
+                                //   return CustomDialogBox(
+                                //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                //     descriptions: 'この機能はベータ版のため使用できません♡',
+                                //     text: 'りょ',
+                                //     key: UniqueKey(),
+                                //   );
                                 //     // });
-                                Navigator.pushNamed(context, '/sub');
+
                                 // Adapty.activate();
                                 // await Adapty.getPaywalls();
                                 // Navigator.pushNamed(context, '/test');

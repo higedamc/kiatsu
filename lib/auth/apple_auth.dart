@@ -4,6 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kiatsu/providers/scaffold_messanger_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 //TODO: #120 null安全にする
@@ -36,8 +38,8 @@ class AppleAuthUtil {
   static void signOut() => FirebaseAuth.instance.signOut();
 
   /// サインイン
-  static Future<User?> signIn(BuildContext context) async {
-    final UserCredential? credential = await signInWithApple(context);
+  static Future<User?> signIn(BuildContext context, WidgetRef ref) async {
+    final UserCredential? credential = await signInWithApple(context, ref);
     return credential!.user;
   }
 
@@ -86,7 +88,8 @@ class AppleAuthUtil {
   }
 
   // TODO: サインインがうまくいくか (Firebaseに反映されるか) 実機で検証する
-  static Future<UserCredential?> signInWithApple(BuildContext context) async {
+  static Future<UserCredential?> signInWithApple(
+      BuildContext context, WidgetRef ref) async {
     final _auth = FirebaseAuth.instance;
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce!);
@@ -128,11 +131,16 @@ class AppleAuthUtil {
       });
     } on SignInWithAppleAuthorizationException catch (e) {
       (e.code == AuthorizationErrorCode.canceled)
-          ? ScaffoldMessenger.of(context)
+          ? 
+          // ref
+          //     .read(scaffoldMessengerProvider)
+          //     .currentState
+          //     ?.showAfterRemoveSnackBar(
+          //         message: Text('ログインがキャンセルされました').toString())
+          ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('ログインがキャンセルされました。')))
           : print(e.code);
     }
-    Navigator.pop(context);
     print('サインインされました');
   }
 }

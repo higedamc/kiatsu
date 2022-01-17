@@ -51,7 +51,10 @@ dependencies:
   google_mobile_ads: ^1.0.0
   google_sign_in: ^5.0.7
   http: ^0.13.3
+  in_app_purchase: ^2.0.1
+  in_app_purchase_android: ^0.2.2+1
   is_first_run: ^1.0.0
+  json_annotation: ^4.4.0
   meta: ^1.7.0
   modal_bottom_sheet: ^2.0.0
   package_info: ^2.0.0
@@ -59,6 +62,7 @@ dependencies:
   permission_handler: ^8.3.0
   provider: ^6.0.0
   purchases_flutter: ^3.4.3
+  rxdart: ^0.27.3
   settings_ui:
     git:
       url: https://github.com/higedamc/flutter-settings-ui.git
@@ -66,8 +70,10 @@ dependencies:
   share: ^2.0.1
   shared_preferences: ^2.0.5
   sign_in_with_apple: ^3.0.0
+  simple_logger: ^1.9.0
   social_auth_buttons: ^2.0.0-nullsafety.1
   splash_screen_view: ^3.0.0
+  subscription_holder: ^2.1.1
   the_apple_sign_in: ^1.1.1
   timeago: ^3.0.2
   webview_flutter: ^3.0.0
@@ -87,7 +93,6 @@ flutter_icons:
   image_path: "assets/images/kiatsu_logo_invert.jpg"
 
 flutter_gen:
-
   output: lib/gen/
 
   integrations:
@@ -110,7 +115,6 @@ flutter:
     # - images/
     - assets/
     - .env
-
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg
