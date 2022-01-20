@@ -1,8 +1,8 @@
 
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kiatsu/repository/weather_repository.dart';
 import 'package:kiatsu/api/api_state.dart';
+import 'package:kiatsu/repository/weather_repository.dart';
 
 class WeatherStateNotifer extends StateNotifier<WeatherClassState> {
   final WeatherRepository weatherRepository;
