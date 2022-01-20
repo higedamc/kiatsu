@@ -75,16 +75,21 @@ class SettingPage extends ConsumerWidget {
     // final loggedIn = ref.watch(authProvider);
     final user = ref.watch(authStateChangesProvider).asData?.value;
     String? pass = dotenv.env['TWITTER_PASSWORD'];
-    return neu.Neumorphic(
-      child: Column(
+    return Column(
         children: <Widget>[
           Expanded(
             child: FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, snapshot) {
                   return SettingsList(
+                    backgroundColor: Colors.white,
                     sections: [
                       SettingsSection(
+                        titleTextStyle: const TextStyle(
+                          // fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black
+                        ),
                         title: 'アカウント管理',
                         tiles: [
                           SettingsTile(
@@ -195,7 +200,12 @@ class SettingPage extends ConsumerWidget {
                         ],
                       ),
                       SettingsSection(
-                        title: '開発者を応援する＾q＾',
+                        titleTextStyle: const TextStyle(
+                          // fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black
+                        ),
+                        title: '開発者を応援する🥺',
                         tiles: [
                           SettingsTile(
                               title: 'フィードバック送信',
@@ -267,8 +277,13 @@ class SettingPage extends ConsumerWidget {
                         ],
                       ),
                       SettingsSection(
+                        titleTextStyle: const TextStyle(
+                          // fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black
+                        ),
                         //TODO: #129 端末のサイズに合わせてバージョンの表示する位置を固定する処理を書く
-                        titlePadding: const EdgeInsets.fromLTRB(168, 0, 0, 0),
+                        titlePadding: const EdgeInsets.fromLTRB(175, 0, 0, 0),
                         title: 'v ' + (snapshot.data?.version ?? '0.0.0'),
                         tiles: const [
                           // SettingsTile(
@@ -286,8 +301,7 @@ class SettingPage extends ConsumerWidget {
           ),
           // Center(child: Text('＾q＾')),
         ],
-      ),
-    );
+      );
   }
 }
 

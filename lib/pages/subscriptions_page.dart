@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/const/enumnum.dart';
+import 'package:kiatsu/controller/progress_controller.dart';
 import 'package:kiatsu/controller/purchase_controller.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/model/entitlement.dart';
@@ -18,6 +20,7 @@ import 'package:kiatsu/pages/timeline.dart';
 import 'package:kiatsu/providers/providers.dart';
 // import 'package:kiatsu/providers/providers.dart' as pro;
 import 'package:kiatsu/providers/revenuecat.dart';
+import 'package:kiatsu/providers/scaffold_messanger_provider.dart';
 import 'package:kiatsu/utils/navigation_service.dart';
 import 'package:kiatsu/utils/purchase_manager.dart';
 import 'package:kiatsu/utils/utils.dart';
@@ -97,8 +100,8 @@ class SubscriptionsPage extends ConsumerWidget {
           context,
           (context) => PaywallWidget(
             packages: packages,
-            title: 'プランをアップグレードする＾q＾',
-            description: 'プランをアップグレードして特典を得る',
+            title: 'THANK YOUUUUUU!!!',
+            description: '今後色々なアンロックできる特典を追加していく予定です！',
             onClickedPackage: (package) async {
               final isPurchased = await PurchaseApi.purchasePackage(package);
               isPurchased == true;
@@ -109,7 +112,7 @@ class SubscriptionsPage extends ConsumerWidget {
               // }
               users.doc(user?.uid).set({'isPurchased': true});
 
-              Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
         );
@@ -223,7 +226,24 @@ class SubscriptionsPage extends ConsumerWidget {
                       'プランを見る',
                       style: TextStyle(fontSize: 20),
                     ),
-                    onPressed: isLoading ? null : fetchOffers,
+                    onPressed: () async {
+                      // final p = products;
+                      // final errorCode = await ref
+                      //       .read(progressController)
+                      //       .executeWithProgress(
+                      //         () => ref
+                      //             .read(purchaseProvider.notifier)
+                      //             .purchaseProduct('pro'),
+                      //       );
+                      //   if (errorCode != null) {
+                      //     ref
+                      //         .read(scaffoldMessengerProvider)
+                      //         .currentState!
+                      //         .showAfterRemoveSnackBar(
+                      //             message: errorCode.described);
+                      //   }
+                      await fetchOffers();
+                    }
                   ),
             const SizedBox(height: 32),
             isNoAds

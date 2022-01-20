@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -53,8 +52,6 @@ Future<void> startApp() async {
   // await PurchaseApi.init();
   await Purchases.setDebugLogsEnabled(kDebugMode);
   await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString());
-
-  // await InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
 
   // final appleSignInAvailable = await AppleSignInAvailable.check();
 
@@ -141,9 +138,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// TODO: WireDashバグらないか確認
 Widget splashScreen = SplashScreenView(
-  navigateRoute: HomePage(),
+  navigateRoute: const HomePage(),
+  // navigateRoute: const SignInPage(),
   duration: 1500,
   imageSize: 130,
   imageSrc: Assets.images.face.path,

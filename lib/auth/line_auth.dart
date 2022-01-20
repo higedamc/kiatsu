@@ -57,13 +57,13 @@ class LineAuthUtil {
         print('username is updated: $updatedDisplayName'.toString());
         print(firebaseUser?.uid);
       });
-    } on FirebaseAuthException catch (e) {
+    } on PlatformException catch (e) {
       var message = 'エラーが発生しました';
       if (e.code == '3063') {
         message = 'キャンセルしました';
         print(message);
       }
-      if (e == 3003) {
+      if (e.code == '3003') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.code),
       ));

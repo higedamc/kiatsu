@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Clock extends StateNotifier<DateTime> {
-  // 1. initialize with current time
+  // 現時時刻の初期化
   Clock() : super(DateTime.now()) {
-    // 2. create a timer that fires every second
+    //発火タイマーの設定
     _timer = Timer.periodic(const Duration(seconds: 60), (_) {
-      // 3. update the state with the current time
+      //現在時刻でステートの更新
       state = DateTime.now();
     });
   }

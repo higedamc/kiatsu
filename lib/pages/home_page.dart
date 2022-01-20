@@ -7,9 +7,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/model/permission_provider.dart';
 import 'package:kiatsu/providers/providers.dart';
 import 'package:kiatsu/utils/purchase_manager.dart';
 import 'package:kiatsu/utils/string_minus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +41,7 @@ class HomePage extends riv.ConsumerWidget {
 
   final String? _res2 = '';
 
-  HomePage({this.cityName, Key? key}) : super(key: key);
+  const HomePage({this.cityName, Key? key}) : super(key: key);
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void submitCityName(
@@ -52,9 +54,62 @@ class HomePage extends riv.ConsumerWidget {
   //   await ref.read(purchaseManagerProvider).purchaseManager();
   // }
 
+
+  //TODO: Riverpod + Freezed化する
+  Future<bool> handlePermission() async {
+    // TODO: implement handlerPermission
+    // final status = await Permission.locationAlways.request();
+    // // // status.isGranted ? print('Permission granted') : print('Permission denied');
+    // if(status.isGranted) {
+    //   print(status.toString());
+    //   return true;
+    // }
+    // else {
+    //   print(status.toString());
+    //   return false;
+    // }
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,
+      // Permission.locationAlways,
+      Permission.locationWhenInUse,
+    ].request();
+    print(statuses);
+    if (statuses[Permission.location] == PermissionStatus.granted &&
+        // statuses[Permission.locationAlways] == PermissionStatus.granted &&
+        statuses[Permission.locationWhenInUse] == PermissionStatus.granted) {
+      return true;
+    } else {
+      return false;
+    }
+    // statuses.forEach((key, value) {
+    //   print('$key: $value');
+    //   if (value.isGranted) {
+    //     // return isGranted(true);
+    //   } else {
+    //     print('Permission denied');
+    //   }
+    // });
+    // if (statuses[Permission.location] == Permission.) {
+    //   return isGranted;
+    // } else {
+    //   print('Permission denied');
+    // }
+  }
+
+  //TODO: Riverpod + Freezed化する
+  Future<void> getLocationPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,
+      // Permission.locationAlways,
+      Permission.locationWhenInUse,
+    ].request();
+    print(statuses);
+  }
+
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
     final currentTime = ref.watch(clockProvider);
+    // final permission = ref.read(permissionGetter);
     // Future<void> waiter(ref) async {
     //   // return Future.delayed(Duration.zero, () async {
     //   //   // PurchaseApi.init();
@@ -315,7 +370,7 @@ class HomePage extends riv.ConsumerWidget {
                           )
                         : data.main!.pressure! <= 1005
                             ? Text(
-                                'DANGEROUS',
+                                'KIKEN',
                                 style: TextStyle(
                                     color: Colors.redAccent[400],
                                     fontWeight: FontWeight.w500,
@@ -432,7 +487,22 @@ class HomePage extends riv.ConsumerWidget {
           child: const Text('＾ｑ＾'),
           onPressed: () async {
             // if (snapshot.hasData)
-            await Navigator.of(context).pushNamed('/timeline');
+            
+            final result = await handlePermission();
+            if (result == true) {
+              print('permission granted');
+              await Navigator.of(context).pushNamed('/timeline');
+            } else {
+              print('permission denied');
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('このアプリは位置情報の許可が必須です'),
+                action: SnackBarAction(
+                  label: '許可',
+                   onPressed: () async{
+                     await getLocationPermissions();
+                   }),
+              ));
+            }
           }),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
