@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'api_state.dart';
 
@@ -51,6 +52,14 @@ mixin _$WeatherClassState {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(WeatherClass weatherClass)? success,
+    TResult Function(String? message)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
@@ -65,6 +74,14 @@ mixin _$WeatherClassState {
     required TResult Function(_WeatherLoading value) loading,
     required TResult Function(_WeatherLoadedSuccess value) success,
     required TResult Function(_WeatherLoadedError value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_WeatherInitial value)? initial,
+    TResult Function(_WeatherLoading value)? loading,
+    TResult Function(_WeatherLoadedSuccess value)? success,
+    TResult Function(_WeatherLoadedError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -126,7 +143,8 @@ class _$_WeatherInitial implements _WeatherInitial {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _WeatherInitial);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _WeatherInitial);
   }
 
   @override
@@ -141,6 +159,17 @@ class _$_WeatherInitial implements _WeatherInitial {
     required TResult Function(String? message) error,
   }) {
     return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(WeatherClass weatherClass)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return initial?.call();
   }
 
   @override
@@ -167,6 +196,17 @@ class _$_WeatherInitial implements _WeatherInitial {
     required TResult Function(_WeatherLoadedError value) error,
   }) {
     return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_WeatherInitial value)? initial,
+    TResult Function(_WeatherLoading value)? loading,
+    TResult Function(_WeatherLoadedSuccess value)? success,
+    TResult Function(_WeatherLoadedError value)? error,
+  }) {
+    return initial?.call(this);
   }
 
   @override
@@ -220,7 +260,8 @@ class _$_WeatherLoading implements _WeatherLoading {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _WeatherLoading);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _WeatherLoading);
   }
 
   @override
@@ -235,6 +276,17 @@ class _$_WeatherLoading implements _WeatherLoading {
     required TResult Function(String? message) error,
   }) {
     return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(WeatherClass weatherClass)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return loading?.call();
   }
 
   @override
@@ -261,6 +313,17 @@ class _$_WeatherLoading implements _WeatherLoading {
     required TResult Function(_WeatherLoadedError value) error,
   }) {
     return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_WeatherInitial value)? initial,
+    TResult Function(_WeatherLoading value)? loading,
+    TResult Function(_WeatherLoadedSuccess value)? success,
+    TResult Function(_WeatherLoadedError value)? error,
+  }) {
+    return loading?.call(this);
   }
 
   @override
@@ -340,15 +403,15 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _WeatherLoadedSuccess &&
-            (identical(other.weatherClass, weatherClass) ||
-                const DeepCollectionEquality()
-                    .equals(other.weatherClass, weatherClass)));
+        (other.runtimeType == runtimeType &&
+            other is _WeatherLoadedSuccess &&
+            const DeepCollectionEquality()
+                .equals(other.weatherClass, weatherClass));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(weatherClass);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(weatherClass));
 
   @JsonKey(ignore: true)
   @override
@@ -365,6 +428,17 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
     required TResult Function(String? message) error,
   }) {
     return success(weatherClass);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(WeatherClass weatherClass)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return success?.call(weatherClass);
   }
 
   @override
@@ -395,6 +469,17 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_WeatherInitial value)? initial,
+    TResult Function(_WeatherLoading value)? loading,
+    TResult Function(_WeatherLoadedSuccess value)? success,
+    TResult Function(_WeatherLoadedError value)? error,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_WeatherInitial value)? initial,
     TResult Function(_WeatherLoading value)? loading,
@@ -413,7 +498,7 @@ abstract class _WeatherLoadedSuccess implements WeatherClassState {
   const factory _WeatherLoadedSuccess(WeatherClass weatherClass) =
       _$_WeatherLoadedSuccess;
 
-  WeatherClass get weatherClass => throw _privateConstructorUsedError;
+  WeatherClass get weatherClass;
   @JsonKey(ignore: true)
   _$WeatherLoadedSuccessCopyWith<_WeatherLoadedSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -467,14 +552,14 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _WeatherLoadedError &&
-            (identical(other.message, message) ||
-                const DeepCollectionEquality().equals(other.message, message)));
+        (other.runtimeType == runtimeType &&
+            other is _WeatherLoadedError &&
+            const DeepCollectionEquality().equals(other.message, message));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(message);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
 
   @JsonKey(ignore: true)
   @override
@@ -490,6 +575,17 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
     required TResult Function(String? message) error,
   }) {
     return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(WeatherClass weatherClass)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return error?.call(message);
   }
 
   @override
@@ -520,6 +616,17 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_WeatherInitial value)? initial,
+    TResult Function(_WeatherLoading value)? loading,
+    TResult Function(_WeatherLoadedSuccess value)? success,
+    TResult Function(_WeatherLoadedError value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_WeatherInitial value)? initial,
     TResult Function(_WeatherLoading value)? loading,
@@ -537,7 +644,7 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
 abstract class _WeatherLoadedError implements WeatherClassState {
   const factory _WeatherLoadedError([String? message]) = _$_WeatherLoadedError;
 
-  String? get message => throw _privateConstructorUsedError;
+  String? get message;
   @JsonKey(ignore: true)
   _$WeatherLoadedErrorCopyWith<_WeatherLoadedError> get copyWith =>
       throw _privateConstructorUsedError;
@@ -582,6 +689,14 @@ mixin _$LocationState {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String address)? success,
+    TResult Function(String? message)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
@@ -596,6 +711,14 @@ mixin _$LocationState {
     required TResult Function(_LocationLoading value) loading,
     required TResult Function(_LocationSuccess value) success,
     required TResult Function(_LocationLoadedError value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LocationInitial value)? initial,
+    TResult Function(_LocationLoading value)? loading,
+    TResult Function(_LocationSuccess value)? success,
+    TResult Function(_LocationLoadedError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -657,7 +780,8 @@ class _$_LocationInitial implements _LocationInitial {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _LocationInitial);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _LocationInitial);
   }
 
   @override
@@ -672,6 +796,17 @@ class _$_LocationInitial implements _LocationInitial {
     required TResult Function(String? message) error,
   }) {
     return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String address)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return initial?.call();
   }
 
   @override
@@ -698,6 +833,17 @@ class _$_LocationInitial implements _LocationInitial {
     required TResult Function(_LocationLoadedError value) error,
   }) {
     return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LocationInitial value)? initial,
+    TResult Function(_LocationLoading value)? loading,
+    TResult Function(_LocationSuccess value)? success,
+    TResult Function(_LocationLoadedError value)? error,
+  }) {
+    return initial?.call(this);
   }
 
   @override
@@ -751,7 +897,8 @@ class _$_LocationLoading implements _LocationLoading {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _LocationLoading);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _LocationLoading);
   }
 
   @override
@@ -766,6 +913,17 @@ class _$_LocationLoading implements _LocationLoading {
     required TResult Function(String? message) error,
   }) {
     return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String address)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return loading?.call();
   }
 
   @override
@@ -792,6 +950,17 @@ class _$_LocationLoading implements _LocationLoading {
     required TResult Function(_LocationLoadedError value) error,
   }) {
     return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LocationInitial value)? initial,
+    TResult Function(_LocationLoading value)? loading,
+    TResult Function(_LocationSuccess value)? success,
+    TResult Function(_LocationLoadedError value)? error,
+  }) {
+    return loading?.call(this);
   }
 
   @override
@@ -862,14 +1031,14 @@ class _$_LocationSuccess implements _LocationSuccess {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _LocationSuccess &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(other.address, address)));
+        (other.runtimeType == runtimeType &&
+            other is _LocationSuccess &&
+            const DeepCollectionEquality().equals(other.address, address));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(address);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(address));
 
   @JsonKey(ignore: true)
   @override
@@ -885,6 +1054,17 @@ class _$_LocationSuccess implements _LocationSuccess {
     required TResult Function(String? message) error,
   }) {
     return success(address);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String address)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return success?.call(address);
   }
 
   @override
@@ -915,6 +1095,17 @@ class _$_LocationSuccess implements _LocationSuccess {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LocationInitial value)? initial,
+    TResult Function(_LocationLoading value)? loading,
+    TResult Function(_LocationSuccess value)? success,
+    TResult Function(_LocationLoadedError value)? error,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LocationInitial value)? initial,
     TResult Function(_LocationLoading value)? loading,
@@ -932,7 +1123,7 @@ class _$_LocationSuccess implements _LocationSuccess {
 abstract class _LocationSuccess implements LocationState {
   const factory _LocationSuccess(String address) = _$_LocationSuccess;
 
-  String get address => throw _privateConstructorUsedError;
+  String get address;
   @JsonKey(ignore: true)
   _$LocationSuccessCopyWith<_LocationSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -986,14 +1177,14 @@ class _$_LocationLoadedError implements _LocationLoadedError {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _LocationLoadedError &&
-            (identical(other.message, message) ||
-                const DeepCollectionEquality().equals(other.message, message)));
+        (other.runtimeType == runtimeType &&
+            other is _LocationLoadedError &&
+            const DeepCollectionEquality().equals(other.message, message));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(message);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
 
   @JsonKey(ignore: true)
   @override
@@ -1010,6 +1201,17 @@ class _$_LocationLoadedError implements _LocationLoadedError {
     required TResult Function(String? message) error,
   }) {
     return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String address)? success,
+    TResult Function(String? message)? error,
+  }) {
+    return error?.call(message);
   }
 
   @override
@@ -1040,6 +1242,17 @@ class _$_LocationLoadedError implements _LocationLoadedError {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LocationInitial value)? initial,
+    TResult Function(_LocationLoading value)? loading,
+    TResult Function(_LocationSuccess value)? success,
+    TResult Function(_LocationLoadedError value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LocationInitial value)? initial,
     TResult Function(_LocationLoading value)? loading,
@@ -1058,7 +1271,7 @@ abstract class _LocationLoadedError implements LocationState {
   const factory _LocationLoadedError([String? message]) =
       _$_LocationLoadedError;
 
-  String? get message => throw _privateConstructorUsedError;
+  String? get message;
   @JsonKey(ignore: true)
   _$LocationLoadedErrorCopyWith<_LocationLoadedError> get copyWith =>
       throw _privateConstructorUsedError;

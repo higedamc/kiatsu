@@ -28,6 +28,7 @@ class PurchaseApi {
     await Purchases.setDebugLogsEnabled(true);
     await dotenv.dotenv.load(fileName: '.env');
     await Purchases.setup(Coins._apiKey, appUserId: current?.uid.toString());
+    // await InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
 
   static Future<List<Offering>> fetchOffersByIds(List<String> ids) async {

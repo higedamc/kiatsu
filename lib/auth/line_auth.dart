@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
-// TODO: 今週中に実装する
+// TODO: #152 createdAtの実装 => 
+// final DateTime createdAt = new DateTime.now();
+              // users.doc(user?.uid).set({'createdAt': createdAt});
 //参照すべきURL: https://zenn.dev/yskuue/articles/410e5b787b354a
 //参照すべきURL2: https://www.youtube.com/watch?v=TT_RoA4ygEU&list=PLmg-gZJdxKEUbB8c-OPgCcpibP2L1tm-w&index=1&t=1328s
 
@@ -27,7 +29,7 @@ class LineAuthUtil {
   static Future<UserCredential?> signInWithLine(BuildContext context) async {
     try {
       final result = await LineSDK.instance.login(
-          // option: LoginOption(false, 'aggressive'),
+          option: LoginOption(false, 'aggressive'),
           );
       //final lineUserProfile = result.userProfile;
       final lineUserId = result.userProfile?.userId;
@@ -55,15 +57,18 @@ class LineAuthUtil {
         print('username is updated: $updatedDisplayName'.toString());
         print(firebaseUser?.uid);
       });
-    } on FirebaseAuthException catch (e) {
+    } on PlatformException catch (e) {
       var message = 'エラーが発生しました';
       if (e.code == '3063') {
         message = 'キャンセルしました';
         print(message);
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      if (e.code == '3003') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.code),
       ));
+      }
+      
       throw FirebaseAuthException(code: e.code, message: message);
     }
   }

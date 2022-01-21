@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kiatsu/auth/auth_manager.dart';
+import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/model/dev_id.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
@@ -31,6 +33,9 @@ class Timeline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final _authManager = ref.watch(authManagerProvider);
+    final isNoAds = ref.watch(userProvider.select((s) => s.isNoAdsUser));
+    final createdAt = ref.watch(clockProvider);
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('お気持ち投稿の場'),
@@ -42,7 +47,7 @@ class Timeline extends ConsumerWidget {
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {
-                return data[index]['userId'] != ''
+                return _authManager.isLoggedIn
                     ? GestureDetector(
                         child: Card(
                           shape: RoundedRectangleBorder(
@@ -57,16 +62,31 @@ class Timeline extends ConsumerWidget {
                               child: Column(children: [
                                 ListTile(
                                   //TODO: ここなんかもっと上手い書き方ないですかね（）
-                                  leading: data[index]['userId'] ==
-                                              DevIds().dev1 ||
-                                          data[index]['userId'] == DevIds().dev2
+                                  // TODO: 課金した際に自分の名前の投稿がわかる機能追加
+                                  leading: isNoAds &&
+                                          (data[index]['userId']
+                                              ?.contains(currentUser?.uid))
                                       ? const Text(
-                                          'Dev',
+                                          'Me',
                                           style: TextStyle(
-                                            fontWeight: neu.FontWeight.bold,
-                                          ),
+                                              fontWeight: neu.FontWeight.bold,
+                                              color: Colors.pink),
                                         )
-                                      : null,
+                                      : data[index]['userId'] ==
+                                                  DevIds().dev1 ||
+                                              data[index]['userId'] ==
+                                                  DevIds().dev2 ||
+                                              data[index]['userId'] ==
+                                                  DevIds().dev3 ||
+                                              data[index]['userId'] ==
+                                                  DevIds().dev4
+                                          ? const Text(
+                                              'Dev',
+                                              style: TextStyle(
+                                                fontWeight: neu.FontWeight.bold,
+                                              ),
+                                            )
+                                          : null,
                                   // leading:
                                   //     data[index]['userId'] == currentUser?.uid
                                   //         ? CircleAvatar(
@@ -147,9 +167,8 @@ class Timeline extends ConsumerWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            final DateTime createdAt = DateTime.now();
             final _editor = TextEditingController();
-            (uid == null)
+            !_authManager.isLoggedIn
                 ? showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -265,7 +284,7 @@ class Timeline extends ConsumerWidget {
                                                 : docRef;
                                             final documentId = docRef.id;
                                             await users
-                                                .doc(currentUser!.uid)
+                                                .doc(currentUser?.uid)
                                                 .collection('comments')
                                                 .doc(documentId)
                                                 .update({
@@ -275,7 +294,6 @@ class Timeline extends ConsumerWidget {
                                               'location': data.name.toString(),
                                               'commentId': documentId,
                                             });
-                                            // print(createdAt.toString());
                                             Navigator.of(context).pop();
                                           },
                                           child: neu.NeumorphicText(

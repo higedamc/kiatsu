@@ -1,28 +1,29 @@
-import 'package:flutter/cupertino.dart';
-import 'package:kiatsu/model/entitlement.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:kiatsu/model/entitlement.dart';
+// import 'package:purchases_flutter/purchases_flutter.dart';
 
-class RevenueCat extends ChangeNotifier {
-  RevenueCat() {
-    init();
-  }
+// class RevenueCat extends ChangeNotifier {
+//   RevenueCat() {
+//     init();
+//   }
 
-  Entitlement _entitlement = Entitlement.free;
-  Entitlement get entitlement => _entitlement;
+//   Entitlement _entitlement = Entitlement.free;
+//   Entitlement get entitlement => _entitlement;
 
-  Future init() async {
-    Purchases.addPurchaserInfoUpdateListener((purchaserInfo) async {
-      updatePurchaseStatus();
-    });
-  }
+//   Future init() async {
+//     Purchases.addPurchaserInfoUpdateListener((purchaserInfo) async {
+//       updatePurchaseStatus();
+//       notifyListeners();
+//     });
+//   }
 
-  Future updatePurchaseStatus() async {
-    final purchaserInfo = await Purchases.getPurchaserInfo();
-    print(purchaserInfo);
-    final entitlements = purchaserInfo.entitlements.active.values.toList();
-    _entitlement =
-        entitlements.isEmpty ? Entitlement.free : Entitlement.pro;
+//   Future updatePurchaseStatus() async {
+//     final purchaserInfo = await Purchases.getPurchaserInfo();
+//     print(purchaserInfo);
+//     final entitlements = purchaserInfo.entitlements.active.values.toList();
+//     _entitlement =
+//         entitlements.isEmpty ? Entitlement.free : Entitlement.pro;
 
-    notifyListeners();
-  }
-}
+//     // notifyListeners();
+//   }
+// }

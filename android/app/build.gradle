@@ -74,7 +74,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
-            useProguard true
+            // useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro' 
         }
     }
@@ -89,9 +89,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.1'
+    // implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+    // implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.1'
     implementation 'com.android.support:multidex:1.0.3'
 }
 
-apply plugin: 'com.google.firebase.crashlytics'
+// apply plugin: 'com.android.application'
+// apply plugin: 'kotlin-android'
+// apply plugin: 'com.google.firebase.crashlytics'

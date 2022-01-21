@@ -7,7 +7,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
-import 'package:kiatsu/auth/line/auth_manager.dart';
 import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
@@ -52,7 +51,7 @@ class SignInPage extends ConsumerWidget {
                           onPressed: () async {
                             if (now == null) {
                               // await AppleAuthUtil.forceLink(context);
-                              await AppleAuthUtil.signInWithApple(context);
+                              await AppleAuthUtil.signInWithApple(context, ref);
                               Navigator.pop(context);
                               print(now?.uid);
                             } else {
@@ -129,18 +128,7 @@ class SignInPage extends ConsumerWidget {
                             ),
                             onPressed: () async {
                               await LineAuthUtil.signIn(context);
-                              // await ref.read(authManagerProvider).signInWithLine();
                               Navigator.pop(context);
-                              // showDialog(
-                              //     context: context,
-                              //     builder: (BuildContext context) {
-                              //       return CustomDialogBox(
-                              //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                              //         descriptions: 'この機能はまだ未実装です♡',
-                              //         text: 'りょ',
-                              //         key: UniqueKey(),
-                              //       );
-                              //     });
                             },
                             icon: Image.asset('assets/images/line.png'),
                             label: const Padding(
