@@ -17,9 +17,7 @@ class GoogleAuthUtil {
   /// サインアウト
   static void signOut() => FirebaseAuth.instance.signOut();
 
-  static final googleSignIn = GoogleSignIn(scopes: [
-    'email'
-  ]);
+  static final googleSignIn = GoogleSignIn(scopes: ['email']);
 
   /// サインイン
   static Future<User?> signIn(BuildContext context) async {
@@ -34,45 +32,49 @@ class GoogleAuthUtil {
     final CollectionReference collection = firebaseStore.collection('users');
 
     try {
-      final GoogleSignInAccount? googleUser =
-        await googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    final googleAuthCredential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      final googleAuthCredential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // final AuthCredential googleAuthCredential = GoogleAuthProvider.credential(
-    //   accessToken: googleAuth.accessToken,
-    //   idToken: googleAuth.idToken,
-    // );
-
-    return newUser
-        .signInWithCredential(googleAuthCredential)
-        .then((result) async {
-      final displayName = result.user?.displayName;
-      final email = result.user?.email;
-      final photoUrl = result.user?.photoURL;
-      final uid = result.user?.uid;
-      final providerData = result.user?.providerData;
-      final firebaseUser = result.user;
-      await firebaseUser?.updatePhotoURL(photoUrl);
-      await collection.doc(result.user?.uid).set({
-        'uid': uid,
-        'displayName': displayName,
-        'email': email,
-        'photoUrl': photoUrl,
-        'createdAt': createdAt,
-        'providerData': providerData,
+      return newUser
+          .signInWithCredential(googleAuthCredential)
+          .then((UserCredential result) async {
+        final String? displayName = result.user?.displayName;
+        print(displayName);
+        final String? email = result.user?.email;
+        print(email);
+        final String? photoUrl = result.user?.photoURL;
+        print(photoUrl);
+        final uid = result.user?.uid;
+        print(uid);
+        final providerData = result.user?.providerData;
+        print(providerData);
+        final firebaseUser = result.user;
+        print(firebaseUser);
+        await firebaseUser?.updateDisplayName(displayName);
+        await firebaseUser?.updateEmail(email.toString());
+        await firebaseUser?.updatePhotoURL(photoUrl);
+        await collection.doc(result.user?.uid).set({'createdAt': createdAt});
+        
+        // await collection.doc(uid.toString()).collection('userInfo').doc().set({
+        //   'uid': uid,
+        //   'displayName': displayName,
+        //   'email': email,
+        //   'photoUrl': photoUrl,
+        //   'createdAt': createdAt,
+        //   'providerData': providerData,
+        // }, SetOptions(merge: true));
       });
-    });
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
-      return null;
+      throw FirebaseAuthException(code: e.code, message: e.message);
     }
   }
 }

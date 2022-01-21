@@ -20,6 +20,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:intl/intl.dart';
 
 import 'custom_dialog_box.dart';
 
@@ -53,7 +54,6 @@ class HomePage extends riv.ConsumerWidget {
   //     BuildContext context, riv.WidgetRef ref) async {
   //   await ref.read(purchaseManagerProvider).purchaseManager();
   // }
-
 
   //TODO: Riverpod + Freezed化する
   Future<bool> handlePermission() async {
@@ -148,7 +148,7 @@ class HomePage extends riv.ConsumerWidget {
                 // waiter(ref);
                 // Future.delayed(Duration.zero,
                 //     () => refreshPurchaser(context, ref));
-                Future.delayed(const Duration(seconds: 2),
+                Future.delayed(const Duration(seconds: 0),
                     () => submitCityName(context, cityName, ref));
 
                 return Container();
@@ -194,11 +194,14 @@ class HomePage extends riv.ConsumerWidget {
         color: Colors.black,
         onRefresh: () async {
           // ref.read(purchaseManagerProvider);
-          final updatedAt = currentTime;
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName.toString());
-          '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
+              // final updatedAt = DateTime.now();
+          // '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
+          ref.refresh(clockProvider);
+          // final timeFormatted = DateFormat.Hms().format(bitch);
+          // '最終更新 - $timeFormatted';
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -248,7 +251,8 @@ class HomePage extends riv.ConsumerWidget {
                 height: 70,
                 width: double.maxFinite,
                 child: Center(
-                  child: NeumorphicText(
+                  child: 
+                  NeumorphicText(
                     'hPa',
                     style: const NeumorphicStyle(
                       depth: 20,
@@ -355,9 +359,23 @@ class HomePage extends riv.ConsumerWidget {
                     );
                     return Container();
                   },
-                  loading: () => const Center(
-                    child: Text('FETCHING DATA...'),
-                  ),
+                  loading: () {
+                    return const Center(
+                      child: Text('FETCHING DATA...'),
+                    );
+                    // Future.delayed(
+                    //   Duration.zero,
+                    //   () async {
+                    //     final fuckMe = await handlePermission();
+                    //     fuckMe == true ? const Center(
+                    //       child: Text('FETCHING DATA...')
+                    //     ) : const Center(
+                    //       child: Text('位置情報を許可してください')
+                    //     );
+                    //   },
+                    // );
+                    // return Container();
+                  },
                   success: (data) => Center(
                     //TODO: #146 ユーザーに表示する合わせてヤバさレベルを変えるようにする
                     child: data.main!.pressure! <= 1000
@@ -424,30 +442,34 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final updatedAt = ref.watch(clockProvider);
+                final currentTime = ref.watch(clockProvider);
+                // final secondsString = DateFormat.s().format(currentTime);
+                // final secondsInt = int.parse(secondsString);
+                final minutesString = DateFormat.m().format(currentTime);
+                final minutesInt = int.parse(minutesString);
+                // final updatedAt = DateTime.now();
                 return Center(
                   child: NeumorphicText(
                     //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
 
-                    timeago.format(
-                              updatedAt,
-                              locale: 'ja',
-                              allowFromNow: false,
-                            ) ==
-                            '60秒未満前'
-                        ? '最終更新 - ' +
-                            timeago.format(
-                              updatedAt,
-                              locale: 'ja',
-                              allowFromNow: false,
-                            ) -
-                            '前'
-                        : '最終更新 - ' +
-                            timeago.format(
-                              updatedAt,
-                              locale: 'ja',
-                              allowFromNow: false,
-                            ),
+                    // timeago.format(
+                    //           currentTime,
+                    //           locale: 'ja',
+                    //           allowFromNow: false,
+                    //         ) ==
+                    //         '60秒未満前'
+                    // secondsInt < 60
+                    //     ? '最終更新 - ' +
+                    //         timeago.format(
+                    //           currentTime,
+                    //           locale: 'ja',
+                    //           allowFromNow: false,
+                    //         ) -
+                    //         '前'
+                    //     : '最終更新 - ' +
+                    //         minutesString + '分前',
+                    minutesInt < 1 ?
+                    '最終更新 - なう' : '最終更新 - ' + minutesInt.toString() + '分前',
                     style: const NeumorphicStyle(
                       // height: 1, // 10だとちょうど下すれすれで良い感じ
                       color: Colors.black,
@@ -487,7 +509,7 @@ class HomePage extends riv.ConsumerWidget {
           child: const Text('＾ｑ＾'),
           onPressed: () async {
             // if (snapshot.hasData)
-            
+
             final result = await handlePermission();
             if (result == true) {
               print('permission granted');
@@ -497,10 +519,10 @@ class HomePage extends riv.ConsumerWidget {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: const Text('このアプリは位置情報の許可が必須です'),
                 action: SnackBarAction(
-                  label: '許可',
-                   onPressed: () async{
-                     await getLocationPermissions();
-                   }),
+                    label: '許可',
+                    onPressed: () async {
+                      await getLocationPermissions();
+                    }),
               ));
             }
           }),

@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:adapty_flutter/adapty_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,32 +48,35 @@ class Coins {
   static const allIds = [removeAdsIOS, tipMe];
 }
 
-Future<void> waiter(WidgetRef ref) async {
-  // return Future.delayed(Duration.zero, () async {
-  //   // PurchaseApi.init();
-  //   await Purchases.setup(Coins._apiKey,
-  //       appUserId: currentUser?.uid.toString());
-  // });
-  final testt = ref.watch(authManagerProvider);
-  if (testt.isLoggedIn) {
-    await Purchases.setup(Coins._apiKey,
-        appUserId: currentUser?.uid.toString());
-  }
-  // await Purchases.setup(
-  //   Coins._apiKey,
-  //   appUserId: currentUser?.uid.toString(),
-  // );
-}
+// Future<void> waiter(WidgetRef ref) async {
+//   // return Future.delayed(Duration.zero, () async {
+//   //   // PurchaseApi.init();
+//   //   await Purchases.setup(Coins._apiKey,
+//   //       appUserId: currentUser?.uid.toString());
+//   // });
+//   final testt = ref.watch(authManagerProvider);
+//   if (testt.isLoggedIn) {
+//     await Purchases.setup(Coins._apiKey,
+//         appUserId: currentUser?.uid.toString());
+//   }
+//   // await Purchases.setup(
+//   //   Coins._apiKey,
+//   //   appUserId: currentUser?.uid.toString(),
+//   // );
+// }
 
 class SettingPage extends ConsumerWidget {
   const SettingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
     // final loggedIn = ref.watch(authProvider);
     final user = ref.watch(authStateChangesProvider).asData?.value;
     String? pass = dotenv.env['TWITTER_PASSWORD'];
-    return Column(
+    return Scaffold(
+      // key: scaffoldMessengerKey,
+      body: Column(
         children: <Widget>[
           Expanded(
             child: FutureBuilder<PackageInfo>(
@@ -86,10 +87,9 @@ class SettingPage extends ConsumerWidget {
                     sections: [
                       SettingsSection(
                         titleTextStyle: const TextStyle(
-                          // fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black
-                        ),
+                            // fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                         title: 'アカウント管理',
                         tiles: [
                           SettingsTile(
@@ -105,13 +105,20 @@ class SettingPage extends ConsumerWidget {
                               }),
                           SettingsTile(
                               title: 'アカウント',
-                              onPressed: (context) => Clipboard.setData(
-                                    ClipboardData(
-                                      text: user != null
-                                          ? user.uid.toString()
-                                          : pass,
-                                    ),
+                              onPressed: (_) async {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        // key: scaffoldMessengerKey,
+                                        // key: UniqueKey(),
+                                        content:
+                                            Text('クリップボードにアカウント名がコピーされました')));
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                    text:
+                                        user != null ? user.uid.toString() : pass,
                                   ),
+                                );
+                              },
                               subtitle:
                                   user != null ? user.uid.toString() : '未登録'),
                           // TODO: サインアウトの挙動の実装が微妙なので本チャンで実装するか迷う
@@ -121,8 +128,7 @@ class SettingPage extends ConsumerWidget {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title:
-                                          const Text('自動的にアプリが終了します (iOSを除く)'),
+                                      title: const Text('自動的にアプリが終了します (iOSを除く)'),
                                       content: const Text('サインアウトしますか？'),
                                       actions: <Widget>[
                                         TextButton(
@@ -136,17 +142,16 @@ class SettingPage extends ConsumerWidget {
                                               (!Platform.isIOS)
                                                   ? await FirebaseAuth.instance
                                                       .signOut()
-                                                      .then((_) => exit(0))
+                                                  // .then((_)
+                                                  //  => exit(0))
                                                   : FirebaseAuth.instance
                                                       .signOut()
                                                       .then((_) async {
                                                       try {
-                                                        await Purchases
-                                                            .logOut();
+                                                        await Purchases.logOut();
                                                       } catch (e) {
                                                         if (e == 22) {
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.pop(context);
                                                         }
                                                       }
                                                       // final purchaserInfo = await Purchases.getPurchaserInfo();
@@ -201,10 +206,9 @@ class SettingPage extends ConsumerWidget {
                       ),
                       SettingsSection(
                         titleTextStyle: const TextStyle(
-                          // fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black
-                        ),
+                            // fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                         title: '開発者を応援する🥺',
                         tiles: [
                           SettingsTile(
@@ -224,43 +228,40 @@ class SettingPage extends ConsumerWidget {
                           //           // fetchOffers2(context);
                           //         })
                           // :
-                          SettingsTile(
-                              title: '有料機能',
-                              subtitle: '押',
-                              onPressed: (context) async {
-                                if (user == null) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomDialogBox(
-                                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                          descriptions: 'この機能を使うにはログインが必要です♡',
-                                          text: 'りょ',
-                                          key: UniqueKey(),
-                                        );
-                                      });
-                                } else if (user != null) {
-                                  // await waiter(ref);
-                                  Navigator.pushNamed(context, '/sub');
-                                }
-                                // ?
+                          //TODO: stagingと本番環境で課金機能の表示を分ける
+                          // SettingsTile(
+                          //     title: '有料機能',
+                          //     subtitle: '押',
+                          //     onPressed: (context) async {
+                          //       if (user == null) {
+                          //         showDialog(
+                          //             context: context,
+                          //             builder: (BuildContext context) {
+                          //               return CustomDialogBox(
+                          //                 title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                          //                 descriptions: 'この機能を使うにはログインが必要です♡',
+                          //                 text: 'りょ',
+                          //                 key: UniqueKey(),
+                          //               );
+                          //             });
+                          //       } else if (user != null) {
+                          //         // await waiter(ref);
+                          //         Navigator.pushNamed(context, '/sub');
+                          //       }
+                          //       // ?
 
-                                // :
-                                // showDialog(
-                                // context: context,
-                                // builder: (BuildContext context) {
-                                //   return CustomDialogBox(
-                                //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                //     descriptions: 'この機能はベータ版のため使用できません♡',
-                                //     text: 'りょ',
-                                //     key: UniqueKey(),
-                                //   );
-                                //     // });
-
-                                // Adapty.activate();
-                                // await Adapty.getPaywalls();
-                                // Navigator.pushNamed(context, '/test');
-                              }),
+                          //       // :
+                          //       // showDialog(
+                          //       // context: context,
+                          //       // builder: (BuildContext context) {
+                          //       //   return CustomDialogBox(
+                          //       //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                          //       //     descriptions: 'この機能はベータ版のため使用できません♡',
+                          //       //     text: 'りょ',
+                          //       //     key: UniqueKey(),
+                          //       //   );
+                          //       //     // });
+                          //     }),
                         ],
                       ),
                       SettingsSection(
@@ -278,10 +279,9 @@ class SettingPage extends ConsumerWidget {
                       ),
                       SettingsSection(
                         titleTextStyle: const TextStyle(
-                          // fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black
-                        ),
+                            // fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                         //TODO: #129 端末のサイズに合わせてバージョンの表示する位置を固定する処理を書く
                         titlePadding: const EdgeInsets.fromLTRB(175, 0, 0, 0),
                         title: 'v ' + (snapshot.data?.version ?? '0.0.0'),
@@ -301,7 +301,8 @@ class SettingPage extends ConsumerWidget {
           ),
           // Center(child: Text('＾q＾')),
         ],
-      );
+      ),
+    );
   }
 }
 
