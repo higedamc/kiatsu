@@ -338,10 +338,6 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - Adapty (1.16.7)
-  - adapty_flutter (1.0.0):
-    - Adapty (= 1.16.7)
-    - Flutter
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -572,7 +568,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - adapty_flutter (from `.symlinks/plugins/adapty_flutter/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -600,7 +595,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
-    - Adapty
     - AppAuth
     - BoringSSL-GRPC
     - Firebase
@@ -632,8 +626,6 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
-  adapty_flutter:
-    :path: ".symlinks/plugins/adapty_flutter/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
@@ -683,8 +675,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
-  Adapty: 18f1f771344546c99d1801af124cac459697e712
-  adapty_flutter: 662cc5419f5c3a3ad7cd42aa7902df1c57b1339d
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: c978a55e0bfc675cdc2291ef7670a69695cc663a
