@@ -50,13 +50,16 @@ workflows:
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - flutter packages pub get
       - |
-        echo "$ENV" | base64 -d > "$FCI_BUILD_DIR/.env"
-        echo "$ANDROID_FIREBASE_SECRET" | base64 -d > "$FCI_BUILD_DIR/android/app/google-services.json"
-        echo "Decoded google-services.json! Here is the directory after."
-        ls "$FCI_BUILD_DIR/android/app"
-        cat "$FCI_BUILD_DIR/android/app/google-services.json"
-        echo "$IOS_FIREBASE_SECRET" | base64 -d > "$FCI_BUILD_DIR/ios/Runner/GoogleService-Info.plist"
-        touch "$FCI_BUILD_DIR/ios/Runner/GoogleService-Info.plist"
+        echo $ENV | base64 --decode \
+        > $FCI_BUILD_DIR/.env
+        echo $ANDROID_FIREBASE_SECRET | base64 --decode \
+        > $FCI_BUILD_DIR/android/app/google-services.json
+        echo Decoded google-services.json! Here is the directory after.
+        ls $FCI_BUILD_DIR/android/app
+        cat $FCI_BUILD_DIR/android/app/google-services.json
+        echo $IOS_FIREBASE_SECRET | base64 --decode \
+        > $FCI_BUILD_DIR/ios/Runner/GoogleService-Info.plist
+        touch $FCI_BUILD_DIR/ios/Runner/GoogleService-Info.plist
         cd ios
         rm -rf Podfile.lock
         flutter clean
@@ -68,7 +71,8 @@ workflows:
       - |
         # set up provisioning profiles
         PROFILE_PATH="$(mktemp "$HOME/Library/MobileDevice/Provisioning Profiles"/ios.mobileprovision)"
-        echo "$PROVISIONING_PROFILE" | base64 -d > "$PROFILE_PATH"
+        echo "$PROVISIONING_PROFILE" | base64 --decode \
+        > "$PROFILE_PATH"
         echo "Saved provisioning profile $PROFILE_PATH"
       - |
         # set up ios signing certificate
