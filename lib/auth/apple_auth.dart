@@ -90,6 +90,7 @@ class AppleAuthUtil {
   // TODO: サインインがうまくいくか (Firebaseに反映されるか) 実機で検証する
   static Future<UserCredential?> signInWithApple(
       BuildContext context, WidgetRef ref) async {
+    
     final _auth = FirebaseAuth.instance;
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce!);
@@ -123,9 +124,11 @@ class AppleAuthUtil {
         final uid = authResult.user?.uid;
         final providerData = authResult.user?.providerData;
         final firebaseUser = authResult.user;
+        await firebaseUser?.updateDisplayName(displayName);
+        await firebaseUser?.updateEmail(email.toString());
         await firebaseUser?.updatePhotoURL(photoUrl);
         print(
-            'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser');
+            'サインインされました: uid: $uid displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser');
 
         // return _auth.signInWithCredential(oAuthCredential);
       });
@@ -141,6 +144,6 @@ class AppleAuthUtil {
               .showSnackBar(const SnackBar(content: Text('ログインがキャンセルされました。')))
           : print(e.code);
     }
-    print('サインインされました');
+    
   }
 }

@@ -1,8 +1,3 @@
-import 'package:adapty_flutter/adapty_flutter.dart';
-import 'package:adapty_flutter/models/adapty_paywall.dart';
-import 'package:adapty_flutter/models/adapty_product.dart';
-import 'package:adapty_flutter/results/get_paywalls_result.dart';
-import 'package:adapty_flutter/results/make_purchase_result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

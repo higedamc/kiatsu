@@ -13,6 +13,7 @@
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		94161C0A276C14920078D03B /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 94161C09276C14920078D03B /* StoreKitTestCertificate.cer */; };
 		944DB087275BCB5400F325AE /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 944DB086275BCB5400F325AE /* Configuration.storekit */; };
+		94C51620279E86530015850B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94C5161F279E86530015850B /* GoogleService-Info.plist */; };
 		94E42E05266A79D700C96D85 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E42E04266A79D600C96D85 /* StoreKit.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		9424FB4225F5EFE80042304B /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		944DB086275BCB5400F325AE /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = Configuration.storekit; path = ../Configuration.storekit; sourceTree = "<group>"; };
 		94A7966E276948A3001BD60A /* RunnerDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RunnerDebug.entitlements; sourceTree = "<group>"; };
+		94C5161F279E86530015850B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94E42E04266A79D600C96D85 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				94A7966E276948A3001BD60A /* RunnerDebug.entitlements */,
 				9424FB4225F5EFE80042304B /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
+				94C5161F279E86530015850B /* GoogleService-Info.plist */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
 				97C147021CF9000F007C117D /* Info.plist */,
@@ -208,6 +211,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				94161C0A276C14920078D03B /* StoreKitTestCertificate.cer in Resources */,
+				94C51620279E86530015850B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,7 +399,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: Kohei Otani (2U4XKJYC6R)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 520;
+				CURRENT_PROJECT_VERSION = 556;
 				DEVELOPMENT_TEAM = 2U4XKJYC6R;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -413,7 +417,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 0.5.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -547,7 +551,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: Kohei Otani (AW8S6KQ8CU)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 520;
+				CURRENT_PROJECT_VERSION = 556;
 				DEVELOPMENT_TEAM = 2U4XKJYC6R;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -564,7 +568,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 0.5.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -587,7 +591,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: Kohei Otani (2U4XKJYC6R)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 520;
+				CURRENT_PROJECT_VERSION = 556;
 				DEVELOPMENT_TEAM = 2U4XKJYC6R;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -605,11 +609,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.5.1;
+				MARKETING_VERSION = 0.5.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = provisioningProfileForAdHoc;
+				PROVISIONING_PROFILE_SPECIFIER = provisioningProfileForRelease;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

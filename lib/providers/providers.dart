@@ -64,6 +64,7 @@ final documentStreamProvider = StreamProvider.autoDispose((ref) {
 //   return PurchaseNotifier();
 // });
 
+//参考URL: https://codewithandrea.com/articles/flutter-state-management-riverpod/
 final clockProvider = StateNotifierProvider<Clock, DateTime>((ref) {
   return Clock();
 });

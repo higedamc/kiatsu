@@ -48,6 +48,14 @@ class WeatherRepositoryImpl implements WeatherRepository {
   @override
   Future<WeatherClass> getWeather(String cityName) async {
     try {
+      //参考URL: https://camposha.info/flutter/flutter-location/#gsc.tab=0
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return Future.error('Location permissions are denied');
+        }
+      }
       final Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best,
           forceAndroidLocationManager: true);

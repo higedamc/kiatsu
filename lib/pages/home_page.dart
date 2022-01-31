@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/controller/user_controller.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:intl/intl.dart';
 
 import 'custom_dialog_box.dart';
 
@@ -54,7 +56,6 @@ class HomePage extends riv.ConsumerWidget {
   //   await ref.read(purchaseManagerProvider).purchaseManager();
   // }
 
-
   //TODO: Riverpod + Freezed化する
   Future<bool> handlePermission() async {
     // TODO: implement handlerPermission
@@ -70,12 +71,12 @@ class HomePage extends riv.ConsumerWidget {
     // }
     Map<Permission, PermissionStatus> statuses = await [
       Permission.location,
-      // Permission.locationAlways,
+      Permission.locationAlways,
       Permission.locationWhenInUse,
     ].request();
     print(statuses);
     if (statuses[Permission.location] == PermissionStatus.granted &&
-        // statuses[Permission.locationAlways] == PermissionStatus.granted &&
+        statuses[Permission.locationAlways] == PermissionStatus.granted &&
         statuses[Permission.locationWhenInUse] == PermissionStatus.granted) {
       return true;
     } else {
@@ -98,12 +99,39 @@ class HomePage extends riv.ConsumerWidget {
 
   //TODO: Riverpod + Freezed化する
   Future<void> getLocationPermissions() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.location,
-      // Permission.locationAlways,
-      Permission.locationWhenInUse,
-    ].request();
-    print(statuses);
+    // final result = handlePermission();
+    final result1 = await Permission.location.isDenied;
+    final result2 = await Permission.locationAlways.isDenied;
+    final result3 = await Permission.locationWhenInUse.isDenied;
+    final result4 = await Permission.location.isLimited;
+    final result5 = await Permission.location.isRestricted;
+    final result6 = await Permission.location.isPermanentlyDenied;
+    final result7 = await Permission.locationAlways.isLimited;
+    final result8 = await Permission.locationAlways.isRestricted;
+    final result9 = await Permission.locationAlways.isPermanentlyDenied;
+    final result10 = await Permission.locationWhenInUse.isLimited;
+    final result11 = await Permission.locationWhenInUse.isRestricted;
+    final result12 = await Permission.locationWhenInUse.isPermanentlyDenied;
+
+    (result1 == true || result4 == true || result5 == true || result6 == true)
+        ? Permission.location.request()
+        : Permission.location.isGranted;
+    (result2 == true || result7 == true || result8 == true || result9 == true)
+        ? Permission.locationAlways.request()
+        : Permission.locationAlways.isGranted;
+    (result3 == true ||
+            result10 == true ||
+            result11 == true ||
+            result12 == true)
+        ? Permission.locationWhenInUse.request()
+        : Permission.locationWhenInUse.isGranted;
+    // if (statuses[Permission.location] == PermissionStatus.granted)
+    // Map<Permission, PermissionStatus> statuses = await [
+    //   Permission.location,
+    //   Permission.locationAlways,
+    //   Permission.locationWhenInUse,
+    // ].request();
+    // print(statuses);
   }
 
   @override
@@ -148,7 +176,7 @@ class HomePage extends riv.ConsumerWidget {
                 // waiter(ref);
                 // Future.delayed(Duration.zero,
                 //     () => refreshPurchaser(context, ref));
-                Future.delayed(const Duration(seconds: 2),
+                Future.delayed(const Duration(seconds: 0),
                     () => submitCityName(context, cityName, ref));
 
                 return Container();
@@ -194,11 +222,14 @@ class HomePage extends riv.ConsumerWidget {
         color: Colors.black,
         onRefresh: () async {
           // ref.read(purchaseManagerProvider);
-          final updatedAt = currentTime;
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName.toString());
-          '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
+          // final updatedAt = DateTime.now();
+          // '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
+          ref.refresh(clockProvider);
+          // final timeFormatted = DateFormat.Hms().format(bitch);
+          // '最終更新 - $timeFormatted';
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -355,9 +386,23 @@ class HomePage extends riv.ConsumerWidget {
                     );
                     return Container();
                   },
-                  loading: () => const Center(
-                    child: Text('FETCHING DATA...'),
-                  ),
+                  loading: () {
+                    return const Center(
+                      child: Text('FETCHING DATA...'),
+                    );
+                    // Future.delayed(
+                    //   Duration.zero,
+                    //   () async {
+                    //     final fuckMe = await handlePermission();
+                    //     fuckMe == true ? const Center(
+                    //       child: Text('FETCHING DATA...')
+                    //     ) : const Center(
+                    //       child: Text('位置情報を許可してください')
+                    //     );
+                    //   },
+                    // );
+                    // return Container();
+                  },
                   success: (data) => Center(
                     //TODO: #146 ユーザーに表示する合わせてヤバさレベルを変えるようにする
                     child: data.main!.pressure! <= 1000
@@ -378,7 +423,7 @@ class HomePage extends riv.ConsumerWidget {
                               )
                             : data.main!.pressure! <= 1008
                                 ? const Text(
-                                    'YABAME',
+                                    'YABAI',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 40,
@@ -387,7 +432,7 @@ class HomePage extends riv.ConsumerWidget {
                                   )
                                 : data.main!.pressure! <= 1010
                                     ? const Text(
-                                        'YABAME-KAMO',
+                                        'YABAME',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 30,
@@ -424,30 +469,35 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final updatedAt = ref.watch(clockProvider);
+                final currentTime = ref.watch(clockProvider);
+                // final secondsString = DateFormat.s().format(currentTime);
+                // final secondsInt = int.parse(secondsString);
+                final minutesString = DateFormat.m().format(currentTime);
+                final minutesInt = int.parse(minutesString);
+                // final updatedAt = DateTime.now();
                 return Center(
                   child: NeumorphicText(
                     //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
 
-                    timeago.format(
-                              updatedAt,
-                              locale: 'ja',
-                              allowFromNow: false,
-                            ) ==
-                            '60秒未満前'
-                        ? '最終更新 - ' +
-                            timeago.format(
-                              updatedAt,
-                              locale: 'ja',
-                              allowFromNow: false,
-                            ) -
-                            '前'
-                        : '最終更新 - ' +
-                            timeago.format(
-                              updatedAt,
-                              locale: 'ja',
-                              allowFromNow: false,
-                            ),
+                    // timeago.format(
+                    //           currentTime,
+                    //           locale: 'ja',
+                    //           allowFromNow: false,
+                    //         ) ==
+                    //         '60秒未満前'
+                    // secondsInt < 60
+                    //     ? '最終更新 - ' +
+                    //         timeago.format(
+                    //           currentTime,
+                    //           locale: 'ja',
+                    //           allowFromNow: false,
+                    //         ) -
+                    //         '前'
+                    //     : '最終更新 - ' +
+                    //         minutesString + '分前',
+                    minutesInt < 1
+                        ? '最終更新 - なう'
+                        : '最終更新 - ' + minutesInt.toString() + '分前',
                     style: const NeumorphicStyle(
                       // height: 1, // 10だとちょうど下すれすれで良い感じ
                       color: Colors.black,
@@ -473,7 +523,7 @@ class HomePage extends riv.ConsumerWidget {
                     ref.watch(userProvider.select((s) => s.isPaidUser));
                 return Center(
                   child: SizedBox(
-                      height: deviceHeight.w * 0.1,
+                      //height: deviceHeight.w * 0.1,
                       child: _isPaid ? Container() : buildAdmob()),
                 );
               },
@@ -487,7 +537,7 @@ class HomePage extends riv.ConsumerWidget {
           child: const Text('＾ｑ＾'),
           onPressed: () async {
             // if (snapshot.hasData)
-            
+
             final result = await handlePermission();
             if (result == true) {
               print('permission granted');
@@ -497,10 +547,11 @@ class HomePage extends riv.ConsumerWidget {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: const Text('このアプリは位置情報の許可が必須です'),
                 action: SnackBarAction(
-                  label: '許可',
-                   onPressed: () async{
-                     await getLocationPermissions();
-                   }),
+                    label: '許可',
+                    onPressed: () async {
+                      // await getLocationPermissions();
+                      await Geolocator.openLocationSettings();
+                    }),
               ));
             }
           }),

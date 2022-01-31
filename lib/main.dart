@@ -25,7 +25,7 @@ import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // Import the generated file
-import 'firebase_options.dart';
+import 'firebase_options.dart.bak';
 import 'package:provider/provider.dart' as provider;
 
 //TODO: WIREDASHのエラー直す(エミュレーターだけ説？)
@@ -46,7 +46,7 @@ Future<void> startApp() async {
   MobileAds.instance.initialize();
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    // options: DefaultFirebaseOptions.currentPlatform,
   );
 
   // await PurchaseApi.init();
@@ -89,12 +89,11 @@ class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
   final _navigatorKey = GlobalKey<NavigatorState>();
-  // final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Wiredash(
-      key: UniqueKey(),
+      // key: UniqueKey(),
       projectId: dotenv.env['WIREDASH_ID'].toString(),
       secret: dotenv.env['WIREDASH_SECRET'].toString(),
       navigatorKey: _navigatorKey,
@@ -107,7 +106,7 @@ class MyApp extends StatelessWidget {
         locale: const Locale('pl'),
       ),
       child: NeumorphicApp(
-        key: UniqueKey(),
+        // key: UniqueKey(),
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
@@ -140,7 +139,6 @@ class MyApp extends StatelessWidget {
 
 Widget splashScreen = SplashScreenView(
   navigateRoute: const HomePage(),
-  // navigateRoute: const SignInPage(),
   duration: 1500,
   imageSize: 130,
   imageSrc: Assets.images.face.path,
