@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
@@ -14,6 +15,7 @@ import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/providers/providers.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wiredash/wiredash.dart';
@@ -114,8 +116,9 @@ class SettingPage extends ConsumerWidget {
                                             Text('クリップボードにアカウント名がコピーされました')));
                                 await Clipboard.setData(
                                   ClipboardData(
-                                    text:
-                                        user != null ? user.uid.toString() : pass,
+                                    text: user != null
+                                        ? user.uid.toString()
+                                        : pass,
                                   ),
                                 );
                               },
@@ -128,7 +131,8 @@ class SettingPage extends ConsumerWidget {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: const Text('自動的にアプリが終了します (iOSを除く)'),
+                                      title:
+                                          const Text('自動的にアプリが終了します (iOSを除く)'),
                                       content: const Text('サインアウトしますか？'),
                                       actions: <Widget>[
                                         TextButton(
@@ -148,10 +152,12 @@ class SettingPage extends ConsumerWidget {
                                                       .signOut()
                                                       .then((_) async {
                                                       try {
-                                                        await Purchases.logOut();
+                                                        await Purchases
+                                                            .logOut();
                                                       } catch (e) {
                                                         if (e == 22) {
-                                                          Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
                                                         }
                                                       }
                                                       // final purchaserInfo = await Purchases.getPurchaserInfo();
@@ -170,27 +176,88 @@ class SettingPage extends ConsumerWidget {
                                     );
                                   })),
                           SettingsTile(
-                              title: '退会',
-                              onPressed: (context) async => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('危険です！'),
-                                      content: const Text('本当にアカウントを削除しますか？'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text('Cancel')),
-                                        TextButton(
-                                            onPressed: () async {
-                                              await currentUser!.delete();
-                                              await SystemNavigator.pop();
-                                            },
-                                            child: const Text('OK')),
-                                      ],
-                                    );
-                                  })),
+                              title: 'パーミッション取得',
+                              onPressed: (context) async {
+                                // await showDialog(
+                                //     context: context,
+                                //     builder: (context) {
+                                //       return AlertDialog(
+                                //         title: const Text('Oops!！'),
+                                //         content:
+                                //             const Text('このアプリには位置情報の取得が必要です'),
+                                //         actions: <Widget>[
+                                //           TextButton(
+                                //               onPressed: () =>
+                                //                   Navigator.pop(context),
+                                //               child: const Text('Cancel')),
+                                //           TextButton(
+                                //               onPressed: () async {
+                                //                 await Geolocator
+                                //                     .openAppSettings();
+                                //               },
+                                //               child: const Text('OK')),
+                                //         ],
+                                //       );
+                                //     });
+                                Map<Permission, PermissionStatus> statuses =
+                                    await [
+                                  Permission.location,
+                                  Permission.locationAlways,
+                                  Permission.locationWhenInUse,
+                                ].request();
+                                print(statuses);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(statuses.toString())));
+                                        //TODO: この辺汚すぎるので後でどうにかする
+                                // final result1 =
+                                //     await Permission.location.isDenied;
+                                // final result2 =
+                                //     await Permission.locationAlways.isDenied;
+                                // final result3 = await Permission
+                                //     .locationWhenInUse.isDenied;
+                                // final result4 =
+                                //     await Permission.location.isLimited;
+                                // final result5 =
+                                //     await Permission.location.isRestricted;
+                                // final result6 = await Permission
+                                //     .location.isPermanentlyDenied;
+                                // final result7 =
+                                //     await Permission.locationAlways.isLimited;
+                                // final result8 = await Permission
+                                //     .locationAlways.isRestricted;
+                                // final result9 = await Permission
+                                //     .locationAlways.isPermanentlyDenied;
+                                // final result10 = await Permission
+                                //     .locationWhenInUse.isLimited;
+                                // final result11 = await Permission
+                                //     .locationWhenInUse.isRestricted;
+                                // final result12 = await Permission
+                                //     .locationWhenInUse.isPermanentlyDenied;
+
+                                // (result1 == true ||
+                                //         result4 == true ||
+                                //         result5 == true ||
+                                //         result6 == true)
+                                //     ? await Permission.location.request()
+                                //     : await Permission.location.isGranted;
+                                // (result2 == true ||
+                                //         result7 == true ||
+                                //         result8 == true ||
+                                //         result9 == true)
+                                //     ? await Permission.locationAlways
+                                //         .request()
+                                //     : await Permission
+                                //         .locationAlways.isGranted;
+                                // (result3 == true ||
+                                //         result10 == true ||
+                                //         result11 == true ||
+                                //         result12 == true)
+                                //     ? await Permission.locationWhenInUse
+                                //         .request()
+                                //     : await Permission
+                                //         .locationWhenInUse.isGranted;
+                              }),
                           //         SettingsTile(
                           //           title: '権限許可',
                           //   onPressed: (context) async {
