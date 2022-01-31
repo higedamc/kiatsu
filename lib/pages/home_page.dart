@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/controller/user_controller.dart';
@@ -70,12 +71,12 @@ class HomePage extends riv.ConsumerWidget {
     // }
     Map<Permission, PermissionStatus> statuses = await [
       Permission.location,
-      // Permission.locationAlways,
+      Permission.locationAlways,
       Permission.locationWhenInUse,
     ].request();
     print(statuses);
     if (statuses[Permission.location] == PermissionStatus.granted &&
-        // statuses[Permission.locationAlways] == PermissionStatus.granted &&
+        statuses[Permission.locationAlways] == PermissionStatus.granted &&
         statuses[Permission.locationWhenInUse] == PermissionStatus.granted) {
       return true;
     } else {
@@ -98,12 +99,39 @@ class HomePage extends riv.ConsumerWidget {
 
   //TODO: Riverpod + Freezed化する
   Future<void> getLocationPermissions() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.location,
-      // Permission.locationAlways,
-      Permission.locationWhenInUse,
-    ].request();
-    print(statuses);
+    // final result = handlePermission();
+    final result1 = await Permission.location.isDenied;
+    final result2 = await Permission.locationAlways.isDenied;
+    final result3 = await Permission.locationWhenInUse.isDenied;
+    final result4 = await Permission.location.isLimited;
+    final result5 = await Permission.location.isRestricted;
+    final result6 = await Permission.location.isPermanentlyDenied;
+    final result7 = await Permission.locationAlways.isLimited;
+    final result8 = await Permission.locationAlways.isRestricted;
+    final result9 = await Permission.locationAlways.isPermanentlyDenied;
+    final result10 = await Permission.locationWhenInUse.isLimited;
+    final result11 = await Permission.locationWhenInUse.isRestricted;
+    final result12 = await Permission.locationWhenInUse.isPermanentlyDenied;
+
+    (result1 == true || result4 == true || result5 == true || result6 == true)
+        ? Permission.location.request()
+        : Permission.location.isGranted;
+    (result2 == true || result7 == true || result8 == true || result9 == true)
+        ? Permission.locationAlways.request()
+        : Permission.locationAlways.isGranted;
+    (result3 == true ||
+            result10 == true ||
+            result11 == true ||
+            result12 == true)
+        ? Permission.locationWhenInUse.request()
+        : Permission.locationWhenInUse.isGranted;
+    // if (statuses[Permission.location] == PermissionStatus.granted)
+    // Map<Permission, PermissionStatus> statuses = await [
+    //   Permission.location,
+    //   Permission.locationAlways,
+    //   Permission.locationWhenInUse,
+    // ].request();
+    // print(statuses);
   }
 
   @override
@@ -197,7 +225,7 @@ class HomePage extends riv.ConsumerWidget {
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName.toString());
-              // final updatedAt = DateTime.now();
+          // final updatedAt = DateTime.now();
           // '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
           ref.refresh(clockProvider);
           // final timeFormatted = DateFormat.Hms().format(bitch);
@@ -251,8 +279,7 @@ class HomePage extends riv.ConsumerWidget {
                 height: 70,
                 width: double.maxFinite,
                 child: Center(
-                  child: 
-                  NeumorphicText(
+                  child: NeumorphicText(
                     'hPa',
                     style: const NeumorphicStyle(
                       depth: 20,
@@ -396,7 +423,7 @@ class HomePage extends riv.ConsumerWidget {
                               )
                             : data.main!.pressure! <= 1008
                                 ? const Text(
-                                    'YABAME',
+                                    'YABAI',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 40,
@@ -405,7 +432,7 @@ class HomePage extends riv.ConsumerWidget {
                                   )
                                 : data.main!.pressure! <= 1010
                                     ? const Text(
-                                        'YABAME-KAMO',
+                                        'YABAME',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 30,
@@ -468,8 +495,9 @@ class HomePage extends riv.ConsumerWidget {
                     //         '前'
                     //     : '最終更新 - ' +
                     //         minutesString + '分前',
-                    minutesInt < 1 ?
-                    '最終更新 - なう' : '最終更新 - ' + minutesInt.toString() + '分前',
+                    minutesInt < 1
+                        ? '最終更新 - なう'
+                        : '最終更新 - ' + minutesInt.toString() + '分前',
                     style: const NeumorphicStyle(
                       // height: 1, // 10だとちょうど下すれすれで良い感じ
                       color: Colors.black,
@@ -495,7 +523,7 @@ class HomePage extends riv.ConsumerWidget {
                     ref.watch(userProvider.select((s) => s.isPaidUser));
                 return Center(
                   child: SizedBox(
-                      height: deviceHeight.w * 0.1,
+                      //height: deviceHeight.w * 0.1,
                       child: _isPaid ? Container() : buildAdmob()),
                 );
               },
@@ -521,7 +549,8 @@ class HomePage extends riv.ConsumerWidget {
                 action: SnackBarAction(
                     label: '許可',
                     onPressed: () async {
-                      await getLocationPermissions();
+                      // await getLocationPermissions();
+                      await Geolocator.openLocationSettings();
                     }),
               ));
             }
