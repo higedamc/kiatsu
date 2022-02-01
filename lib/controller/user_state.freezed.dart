@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'user_state.dart';
@@ -43,6 +44,8 @@ abstract class $UserStateCopyWith<$Res> {
   factory $UserStateCopyWith(UserState value, $Res Function(UserState) then) =
       _$UserStateCopyWithImpl<$Res>;
   $Res call({User? user, PurchaserInfo? purchaserInfo});
+
+  $PurchaserInfoCopyWith<$Res>? get purchaserInfo;
 }
 
 /// @nodoc
@@ -69,6 +72,17 @@ class _$UserStateCopyWithImpl<$Res> implements $UserStateCopyWith<$Res> {
               as PurchaserInfo?,
     ));
   }
+
+  @override
+  $PurchaserInfoCopyWith<$Res>? get purchaserInfo {
+    if (_value.purchaserInfo == null) {
+      return null;
+    }
+
+    return $PurchaserInfoCopyWith<$Res>(_value.purchaserInfo!, (value) {
+      return _then(_value.copyWith(purchaserInfo: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -78,6 +92,9 @@ abstract class _$UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       __$UserStateCopyWithImpl<$Res>;
   @override
   $Res call({User? user, PurchaserInfo? purchaserInfo});
+
+  @override
+  $PurchaserInfoCopyWith<$Res>? get purchaserInfo;
 }
 
 /// @nodoc

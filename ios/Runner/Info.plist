@@ -51,6 +51,8 @@
 	<string>This shit uses this shit!Yes!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses location to forecast the weather.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>表示する広告を適切に選択するために使用します。</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -1,10 +1,9 @@
 # kiatsu
 
 [![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3LrRRh3Tz49AmEFwpmF5gt7rXgzyXMGsuV)](https://en.cryptobadges.io/donate/3LrRRh3Tz49AmEFwpmF5gt7rXgzyXMGsuV)
-
-<img src="https://github.com/higedamc/kiatsu/blob/master/screenshots/IMG_2924.jpg">
-
 [![Codemagic build status](https://api.codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/status_badge.svg)](https://codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/latest_build)
+![](https://img.shields.io/keybase/zec/higechang?logo=Zcash&logoColor=white)
+<img src="https://github.com/higedamc/kiatsu/blob/114ca73c719cb259a9ab6572726d027d0238ec30/screenshots/IMG_2924.jpg">
 
 シンプルな気圧測定アプリ / A simple application for meteoropathy
 
@@ -22,15 +21,20 @@ TWITTER_SECRET_KEY='YOUR_SECRET_KEY'
 ```
 3. env配下のproduction.dartを起動
 
-# 今後実装する機能 / Future Features
+# 現在開発中の機能 / Features in development
 
 - [ ] 全国気圧ヒートマップ
 - [ ] 1週間分の気圧変化チャート
 
 ## 実装済み
-- [x] 気圧に合わせて動的なコメントをシェアする機能。
-- [x] アカウント登録機能。
+- [x] 気圧に合わせて動的なコメントをシェアする機能
+- [x] アカウント登録機能
+- [x] ログイン機能
+- [x] 今の気持ちを呟く機能
+- [x] 課金機能
+
 
 ## Contact
 
 [フィードバック](<mailto:jstache@tutanota.com>)
+
