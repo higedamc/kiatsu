@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'purchase_state.dart';
@@ -42,6 +43,8 @@ abstract class $PurchaseStateCopyWith<$Res> {
           PurchaseState value, $Res Function(PurchaseState) then) =
       _$PurchaseStateCopyWithImpl<$Res>;
   $Res call({Offerings? offerings});
+
+  $OfferingsCopyWith<$Res>? get offerings;
 }
 
 /// @nodoc
@@ -64,6 +67,17 @@ class _$PurchaseStateCopyWithImpl<$Res>
               as Offerings?,
     ));
   }
+
+  @override
+  $OfferingsCopyWith<$Res>? get offerings {
+    if (_value.offerings == null) {
+      return null;
+    }
+
+    return $OfferingsCopyWith<$Res>(_value.offerings!, (value) {
+      return _then(_value.copyWith(offerings: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -74,6 +88,9 @@ abstract class _$PurchaseStateCopyWith<$Res>
       __$PurchaseStateCopyWithImpl<$Res>;
   @override
   $Res call({Offerings? offerings});
+
+  @override
+  $OfferingsCopyWith<$Res>? get offerings;
 }
 
 /// @nodoc

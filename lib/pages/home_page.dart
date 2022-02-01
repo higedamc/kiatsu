@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
+import 'package:kiatsu/controller/ad_controller.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/model/entitlement.dart';
 import 'package:kiatsu/model/permission_provider.dart';
@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:intl/intl.dart';
 
@@ -55,6 +56,17 @@ class HomePage extends riv.ConsumerWidget {
   //     BuildContext context, riv.WidgetRef ref) async {
   //   await ref.read(purchaseManagerProvider).purchaseManager();
   // }
+
+  Future<bool> checkFirstRun() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool _firstRun = prefs.getBool('firstRun') ?? true;
+    if (_firstRun) {
+      prefs.setBool('firstRun', false);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   //TODO: Riverpod + Freezed化する
   Future<bool> handlePermission() async {
@@ -137,6 +149,12 @@ class HomePage extends riv.ConsumerWidget {
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
     final currentTime = ref.watch(clockProvider);
+    Size size = MediaQuery.of(context).size;
+    // print(size);
+    final width = size.width;
+    final height = size.height;
+    final currentWidth = width * 1 / 2;
+    final currentHeight = height * 1 / 2;
     // final permission = ref.read(permissionGetter);
     // Future<void> waiter(ref) async {
     //   // return Future.delayed(Duration.zero, () async {
@@ -162,6 +180,9 @@ class HomePage extends riv.ConsumerWidget {
     // final entitlement = ref.watch(purchaseManagerProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
     // final _purchaser = ref.watch(purchaseManagerProvider);
+    final isLoaded =
+        ref.watch(bannerAdProvider.select((value) => value.isLoaded));
+        final bannerNotifier = ref.watch(bannerAdProvider.notifier)..loadBannerAd();
     return Scaffold(
       // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
@@ -523,8 +544,8 @@ class HomePage extends riv.ConsumerWidget {
                     ref.watch(userProvider.select((s) => s.isPaidUser));
                 return Center(
                   child: SizedBox(
-                      //height: deviceHeight.w * 0.1,
-                      child: _isPaid ? Container() : buildAdmob()),
+                      height: currentHeight * 0.6,
+                      child: _isPaid ? Container() : bannerNotifier.loadBannerAd()),
                 );
               },
             ),
@@ -571,7 +592,7 @@ class HomePage extends riv.ConsumerWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(
-                  Icons.search_outlined,
+                  Icons.bar_chart_outlined,
                   color: Colors.black,
                 ),
                 onPressed: () {
@@ -581,8 +602,8 @@ class HomePage extends riv.ConsumerWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return CustomDialogBox(
-                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                          descriptions: 'この機能はまだ未実装です♡',
+                          title: '',
+                          descriptions: 'この機能は近日公開予定です♡',
                           text: '押',
                           key: UniqueKey(),
                         );
@@ -606,61 +627,52 @@ class HomePage extends riv.ConsumerWidget {
   }
 }
 
-Widget buildAdmob() {
-  //TODO: #125 dispose()を呼び出す処理を書く
-  // 参考URL: https://uedive.net/2021/5410/flutter2-gad/
-  //TODO: #128 端末のサイズに合わせて自動で広告のサイズを変更する処理を書く
-  String getTestBannerUnitID() {
-    String testBannerUnitId = '';
-    if (Platform.isIOS) {
-      testBannerUnitId = 'ca-app-pub-3940256099942544/2934735716';
-    } else if (Platform.isAndroid) {
-      testBannerUnitId = 'ca-app-pub-3940256099942544/6300978111';
-    }
-    return testBannerUnitId;
-  }
+// Widget buildAdmob() {
+//   //TODO: #125 dispose()を呼び出す処理を書く
+//   // 参考URL: https://uedive.net/2021/5410/flutter2-gad/
+//   //TODO: #128 端末のサイズに合わせて自動で広告のサイズを変更する処理を書く
+//   String getTestBannerUnitID() {
+//     String testBannerUnitId = '';
+//     if (Platform.isIOS) {
+//       testBannerUnitId = 'ca-app-pub-3940256099942544/2934735716';
+//     } else if (Platform.isAndroid) {
+//       testBannerUnitId = 'ca-app-pub-3940256099942544/6300978111';
+//     }
+//     return testBannerUnitId;
+//   }
 
-  final BannerAd myBanner = BannerAd(
-    adUnitId: getTestBannerUnitID(),
-    size: AdSize.banner,
-    request: const AdRequest(),
-    listener:
-        // BannerAdListener(),
-        BannerAdListener(
-      // 広告が正常にロードされたときに呼ばれます。
-      onAdLoaded: (Ad ad) => print('バナー広告がロードされました。'),
-      // 広告のロードが失敗した際に呼ばれます。
-      onAdFailedToLoad: (Ad ad, LoadAdError error) {
-        print('バナー広告のロードに失敗しました。: $error');
-      },
-      // 広告が開かれたときに呼ばれます。
-      onAdOpened: (Ad ad) => print('バナー広告が開かれました。'),
-      // 広告が閉じられたときに呼ばれます。
-      onAdClosed: (Ad ad) => print('バナー広告が閉じられました。'),
-      // ユーザーがアプリを閉じるときに呼ばれます。
-      // onApplicationExit: (Ad ad) => print('ユーザーがアプリを離れました。'),
-    ),
-  );
-  myBanner.load();
-  final AdWidget adWidget = AdWidget(ad: myBanner);
-  final Container adContainer = Container(
-    alignment: Alignment.center,
-    child: adWidget,
-    width: myBanner.size.width.toDouble(),
-    height: myBanner.size.height.toDouble(),
-  );
-  // return entitlement == Entitlement.pro ? Container() : adContainer;
-  return adContainer;
-
-  // switch (entitlement) {
-  //   case Entitlement.pro:
-  //     return Container();
-  //   case Entitlement.free:
-  //     return Center(
-  //       child: adContainer,
-  //     );
-  // }
-}
+//   final BannerAd myBanner = BannerAd(
+//     adUnitId: getTestBannerUnitID(),
+//     size: AdSize.banner,
+//     request: const AdRequest(),
+//     listener:
+//         // BannerAdListener(),
+//         BannerAdListener(
+//       // 広告が正常にロードされたときに呼ばれます。
+//       onAdLoaded: (Ad ad) => print('バナー広告がロードされました。'),
+//       // 広告のロードが失敗した際に呼ばれます。
+//       onAdFailedToLoad: (Ad ad, LoadAdError error) {
+//         print('バナー広告のロードに失敗しました。: $error');
+//       },
+//       // 広告が開かれたときに呼ばれます。
+//       onAdOpened: (Ad ad) => print('バナー広告が開かれました。'),
+//       // 広告が閉じられたときに呼ばれます。
+//       onAdClosed: (Ad ad) => print('バナー広告が閉じられました。'),
+//       // ユーザーがアプリを閉じるときに呼ばれます。
+//       // onApplicationExit: (Ad ad) => print('ユーザーがアプリを離れました。'),
+//     ),
+//   );
+//   myBanner.load();
+//   final AdWidget adWidget = AdWidget(ad: myBanner);
+//   final Container adContainer = Container(
+//     alignment: Alignment.center,
+//     child: adWidget,
+//     width: myBanner.size.width.toDouble(),
+//     height: myBanner.size.height.toDouble(),
+//   );
+//   // return entitlement == Entitlement.pro ? Container() : adContainer;
+//   return adContainer;
+// }
 
 getTimelineView(BuildContext context) {
   return Navigator.of(context).pushNamed('/timeline2');
