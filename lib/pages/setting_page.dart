@@ -18,6 +18,7 @@ import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wiredash/wiredash.dart';
 
 //TODO: #115 サインアップ時に設定ページの表示が更新されるようにする
@@ -38,6 +39,17 @@ final userProvider = StateProvider((ref) {
 //    	final packageInfo = await PackageInfo.fromPlatform();
 //    	return packageInfo.version;
 //  }
+
+Future<bool> checkFirstRun() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool _firstRun = prefs.getBool('firstRun') ?? true;
+  if (_firstRun) {
+    prefs.setBool('firstRun', false);
+    return true;
+  } else {
+    return false;
+  }
+}
 
 class Coins {
   // Entitlementsの設定
@@ -74,6 +86,13 @@ class SettingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
     // final loggedIn = ref.watch(authProvider);
+
+    Size size = MediaQuery.of(context).size;
+    print(size);
+    final width = size.width;
+    final height = size.height;
+    final currentWidth = width * 1 / 2;
+    final currentHeight = height * 1 / 2;
     final user = ref.watch(authStateChangesProvider).asData?.value;
     String? pass = dotenv.env['TWITTER_PASSWORD'];
     return Scaffold(
@@ -81,6 +100,7 @@ class SettingPage extends ConsumerWidget {
       body: Column(
         children: <Widget>[
           Expanded(
+            //TODO: Riverpod化する
             child: FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, snapshot) {
@@ -175,7 +195,95 @@ class SettingPage extends ConsumerWidget {
                                       ],
                                     );
                                   })),
+                          
+                          //         SettingsTile(
+                          //           title: '権限許可',
+                          //   onPressed: (context) async {
+                          //     var status = await Permission.location.request();
+                          //     if (status != PermissionStatus.granted) {
+                          //       // 一度もリクエストしてないので権限のリクエスト.
+                          //       status = await Permission.location.request();
+                          //     }
+                          //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されました')));
+                          //   },
+                          // ),
+                        ],
+                      ),
+                      SettingsSection(
+                        titleTextStyle: const TextStyle(
+                            // fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                        title: '開発者を応援する🥺',
+                        tiles: [
                           SettingsTile(
+                              title: 'フィードバック送信',
+                              subtitle: '押',
+                              // leading: neu.NeumorphicIcon(Icons.bug_report),
+                              onPressed: (context) async {
+                                Wiredash.of(context)?.show();
+                              }),
+                          // snapshot.hasData
+                          //     ? SettingsTile(
+                          //         title: '広告解除済み',
+                          //         subtitle: '',
+                          //         leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
+                          //         onPressed: (_) async {
+                          //           // // Navigator.pushNamed(_, '/buy');
+                          //           // fetchOffers2(context);
+                          //         })
+                          // :
+                          //TODO: stagingと本番環境で課金機能の表示を分ける
+                          SettingsTile(
+                              title: '有料機能',
+                              subtitle: '押',
+                              onPressed: (context) async {
+                                if (user == null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialogBox(
+                                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                          descriptions: 'この機能を使うにはログインが必要です♡',
+                                          text: 'りょ',
+                                          key: UniqueKey(),
+                                        );
+                                      });
+                                } else if (user != null) {
+                                  // await waiter(ref);
+                                  Navigator.pushNamed(context, '/sub');
+                                }
+                                //       // ?
+
+                                //       // :
+                                //       // showDialog(
+                                //       // context: context,
+                                //       // builder: (BuildContext context) {
+                                //       //   return CustomDialogBox(
+                                //       //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                //       //     descriptions: 'この機能はベータ版のため使用できません♡',
+                                //       //     text: 'りょ',
+                                //       //     key: UniqueKey(),
+                                //       //   );
+                                //       //     // });
+                              }),
+                        ],
+                      ),
+                      SettingsSection(
+                        // titlePadding: EdgeInsets.fromLTRB(0, 0, 0, currentWidth),
+                        title: '',
+                        tiles: [
+                          SettingsTile(
+                              title: '初回起動確認',
+                              trailing: null,
+                              // subtitle: '押',
+                              onPressed: (context) async {
+                                final checkResult = await checkFirstRun();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(checkResult.toString())));
+                              }),
+                              SettingsTile(
                               title: 'パーミッション取得',
                               onPressed: (context) async {
                                 // await showDialog(
@@ -209,7 +317,7 @@ class SettingPage extends ConsumerWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(statuses.toString())));
-                                        //TODO: この辺汚すぎるので後でどうにかする
+                                //TODO: この辺汚すぎるので後でどうにかする
                                 // final result1 =
                                 //     await Permission.location.isDenied;
                                 // final result2 =
@@ -258,90 +366,6 @@ class SettingPage extends ConsumerWidget {
                                 //     : await Permission
                                 //         .locationWhenInUse.isGranted;
                               }),
-                          //         SettingsTile(
-                          //           title: '権限許可',
-                          //   onPressed: (context) async {
-                          //     var status = await Permission.location.request();
-                          //     if (status != PermissionStatus.granted) {
-                          //       // 一度もリクエストしてないので権限のリクエスト.
-                          //       status = await Permission.location.request();
-                          //     }
-                          //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されました')));
-                          //   },
-                          // ),
-                        ],
-                      ),
-                      SettingsSection(
-                        titleTextStyle: const TextStyle(
-                            // fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                        title: '開発者を応援する🥺',
-                        tiles: [
-                          SettingsTile(
-                              title: 'フィードバック送信',
-                              subtitle: '押',
-                              // leading: neu.NeumorphicIcon(Icons.bug_report),
-                              onPressed: (context) async {
-                                Wiredash.of(context)?.show();
-                              }),
-                          // snapshot.hasData
-                          //     ? SettingsTile(
-                          //         title: '広告解除済み',
-                          //         subtitle: '',
-                          //         leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
-                          //         onPressed: (_) async {
-                          //           // // Navigator.pushNamed(_, '/buy');
-                          //           // fetchOffers2(context);
-                          //         })
-                          // :
-                          //TODO: stagingと本番環境で課金機能の表示を分ける
-                          // SettingsTile(
-                          //     title: '有料機能',
-                          //     subtitle: '押',
-                          //     onPressed: (context) async {
-                          //       if (user == null) {
-                          //         showDialog(
-                          //             context: context,
-                          //             builder: (BuildContext context) {
-                          //               return CustomDialogBox(
-                          //                 title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                          //                 descriptions: 'この機能を使うにはログインが必要です♡',
-                          //                 text: 'りょ',
-                          //                 key: UniqueKey(),
-                          //               );
-                          //             });
-                          //       } else if (user != null) {
-                          //         // await waiter(ref);
-                          //         Navigator.pushNamed(context, '/sub');
-                          //       }
-                          //       // ?
-
-                          //       // :
-                          //       // showDialog(
-                          //       // context: context,
-                          //       // builder: (BuildContext context) {
-                          //       //   return CustomDialogBox(
-                          //       //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                          //       //     descriptions: 'この機能はベータ版のため使用できません♡',
-                          //       //     text: 'りょ',
-                          //       //     key: UniqueKey(),
-                          //       //   );
-                          //       //     // });
-                          //     }),
-                        ],
-                      ),
-                      SettingsSection(
-                        titlePadding: const EdgeInsets.fromLTRB(150, 300, 0, 0),
-                        title: '',
-                        tiles: const [
-                          // SettingsTile(
-                          //     title: 'フィードバック送信',
-                          //     trailing: null,
-                          //     // subtitle: '押',
-                          //     onPressed: (context) async {
-                          //       Wiredash.of(context)!.show();
-                          //     }),
                         ],
                       ),
                       SettingsSection(
@@ -350,7 +374,8 @@ class SettingPage extends ConsumerWidget {
                             fontWeight: FontWeight.bold,
                             color: Colors.black),
                         //TODO: #129 端末のサイズに合わせてバージョンの表示する位置を固定する処理を書く
-                        titlePadding: const EdgeInsets.fromLTRB(175, 0, 0, 0),
+                        titlePadding: EdgeInsets.fromLTRB(
+                            currentWidth * 0.88, currentHeight * 0.6, 0, 0),
                         title: 'v ' + (snapshot.data?.version ?? '0.0.0'),
                         tiles: const [
                           // SettingsTile(

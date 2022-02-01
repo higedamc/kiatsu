@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kiatsu/gen/assets.gen.dart';
 import 'package:kiatsu/l18n/ja_messages.dart';
 import 'package:kiatsu/pages/dialog.dart';
@@ -42,12 +42,14 @@ Future<void> startApp() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  
+
   await dotenv.load(fileName: '.env');
-  MobileAds.instance.initialize();
+ 
 
   await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
-  );
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
 
   // await PurchaseApi.init();
   await Purchases.setDebugLogsEnabled(kDebugMode);
@@ -55,6 +57,12 @@ Future<void> startApp() async {
 
   // final appleSignInAvailable = await AppleSignInAvailable.check();
 
+  final result = await checkFirstRun();
+  if (result == true) {
+    await AppTrackingTransparency.requestTrackingAuthorization();
+  }
+
+  await MobileAds.instance.initialize();
   timeago.setLocaleMessages('ja', const MyCustomMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -71,14 +79,10 @@ Future<void> startApp() async {
     runZonedGuarded(() async {
       runApp(
         ProviderScope(
-          child: ScreenUtilInit(
-              designSize: const Size(375, 812),
-              builder: () {
-                return MyApp(
-                  prefs: prefs,
-                  key: UniqueKey(),
-                );
-              }),
+          child: MyApp(
+            prefs: prefs,
+            key: UniqueKey(),
+          ),
         ),
       );
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
@@ -149,6 +153,17 @@ Widget splashScreen = SplashScreenView(
   ),
   backgroundColor: Colors.white,
 );
+
+Future<bool> checkFirstRun() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool _firstRun = prefs.getBool('firstRun') ?? true;
+    if (_firstRun) {
+      prefs.setBool('firstRun', false);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 // class SplashPage extends MyApp {
   
