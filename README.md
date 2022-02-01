@@ -2,7 +2,7 @@
 
 [![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3LrRRh3Tz49AmEFwpmF5gt7rXgzyXMGsuV)](https://en.cryptobadges.io/donate/3LrRRh3Tz49AmEFwpmF5gt7rXgzyXMGsuV)
 [![Codemagic build status](https://api.codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/status_badge.svg)](https://codemagic.io/apps/609f571800a2d305209fe46d/609f571800a2d305209fe46c/latest_build)
-![](https://img.shields.io/keybase/zec/higechang?logo=Zcash&logoColor=white)
+[![](https://img.shields.io/keybase/zec/higechang?logo=Zcash&logoColor=white)](https://github.com/higedamc/kiatsu/blob/6311483b60961bf4b86ac7cce669200be0b6c1f0/screenshots/ZCASH_QR.png)
 <img src="https://github.com/higedamc/kiatsu/blob/114ca73c719cb259a9ab6572726d027d0238ec30/screenshots/IMG_2924.jpg">
 
 シンプルな気圧測定アプリ / A simple application for meteoropathy
