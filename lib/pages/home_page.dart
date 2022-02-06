@@ -57,6 +57,24 @@ class HomePage extends riv.ConsumerWidget {
   //   await ref.read(purchaseManagerProvider).purchaseManager();
   // }
 
+  Future<String> fromAtNow(DateTime date) async {
+    // final DateTime currentTime = ref.watch(clockProvider);
+    final Duration difference = DateTime.now().difference(date);
+    // final Duration difference =
+    //     DateTime.now().difference(currentTime);
+    final int sec = difference.inSeconds;
+
+    if (sec >= 60 * 60 * 24) {
+      return '最終更新 - ${difference.inDays.toString()}日前';
+    } else if (sec >= 60 * 60) {
+      return '最終更新 - ${difference.inHours.toString()}時間前';
+    } else if (sec >= 60) {
+      return '最終更新 - ${difference.inMinutes.toString()}分前';
+    } else {
+      return '最終更新 - $sec秒前';
+    }
+  }
+
   Future<bool> checkFirstRun() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool _firstRun = prefs.getBool('firstRun') ?? true;
@@ -182,7 +200,7 @@ class HomePage extends riv.ConsumerWidget {
     // final _purchaser = ref.watch(purchaseManagerProvider);
     final isLoaded =
         ref.watch(bannerAdProvider.select((value) => value.isLoaded));
-        final bannerNotifier = ref.watch(bannerAdProvider.notifier)..loadBannerAd();
+    final bannerNotifier = ref.watch(bannerAdProvider.notifier)..loadBannerAd();
     return Scaffold(
       // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
@@ -225,16 +243,17 @@ class HomePage extends riv.ConsumerWidget {
                 ),
                 onPressed: () async {
                   // 未実装ダイアログ
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomDialogBox(
-                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                          descriptions: 'この機能はまだ未実装です♡',
-                          text: '押',
-                          key: UniqueKey(),
-                        );
-                      });
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return CustomDialogBox(
+                  //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                  //         descriptions: 'この機能はまだ未実装です♡',
+                  //         text: '押',
+                  //         key: UniqueKey(),
+                  //       );
+                  //     });
+                  await Navigator.pushNamed(context, '/notify');
                 }),
           )
         ],
@@ -242,13 +261,19 @@ class HomePage extends riv.ConsumerWidget {
       body: RefreshIndicator(
         color: Colors.black,
         onRefresh: () async {
+          // ref.refresh(clockProvider.notifier);
+          // final currentTime = DateTime.now();
+
           // ref.read(purchaseManagerProvider);
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName.toString());
-          // final updatedAt = DateTime.now();
+              final updatedAt = DateTime.now();
+          await fromAtNow(updatedAt);
+          // (context as Element).markNeedsBuild();
+          
           // '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
-          ref.refresh(clockProvider);
+
           // final timeFormatted = DateFormat.Hms().format(bitch);
           // '最終更新 - $timeFormatted';
         },
@@ -490,11 +515,37 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final currentTime = ref.watch(clockProvider);
+                final DateTime now = DateTime.now();
+                final DateTime currentTime = ref.watch(clockProvider);
+                // final List<DateTime> dates = [
+                //   now.add(Duration(seconds: currentTime.second) * -1),
+                //    now.add(Duration(minutes: currentTime.minute) * -1),
+                // ];
+                final DateTime date =
+                    now.add(Duration(seconds: currentTime.second) * -5);
                 // final secondsString = DateFormat.s().format(currentTime);
                 // final secondsInt = int.parse(secondsString);
-                final minutesString = DateFormat.m().format(currentTime);
-                final minutesInt = int.parse(minutesString);
+                // final minutesString = DateFormat.m().format(currentTime);
+                // final minutesInt = int.parse(minutesString);
+                String fromAtNow(DateTime date) {
+                  // final DateTime currentTime = ref.watch(clockProvider);
+                  final Duration difference = DateTime.now().difference(date);
+                  // final Duration difference =
+                  //     DateTime.now().difference(currentTime);
+                  final int sec = difference.inSeconds;
+
+                  if (sec >= 60 * 60 * 24) {
+                    return '最終更新 - ${difference.inDays.toString()}日前';
+                  } else if (sec >= 60 * 60) {
+                    return '最終更新 - ${difference.inHours.toString()}時間前';
+                  } else if (sec >= 60) {
+                    return '最終更新 - ${difference.inMinutes.toString()}分前';
+                  } else {
+                    return '最終更新 - $sec秒前';
+                  }
+                }
+                // final difference = dates.map((date) => Text(fromAtNow(date))).toList();
+
                 // final updatedAt = DateTime.now();
                 return Center(
                   child: NeumorphicText(
@@ -515,10 +566,14 @@ class HomePage extends riv.ConsumerWidget {
                     //         ) -
                     //         '前'
                     //     : '最終更新 - ' +
-                    //         minutesString + '分前',
-                    minutesInt < 1
-                        ? '最終更新 - なう'
-                        : '最終更新 - ' + minutesInt.toString() + '分前',
+                    // //         minutesString + '分前',
+                    // secondsInt <= 60
+                    //     ? '最終更新 - $secondsInt 秒前'
+                    //     : secondsInt >= 60
+                    //         ? '最終更新 - ' + minutesInt.toString() + ' 分前'
+                    //         : '最終更新 - なう',
+                    // currentTime.toString(),
+                    fromAtNow(date).toString(),
                     style: const NeumorphicStyle(
                       // height: 1, // 10だとちょうど下すれすれで良い感じ
                       color: Colors.black,
@@ -545,7 +600,9 @@ class HomePage extends riv.ConsumerWidget {
                 return Center(
                   child: SizedBox(
                       height: currentHeight * 0.6,
-                      child: _isPaid ? Container() : bannerNotifier.loadBannerAd()),
+                      child: _isPaid
+                          ? Container()
+                          : bannerNotifier.loadBannerAd()),
                 );
               },
             ),

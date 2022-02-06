@@ -294,7 +294,7 @@ class Timeline extends ConsumerWidget {
                                               'location': data.name.toString(),
                                               'commentId': documentId,
                                             });
-                                            Navigator.of(context).pop();
+                                           Navigator.of(context).pop();
                                           },
                                           child: neu.NeumorphicText(
                                             '押',

@@ -10,6 +10,7 @@ import 'package:kiatsu/l18n/ja_messages.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
+import 'package:kiatsu/pages/notification_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
@@ -131,6 +132,8 @@ class MyApp extends StatelessWidget {
           '/timeline': (BuildContext context) => Timeline(
                 cityName: '',
                 key: UniqueKey(),
+              ),
+              '/notify': (BuildContext context) => const NotificationPage(
               ),
           // '/test': (BuildContext context) => const PurchasePage(),
         },
