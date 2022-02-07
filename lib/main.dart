@@ -145,7 +145,7 @@ class MyApp extends StatelessWidget {
 
 Widget splashScreen = SplashScreenView(
   navigateRoute: const HomePage(),
-  duration: 1500,
+  duration: 1000,
   imageSize: 130,
   imageSrc: Assets.images.face.path,
   text: 'Kiatsu',

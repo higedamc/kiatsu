@@ -35,11 +35,13 @@ class Coins {
   // Entitlementsの設定
   // static const removeAds = 'kiatsu_120_remove_ads';
   // for iOS
-  static const removeAdsIOS = 'kiatsu_250_remove_ads';
-  static const tipMe = 'tip_me_490';
+  static const removeAdsAndroid = 'kiatsu_120_remove_ads';
+  static const tipMe = 'tip_me';
+  static const subsc1m = 'kiatsu_pro_1m';
+  static const subsc1y = 'kiatsu_pro_1y';
   static final _apiKey = dotenv.env['REVENUECAT_SECRET_KEY'].toString();
   // Added some
-  static const allIds = [removeAdsIOS, tipMe];
+  static const allIds = [removeAdsAndroid, tipMe, subsc1m, subsc1y];
 }
 
 // class SubscriptionsPage extends StatefulWidget {
@@ -160,10 +162,12 @@ class SubscriptionsPage extends ConsumerWidget {
           context,
           (context) => PaywallWidget(
             packages: packages,
-            title: 'プランの選択',
-            description: 'プランをアップグレードして特典を得る',
+            title: 'THANK YOUUUUUU!!!',
+            description: '今後色々なアンロックできる特典を追加していく予定です！',
             onClickedPackage: (package) async {
-              await PurchaseApi.purchasePackage(package);
+              final isPurchased = await PurchaseApi.purchasePackage(package);
+              isPurchased == true;
+              await users.doc(user?.uid).set({'isPurchased': true});
               Navigator.pop(context);
             },
           ),
