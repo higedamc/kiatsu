@@ -27,6 +27,7 @@ class LineAuthUtil {
   }
 
   static Future<UserCredential?> signInWithLine(BuildContext context) async {
+    int count = 0;
     try {
       final result = await LineSDK.instance.login(
           option: LoginOption(false, 'aggressive'),
@@ -50,12 +51,16 @@ class LineAuthUtil {
           .signInWithCustomToken(response.data['customToken'])
           .then((authResult) async {
         final firebaseUser = authResult.user;
-        final updatedDisplayName = authResult.user?.updateDisplayName(firebaseUser.toString());
+        // final updatedDisplayName = authResult.user?.updateDisplayName(firebaseUser.toString());
 
         print(firebaseUser);
         // print(displayName);
-        print('username is updated: $updatedDisplayName'.toString());
+        // print('username is updated: $updatedDisplayName'.toString());
         print(firebaseUser?.uid);
+        Navigator.popUntil(context, (_) => count++ >= 1);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('ログインされました。')));
+        // Navigator.pushReplacementNamed(context,'/home');
       });
     } on PlatformException catch (e) {
       var message = 'エラーが発生しました';

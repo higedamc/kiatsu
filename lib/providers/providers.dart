@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/api_state.dart';
 import 'package:kiatsu/model/entitlement.dart';
@@ -67,4 +68,9 @@ final documentStreamProvider = StreamProvider.autoDispose((ref) {
 //参考URL: https://codewithandrea.com/articles/flutter-state-management-riverpod/
 final clockProvider = StateNotifierProvider<Clock, DateTime>((ref) {
   return Clock();
+});
+
+// https://tamappe.com/2021/09/29/flutter-riverpod-textfield/
+final textControllerStateProvider = StateProvider.autoDispose((ref) {
+  return TextEditingController(text: '');
 });

@@ -12,7 +12,7 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.5.8+568
+version: 0.6.4+568
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -55,6 +55,7 @@ dependencies:
   intl: ^0.17.0
   is_first_run: ^1.0.0
   json_annotation: ^4.4.0
+  lottie: ^1.2.1
   meta: ^1.7.0
   modal_bottom_sheet: ^2.0.0
   package_info: ^2.0.0
@@ -64,7 +65,7 @@ dependencies:
   purchases_flutter: ^3.4.3
   rxdart: ^0.27.3
   settings_ui:
-    git:
+   git:
       url: https://github.com/higedamc/flutter-settings-ui.git
       publish_to: none
   share: ^2.0.1
@@ -81,7 +82,7 @@ dependencies:
   wiredash: ^0.7.0+1
 
 dev_dependencies:
-  build_runner: ^2.0.5
+  build_runner: ^2.1.7
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
@@ -93,13 +94,13 @@ flutter_icons:
   ios: true
   image_path: "assets/images/kiatsu_logo_invert.jpg"
 
-flutter_gen:
+flutter_gen_runner:
   output: lib/gen/
 
-  integrations:
-    flutter_svg: true
-    flare_flutter: false
-    rive: true
+  # integrations:
+  #   flutter_svg: false
+  #   flare_flutter: false
+  #   rive: false
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -113,7 +114,8 @@ flutter:
     - assets/images/kiatsu_logo_invert.jpg
     - assets/images/face.png
     - assets/images/line.png
-    # - images/
+    - assets/images/model.jpg
+    - assets/json/arrow_down_bounce.json
     - assets/
     - .env
 

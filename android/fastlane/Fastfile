@@ -1,38 +1,42 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+  android_app_ids = {
+    :dev => ENV['APP_KEY'],
+    :prod => "FIREBASEのAPP_ID"
+  }
+
+  desc "Publish by App Distribution"
+  lane :publish do |options|
+    flavor = options[:flavor]
+    sh( "flutter","clean" )
+    sh( "flutter","build","apk","--release", "--flavor",flavor.to_s,"--target","lib/env/release_#{flavor.to_s}.dart" )
+    firebase_app_distribution(
+                  # app: android_app_ids[flavor],
+                  app: ENV['APP_KEY'],
+                  # groups: "me",
+                  testers: "mustache40@gmail.com, harunonsystem@gmail.com",
+                  release_notes_file: "/Users/jackstash/Pictures/work/kiatsu/release_notes.txt",
+                  firebase_cli_token: ENV['FIREBASE_CLI_TOKEN'],
+                  # debug: true,
+                  android_artifact_type: "APK",
+                  apk_path: "../build/app/outputs/flutter-apk/app-#{flavor.to_s}-release.apk"
+              )
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  desc "Publish dev version by App Distribution"
+  lane :publish_dev do
+    publish(flavor: :dev)
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  desc "Publish prod version by App Distribution"
+  lane :publish_prod do
+    publish(flavor: :prod)
+  end
+
+  desc "Publish all version by App Distribution"
+  lane :publish_all do
+    publish(flavor: :dev)
+    publish(flavor: :prod)
   end
 end

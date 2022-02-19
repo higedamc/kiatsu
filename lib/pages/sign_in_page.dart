@@ -9,13 +9,24 @@ import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
+import 'package:kiatsu/pages/timeline.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 
 class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
+ _popAndDisplaySnackBar(BuildContext context) async {
+   final result = await Navigator.pushNamed(
+     context, '/timeline'
+   );
+
+   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ログインしました')));
+  }
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    int count = 0;
     final _auth = FirebaseAuth.instance;
     final now = _auth.currentUser;
     // ToDO: AppleAuthのboolが起動するか初期化して確認
@@ -44,10 +55,13 @@ class SignInPage extends ConsumerWidget {
                           separator: 15.0,
                           borderColor: Colors.black,
                           onPressed: () async {
-                            if (now == null) {
+                            if (now == null)  {
                               // await AppleAuthUtil.forceLink(context);
                               await AppleAuthUtil.signInWithApple(context, ref);
-                              Navigator.pop(context);
+                              // await _popAndDisplaySnackBar(context);
+                              Navigator.pop(context, 'ログインされました');
+
+
                               print(now?.uid);
                             } else {
                               print('Apple IDでサイン済み');
@@ -85,6 +99,7 @@ class SignInPage extends ConsumerWidget {
                             borderColor: Colors.black,
                             onPressed: () => {
                                   TwitterAuthUtil.signInWithTwitter(context),
+                                  //  Navigator.pop(context, 'ログインされました'),
                                 }),
                       ),
                       Platform.isAndroid

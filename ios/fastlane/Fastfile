@@ -19,17 +19,29 @@ platform :ios do
   desc "The lane for distributing Flutter app for iOS"
   lane :kiatsu_test do
     build_ios_app(
-      scheme: "Runner",
-      archive_path: "./build/Runner.xcarchive",
-      # build_type: "Release",
-      export_method: "ad-hoc",
+      scheme: "prod",
+      # archive_path: "./build/Runner.xcarchive",
+      export_method: "app-store",
       export_options: {
         provisioningProfiles: {
-          ENV["APP_IDENTIFIER"] => ENV["PROVISIONING_PROFILE"],
+          ENV["APP_IDENTIFIER"] => ENV["PROVISIONING_PROFILE_RELEASE"],
         },
       },
       output_directory: "./build/Runner",
     )
+    # desc "Push a new release build to the TestFlight"
+    # lane :beta do
+    # increment_build_number(xcodeproj: "/Users/jackstash/Pictures/work/kiatsu/ios/Runner.xcodeproj")
+    # match(type: "appstore")
+    # cocoapods
+    # build_app(
+    #   workspace: "/Users/jackstash/Pictures/work/kiatsu/ios/Runner.xcworkspace",
+    #   # scheme: "XXXXX_APPSTORE",
+    # )
+    # upload_to_testflight(
+ # skip_waiting_for_build_processing: true,
+      # )
+    # end
     firebase_app_distribution(
       app: ENV["APP_KEY"],
       groups: "me",

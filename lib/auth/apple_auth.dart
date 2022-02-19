@@ -90,6 +90,7 @@ class AppleAuthUtil {
   // TODO: サインインがうまくいくか (Firebaseに反映されるか) 実機で検証する
   static Future<UserCredential?> signInWithApple(
       BuildContext context, WidgetRef ref) async {
+    int count = 0;
     
     final _auth = FirebaseAuth.instance;
     final rawNonce = generateNonce();
@@ -129,8 +130,11 @@ class AppleAuthUtil {
         await firebaseUser?.updatePhotoURL(photoUrl);
         print(
             'サインインされました: uid: $uid displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser');
-
+        // await Navigator.popUntil(context, (_) => count++ >= 2);
         // return _auth.signInWithCredential(oAuthCredential);
+        Navigator.popUntil(context, (_) => count++ >= 2);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('ログインされました。')));
       });
     } on SignInWithAppleAuthorizationException catch (e) {
       (e.code == AuthorizationErrorCode.canceled)

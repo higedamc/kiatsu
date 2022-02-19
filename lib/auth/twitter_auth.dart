@@ -32,6 +32,7 @@ class TwitterAuthUtil {
     // final _user = FirebaseAuth.instance.currentUser;
     final createdAt =  DateTime.now();
     final newUser = FirebaseAuth.instance;
+    int count = 0;
     
     final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
     final CollectionReference users = firebaseStore.collection('users');
@@ -58,7 +59,8 @@ class TwitterAuthUtil {
             await users.doc(authResult.user!.uid).set({'createdAt': createdAt});
             print(
                 'displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser, createdAt: $createdAt');
-                Navigator.pop(context);
+                // Navigator.pop(context, '/timeline');
+                Navigator.popUntil(context, (_) => count++ >= 2);
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('ログインされました。')));
           });

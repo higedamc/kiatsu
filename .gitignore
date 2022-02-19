@@ -147,3 +147,7 @@ ios/Podfile
 ios/Podfile.lock
 android/keystore.properties
 pubspec.lock
+android/app/src/prod/google-services.json
+android/app/src/dev/google-services.json
+ios/Runner/Firebase/dev/GoogleService-Info.plist
+ios/Runner/Firebase/prod/GoogleService-Info.plist

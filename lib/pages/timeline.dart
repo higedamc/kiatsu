@@ -1,14 +1,20 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/controller/user_controller.dart';
+import 'package:kiatsu/gen/assets.gen.dart';
 import 'package:kiatsu/model/dev_id.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:lottie/lottie.dart';
 
 //TODO: Firestore関連の処理のRiverpod化
 //TODO: リアクション機能実装したい
@@ -36,6 +42,14 @@ class Timeline extends ConsumerWidget {
     final _authManager = ref.watch(authManagerProvider);
     final isNoAds = ref.watch(userProvider.select((s) => s.isNoAdsUser));
     final createdAt = ref.watch(clockProvider);
+    var devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    Size size = MediaQuery.of(context).size;
+    print(size);
+    final width = size.width;
+    final height = size.height;
+    final currentWidth = width / 100;
+    final currentHeight = height / 100;
+    final txtControllerProvider = ref.watch(textControllerStateProvider);
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('お気持ち投稿の場'),
@@ -156,30 +170,55 @@ class Timeline extends ConsumerWidget {
               },
             );
           },
-          error: (err, stack) => Center(child: Text(err.toString())),
+          error: (err, stack) => Stack(
+                children: const [
+                  Center(
+                    child: Text('この機能を使うためにはログインが必要です'),
+                  ),
+                ],
+              ),
           loading: () => const Center(child: CircularProgressIndicator())),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: () {},
-        child: IconButton(
-          icon: const Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            final _editor = TextEditingController();
-            !_authManager.isLoggedIn
-                ? showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CustomDialogBox(
-                        title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                        descriptions: 'この機能はログインしているユーザーのみ使用できます',
-                        text: 'りょ',
-                        key: UniqueKey(),
-                      );
-                    })
-                : showDialog(
+      floatingActionButton: !_authManager.isLoggedIn
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                    color: Colors.white,
+                    child: SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: Lottie.asset(
+                        'assets/json/arrow_down_bounce.json',
+                      ),
+                    )),
+                const SizedBox(
+                  height: 30,
+                ),
+                FloatingActionButton(
+                  backgroundColor: Colors.black,
+                  onPressed: () {},
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      await Navigator.pushNamed(context, '/sign');
+                    },
+                  ),
+                ),
+              ],
+            )
+          : FloatingActionButton(
+              backgroundColor: Colors.black,
+              onPressed: () {},
+              child: IconButton(
+                icon: const Icon(Icons.add, color: Colors.white),
+                onPressed: () async {
+                  print(currentWidth + currentHeight);
+                  // final _editor = TextEditingController();
+
+                  showDialog(
                     context: context,
                     builder: (context) => Dialog(
                         backgroundColor: Colors.transparent,
@@ -200,11 +239,13 @@ class Timeline extends ConsumerWidget {
                               child: TextField(
                                 keyboardType: TextInputType.multiline,
                                 maxLines: null,
-                                controller: _editor,
+                                controller: txtControllerProvider,
                                 cursorWidth: 2,
                                 cursorColor: Colors.grey,
-                                decoration: const InputDecoration(
-                                  hintText: '自由にコメントしてね🥺',
+                                decoration: InputDecoration(
+                                  hintText: txtControllerProvider.text.isEmpty
+                                      ? 'テキストを入力してください'
+                                      : '',
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -243,58 +284,46 @@ class Timeline extends ConsumerWidget {
                                           ),
 
                                           onPressed: () async {
-                                            // var status = await Permission
-                                            //     .location
-                                            //     .request();
-                                            // if (status !=
-                                            //     PermissionStatus.granted) {
-                                            //   // 一度もリクエストしてないので権限のリクエスト.
-                                            //   status = await Permission.location
-                                            //       .request();
-                                            // }
-                                            // 権限がない場合の処理.
-                                            // if (
-                                            //     status.isDenied ||
-                                            //     status.isRestricted ||
-                                            //     status.isPermanentlyDenied) {
-                                            //   // 端末の設定画面へ遷移.
-                                            //   await openAppSettings();
-                                            //   return;
-                                            // }
-                                            // var collection = FirebaseFirestore
-                                            //     .instance
-                                            //     .collection('comments');
-                                            final docRef = await users
-                                                .doc(currentUser?.uid)
-                                                .collection('comments')
-                                                .add({
-                                              'comment': _editor.text,
-                                              'createdAt': createdAt,
-                                              'userId': currentUser!.uid,
-                                              'location': data.name.toString(),
-                                            });
-                                            // var documentId = docRef.id;
-                                            (_editor.text.isEmpty)
-                                                ? showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        const AlertDialog(
-                                                            title: Text(
-                                                                'コメントを入力してください')))
-                                                : docRef;
-                                            final documentId = docRef.id;
-                                            await users
-                                                .doc(currentUser?.uid)
-                                                .collection('comments')
-                                                .doc(documentId)
-                                                .update({
-                                              'comment': _editor.text,
-                                              'createdAt': createdAt,
-                                              'userId': currentUser!.uid,
-                                              'location': data.name.toString(),
-                                              'commentId': documentId,
-                                            });
-                                           Navigator.of(context).pop();
+                                            if (txtControllerProvider
+                                                .text.isEmpty) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content:
+                                                    const Text('テキストの入力が必要です'),
+                                                action: SnackBarAction(
+                                                    label: 'OK',
+                                                    onPressed: () {}),
+                                              ));
+                                              Navigator.pop(context);
+                                            } else {
+                                              final docRef = await users
+                                                  .doc(currentUser?.uid)
+                                                  .collection('comments')
+                                                  .add({
+                                                'comment':
+                                                    txtControllerProvider.text,
+                                                'createdAt': createdAt,
+                                                'userId': currentUser!.uid,
+                                                'location':
+                                                    data.name.toString(),
+                                              });
+                                              final documentId = docRef.id;
+
+                                              await users
+                                                  .doc(currentUser?.uid)
+                                                  .collection('comments')
+                                                  .doc(documentId)
+                                                  .update({
+                                                'comment':
+                                                    txtControllerProvider.text,
+                                                'createdAt': createdAt,
+                                                'userId': currentUser!.uid,
+                                                'location':
+                                                    data.name.toString(),
+                                                'commentId': documentId,
+                                              });
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           child: neu.NeumorphicText(
                                             '押',
@@ -319,9 +348,9 @@ class Timeline extends ConsumerWidget {
                           ],
                         )),
                   );
-          },
-        ),
-      ),
+                },
+              ),
+            ),
     );
   }
 }

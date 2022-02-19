@@ -14,7 +14,6 @@ import 'package:kiatsu/pages/notification_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
-import 'package:kiatsu/pages/test_widget.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +36,7 @@ import 'package:provider/provider.dart' as provider;
 
 // 参照: https://codeux.design/articles/manage-secrets-flutter-project/
 
-Future<void> startApp() async {
+Future<void> startAppProd() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -135,7 +134,7 @@ class MyApp extends StatelessWidget {
               ),
               '/notify': (BuildContext context) => const NotificationPage(
               ),
-          '/test': (BuildContext context) => const TestWidget(),
+          // '/test': (BuildContext context) => const PurchasePage(),
         },
         home: splashScreen,
       ),
