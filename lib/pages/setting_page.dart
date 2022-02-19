@@ -238,7 +238,7 @@ class SettingPage extends ConsumerWidget {
                             tiles: [
                               SettingsTile(
                                   title: 'フィードバック送信',
-                                  leading: Icon(CupertinoIcons.smiley),
+                                  leading: const Icon(CupertinoIcons.smiley),
                                   subtitle: '',
                                   // leading: neu.NeumorphicIcon(Icons.bug_report),
                                   onPressed: (context) async {
@@ -307,8 +307,20 @@ class SettingPage extends ConsumerWidget {
                               //     }),
                               SettingsTile(
                                   title: 'プライバシーポリシー',
+                                  leading: const Icon(CupertinoIcons.book),
                                   trailing: null,
                                   // subtitle: '押',
+                                  onPressed: (context) async {
+                                    final checkResult = await checkFirstRun();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(checkResult.toString())));
+                                  }),
+                                  SettingsTile(
+                                  title: 'バージョン',
+                                  leading: const Icon(CupertinoIcons.number),
+                                  trailing: null,
+                                  subtitle: ('v' + (snapshot.data?.version ?? '0.0.0')),
                                   onPressed: (context) async {
                                     final checkResult = await checkFirstRun();
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -319,13 +331,10 @@ class SettingPage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      Center(
-                        child: Positioned(
-                          // top: currentHeight * 80,
-                          // left: currentWidth * 48,
-                          child: Text('v' + (snapshot.data?.version ?? '0.0.0'),),
-                        ),
-                      )],
+                      // Center(
+                      //   child: Text('v' + (snapshot.data?.version ?? '0.0.0'),),
+                      // )
+                      ],
                   );
                 }),
           ),
