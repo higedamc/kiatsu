@@ -472,7 +472,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -569,7 +569,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -666,7 +666,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -761,7 +761,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -856,7 +856,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -948,7 +948,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1040,7 +1040,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1191,7 +1191,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1232,7 +1232,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.5;
+				MARKETING_VERSION = 0.6.6;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kiatsu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";

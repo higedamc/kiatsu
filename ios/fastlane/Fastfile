@@ -21,10 +21,10 @@ platform :ios do
     build_ios_app(
       scheme: "prod",
       # archive_path: "./build/Runner.xcarchive",
-      export_method: "app-store",
+      export_method: "ad-hoc",
       export_options: {
         provisioningProfiles: {
-          ENV["APP_IDENTIFIER"] => ENV["PROVISIONING_PROFILE_RELEASE"],
+          ENV["APP_IDENTIFIER"] => ENV["PROVISIONING_PROFILE_ADHOC"],
         },
       },
       output_directory: "./build/Runner",

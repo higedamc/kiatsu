@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
 import 'package:kiatsu/const/enumnum.dart';
@@ -190,6 +191,9 @@ class SubscriptionsPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      appBar: NeumorphicAppBar(
+        title: const Text('サブスクリプション'),
+      ),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(32),
