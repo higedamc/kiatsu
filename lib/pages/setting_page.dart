@@ -22,6 +22,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wiredash/wiredash.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //TODO: #115 サインアップ時に設定ページの表示が更新されるようにする
 //TODO: Android版の文字の色を変える
@@ -311,11 +312,14 @@ class SettingPage extends ConsumerWidget {
                                   trailing: null,
                                   // subtitle: '押',
                                   onPressed: (context) async {
-                                    final checkResult = await checkFirstRun();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(checkResult.toString())));
-                                  }),
+                                  //   final checkResult = await checkFirstRun();
+                                  //   ScaffoldMessenger.of(context).showSnackBar(
+                                  //       SnackBar(
+                                  //           content: Text(checkResult.toString())));
+                                  await launch(dotenv.env['KIATSU_PRIVACY_POLICY'].toString());
+                                  }
+                                  
+                                  ),
                                   SettingsTile(
                                   title: 'バージョン',
                                   leading: const Icon(CupertinoIcons.number),

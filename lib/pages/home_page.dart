@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' as riv;
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:onboarding_overlay/onboarding_overlay.dart';
 
 import 'custom_dialog_box.dart';
 
@@ -46,6 +47,29 @@ class HomePage extends riv.ConsumerWidget {
   //     BuildContext context, riv.WidgetRef ref) async {
   //   await ref.read(purchaseManagerProvider).purchaseManager();
   // }
+
+  // final List<FocusNode> overlayKeys = <FocusNode>[
+  //   FocusNode(),
+  //   FocusNode(),
+  //   FocusNode(),
+  // ];
+
+  // final List<OnboardingSteps> steps = [OnboardingStep(
+  //   focusNode: _focusNodes != null ? _focusNodes[0] : null,
+  //   title: "Hi",
+  //   titleTextStyle: Theme.of(context).textTheme.headline5.copyWith(
+  //       color: Theme.of(context).canvasColor,
+  //       ),
+  //   bodyText:
+  //       '''Check this out''',
+  //   bodyTextStyle: Theme.of(context).textTheme.subtitle1.copyWith(
+  //       color: Theme.of(context).canvasColor,
+  //       ),
+  //   hasLabelBox: false,
+  //   fullscreen: true,
+  //   overlayColor: Theme.of(context).primaryColorDark.withOpacity(0.8),
+  //   hasArrow: false,
+  //   ),];
 
   Future<String> fromAtNow(DateTime date) async {
     // final DateTime currentTime = ref.watch(clockProvider);

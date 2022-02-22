@@ -58,6 +58,7 @@ dependencies:
   lottie: ^1.2.1
   meta: ^1.7.0
   modal_bottom_sheet: ^2.0.0
+  onboarding_overlay: ^3.0.0
   package_info: ^2.0.0
   pal_widgets: ^0.2.0
   permission_handler: ^8.3.0
@@ -65,7 +66,7 @@ dependencies:
   purchases_flutter: ^3.4.3
   rxdart: ^0.27.3
   settings_ui:
-   git:
+    git:
       url: https://github.com/higedamc/flutter-settings-ui.git
       publish_to: none
   share: ^2.0.1
@@ -78,6 +79,7 @@ dependencies:
   the_apple_sign_in: ^1.1.1
   timeago: ^3.0.2
   tutorial_coach_mark: ^1.2.1
+  url_launcher: ^6.0.20
   webview_flutter: ^3.0.0
   wiredash: ^0.7.0+1
 
@@ -96,7 +98,6 @@ flutter_icons:
 
 flutter_gen_runner:
   output: lib/gen/
-
   # integrations:
   #   flutter_svg: false
   #   flare_flutter: false
