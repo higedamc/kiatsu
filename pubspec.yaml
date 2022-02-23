@@ -12,7 +12,7 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.6.6+570
+version: 0.7.1+575
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -47,6 +47,7 @@ dependencies:
   font_awesome_flutter: ^9.0.0
   freezed_annotation: ^1.0.0
   geolocator: ^8.0.0
+  getwidget: ^2.0.5
   google_mobile_ads: ^1.0.0
   google_sign_in: ^5.0.7
   http: ^0.13.3
@@ -73,6 +74,7 @@ dependencies:
   shared_preferences: ^2.0.5
   sign_in_with_apple: ^3.0.0
   simple_logger: ^1.9.0
+  smooth_page_indicator: ^1.0.0+2
   social_auth_buttons: ^2.0.0-nullsafety.1
   splash_screen_view: ^3.0.0
   subscription_holder: ^2.1.1

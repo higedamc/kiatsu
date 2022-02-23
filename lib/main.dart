@@ -11,6 +11,7 @@ import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
 import 'package:kiatsu/pages/notification_page.dart';
+import 'package:kiatsu/pages/onboarding_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
@@ -136,6 +137,7 @@ class MyApp extends StatelessWidget {
               '/notify': (BuildContext context) => const NotificationPage(
               ),
           '/test': (BuildContext context) => const TestWidget(),
+          '/onbo': (BuildContext context) => const OnboardingPage(),
         },
         home: splashScreen,
       ),
@@ -148,7 +150,7 @@ Widget splashScreen = SplashScreenView(
   duration: 1000,
   imageSize: 130,
   imageSrc: Assets.images.face.path,
-  text: 'Kiatsu',
+  text: 'Hello, world',
   textType: TextType.NormalText,
   textStyle: const TextStyle(
     fontSize: 30.0,
