@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -11,18 +12,17 @@ import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
- _popAndDisplaySnackBar(BuildContext context) async {
-   final result = await Navigator.pushNamed(
-     context, '/timeline'
-   );
+  _popAndDisplaySnackBar(BuildContext context) async {
+    final result = await Navigator.pushNamed(context, '/timeline');
 
-   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ログインしました')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('ログインしました')));
   }
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,17 +55,10 @@ class SignInPage extends ConsumerWidget {
                           separator: 15.0,
                           borderColor: Colors.black,
                           onPressed: () async {
-                            if (now == null)  {
-                              // await AppleAuthUtil.forceLink(context);
-                              await AppleAuthUtil.signInWithApple(context, ref);
+                              await AppleAuthUtil.signInWithApple(context, ref)
+                                  .then((_) => _popAndDisplaySnackBar(context));
                               // await _popAndDisplaySnackBar(context);
-                              Navigator.pop(context, 'ログインされました');
 
-
-                              print(now?.uid);
-                            } else {
-                              print('Apple IDでサイン済み');
-                            }
                           },
                         ),
                       ),
@@ -126,8 +119,7 @@ class SignInPage extends ConsumerWidget {
                         child: SizedBox(
                           width: 280,
                           height: 50,
-                          child:
-                              ElevatedButton.icon(
+                          child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.green[600],
                               onPrimary: Colors.white,
@@ -137,8 +129,8 @@ class SignInPage extends ConsumerWidget {
                               padding: const EdgeInsets.fromLTRB(1, 10, 50, 10),
                             ),
                             onPressed: () async {
-                              await LineAuthUtil.signIn(context);
-                              Navigator.pop(context);
+                              await LineAuthUtil.signIn(context)
+                                  .then((_) async => Navigator.pop(context));
                             },
                             icon: Image.asset('assets/images/line.png'),
                             label: const Padding(
@@ -149,6 +141,35 @@ class SignInPage extends ConsumerWidget {
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 280,
+                          height: 50,
+                          child: Center(
+                              child: RichText(
+                            text: TextSpan(children: [
+                              const TextSpan(
+                                  text: 'kiatsu の利用を開始することで、',
+                                  style: TextStyle(color: Colors.black)),
+                              TextSpan(
+                                text: 'プライバシーポリシー',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    decoration: TextDecoration.underline),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    await launch(
+                                        'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3');
+                                  },
+                              ),
+                              const TextSpan(
+                                  text: 'に同意したことになります。',
+                                  style: TextStyle(color: Colors.black)),
+                            ]),
+                          )),
                         ),
                       ),
                     ],

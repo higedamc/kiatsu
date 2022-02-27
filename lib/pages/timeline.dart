@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/controller/user_controller.dart';
-import 'package:kiatsu/gen/assets.gen.dart';
 import 'package:kiatsu/model/dev_id.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';

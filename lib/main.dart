@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -27,8 +28,6 @@ import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // Import the generated file
-import 'firebase_options.dart.bak';
-import 'package:provider/provider.dart' as provider;
 
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
@@ -94,6 +93,7 @@ class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class MyApp extends StatelessWidget {
           '/test': (BuildContext context) => const TestWidget(),
           '/onbo': (BuildContext context) => const OnboardingPage(),
         },
-        home: splashScreen,
+        home: firebaseAuth.currentUser != null ? splashScreen : const OnboardingPage(),
       ),
     );
   }
@@ -147,7 +147,7 @@ class MyApp extends StatelessWidget {
 
 Widget splashScreen = SplashScreenView(
   navigateRoute: const HomePage(),
-  duration: 1000,
+  duration: 2000,
   imageSize: 130,
   imageSrc: Assets.images.face.path,
   text: 'Hello, world',

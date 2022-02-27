@@ -12,7 +12,7 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 0.7.1+575
+version: 0.8.0+577
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -98,12 +98,12 @@ flutter_icons:
   ios: true
   image_path: "assets/images/kiatsu_logo_invert.jpg"
 
-flutter_gen_runner:
-  output: lib/gen/
-  # integrations:
-  #   flutter_svg: false
-  #   flare_flutter: false
-  #   rive: false
+  flutter_gen_runner:
+    output: lib/gen/
+    integrations:
+      flutter_svg: true
+    #   flare_flutter: false
+    #   rive: false
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
