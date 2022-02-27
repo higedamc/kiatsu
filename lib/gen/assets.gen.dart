@@ -19,16 +19,35 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/line.png
   AssetGenImage get line => const AssetGenImage('assets/images/line.png');
+
+  /// File path: assets/images/model.jpg
+  AssetGenImage get model => const AssetGenImage('assets/images/model.jpg');
+}
+
+class $AssetsJsonGen {
+  const $AssetsJsonGen();
+
+  /// File path: assets/json/arrow_down_bounce.json
+  String get arrowDownBounce => 'assets/json/arrow_down_bounce.json';
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsJsonGen json = $AssetsJsonGen();
   static const String macosxwheel = 'assets/macosxwheel.flr';
   static const String meteor = 'assets/meteor.flr';
   static const AssetGenImage model = AssetGenImage('assets/model.jpg');
   static const String modelPng = 'assets/model.png.bak';
+  static const AssetGenImage onbo1 = AssetGenImage('assets/onbo1.PNG');
+  static const AssetGenImage onbo1Fixed =
+      AssetGenImage('assets/onbo1_fixed.png');
+  static const AssetGenImage onbo2 = AssetGenImage('assets/onbo2.PNG');
+  static const AssetGenImage onbo2Fixed =
+      AssetGenImage('assets/onbo2_fixed.png');
+  static const AssetGenImage onbo3 = AssetGenImage('assets/onbo3.PNG');
+  static const AssetGenImage onboX = AssetGenImage('assets/onbo_x.png');
 }
 
 class AssetGenImage extends AssetImage {

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kiatsu/const/constants.dart';
-import 'package:kiatsu/gen/assets.gen.dart';
 
 class CustomDialogBox extends StatefulWidget {
   final String title, descriptions, text;

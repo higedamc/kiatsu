@@ -25,9 +25,10 @@ import 'custom_dialog_box.dart';
 // TODO: #114 ダッシュボード機能の実装
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+final currentUser = firebaseAuth.currentUser;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
-final currentUser = firebaseAuth.currentUser;
+
 
 //TODO: #130 コンストラクターにkeyを渡す
 class HomePage extends riv.ConsumerWidget {
@@ -208,7 +209,7 @@ class HomePage extends riv.ConsumerWidget {
                     icon: const Icon(Icons.share_outlined),
                     onPressed: () {
                       Share.share(data.main!.pressure.toString() +
-                          'hPa is 低気圧しんどいぴえん🥺️ #thekiatsu');
+                          'hPa is 低気圧しんどいぴえん🥺️ #kiatsu_app');
                     },
                   ),
               orElse: () {
@@ -531,7 +532,7 @@ class HomePage extends riv.ConsumerWidget {
 
                 // final updatedAt = DateTime.now();
                 return Center(
-                  child: NeumorphicText(
+                  child:Text(
                     //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
 
                     // timeago.format(
@@ -557,11 +558,11 @@ class HomePage extends riv.ConsumerWidget {
                     //         : '最終更新 - なう',
                     // currentTime.toString(),
                     fromAtNow(date).toString(),
-                    style: const NeumorphicStyle(
-                      // height: 1, // 10だとちょうど下すれすれで良い感じ
-                      color: Colors.black,
-                    ),
-                    textStyle: NeumorphicTextStyle(),
+                    // style: const NeumorphicStyle(
+                    //   // height: 1, // 10だとちょうど下すれすれで良い感じ
+                    //   color: Colors.black,
+                    // ),
+                    // textStyle: NeumorphicTextStyle(),
                   ),
                 );
               },
