@@ -1,0 +1,42 @@
+default_platform(:android)
+
+platform :android do
+  android_app_ids = {
+    :dev => ENV['APP_KEY'],
+    :prod => "FIREBASEのAPP_ID"
+  }
+
+  desc "Publish by App Distribution"
+  lane :publish do |options|
+    flavor = options[:flavor]
+    sh( "flutter","clean" )
+    sh( "flutter","build","apk","--release", "--flavor",flavor.to_s,"--target","lib/env/release_#{flavor.to_s}.dart" )
+    firebase_app_distribution(
+                  # app: android_app_ids[flavor],
+                  app: ENV['APP_KEY'],
+                  # groups: "me",
+                  testers: "mustache40@gmail.com, harunonsystem@gmail.com",
+                  release_notes_file: "/Users/jackstash/Pictures/work/kiatsu/release_notes.txt",
+                  firebase_cli_token: ENV['FIREBASE_CLI_TOKEN'],
+                  # debug: true,
+                  android_artifact_type: "APK",
+                  apk_path: "../build/app/outputs/flutter-apk/app-#{flavor.to_s}-release.apk"
+              )
+  end
+
+  desc "Publish dev version by App Distribution"
+  lane :publish_dev do
+    publish(flavor: :dev)
+  end
+
+  desc "Publish prod version by App Distribution"
+  lane :publish_prod do
+    publish(flavor: :prod)
+  end
+
+  desc "Publish all version by App Distribution"
+  lane :publish_all do
+    publish(flavor: :dev)
+    publish(flavor: :prod)
+  end
+end

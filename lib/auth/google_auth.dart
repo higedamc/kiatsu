@@ -26,6 +26,7 @@ class GoogleAuthUtil {
   }
 
   static Future<UserCredential?> signInWithGoogle(BuildContext context) async {
+    int count = 0;
     final newUser = FirebaseAuth.instance;
     final createdAt = DateTime.now();
     final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -61,6 +62,9 @@ class GoogleAuthUtil {
         await firebaseUser?.updateEmail(email.toString());
         await firebaseUser?.updatePhotoURL(photoUrl);
         await collection.doc(result.user?.uid).set({'createdAt': createdAt});
+        Navigator.popUntil(context, (_) => count++ >= 2);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('ログインされました。')));
         
         // await collection.doc(uid.toString()).collection('userInfo').doc().set({
         //   'uid': uid,

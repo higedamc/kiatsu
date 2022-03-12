@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kiatsu/api/purchase_api.dart';
@@ -20,6 +22,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wiredash/wiredash.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //TODO: #115 サインアップ時に設定ページの表示が更新されるようにする
 //TODO: Android版の文字の色を変える
@@ -28,6 +31,7 @@ import 'package:wiredash/wiredash.dart';
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
+const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
 // test1
 // final currentPurchaser = PurchaseApi.getCurrentPurchaser();
 
@@ -89,14 +93,19 @@ class SettingPage extends ConsumerWidget {
 
     Size size = MediaQuery.of(context).size;
     print(size);
+    var devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     final width = size.width;
     final height = size.height;
-    final currentWidth = width * 1 / 2;
-    final currentHeight = height * 1 / 2;
+    final currentWidth = width / 100;
+    final currentHeight = height / 100;
     final user = ref.watch(authStateChangesProvider).asData?.value;
     String? pass = dotenv.env['TWITTER_PASSWORD'];
     return Scaffold(
       // key: scaffoldMessengerKey,
+      appBar: NeumorphicAppBar(
+        title: const Text('設定'),
+        centerTitle: true,
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -104,289 +113,252 @@ class SettingPage extends ConsumerWidget {
             child: FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, snapshot) {
-                  return SettingsList(
-                    backgroundColor: Colors.white,
-                    sections: [
-                      SettingsSection(
-                        titleTextStyle: const TextStyle(
-                            // fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                        title: 'アカウント管理',
-                        tiles: [
-                          SettingsTile(
-                              title: 'SNSログイン',
-                              subtitle: '押',
-                              // leading: neu.NeumorphicIcon(Icons.account_circle_outlined),
-                              onPressed: (context) async {
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignInPage()));
-                              }),
-                          SettingsTile(
-                              title: 'アカウント',
-                              onPressed: (_) async {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        // key: scaffoldMessengerKey,
-                                        // key: UniqueKey(),
-                                        content:
-                                            Text('クリップボードにアカウント名がコピーされました')));
-                                await Clipboard.setData(
-                                  ClipboardData(
-                                    text: user != null
-                                        ? user.uid.toString()
-                                        : pass,
-                                  ),
-                                );
-                              },
-                              subtitle:
-                                  user != null ? user.uid.toString() : '未登録'),
-                          // TODO: サインアウトの挙動の実装が微妙なので本チャンで実装するか迷う
-                          SettingsTile(
-                              title: 'サインアウト',
-                              onPressed: (context) async => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title:
-                                          const Text('自動的にアプリが終了します (iOSを除く)'),
-                                      content: const Text('サインアウトしますか？'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('Cancel')),
-                                        TextButton(
-                                            onPressed: () async {
-                                              // await FirebaseAuth.instance.signOut();
-                                              (!Platform.isIOS)
-                                                  ? await FirebaseAuth.instance
-                                                      .signOut()
-                                                  // .then((_)
-                                                  //  => exit(0))
-                                                  : FirebaseAuth.instance
-                                                      .signOut()
-                                                      .then((_) async {
-                                                      try {
-                                                        await Purchases
-                                                            .logOut();
-                                                      } catch (e) {
-                                                        if (e == 22) {
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                      }
-                                                      // final purchaserInfo = await Purchases.getPurchaserInfo();
-                                                      // print(purchaserInfo);
-                                                      // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
-
-                                                      // // if (purchaserInfo != null) {
-                                                      //    null : await Purchases.logOut();
-                                                      // // }
-
-                                                      Navigator.pop(context);
-                                                    });
-                                            },
-                                            child: const Text('OK')),
-                                      ],
-                                    );
-                                  })),
-                          
-                          //         SettingsTile(
-                          //           title: '権限許可',
-                          //   onPressed: (context) async {
-                          //     var status = await Permission.location.request();
-                          //     if (status != PermissionStatus.granted) {
-                          //       // 一度もリクエストしてないので権限のリクエスト.
-                          //       status = await Permission.location.request();
-                          //     }
-                          //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されました')));
-                          //   },
-                          // ),
-                        ],
-                      ),
-                      SettingsSection(
-                        titleTextStyle: const TextStyle(
-                            // fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                        title: '開発者を応援する🥺',
-                        tiles: [
-                          SettingsTile(
-                              title: 'フィードバック送信',
-                              subtitle: '押',
-                              // leading: neu.NeumorphicIcon(Icons.bug_report),
-                              onPressed: (context) async {
-                                Wiredash.of(context)?.show();
-                              }),
-                          // snapshot.hasData
-                          //     ? SettingsTile(
-                          //         title: '広告解除済み',
-                          //         subtitle: '',
-                          //         leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
-                          //         onPressed: (_) async {
-                          //           // // Navigator.pushNamed(_, '/buy');
-                          //           // fetchOffers2(context);
-                          //         })
-                          // :
-                          //TODO: stagingと本番環境で課金機能の表示を分ける
-                          SettingsTile(
-                              title: '有料機能',
-                              subtitle: '押',
-                              onPressed: (context) async {
-                                if (user == null) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomDialogBox(
-                                          title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                          descriptions: 'この機能を使うにはログインが必要です♡',
-                                          text: 'りょ',
-                                          key: UniqueKey(),
-                                        );
-                                      });
-                                } else if (user != null) {
-                                  // await waiter(ref);
-                                  Navigator.pushNamed(context, '/sub');
-                                }
-                                //       // ?
-
-                                //       // :
-                                //       // showDialog(
-                                //       // context: context,
-                                //       // builder: (BuildContext context) {
-                                //       //   return CustomDialogBox(
-                                //       //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                //       //     descriptions: 'この機能はベータ版のため使用できません♡',
-                                //       //     text: 'りょ',
-                                //       //     key: UniqueKey(),
-                                //       //   );
-                                //       //     // });
-                              }),
-                        ],
-                      ),
-                      SettingsSection(
-                        // titlePadding: EdgeInsets.fromLTRB(0, 0, 0, currentWidth),
-                        title: '',
-                        tiles: [
-                          SettingsTile(
-                              title: '初回起動確認',
-                              trailing: null,
-                              // subtitle: '押',
-                              onPressed: (context) async {
-                                final checkResult = await checkFirstRun();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(checkResult.toString())));
-                              }),
+                  return Stack(
+                    children: [
+                      SettingsList(
+                        backgroundColor: Colors.white,
+                        sections: [
+                          SettingsSection(
+                            titleTextStyle: const TextStyle(
+                                // fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            title: 'アカウント管理',
+                            tiles: [
                               SettingsTile(
-                              title: 'パーミッション取得',
-                              onPressed: (context) async {
-                                // await showDialog(
-                                //     context: context,
-                                //     builder: (context) {
-                                //       return AlertDialog(
-                                //         title: const Text('Oops!！'),
-                                //         content:
-                                //             const Text('このアプリには位置情報の取得が必要です'),
-                                //         actions: <Widget>[
-                                //           TextButton(
-                                //               onPressed: () =>
-                                //                   Navigator.pop(context),
-                                //               child: const Text('Cancel')),
-                                //           TextButton(
-                                //               onPressed: () async {
-                                //                 await Geolocator
-                                //                     .openAppSettings();
-                                //               },
-                                //               child: const Text('OK')),
-                                //         ],
-                                //       );
-                                //     });
-                                Map<Permission, PermissionStatus> statuses =
-                                    await [
-                                  Permission.location,
-                                  Permission.locationAlways,
-                                  Permission.locationWhenInUse,
-                                ].request();
-                                print(statuses);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(statuses.toString())));
-                                //TODO: この辺汚すぎるので後でどうにかする
-                                // final result1 =
-                                //     await Permission.location.isDenied;
-                                // final result2 =
-                                //     await Permission.locationAlways.isDenied;
-                                // final result3 = await Permission
-                                //     .locationWhenInUse.isDenied;
-                                // final result4 =
-                                //     await Permission.location.isLimited;
-                                // final result5 =
-                                //     await Permission.location.isRestricted;
-                                // final result6 = await Permission
-                                //     .location.isPermanentlyDenied;
-                                // final result7 =
-                                //     await Permission.locationAlways.isLimited;
-                                // final result8 = await Permission
-                                //     .locationAlways.isRestricted;
-                                // final result9 = await Permission
-                                //     .locationAlways.isPermanentlyDenied;
-                                // final result10 = await Permission
-                                //     .locationWhenInUse.isLimited;
-                                // final result11 = await Permission
-                                //     .locationWhenInUse.isRestricted;
-                                // final result12 = await Permission
-                                //     .locationWhenInUse.isPermanentlyDenied;
+                                  title: 'アカウント',
+                                  subtitle: (user != null
+                                      ? user.uid.toString()
+                                      : '未登録'),
+                                  leading:
+                                      const Icon(CupertinoIcons.person_solid),
+                                  onPressed: (context) async {
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignInPage()));
+                                  }),
+                              // SettingsTile(
+                              //     title: 'アカウント',
+                              //     // leading: const Icon(Icons.account_circle_outlined),
+                              //     onPressed: (_) async {
+                              //       ScaffoldMessenger.of(context).showSnackBar(
+                              //           const SnackBar(
+                              //               // key: scaffoldMessengerKey,
+                              //               // key: UniqueKey(),
+                              //               content:
+                              //                   Text('クリップボードにアカウント名がコピーされました')));
+                              //       await Clipboard.setData(
+                              //         ClipboardData(
+                              //           text: user != null
+                              //               ? user.uid.toString()
+                              //               : pass,
+                              //         ),
+                              //       );
+                              //     },
+                              //     subtitle:
+                              //         user != null ? user.uid.toString() : '未登録'),
+                              // TODO: サインアウトの挙動の実装が微妙なので本チャンで実装するか迷う
+                              user != null
+                                  ? SettingsTile(
+                                      title: 'サインアウト',
+                                      leading: const Icon(CupertinoIcons.eject),
+                                      onPressed: (context) async => showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'サインアウトすると特定の機能にアクセスできなくなります'),
+                                              content:
+                                                  const Text('本当にサインアウトしますか？'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child:
+                                                        const Text('Cancel')),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      // await FirebaseAuth.instance.signOut();
+                                                      (!Platform.isIOS)
+                                                          ? await FirebaseAuth
+                                                              .instance
+                                                              .signOut()
+                                                          // .then((_)
+                                                          //  => exit(0))
+                                                          : FirebaseAuth
+                                                              .instance
+                                                              .signOut()
+                                                              .then((_) async {
+                                                              try {
+                                                                await Purchases
+                                                                    .logOut();
+                                                              } catch (e) {
+                                                                if (e == 22) {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                }
+                                                              }
+                                                              // final purchaserInfo = await Purchases.getPurchaserInfo();
+                                                              // print(purchaserInfo);
+                                                              // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
 
-                                // (result1 == true ||
-                                //         result4 == true ||
-                                //         result5 == true ||
-                                //         result6 == true)
-                                //     ? await Permission.location.request()
-                                //     : await Permission.location.isGranted;
-                                // (result2 == true ||
-                                //         result7 == true ||
-                                //         result8 == true ||
-                                //         result9 == true)
-                                //     ? await Permission.locationAlways
-                                //         .request()
-                                //     : await Permission
-                                //         .locationAlways.isGranted;
-                                // (result3 == true ||
-                                //         result10 == true ||
-                                //         result11 == true ||
-                                //         result12 == true)
-                                //     ? await Permission.locationWhenInUse
-                                //         .request()
-                                //     : await Permission
-                                //         .locationWhenInUse.isGranted;
-                              }),
+                                                              // // if (purchaserInfo != null) {
+                                                              //    null : await Purchases.logOut();
+                                                              // // }
+
+                                                              Navigator.pop(
+                                                                  context);
+                                                            });
+                                                    },
+                                                    child: const Text('OK')),
+                                              ],
+                                            );
+                                          }))
+                                  : const SettingsTile(
+                                      enabled: false,
+                                      // title: '',
+                                      // leading: null,
+                                      // trailing: null,
+                                      // onPressed: (_) async {
+
+                                      // }
+                                    ),
+
+                              //         SettingsTile(
+                              //           title: '権限許可',
+                              //   onPressed: (context) async {
+                              //     var status = await Permission.location.request();
+                              //     if (status != PermissionStatus.granted) {
+                              //       // 一度もリクエストしてないので権限のリクエスト.
+                              //       status = await Permission.location.request();
+                              //     }
+                              //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('権限が許可されました')));
+                              //   },
+                              // ),
+                            ],
+                          ),
+                          SettingsSection(
+                            titleTextStyle: const TextStyle(
+                                // fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            title: '開発者を応援する🥺',
+                            tiles: [
+                              SettingsTile(
+                                  title: 'フィードバック送信',
+                                  leading: const Icon(CupertinoIcons.smiley),
+                                  subtitle: '',
+                                  // leading: neu.NeumorphicIcon(Icons.bug_report),
+                                  onPressed: (context) async {
+                                    Wiredash.of(context)?.show();
+                                  }),
+                              // snapshot.hasData
+                              //     ? SettingsTile(
+                              //         title: '広告解除済み',
+                              //         subtitle: '',
+                              //         leading: neu.NeumorphicIcon(Icons.attach_money_rounded),
+                              //         onPressed: (_) async {
+                              //           // // Navigator.pushNamed(_, '/buy');
+                              //           // fetchOffers2(context);
+                              //         })
+                              // :
+                              //TODO: stagingと本番環境で課金機能の表示を分ける
+                              SettingsTile(
+                                  title: '有料機能',
+                                  leading: Icon(CupertinoIcons.money_yen),
+                                  subtitle: '',
+                                  onPressed: (context) async {
+                                    if (user == null) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return CustomDialogBox(
+                                              title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                              descriptions:
+                                                  'この機能を使うにはログインが必要です♡',
+                                              text: 'りょ',
+                                              key: UniqueKey(),
+                                            );
+                                          });
+                                    } else if (user != null) {
+                                      // await waiter(ref);
+                                      Navigator.pushNamed(context, '/sub');
+                                    }
+                                    //       // ?
+
+                                    //       // :
+                                    //       // showDialog(
+                                    //       // context: context,
+                                    //       // builder: (BuildContext context) {
+                                    //       //   return CustomDialogBox(
+                                    //       //     title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
+                                    //       //     descriptions: 'この機能はベータ版のため使用できません♡',
+                                    //       //     text: 'りょ',
+                                    //       //     key: UniqueKey(),
+                                    //       //   );
+                                    //       //     // });
+                                  }),
+                            ],
+                          ),
+                          SettingsSection(
+                            // titlePadding: EdgeInsets.fromLTRB(0, 0, 0, currentWidth),
+                            title: '',
+                            tiles: [
+                              // SettingsTile(
+                              //     title: '初回起動確認',
+                              //     trailing: null,
+                              //     // subtitle: '押',
+                              //     onPressed: (context) async {
+                              //       final checkResult = await checkFirstRun();
+                              //       ScaffoldMessenger.of(context).showSnackBar(
+                              //           SnackBar(
+                              //               content: Text(checkResult.toString())));
+                              //     }),
+                              SettingsTile(
+                                  title: 'プライバシーポリシー',
+                                  leading: const Icon(CupertinoIcons.book),
+                                  trailing: null,
+                                  // subtitle: '押',
+                                  onPressed: (context) async {
+                                    //   final checkResult = await checkFirstRun();
+                                    //   ScaffoldMessenger.of(context).showSnackBar(
+                                    //       SnackBar(
+                                    //           content: Text(checkResult.toString())));
+                                    await launch(dotenv
+                                        .env['KIATSU_PRIVACY_POLICY']
+                                        .toString());
+                                  }),
+                              SettingsTile(
+                                  title: flavor == 'dev' ? '環境確認' : 'バージョン',
+                                  leading: const Icon(CupertinoIcons.number),
+                                  trailing: null,
+                                  subtitle: ('v' +
+                                      (snapshot.data?.version ?? '0.0.0')),
+                                  onPressed: (context) async {
+                                    if (flavor == 'dev') {
+                                      await Navigator.pushNamed(
+                                          context, '/env');
+                                    } else {
+                                      //TODO: クリップボードにバージョンをコピーする挙動に変更
+                                      // final checkResult = await checkFirstRun();
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(SnackBar(
+                                      //         content: Text(
+                                      //             checkResult.toString())));
+                                      await Navigator.pushNamed(
+                                          context, '/env');
+                                    }
+                                  }),
+                            ],
+                          ),
                         ],
                       ),
-                      SettingsSection(
-                        titleTextStyle: const TextStyle(
-                            // fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                        //TODO: #129 端末のサイズに合わせてバージョンの表示する位置を固定する処理を書く
-                        titlePadding: EdgeInsets.fromLTRB(
-                            currentWidth * 0.88, currentHeight * 0.6, 0, 0),
-                        title: 'v ' + (snapshot.data?.version ?? '0.0.0'),
-                        tiles: const [
-                          // SettingsTile(
-                          //     title: 'フィードバック送信',
-                          //     trailing: null,
-                          //     // subtitle: '押',
-                          //     onPressed: (context) async {
-                          //       Wiredash.of(context)!.show();
-                          //     }),
-                        ],
-                      ),
+                      // Center(
+                      //   child: Text('v' + (snapshot.data?.version ?? '0.0.0'),),
+                      // )
                     ],
                   );
                 }),

@@ -15,13 +15,29 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios kiatsu_test
+### ios build_ios
 
 ```sh
-[bundle exec] fastlane ios kiatsu_test
+[bundle exec] fastlane ios build_ios
 ```
 
-The lane for distributing Flutter app for iOS
+Build & sign iOS app
+
+### ios distribute_beta
+
+```sh
+[bundle exec] fastlane ios distribute_beta
+```
+
+Deploy a new beta
+
+### ios test_do
+
+```sh
+[bundle exec] fastlane ios test_do
+```
+
+Deploy a new beta to TestFlight
 
 ----
 

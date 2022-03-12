@@ -3,4 +3,8 @@
 firebase.json
 firestore.indexes.json
 firestore.rules
-ios/StoreKitTestCertificate.cer
+ios/Flutter/dev.xcconfig
+ios/Flutter/prod.xcconfig
+ios/fastlane/Fastfile
+lib/env/firebase_options_dev.dart
+lib/env/firebase_options_prod.dart

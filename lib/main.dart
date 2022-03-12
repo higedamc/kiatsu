@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -7,13 +9,18 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/gen/assets.gen.dart';
 import 'package:kiatsu/l18n/ja_messages.dart';
+import 'package:kiatsu/pages/check_env_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
+import 'package:kiatsu/pages/notification_page.dart';
+import 'package:kiatsu/pages/onboarding_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
 import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
+import 'package:kiatsu/pages/test_widget.dart';
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:package_info/package_info.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
@@ -23,11 +30,12 @@ import 'package:wiredash/wiredash.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-// Import the generated file
-import 'firebase_options.dart.bak';
-import 'package:provider/provider.dart' as provider;
+import 'env/firebase_options_dev.dart' as dev;
+import 'env/firebase_options_prod.dart' as prod;
 
-//TODO: WIREDASHのエラー直す(エミュレーターだけ説？)
+
+// Import the generated file
+
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
@@ -36,18 +44,54 @@ import 'package:provider/provider.dart' as provider;
 
 // 参照: https://codeux.design/articles/manage-secrets-flutter-project/
 
+const flavor = String.fromEnvironment('FLAVOR');
+
+void main() {
+  startApp();
+}
+
+
 Future<void> startApp() async {
   // final _navigatorKey = GlobalKey<NavigatorState>();
 
   WidgetsFlutterBinding.ensureInitialized();
-
+  
   
 
   await dotenv.load(fileName: '.env');
  
+  // FirebaseOptions? firebaseOptions;
+  // if ((Platform.isIOS && flavor == 'dev')) {
+  //   firebaseOptions = FirebaseOptions(
+  //    apiKey: dotenv.env['FIREBASE_API_KEY_IOS_DEV']!,
+  //     appId: dotenv.env['FIREBASE_APP_ID_IOS_DEV']!,
+  //      messagingSenderId: dotenv.env['FIREBASE_GCM_SENDER_ID_IOS_DEV']!,
+  //       projectId: dotenv.env['FIREBASE_PROJECT_ID_IOS_DEV']!,
+  //       storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET_IOS_DEV']!,
+  //       databaseURL: dotenv.env['FIREBASE_DETABASE_URL_IOS_DEV']!,
+  //       );
+  // } 
+  // else {
+  //   firebaseOptions = const FirebaseOptions(
+  //     apiKey: apiKey,
+  //      appId: appId,
+  //       messagingSenderId: messagingSenderId,
+  //        projectId: projectId);
+  // }
+  // https://qiita.com/KazaKago/items/5dbe67032ecc7d459d74
+  FirebaseOptions firebaseOptions() {
+  switch (flavor) {
+    case 'dev':
+      return dev.DefaultFirebaseOptions.currentPlatform;
+    case 'prod':
+      return prod.DefaultFirebaseOptions.currentPlatform;
+    default:
+      throw ArgumentError('Not available flavor');
+  }
+}
 
   await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
+      options: firebaseOptions(),
       );
 
   // await PurchaseApi.init();
@@ -61,7 +105,6 @@ Future<void> startApp() async {
     await AppTrackingTransparency.requestTrackingAuthorization();
   }
 
-  await MobileAds.instance.initialize();
   timeago.setLocaleMessages('ja', const MyCustomMessages());
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -71,8 +114,13 @@ Future<void> startApp() async {
       backgroundColor: Colors.white,
     ));
   };
-
-  await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID'].toString());
+  await MobileAds.instance.initialize();
+  if(flavor == 'stg') {
+    await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID_STG'].toString());
+  }
+  else {
+    await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID'].toString());
+  }
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded(() async {
@@ -92,6 +140,7 @@ class MyApp extends StatelessWidget {
   MyApp({required Key key, required this.prefs}) : super(key: key);
   final SharedPreferences prefs;
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -132,9 +181,13 @@ class MyApp extends StatelessWidget {
                 cityName: '',
                 key: UniqueKey(),
               ),
-          // '/test': (BuildContext context) => const PurchasePage(),
+              '/notify': (BuildContext context) => const NotificationPage(
+              ),
+          '/test': (BuildContext context) => const TestWidget(),
+          '/onbo': (BuildContext context) => const OnboardingPage(),
+          '/env': (BuildContext context) => const CheckEnvPage()
         },
-        home: splashScreen,
+        home: firebaseAuth.currentUser != null ? splashScreen : const OnboardingPage(),
       ),
     );
   }
@@ -142,10 +195,10 @@ class MyApp extends StatelessWidget {
 
 Widget splashScreen = SplashScreenView(
   navigateRoute: const HomePage(),
-  duration: 1500,
+  duration: 2000,
   imageSize: 130,
   imageSrc: Assets.images.face.path,
-  text: 'Kiatsu',
+  text: 'Hello, world',
   textType: TextType.NormalText,
   textStyle: const TextStyle(
     fontSize: 30.0,
