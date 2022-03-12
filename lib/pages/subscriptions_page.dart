@@ -109,6 +109,7 @@ class SubscriptionsPage extends ConsumerWidget {
               // });
               // }
               users.doc(user?.uid).set({'isPurchased': true});
+              Navigator.pop(context);
 
               // Navigator.pop(context);
             },

@@ -41,7 +41,6 @@ class Timeline extends ConsumerWidget {
     final _authManager = ref.watch(authManagerProvider);
     final isNoAds = ref.watch(userProvider.select((s) => s.isNoAdsUser));
     final createdAt = ref.watch(clockProvider);
-    var devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     Size size = MediaQuery.of(context).size;
     print(size);
     final width = size.width;

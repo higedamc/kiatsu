@@ -65,7 +65,7 @@ class PurchaseController extends StateNotifier<PurchaseState>
       await Purchases.restoreTransactions();
       // ... check restored purchaserInfo to see if entitlement is now active
 
-      // TODO(tsuruoka): 購入状態（レシート）が見つからない場合には、Exceptionではなくネイティブ側のログが表示される程度なので分岐ができない
+      // TODO: 購入状態（レシート）が見つからない場合には、Exceptionではなくネイティブ側のログが表示される程度なので分岐ができない
       // 購入状態の成功or失敗の判定ができない（同期ボタンという解釈で「更新しました」のSnackBarを表示するのでも十分かも）
       // [Purchases] - WARN: ⚠️ allowSharingAppStoreAccount is set to false and restoreTransactions has been called.
       // Are you sure you want to do this?

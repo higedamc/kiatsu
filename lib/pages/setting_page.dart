@@ -31,6 +31,7 @@ import 'package:url_launcher/url_launcher.dart';
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final currentUser = firebaseAuth.currentUser;
+const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
 // test1
 // final currentPurchaser = PurchaseApi.getCurrentPurchaser();
 
@@ -126,8 +127,11 @@ class SettingPage extends ConsumerWidget {
                             tiles: [
                               SettingsTile(
                                   title: 'アカウント',
-                                  subtitle: (user != null ? user.uid.toString() : '未登録'),
-                                  leading: const Icon(CupertinoIcons.person_solid),
+                                  subtitle: (user != null
+                                      ? user.uid.toString()
+                                      : '未登録'),
+                                  leading:
+                                      const Icon(CupertinoIcons.person_solid),
                                   onPressed: (context) async {
                                     await Navigator.push(
                                         context,
@@ -156,67 +160,73 @@ class SettingPage extends ConsumerWidget {
                               //     subtitle:
                               //         user != null ? user.uid.toString() : '未登録'),
                               // TODO: サインアウトの挙動の実装が微妙なので本チャンで実装するか迷う
-                              user != null ? 
-                              SettingsTile(
-                                  title: 'サインアウト',
-                                  leading: const Icon(CupertinoIcons.eject),
-                                  onPressed: (context) async => showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title:
-                                              const Text('サインアウトすると特定の機能にアクセスできなくなります'),
-                                          content: const Text('本当にサインアウトしますか？'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                                onPressed: () async {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text('Cancel')),
-                                            TextButton(
-                                                onPressed: () async {
-                                                  // await FirebaseAuth.instance.signOut();
-                                                  (!Platform.isIOS)
-                                                      ? await FirebaseAuth.instance
-                                                          .signOut()
-                                                      // .then((_)
-                                                      //  => exit(0))
-                                                      : FirebaseAuth.instance
-                                                          .signOut()
-                                                          .then((_) async {
-                                                          try {
-                                                            await Purchases
-                                                                .logOut();
-                                                          } catch (e) {
-                                                            if (e == 22) {
+                              user != null
+                                  ? SettingsTile(
+                                      title: 'サインアウト',
+                                      leading: const Icon(CupertinoIcons.eject),
+                                      onPressed: (context) async => showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'サインアウトすると特定の機能にアクセスできなくなります'),
+                                              content:
+                                                  const Text('本当にサインアウトしますか？'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child:
+                                                        const Text('Cancel')),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      // await FirebaseAuth.instance.signOut();
+                                                      (!Platform.isIOS)
+                                                          ? await FirebaseAuth
+                                                              .instance
+                                                              .signOut()
+                                                          // .then((_)
+                                                          //  => exit(0))
+                                                          : FirebaseAuth
+                                                              .instance
+                                                              .signOut()
+                                                              .then((_) async {
+                                                              try {
+                                                                await Purchases
+                                                                    .logOut();
+                                                              } catch (e) {
+                                                                if (e == 22) {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                }
+                                                              }
+                                                              // final purchaserInfo = await Purchases.getPurchaserInfo();
+                                                              // print(purchaserInfo);
+                                                              // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
+
+                                                              // // if (purchaserInfo != null) {
+                                                              //    null : await Purchases.logOut();
+                                                              // // }
+
                                                               Navigator.pop(
                                                                   context);
-                                                            }
-                                                          }
-                                                          // final purchaserInfo = await Purchases.getPurchaserInfo();
-                                                          // print(purchaserInfo);
-                                                          // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
+                                                            });
+                                                    },
+                                                    child: const Text('OK')),
+                                              ],
+                                            );
+                                          }))
+                                  : const SettingsTile(
+                                      enabled: false,
+                                      // title: '',
+                                      // leading: null,
+                                      // trailing: null,
+                                      // onPressed: (_) async {
 
-                                                          // // if (purchaserInfo != null) {
-                                                          //    null : await Purchases.logOut();
-                                                          // // }
+                                      // }
+                                    ),
 
-                                                          Navigator.pop(context);
-                                                        });
-                                                },
-                                                child: const Text('OK')),
-                                          ],
-                                        );
-                                      })) : const SettingsTile(
-                                        enabled: false,
-                                  // title: '',
-                                  // leading: null,
-                                  // trailing: null,
-                                  // onPressed: (_) async {
-
-                                  // }
-                                      ),
-                              
                               //         SettingsTile(
                               //           title: '権限許可',
                               //   onPressed: (context) async {
@@ -267,7 +277,8 @@ class SettingPage extends ConsumerWidget {
                                           builder: (BuildContext context) {
                                             return CustomDialogBox(
                                               title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                                              descriptions: 'この機能を使うにはログインが必要です♡',
+                                              descriptions:
+                                                  'この機能を使うにはログインが必要です♡',
                                               text: 'りょ',
                                               key: UniqueKey(),
                                             );
@@ -312,24 +323,34 @@ class SettingPage extends ConsumerWidget {
                                   trailing: null,
                                   // subtitle: '押',
                                   onPressed: (context) async {
-                                  //   final checkResult = await checkFirstRun();
-                                  //   ScaffoldMessenger.of(context).showSnackBar(
-                                  //       SnackBar(
-                                  //           content: Text(checkResult.toString())));
-                                  await launch(dotenv.env['KIATSU_PRIVACY_POLICY'].toString());
-                                  }
-                                  
-                                  ),
-                                  SettingsTile(
-                                  title: 'バージョン',
+                                    //   final checkResult = await checkFirstRun();
+                                    //   ScaffoldMessenger.of(context).showSnackBar(
+                                    //       SnackBar(
+                                    //           content: Text(checkResult.toString())));
+                                    await launch(dotenv
+                                        .env['KIATSU_PRIVACY_POLICY']
+                                        .toString());
+                                  }),
+                              SettingsTile(
+                                  title: flavor == 'dev' ? '環境確認' : 'バージョン',
                                   leading: const Icon(CupertinoIcons.number),
                                   trailing: null,
-                                  subtitle: ('v' + (snapshot.data?.version ?? '0.0.0')),
+                                  subtitle: ('v' +
+                                      (snapshot.data?.version ?? '0.0.0')),
                                   onPressed: (context) async {
-                                    final checkResult = await checkFirstRun();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(checkResult.toString())));
+                                    if (flavor == 'dev') {
+                                      await Navigator.pushNamed(
+                                          context, '/env');
+                                    } else {
+                                      //TODO: クリップボードにバージョンをコピーする挙動に変更
+                                      // final checkResult = await checkFirstRun();
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(SnackBar(
+                                      //         content: Text(
+                                      //             checkResult.toString())));
+                                      await Navigator.pushNamed(
+                                          context, '/env');
+                                    }
                                   }),
                             ],
                           ),
@@ -338,7 +359,7 @@ class SettingPage extends ConsumerWidget {
                       // Center(
                       //   child: Text('v' + (snapshot.data?.version ?? '0.0.0'),),
                       // )
-                      ],
+                    ],
                   );
                 }),
           ),

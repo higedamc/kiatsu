@@ -8,6 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'failures.dart';
 
+const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
+
 //TODO: Android版で天気情報が取得できない問題をなんとかする
 
 abstract class WeatherRepository {
@@ -60,7 +62,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
           desiredAccuracy: LocationAccuracy.best,
           forceAndroidLocationManager: true);
       // Position position = _determinePosition() as Position;
-      final rr = dotenv.env['FIREBASE_API_KEY'];
+      final rr = (flavor == 'prod') ? dotenv.env['OPENWEATHERMAP_API_KEY'] : dotenv.env['OPENWEATHERMAP_API_KEY_DEV'];
       final double lat = position.latitude;
       final double lon = position.longitude;
       final Map<String, String> queryParams = {

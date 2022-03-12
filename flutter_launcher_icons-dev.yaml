@@ -1,0 +1,5 @@
+# flutter_launcher_icons-dev.yaml
+flutter_icons:
+  image_path: "assets/images/model.jpg"
+  android: true
+  ios: true
