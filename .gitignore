@@ -153,8 +153,8 @@ ios/Runner/Firebase/dev/GoogleService-Info.plist
 ios/Runner/Firebase/prod/GoogleService-Info.plist
 lib/env/firebase_options_dev.dart
 lib/env/firebase_options_prod.dart
-ios/Flutter/prod.xcconfig
 ios/Flutter/dev.xcconfig
 ios/fastlane/Fastfile/ios/fastlane/Fastfile
 ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
 /ios/Flutter/prod.xcconfig
+/lib/env/firebase_options_prod.dart

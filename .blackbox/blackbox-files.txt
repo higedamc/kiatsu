@@ -7,3 +7,4 @@ ios/Flutter/dev.xcconfig
 ios/Flutter/prod.xcconfig
 ios/StoreKitTestCertificate.cer
 ios/fastlane/Fastfile
+lib/env/firebase_options_prod.dart
