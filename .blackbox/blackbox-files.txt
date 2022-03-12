@@ -4,5 +4,6 @@ firebase.json
 firestore.indexes.json
 firestore.rules
 ios/Flutter/dev.xcconfig
+ios/Flutter/prod.xcconfig
 ios/StoreKitTestCertificate.cer
 ios/fastlane/Fastfile
