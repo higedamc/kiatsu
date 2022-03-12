@@ -4,3 +4,4 @@ firebase.json
 firestore.indexes.json
 firestore.rules
 ios/StoreKitTestCertificate.cer
+ios/fastlane/Fastfile
