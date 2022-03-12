@@ -158,3 +158,4 @@ ios/fastlane/Fastfile/ios/fastlane/Fastfile
 ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
 /ios/Flutter/prod.xcconfig
 /lib/env/firebase_options_prod.dart
+/lib/env/firebase_options_dev.dart
