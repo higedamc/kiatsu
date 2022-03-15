@@ -159,9 +159,4 @@ ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
 /ios/Flutter/prod.xcconfig
 /lib/env/firebase_options_prod.dart
 /lib/env/firebase_options_dev.dart
-ios/Flutter/DartDefines.xcconfig
-ios/fastlane/ExportOptions.plist
-ios/fastlane/ExportOptions-dev.plist
-/ExportOptions-dev.plist
-/ExportOptions.plist
-/ios/fastlane/ExportOptions.plist
+ios/Flutter/DartDefines.xcconfig/ios/Runner.xcodeproj/project.pbxproj
