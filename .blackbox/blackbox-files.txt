@@ -1,5 +1,6 @@
 .env
 .firebaserc
+ExportOptions-dev.plist
 firebase.json
 firestore.indexes.json
 firestore.rules
