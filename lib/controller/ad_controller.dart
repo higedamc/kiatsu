@@ -93,7 +93,7 @@ class BannerAdController extends StateNotifier<BannerAdState> {
     String adMobUnitIdDev = dotenv.env['ADMOB_BANNER_UNIT_ID_IOS_DEV'].toString();
     String adMobUnitIdProd = dotenv.env['ADMOB_BANNER_UNID_ID_IOS'].toString();
     if (kDebugMode) {
-      return BannerAd.testAdUnitId;
+      return adMobUnitIdDev;
     }
 
     if (Platform.isAndroid && flavor == 'dev') {
@@ -110,7 +110,7 @@ class BannerAdController extends StateNotifier<BannerAdState> {
       return adMobUnitIdDev;
     }
      else {
-      return BannerAd.testAdUnitId;
+      return adMobUnitIdDev;
     }
   }
 

@@ -584,9 +584,12 @@ class HomePage extends riv.ConsumerWidget {
                 return Center(
                   child: SizedBox(
                       height: currentHeight * 0.6,
-                      child: _isPaid
-                          ? Container()
-                          : bannerNotifier.loadBannerAd()),
+                      //TODO: 一旦広告非表示にしてるよ！
+                      child: Container(),
+                      // _isPaid
+                      //     ? Container()
+                      //     : bannerNotifier.loadBannerAd()
+                          ),
                 );
               },
             ),
