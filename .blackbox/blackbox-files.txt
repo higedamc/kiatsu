@@ -8,6 +8,7 @@ firestore.rules
 ios/Flutter/dev.xcconfig
 ios/Flutter/prod.xcconfig
 ios/Runner.xcodeproj/project.pbxproj
+ios/fastlane/ExportOptions-dev.plist
 ios/fastlane/ExportOptions.plist
 ios/fastlane/Fastfile
 lib/env/firebase_options_dev.dart
