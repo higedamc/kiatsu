@@ -163,3 +163,4 @@ ios/Flutter/DartDefines.xcconfig
 ios/fastlane/ExportOptions.plist
 ios/fastlane/ExportOptions-dev.plist
 /ExportOptions-dev.plist
+/ExportOptions.plist
