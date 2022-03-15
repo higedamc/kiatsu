@@ -7,6 +7,7 @@ firestore.indexes.json
 firestore.rules
 ios/Flutter/dev.xcconfig
 ios/Flutter/prod.xcconfig
+ios/fastlane/ExportOptions.plist
 ios/fastlane/Fastfile
 lib/env/firebase_options_dev.dart
 lib/env/firebase_options_prod.dart
