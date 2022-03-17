@@ -342,14 +342,10 @@ class SettingPage extends ConsumerWidget {
                                       await Navigator.pushNamed(
                                           context, '/env');
                                     } else {
-                                      //TODO: クリップボードにバージョンをコピーする挙動に変更
-                                      // final checkResult = await checkFirstRun();
-                                      // ScaffoldMessenger.of(context)
-                                      //     .showSnackBar(SnackBar(
-                                      //         content: Text(
-                                      //             checkResult.toString())));
-                                      await Navigator.pushNamed(
-                                          context, '/env');
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text('何も起きないよ＾q＾')));
+
                                     }
                                   }),
                             ],
