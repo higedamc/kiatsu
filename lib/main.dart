@@ -79,12 +79,8 @@ void main() async {
         ));
       };
       await MobileAds.instance.initialize();
-      if (flavor == 'stg') {
-        await LineSDK.instance
-            .setup(dotenv.env['LINE_CHANNEL_ID_STG'].toString());
-      } else {
+
         await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID'].toString());
-      }
       runApp(
         ProviderScope(
           child: MyApp(
