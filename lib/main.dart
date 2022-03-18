@@ -33,9 +33,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'env/firebase_options_dev.dart' as dev;
 import 'env/firebase_options_prod.dart' as prod;
 
-
 // Import the generated file
-
 
 // https://github.com/Meshkat-Shadik/WeatherApp/blob/279c8bc1dd/lib/infrastructure/weather_repository.dart#L11
 
@@ -45,85 +43,49 @@ import 'env/firebase_options_prod.dart' as prod;
 // 参照: https://codeux.design/articles/manage-secrets-flutter-project/
 
 const flavor = String.fromEnvironment('FLAVOR');
-
-void main() {
-  startApp();
-}
-
-
-Future<void> startApp() async {
-  // final _navigatorKey = GlobalKey<NavigatorState>();
-
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  
-
-  await dotenv.load(fileName: '.env');
- 
-  // FirebaseOptions? firebaseOptions;
-  // if ((Platform.isIOS && flavor == 'dev')) {
-  //   firebaseOptions = FirebaseOptions(
-  //    apiKey: dotenv.env['FIREBASE_API_KEY_IOS_DEV']!,
-  //     appId: dotenv.env['FIREBASE_APP_ID_IOS_DEV']!,
-  //      messagingSenderId: dotenv.env['FIREBASE_GCM_SENDER_ID_IOS_DEV']!,
-  //       projectId: dotenv.env['FIREBASE_PROJECT_ID_IOS_DEV']!,
-  //       storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET_IOS_DEV']!,
-  //       databaseURL: dotenv.env['FIREBASE_DETABASE_URL_IOS_DEV']!,
-  //       );
-  // } 
-  // else {
-  //   firebaseOptions = const FirebaseOptions(
-  //     apiKey: apiKey,
-  //      appId: appId,
-  //       messagingSenderId: messagingSenderId,
-  //        projectId: projectId);
-  // }
-  // https://qiita.com/KazaKago/items/5dbe67032ecc7d459d74
-  FirebaseOptions firebaseOptions() {
-  switch (flavor) {
-    case 'dev':
-      return dev.DefaultFirebaseOptions.currentPlatform;
-    case 'prod':
-      return prod.DefaultFirebaseOptions.currentPlatform;
-    default:
-      throw ArgumentError('Not available flavor');
-  }
-}
-
-  await Firebase.initializeApp(
-      options: firebaseOptions(),
-      );
-
-  // await PurchaseApi.init();
-  await Purchases.setDebugLogsEnabled(kDebugMode);
-  await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString());
-
-  // final appleSignInAvailable = await AppleSignInAvailable.check();
-
-  final result = await checkFirstRun();
-  if (result == true) {
-    await AppTrackingTransparency.requestTrackingAuthorization();
-  }
-
-  timeago.setLocaleMessages('ja', const MyCustomMessages());
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return const Center(
-        child: CircularProgressIndicator(
-      backgroundColor: Colors.white,
-    ));
-  };
-  await MobileAds.instance.initialize();
-  if(flavor == 'stg') {
-    await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID_STG'].toString());
-  }
-  else {
-    await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID'].toString());
-  }
+void main() async {
   SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
-    runZonedGuarded(() async {
+    runZonedGuarded<Future<void>>(() async {
+      //WidgetsFlutterBinding.ensureInitialized()はrunZonedGuardedの中に
+      //参照URL: https://firebase.flutter.dev/docs/crashlytics/usage/
+      WidgetsFlutterBinding.ensureInitialized();
+      await dotenv.load(fileName: '.env');
+      FirebaseOptions firebaseOptions() {
+        switch (flavor) {
+          case 'dev':
+            return dev.DefaultFirebaseOptions.currentPlatform;
+          case 'prod':
+            return prod.DefaultFirebaseOptions.currentPlatform;
+          default:
+            throw ArgumentError('Not available flavor');
+        }
+      }
+      await Firebase.initializeApp(
+        options: firebaseOptions(),
+      );
+      await Purchases.setDebugLogsEnabled(kDebugMode);
+      await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString());
+      final result = await checkFirstRun();
+      if (result == true) {
+        await AppTrackingTransparency.requestTrackingAuthorization();
+      }
+      timeago.setLocaleMessages('ja', const MyCustomMessages());
+      FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+      ErrorWidget.builder = (FlutterErrorDetails details) {
+        return const Center(
+            child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+        ));
+      };
+      await MobileAds.instance.initialize();
+      if (flavor == 'stg') {
+        await LineSDK.instance
+            .setup(dotenv.env['LINE_CHANNEL_ID_STG'].toString());
+      } else {
+        await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID'].toString());
+      }
       runApp(
         ProviderScope(
           child: MyApp(
@@ -181,13 +143,14 @@ class MyApp extends StatelessWidget {
                 cityName: '',
                 key: UniqueKey(),
               ),
-              '/notify': (BuildContext context) => const NotificationPage(
-              ),
+          '/notify': (BuildContext context) => const NotificationPage(),
           '/test': (BuildContext context) => const TestWidget(),
           '/onbo': (BuildContext context) => const OnboardingPage(),
           '/env': (BuildContext context) => const CheckEnvPage()
         },
-        home: firebaseAuth.currentUser != null ? splashScreen : const OnboardingPage(),
+        home: firebaseAuth.currentUser != null
+            ? splashScreen
+            : const OnboardingPage(),
       ),
     );
   }
@@ -207,15 +170,15 @@ Widget splashScreen = SplashScreenView(
 );
 
 Future<bool> checkFirstRun() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool _firstRun = prefs.getBool('firstRun') ?? true;
-    if (_firstRun) {
-      prefs.setBool('firstRun', false);
-      return true;
-    } else {
-      return false;
-    }
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool _firstRun = prefs.getBool('firstRun') ?? true;
+  if (_firstRun) {
+    prefs.setBool('firstRun', false);
+    return true;
+  } else {
+    return false;
   }
+}
 
 // class SplashPage extends MyApp {
   
