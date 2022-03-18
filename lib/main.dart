@@ -44,7 +44,6 @@ import 'env/firebase_options_prod.dart' as prod;
 
 const flavor = String.fromEnvironment('FLAVOR');
 void main() async {
-  SharedPreferences.getInstance().then((prefs) {
     // runeZonedGuardedに包むことによってFlutter起動中のエラーを非同期的に全部拾ってくれる(らしい)
     runZonedGuarded<Future<void>>(() async {
       //WidgetsFlutterBinding.ensureInitialized()はrunZonedGuardedの中に
@@ -89,18 +88,15 @@ void main() async {
       runApp(
         ProviderScope(
           child: MyApp(
-            prefs: prefs,
             key: UniqueKey(),
           ),
         ),
       );
     }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
-  });
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({required Key key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  MyApp({required Key key}) : super(key: key);
   final _navigatorKey = GlobalKey<NavigatorState>();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
