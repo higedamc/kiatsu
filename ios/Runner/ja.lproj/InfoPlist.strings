@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Kohei Otani on 2022/04/02.
+  
+*/
+NSLocationAlwaysAndWhenInUseUsageDescription = "このアプリは天気情報を取得するために位置情報の許可が必要です";
+NSLocationAlwaysUsageDescription = "このアプリは天気情報を取得するために位置情報の許可が必要です";
+NSLocationUsageDescription = "このアプリは天気情報を取得するために位置情報の許可が必要です";
+NSLocationWhenInUseUsageDescription = "このアプリは天気情報を取得するために位置情報の許可が必要です";
+NSUserTrackingUsageDescription = "表示する広告を適切に表示する目的で使用します";
