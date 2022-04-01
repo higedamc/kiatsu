@@ -38,7 +38,7 @@
 	<key>DART_DEFINE_MODE</key>
 	<string>$(DART_DEFINE_MODE)</string>
 	<key>GADApplicationIdentifier</key>
-	<string>$(ADMOB_IDENTIFIER)</string>
+	<string>ca-app-pub-9614978207890633~5275407674</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>

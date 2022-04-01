@@ -9,6 +9,8 @@ import 'package:kiatsu/controller/user_controller.dart';
 
 import 'ad_state.dart';
 
+//参考URL: https://techgamelife.net/2022/01/17/flutter-admob-reward/
+
 const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
 
 
@@ -82,35 +84,22 @@ class BannerAdController extends StateNotifier<BannerAdState> {
     }
   }
 
-  // /// 引数は報酬を付与する処理
-  // Future<void> showBannerAd() async {
-  //   await
-
-  // }
-
   String get _rewardAdUnitId {
     
-    String adMobUnitIdDev = dotenv.env['ADMOB_BANNER_UNIT_ID_IOS_DEV'].toString();
-    String adMobUnitIdProd = dotenv.env['ADMOB_BANNER_UNID_ID_IOS'].toString();
-    if (kDebugMode) {
-      return adMobUnitIdDev;
-    }
+    String adMobUnitIdIOS = dotenv.env['ADMOB_BANNDER_UNIT_ID_IOS'].toString();
+    String adMobUnitIdAndroid = dotenv.env['ADMOB_BANNER_UNIT_ID_ANDROID'].toString();
 
-    if (Platform.isAndroid && flavor == 'dev') {
-      //TODO: Android用のUnitIDの設定を後でやる
-      return 'ca-app-pub-3940256099942544/6300978111';
-    } else if (Platform.isIOS && flavor == 'dev') {
-      return adMobUnitIdDev;
-    } 
-    // else if (Platform.isAndroid && flavor == 'prod') {
-    //   return null;
-    // } 
-    //TODO: 一旦テストでProd版でもDev版を表示させているがリリース前に戻すのを忘れないこと
-    else if (Platform.isIOS && flavor == 'prod') {
-      return adMobUnitIdDev;
+    if (kDebugMode || flavor == 'dev') {
+      return Platform.isAndroid ? 'ca-app-pub-3940256099942544/6300978111' 
+                                : 'ca-app-pub-3940256099942544/2934735716';
     }
-     else {
-      return adMobUnitIdDev;
+ 
+    else if (flavor == 'prod') {
+      return Platform.isAndroid ? adMobUnitIdAndroid
+                                : adMobUnitIdIOS;
+    } else {
+      return Platform.isAndroid ? 'ca-app-pub-3940256099942544/6300978111' 
+                                : 'ca-app-pub-3940256099942544/2934735716';
     }
   }
 
