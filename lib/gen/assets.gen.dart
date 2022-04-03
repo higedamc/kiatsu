@@ -47,6 +47,7 @@ class Assets {
   static const AssetGenImage onbo2Fixed =
       AssetGenImage('assets/onbo2_fixed.png');
   static const AssetGenImage onbo3 = AssetGenImage('assets/onbo3.PNG');
+  static const AssetGenImage onbo8 = AssetGenImage('assets/onbo8.png');
   static const AssetGenImage onboX = AssetGenImage('assets/onbo_x.png');
 }
 
