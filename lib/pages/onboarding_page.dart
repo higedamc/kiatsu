@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 // import 'package:flutter/material.dart';
 import 'package:kiatsu/gen/assets.gen.dart';
@@ -9,6 +10,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 //TODO: Riverpod化
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final currentUser = firebaseAuth.currentUser;
+
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -39,7 +41,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           },
           children: [
             buildPage(
-              color: Colors.white24, urlImage: Assets.onboX.path, title: 'シンプル', subtitle: '使い方は簡単！起動したら気圧の状況が一目でわかります', textColor: Colors.black),
+              color: Colors.white24,
+               urlImage: (Device.get().hasNotch) ? Assets.onboX.path : Assets.onbo8.path, title: 'シンプル', subtitle: '使い方は簡単！起動したら気圧の状況が一目でわかります', textColor: Colors.black),
             buildPage(
               color: Colors.white24, urlImage: Assets.onbo2Fixed.path, title: 'つながる', subtitle: '今の気分や体調をシェアして、匿名で他の人とつながることができます', textColor: Colors.black87),
             Container(
