@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,18 +33,18 @@ final CollectionReference users = firebaseStore.collection('users');
 //TODO: #117 iOS版のサブスク機能が動くようにする
 //TODO: #116 課金後課金情報が消えてしまうので課金情報を更新する
 
-class Coins {
-  // Entitlementsの設定
-  // static const removeAds = 'kiatsu_120_remove_ads';
-  // for iOS
-  static const removeAdsAndroid = 'kiatsu_120_remove_ads';
-  static const tipMe = 'tip_me';
-  static const subsc1m = 'kiatsu_pro_1m';
-  static const subsc1y = 'kiatsu_pro_1y';
-  static final _apiKey = dotenv.env['REVENUECAT_SECRET_KEY'].toString();
-  // Added some
-  static const allIds = [removeAdsAndroid, tipMe, subsc1m, subsc1y];
-}
+// class Coins {
+//   // Entitlementsの設定
+//   // static const removeAds = 'kiatsu_120_remove_ads';
+//   // for iOS
+//   final removeAdsAndroid = 'kiatsu_120_remove_ads';
+//   final tipMe = 'tip_me';
+//   final subsc1m = 'kiatsu_pro_1m';
+//   final subsc1y = 'kiatsu_pro_1y';
+//   final _apiKey = dotenv.env['REVENUECAT_SECRET_KEY'].toString();
+//   // Added some
+//   static const allIds = [removeAdsAndroid, tipMe, subsc1m, subsc1y];
+// }
 
 // class SubscriptionsPage extends StatefulWidget {
 //   const SubscriptionsPage({Key? key}) : super(key: key);
@@ -53,8 +54,8 @@ class Coins {
 // }
 
 class SubscriptionsPage extends ConsumerWidget {
-  const SubscriptionsPage({Key? key}) : super(key: key);
-  final bool isLoading = false;
+  SubscriptionsPage({Key? key}) : super(key: key);
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -81,7 +82,7 @@ class SubscriptionsPage extends ConsumerWidget {
     //   });
     // }
 
-    Future fetchOffers() async {
+    Future<void> fetchOffers() async {
       final offerings = await PurchaseApi.fetchOffers(all: true);
 
       if (offerings.isEmpty) {
@@ -94,21 +95,20 @@ class SubscriptionsPage extends ConsumerWidget {
             .expand((pair) => pair)
             .toList();
 
-        Utils.showSheet(
+        await Utils().showSheet(
           context,
           (context) => PaywallWidget(
             packages: packages,
             title: 'THANK YOUUUUUU!!!',
             description: '今後色々なアンロックできる特典を追加していく予定です！',
             onClickedPackage: (package) async {
-              final isPurchased = await PurchaseApi.purchasePackage(package);
-              isPurchased == true;
+              await PurchaseApi.purchasePackage(package);
               // if (user != null) {
               //   return users.doc(currentUser?.uid).update({
               //   'entitlement': _purchaser.entitlement.name,
               // });
               // }
-              users.doc(user?.uid).set({'isPurchased': true});
+             await users.doc(user?.uid).set({'isPurchased': true});
               Navigator.pop(context);
 
               // Navigator.pop(context);
@@ -130,66 +130,23 @@ class SubscriptionsPage extends ConsumerWidget {
           ],
         );
 
-    Widget buildEntitlement(Entitlement entitlement) {
-      switch (entitlement) {
-        case Entitlement.pro:
-          return buildEntitlementIcon(
-            text: '有料プラン利用中',
-            icon: Icons.done, // ex. paid
-          );
-        case Entitlement.free:
-        default:
-          return buildEntitlementIcon(
-            text: '無料プラン利用中',
-            icon: Icons.lock,
-          );
-      }
-    }
+    // Widget buildEntitlement(Entitlement entitlement) {
+    //   switch (entitlement) {
+    //     case Entitlement.pro:
+    //       return buildEntitlementIcon(
+    //         text: '有料プラン利用中',
+    //         icon: Icons.done, // ex. paid
+    //       );
+    //     case Entitlement.free:
+       
+    //       return buildEntitlementIcon(
+    //         text: '無料プラン利用中',
+    //         icon: Icons.lock,
+    //       );
+    //   }
+    // }
 
-    Future fetchOffers2() async {
-      final offerings = await PurchaseApi.fetchOffersByIds(Coins.allIds);
-      // final offering = await PurchaseApi.fetchSingleOffer(Coins.removeAdsIOS);
-
-      if (offerings.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('プランが見つかりませんでした🥺'),
-        ));
-      } else {
-        final packages = offerings
-            .map((offer) => offer.availablePackages)
-            .expand((pair) => pair)
-            .toList();
-
-        Utils.showSheet(
-          context,
-          (context) => PaywallWidget(
-            packages: packages,
-            title: 'THANK YOUUUUUU!!!',
-            description: '今後色々なアンロックできる特典を追加していく予定です！',
-            onClickedPackage: (package) async {
-              final isPurchased = await PurchaseApi.purchasePackage(package);
-              isPurchased == true;
-              await users.doc(user?.uid).set({'isPurchased': true});
-              Navigator.pop(context);
-            },
-          ),
-        );
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => PaywallWidget(
-        //       packages: offerings.map((offer) => offer.availablePackages).expand((pair) => pair).toList(),
-        //       title: 'プランの選択',
-        //       description: 'プランをアップグレードして特典を得る',
-        //       onClickedPackage: (package) async {
-        //         await PurchaseApi.purchasePackage(package);
-        //         Navigator.pop(context);
-        //       },
-        //     ),
-        //   ),
-        // );
-      }
-    }
+    
 
     return Scaffold(
       appBar: NeumorphicAppBar(
@@ -215,11 +172,11 @@ class SubscriptionsPage extends ConsumerWidget {
                       minimumSize: const Size.fromHeight(50),
                       primary: Colors.black,
                     ),
+                    onPressed: null,
                     child: const Text(
                       '広告削除済みです',
                       style: TextStyle(fontSize: 20),
                     ),
-                    onPressed: null,
                   )
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -263,9 +220,11 @@ class SubscriptionsPage extends ConsumerWidget {
                       //The receipt is missing
                     ),
                     onPressed: () async {
-                      final PurchaserInfo restoredInfo =
+                      final restoredInfo =
                           await Purchases.restoreTransactions();
-                      print(restoredInfo);
+                      if (kDebugMode) {
+                        print(restoredInfo);
+                      }
                       if (restoredInfo.entitlements.all['pro'] != null &&
                           restoredInfo.entitlements.all['pro']!.isActive) {
                         // 復元完了のポップアップ
@@ -289,7 +248,7 @@ class SubscriptionsPage extends ConsumerWidget {
                         );
                       } else {
                         // 購入情報が見つからない場合
-                        final result = await showDialog<int>(
+                        await showDialog<int>(
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) {
