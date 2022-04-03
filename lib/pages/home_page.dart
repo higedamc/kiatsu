@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:kiatsu/controller/ad_controller.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/widget/ad_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,55 +31,26 @@ final currentUser = firebaseAuth.currentUser;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
 
-
 //TODO: #130 コンストラクターにkeyを渡す
 class HomePage extends riv.ConsumerWidget {
-  final String? cityName;
+  const HomePage({required this.cityName, required this.res2, required Key key})
+      : super(key: key);
 
-  final String? _res2 = '';
+  final String cityName;
 
-  const HomePage({this.cityName, Key? key}) : super(key: key);
-  // final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final String res2;
 
-  void submitCityName(
+  Future<void> submitCityName(
       BuildContext context, String? cityName, riv.WidgetRef ref) async {
     await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName!);
   }
 
-  // void refreshPurchaser(
-  //     BuildContext context, riv.WidgetRef ref) async {
-  //   await ref.read(purchaseManagerProvider).purchaseManager();
-  // }
-
-  // final List<FocusNode> overlayKeys = <FocusNode>[
-  //   FocusNode(),
-  //   FocusNode(),
-  //   FocusNode(),
-  // ];
-
-  // final List<OnboardingSteps> steps = [OnboardingStep(
-  //   focusNode: _focusNodes != null ? _focusNodes[0] : null,
-  //   title: "Hi",
-  //   titleTextStyle: Theme.of(context).textTheme.headline5.copyWith(
-  //       color: Theme.of(context).canvasColor,
-  //       ),
-  //   bodyText:
-  //       '''Check this out''',
-  //   bodyTextStyle: Theme.of(context).textTheme.subtitle1.copyWith(
-  //       color: Theme.of(context).canvasColor,
-  //       ),
-  //   hasLabelBox: false,
-  //   fullscreen: true,
-  //   overlayColor: Theme.of(context).primaryColorDark.withOpacity(0.8),
-  //   hasArrow: false,
-  //   ),];
-
   Future<String> fromAtNow(DateTime date) async {
     // final DateTime currentTime = ref.watch(clockProvider);
-    final Duration difference = DateTime.now().difference(date);
+    final difference = DateTime.now().difference(date);
     // final Duration difference =
     //     DateTime.now().difference(currentTime);
-    final int sec = difference.inSeconds;
+    final sec = difference.inSeconds;
 
     if (sec >= 60 * 60 * 24) {
       return '最終更新 - ${difference.inDays.toString()}日前';
@@ -90,25 +63,16 @@ class HomePage extends riv.ConsumerWidget {
     }
   }
 
-  Future<bool> checkFirstRun() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool _firstRun = prefs.getBool('firstRun') ?? true;
-    if (_firstRun) {
-      prefs.setBool('firstRun', false);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   //TODO: Riverpod + Freezed化する
   Future<bool> handlePermission() async {
-    Map<Permission, PermissionStatus> statuses = await [
+    final statuses = await [
       Permission.location,
       // Permission.locationAlways,
       Permission.locationWhenInUse,
     ].request();
-    print(statuses);
+    if (kDebugMode) {
+      print(statuses);
+    }
     if (statuses[Permission.location] == PermissionStatus.granted &&
         // statuses[Permission.locationAlways] == PermissionStatus.granted &&
         statuses[Permission.locationWhenInUse] == PermissionStatus.granted) {
@@ -134,13 +98,19 @@ class HomePage extends riv.ConsumerWidget {
     final result11 = await Permission.locationWhenInUse.isRestricted;
     final result12 = await Permission.locationWhenInUse.isPermanentlyDenied;
 
-    (result1 == true || result4 == true || result5 == true || result6 == true)
+    await (result1 == true ||
+            result4 == true ||
+            result5 == true ||
+            result6 == true)
         ? Permission.location.request()
         : Permission.location.isGranted;
-    (result2 == true || result7 == true || result8 == true || result9 == true)
+    await (result2 == true ||
+            result7 == true ||
+            result8 == true ||
+            result9 == true)
         ? Permission.locationAlways.request()
         : Permission.locationAlways.isGranted;
-    (result3 == true ||
+    await (result3 == true ||
             result10 == true ||
             result11 == true ||
             result12 == true)
@@ -150,43 +120,15 @@ class HomePage extends riv.ConsumerWidget {
 
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
-    final currentTime = ref.watch(clockProvider);
-    Size size = MediaQuery.of(context).size;
+    // final currentTime = ref.watch(clockProvider);
+    final size = MediaQuery.of(context).size;
     // print(size);
-    final width = size.width;
+    // final width = size.width;
     final height = size.height;
-    final currentWidth = width * 1 / 2;
+    // final currentWidth = width * 1 / 2;
     final currentHeight = height * 1 / 2;
-    // final permission = ref.read(permissionGetter);
-    // Future<void> waiter(ref) async {
-    //   // return Future.delayed(Duration.zero, () async {
-    //   //   // PurchaseApi.init();
-    //   //   await Purchases.setup(Coins._apiKey,
-    //   //       appUserId: currentUser?.uid.toString());
-    //   // });
-    //   final testt = ref.watch(authManagerProvider);
-
-    //   if (testt.isLoggedIn) {
-    //     await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString(),
-    //         appUserId: currentUser?.uid.toString());
-    //   }
-    //   // await Purchases.setup(
-    //   //   Coins._apiKey,
-    //   //   appUserId: currentUser?.uid.toString(),
-    //   // );
-    // }
-
-    // final entitlement = Provider.of<RevenueCat>(context).entitlement;
-    final double deviceHeight = MediaQuery.of(context).size.height;
-    // final entitlement = ref.watch(revenueCatProvider).entitlement;
-    // final entitlement = ref.watch(purchaseManagerProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
-    // final _purchaser = ref.watch(purchaseManagerProvider);
-    final isLoaded =
-        ref.watch(bannerAdProvider.select((value) => value.isLoaded));
-    final bannerNotifier = ref.watch(bannerAdProvider.notifier)..loadBannerAd();
     return Scaffold(
-      // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
         centerTitle: true,
         title: const Text(
@@ -196,10 +138,7 @@ class HomePage extends riv.ConsumerWidget {
           final weatherState = ref.watch(weatherStateNotifierProvider);
           return weatherState.maybeWhen(
               initial: () {
-                // waiter(ref);
-                // Future.delayed(Duration.zero,
-                //     () => refreshPurchaser(context, ref));
-                Future.delayed(const Duration(seconds: 0),
+                Future.delayed(Duration.zero,
                     () => submitCityName(context, cityName, ref));
 
                 return Container();
@@ -208,8 +147,10 @@ class HomePage extends riv.ConsumerWidget {
               success: (data) => IconButton(
                     icon: const Icon(Icons.share_outlined),
                     onPressed: () {
-                      Share.share(data.main!.pressure.toString() +
-                          'hPa is 低気圧しんどいぴえん🥺️ #kiatsu_app');
+                      final pressure = data.main?.pressure.toString();
+                      Share.share(
+                        '$pressure hPa is 低気圧しんどいぴえん🥺️ #kiatsu_app',
+                      ).toString();
                     },
                   ),
               orElse: () {
@@ -226,17 +167,6 @@ class HomePage extends riv.ConsumerWidget {
                   style: const NeumorphicStyle(color: Colors.black87),
                 ),
                 onPressed: () async {
-                  // 未実装ダイアログ
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       return CustomDialogBox(
-                  //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                  //         descriptions: 'この機能はまだ未実装です♡',
-                  //         text: '押',
-                  //         key: UniqueKey(),
-                  //       );
-                  //     });
                   await Navigator.pushNamed(context, '/notify');
                 }),
           )
@@ -251,7 +181,7 @@ class HomePage extends riv.ConsumerWidget {
           // ref.read(purchaseManagerProvider);
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
-              .getWeather(cityName.toString());
+              .getWeather(cityName);
           final updatedAt = DateTime.now();
           await fromAtNow(updatedAt);
           // (context as Element).markNeedsBuild();
@@ -279,7 +209,7 @@ class HomePage extends riv.ConsumerWidget {
                               Duration.zero,
                               () => submitCityName(
                                     context,
-                                    cityName.toString(),
+                                    cityName,
                                     ref,
                                   ));
                           return Container();
@@ -294,7 +224,7 @@ class HomePage extends riv.ConsumerWidget {
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.w200,
-                            fontSize: 75.0,
+                            fontSize: 75,
                           ),
                         ),
                         orElse: () => Container(),
@@ -317,12 +247,12 @@ class HomePage extends riv.ConsumerWidget {
                       color: Colors.black,
                     ),
                     textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w200, fontSize: 75.0),
+                        fontWeight: FontWeight.w200, fontSize: 75),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 1.0),
+            const SizedBox(height: 1),
             Consumer(
               builder: (context, watch, child) {
                 final weatherState = ref.watch(weatherStateNotifierProvider);
@@ -332,7 +262,7 @@ class HomePage extends riv.ConsumerWidget {
                       Duration.zero,
                       () => submitCityName(
                         context,
-                        cityName.toString(),
+                        cityName,
                         ref,
                       ),
                     );
@@ -360,8 +290,7 @@ class HomePage extends riv.ConsumerWidget {
                                   color: Colors.black,
                                 ),
                                 textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 56.0),
+                                    fontWeight: FontWeight.w200, fontSize: 56),
                               )
                             : data.weather![0].main.toString() == 'Clear Sky'
                                 ? NeumorphicText(
@@ -378,7 +307,7 @@ class HomePage extends riv.ConsumerWidget {
                                             color: Colors.black),
                                         textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.w200,
-                                            fontSize: 56.0))
+                                            fontSize: 56))
                                     : NeumorphicText(
                                         data.weather![0].main.toString(),
                                         style: const NeumorphicStyle(
@@ -386,7 +315,7 @@ class HomePage extends riv.ConsumerWidget {
                                         ),
                                         textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.w200,
-                                            fontSize: 56.0),
+                                            fontSize: 56),
                                       ),
                   ),
                   orElse: () => Container(),
@@ -420,18 +349,6 @@ class HomePage extends riv.ConsumerWidget {
                     return const Center(
                       child: Text('FETCHING DATA...'),
                     );
-                    // Future.delayed(
-                    //   Duration.zero,
-                    //   () async {
-                    //     final fuckMe = await handlePermission();
-                    //     fuckMe == true ? const Center(
-                    //       child: Text('FETCHING DATA...')
-                    //     ) : const Center(
-                    //       child: Text('位置情報を許可してください')
-                    //     );
-                    //   },
-                    // );
-                    // return Container();
                   },
                   success: (data) => Center(
                     //TODO: #146 ユーザーに表示する合わせてヤバさレベルを変えるようにする
@@ -493,19 +410,19 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Center(
               // 5日分の天気データ
-              child: Text(_res2!,
+              child: Text(res2,
                   style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w100)),
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final DateTime now = DateTime.now();
-                final DateTime currentTime = ref.watch(clockProvider);
+                final now = DateTime.now();
+                final currentTime = ref.watch(clockProvider);
                 // final List<DateTime> dates = [
                 //   now.add(Duration(seconds: currentTime.second) * -1),
                 //    now.add(Duration(minutes: currentTime.minute) * -1),
                 // ];
-                final DateTime date =
+                final date =
                     now.add(Duration(seconds: currentTime.second) * -5);
                 // final secondsString = DateFormat.s().format(currentTime);
                 // final secondsInt = int.parse(secondsString);
@@ -513,10 +430,10 @@ class HomePage extends riv.ConsumerWidget {
                 // final minutesInt = int.parse(minutesString);
                 String fromAtNow(DateTime date) {
                   // final DateTime currentTime = ref.watch(clockProvider);
-                  final Duration difference = DateTime.now().difference(date);
+                  final difference = DateTime.now().difference(date);
                   // final Duration difference =
                   //     DateTime.now().difference(currentTime);
-                  final int sec = difference.inSeconds;
+                  final sec = difference.inSeconds;
 
                   if (sec >= 60 * 60 * 24) {
                     return '最終更新 - ${difference.inDays.toString()}日前';
@@ -532,7 +449,7 @@ class HomePage extends riv.ConsumerWidget {
 
                 // final updatedAt = DateTime.now();
                 return Center(
-                  child:Text(
+                  child: Text(
                     //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
 
                     // timeago.format(
@@ -557,7 +474,7 @@ class HomePage extends riv.ConsumerWidget {
                     //         ? '最終更新 - ' + minutesInt.toString() + ' 分前'
                     //         : '最終更新 - なう',
                     // currentTime.toString(),
-                    fromAtNow(date).toString(),
+                    fromAtNow(date),
                     // style: const NeumorphicStyle(
                     //   // height: 1, // 10だとちょうど下すれすれで良い感じ
                     //   color: Colors.black,
@@ -569,27 +486,29 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Center(
               child: Text(
-                _res2!,
+                res2,
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w100),
               ),
             ),
             const SizedBox(
-              height: 70.0,
+              height: 70,
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final _isPaid =
+                final isPaid =
                     ref.watch(userProvider.select((s) => s.isPaidUser));
+
                 return Center(
                   child: SizedBox(
-                      height: currentHeight * 0.6,
-                      //TODO: 一旦広告非表示にしてるよ！
-                      child: Container(),
-                      // _isPaid
-                      //     ? Container()
-                      //     : bannerNotifier.loadBannerAd()
-                          ),
+                    height: currentHeight * 0.6,
+                    child: 
+                    !isPaid
+                    //     ? bannerNotifier.loadBannerAd()
+                    //     :
+                      ?
+                        const AdBanner() : Container(),
+                  ),
                 );
               },
             ),
@@ -601,22 +520,18 @@ class HomePage extends riv.ConsumerWidget {
           backgroundColor: Colors.white,
           child: const Text('＾ｑ＾'),
           onPressed: () async {
-            // try {
-            //   final result = await getLocationPermissions();
-            // await Navigator.of(context).pushNamed('/timeline');
-            // } on PlatformException catch (e) {
-            //   print(e);
-            //   if (e.message == 'ERROR_ALREADY_REQUESTING_PERMISSIONS' ) {
-            //     throw Error();
-            //   }
-            // }
+
             try {
               final result = await handlePermission();
               if (result == true) {
-                print('permission granted');
+                if (kDebugMode) {
+                  print('permission granted');
+                }
                 await Navigator.of(context).pushNamed('/timeline');
               } else {
-                print('permission denied');
+                if (kDebugMode) {
+                  print('permission denied');
+                }
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: const Text('このアプリは位置情報の許可が必須です'),
                   action: SnackBarAction(
@@ -658,9 +573,8 @@ class HomePage extends riv.ConsumerWidget {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Navigator.of(context).pushNamed('/timeline');
                   // 未実装ダイアログ
-                  showDialog(
+                  showDialog<Widget>(
                       context: context,
                       builder: (BuildContext context) {
                         return CustomDialogBox(
@@ -689,53 +603,6 @@ class HomePage extends riv.ConsumerWidget {
   }
 }
 
-// Widget buildAdmob() {
-//   //TODO: #125 dispose()を呼び出す処理を書く
-//   // 参考URL: https://uedive.net/2021/5410/flutter2-gad/
-//   //TODO: #128 端末のサイズに合わせて自動で広告のサイズを変更する処理を書く
-//   String getTestBannerUnitID() {
-//     String testBannerUnitId = '';
-//     if (Platform.isIOS) {
-//       testBannerUnitId = 'ca-app-pub-3940256099942544/2934735716';
-//     } else if (Platform.isAndroid) {
-//       testBannerUnitId = 'ca-app-pub-3940256099942544/6300978111';
-//     }
-//     return testBannerUnitId;
-//   }
-
-//   final BannerAd myBanner = BannerAd(
-//     adUnitId: getTestBannerUnitID(),
-//     size: AdSize.banner,
-//     request: const AdRequest(),
-//     listener:
-//         // BannerAdListener(),
-//         BannerAdListener(
-//       // 広告が正常にロードされたときに呼ばれます。
-//       onAdLoaded: (Ad ad) => print('バナー広告がロードされました。'),
-//       // 広告のロードが失敗した際に呼ばれます。
-//       onAdFailedToLoad: (Ad ad, LoadAdError error) {
-//         print('バナー広告のロードに失敗しました。: $error');
-//       },
-//       // 広告が開かれたときに呼ばれます。
-//       onAdOpened: (Ad ad) => print('バナー広告が開かれました。'),
-//       // 広告が閉じられたときに呼ばれます。
-//       onAdClosed: (Ad ad) => print('バナー広告が閉じられました。'),
-//       // ユーザーがアプリを閉じるときに呼ばれます。
-//       // onApplicationExit: (Ad ad) => print('ユーザーがアプリを離れました。'),
-//     ),
-//   );
-//   myBanner.load();
-//   final AdWidget adWidget = AdWidget(ad: myBanner);
-//   final Container adContainer = Container(
-//     alignment: Alignment.center,
-//     child: adWidget,
-//     width: myBanner.size.width.toDouble(),
-//     height: myBanner.size.height.toDouble(),
-//   );
-//   // return entitlement == Entitlement.pro ? Container() : adContainer;
-//   return adContainer;
-// }
-
-getTimelineView(BuildContext context) {
+Future<Object?> getTimelineView(BuildContext context) {
   return Navigator.of(context).pushNamed('/timeline2');
 }

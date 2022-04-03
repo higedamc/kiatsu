@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/model/weather_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:geocode/geocode.dart';
-
-import 'failures.dart';
 
 const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
 
 //TODO: Android版で天気情報が取得できない問題をなんとかする
+
 
 abstract class WeatherRepository {
   Future<WeatherClass> getWeather(String cityName);
@@ -18,6 +17,7 @@ abstract class WeatherRepository {
 
 class WeatherRepositoryImpl implements WeatherRepository {
   final http.Client _client;
+  //TODO: Sort constructor declarations before other members.
   WeatherRepositoryImpl(this._client);
 
   // Future<Position> _determinePosition() async {
@@ -51,21 +51,21 @@ class WeatherRepositoryImpl implements WeatherRepository {
   Future<WeatherClass> getWeather(String cityName) async {
     try {
       //参考URL: https://camposha.info/flutter/flutter-location/#gsc.tab=0
-      LocationPermission permission = await Geolocator.checkPermission();
+      final permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
+        final permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           return Future.error('Location permissions are denied');
         }
       }
-      final Position position = await Geolocator.getCurrentPosition(
+      final position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best,
           forceAndroidLocationManager: true);
       // Position position = _determinePosition() as Position;
       final rr = (flavor == 'prod') ? dotenv.env['OPENWEATHERMAP_API_KEY'] : dotenv.env['OPENWEATHERMAP_API_KEY_DEV'];
-      final double lat = position.latitude;
-      final double lon = position.longitude;
-      final Map<String, String> queryParams = {
+      final lat = position.latitude;
+      final lon = position.longitude;
+      final queryParams = {
         'lat': lat.toString(),
         'lon': lon.toString(),
         'APPID': rr.toString(),
@@ -76,20 +76,24 @@ class WeatherRepositoryImpl implements WeatherRepository {
         path: '/data/2.5/weather',
         queryParameters: queryParams,
       );
-      final http.Response response = await _client.get(uri);
+      final response = await _client.get(uri);
       if (response.statusCode == 200) {
-        final parsedData = jsonDecode(response.body);
+        final parsedData = jsonDecode(response.body) as Map<String, dynamic>;
         final weatherData = WeatherClass.fromJson(parsedData);
         return weatherData;
       } else if (response.statusCode == 404) {
-        print(response);
-        throw Failure('データが見つかりませんでした🥺');
+        if (kDebugMode) {
+          print(response);
+        }
+        throw Exception('データが見つかりませんでした🥺');
       } else {
-        print(response);
-        throw Failure('ネットワークまたはGPSエラーです＾q＾');
+        if (kDebugMode) {
+          print(response);
+        }
+        throw Exception('ネットワークまたはGPSエラーです＾q＾');
       }
     } on SocketException {
-      throw Failure('ネットワークまたはGPSエラーです＾q＾');
+      throw Exception('ネットワークまたはGPSエラーです＾q＾');
     }
   }
 }
