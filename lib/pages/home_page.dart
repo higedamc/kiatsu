@@ -40,40 +40,10 @@ class HomePage extends riv.ConsumerWidget {
 
   final String res2;
 
-  // final _scaffoldKey = GlobalKey<ScaffoldState>();
-
   Future<void> submitCityName(
       BuildContext context, String? cityName, riv.WidgetRef ref) async {
     await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName!);
   }
-
-  // void refreshPurchaser(
-  //     BuildContext context, riv.WidgetRef ref) async {
-  //   await ref.read(purchaseManagerProvider).purchaseManager();
-  // }
-
-  // final List<FocusNode> overlayKeys = <FocusNode>[
-  //   FocusNode(),
-  //   FocusNode(),
-  //   FocusNode(),
-  // ];
-
-  // final List<OnboardingSteps> steps = [OnboardingStep(
-  //   focusNode: _focusNodes != null ? _focusNodes[0] : null,
-  //   title: "Hi",
-  //   titleTextStyle: Theme.of(context).textTheme.headline5.copyWith(
-  //       color: Theme.of(context).canvasColor,
-  //       ),
-  //   bodyText:
-  //       '''Check this out''',
-  //   bodyTextStyle: Theme.of(context).textTheme.subtitle1.copyWith(
-  //       color: Theme.of(context).canvasColor,
-  //       ),
-  //   hasLabelBox: false,
-  //   fullscreen: true,
-  //   overlayColor: Theme.of(context).primaryColorDark.withOpacity(0.8),
-  //   hasArrow: false,
-  //   ),];
 
   Future<String> fromAtNow(DateTime date) async {
     // final DateTime currentTime = ref.watch(clockProvider);
@@ -157,35 +127,8 @@ class HomePage extends riv.ConsumerWidget {
     final height = size.height;
     // final currentWidth = width * 1 / 2;
     final currentHeight = height * 1 / 2;
-    // final permission = ref.read(permissionGetter);
-    // Future<void> waiter(ref) async {
-    //   // return Future.delayed(Duration.zero, () async {
-    //   //   // PurchaseApi.init();
-    //   //   await Purchases.setup(Coins._apiKey,
-    //   //       appUserId: currentUser?.uid.toString());
-    //   // });
-    //   final testt = ref.watch(authManagerProvider);
-
-    //   if (testt.isLoggedIn) {
-    //     await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString(),
-    //         appUserId: currentUser?.uid.toString());
-    //   }
-    //   // await Purchases.setup(
-    //   //   Coins._apiKey,
-    //   //   appUserId: currentUser?.uid.toString(),
-    //   // );
-    // }
-
-    // final entitlement = Provider.of<RevenueCat>(context).entitlement;
-    // final deviceHeight = MediaQuery.of(context).size.height;
-    // final entitlement = ref.watch(revenueCatProvider).entitlement;
-    // final entitlement = ref.watch(purchaseManagerProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
-    // final _purchaser = ref.watch(purchaseManagerProvider);
-    // final isLoaded =
-    //     ref.watch(bannerAdProvider.select((value) => value.isLoaded));
     return Scaffold(
-      // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
         centerTitle: true,
         title: const Text(
@@ -195,9 +138,6 @@ class HomePage extends riv.ConsumerWidget {
           final weatherState = ref.watch(weatherStateNotifierProvider);
           return weatherState.maybeWhen(
               initial: () {
-                // waiter(ref);
-                // Future.delayed(Duration.zero,
-                //     () => refreshPurchaser(context, ref));
                 Future.delayed(Duration.zero,
                     () => submitCityName(context, cityName, ref));
 
@@ -227,17 +167,6 @@ class HomePage extends riv.ConsumerWidget {
                   style: const NeumorphicStyle(color: Colors.black87),
                 ),
                 onPressed: () async {
-                  // 未実装ダイアログ
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       return CustomDialogBox(
-                  //         title: 'てへぺろ☆(ゝω･)vｷｬﾋﾟ',
-                  //         descriptions: 'この機能はまだ未実装です♡',
-                  //         text: '押',
-                  //         key: UniqueKey(),
-                  //       );
-                  //     });
                   await Navigator.pushNamed(context, '/notify');
                 }),
           )
@@ -420,18 +349,6 @@ class HomePage extends riv.ConsumerWidget {
                     return const Center(
                       child: Text('FETCHING DATA...'),
                     );
-                    // Future.delayed(
-                    //   Duration.zero,
-                    //   () async {
-                    //     final fuckMe = await handlePermission();
-                    //     fuckMe == true ? const Center(
-                    //       child: Text('FETCHING DATA...')
-                    //     ) : const Center(
-                    //       child: Text('位置情報を許可してください')
-                    //     );
-                    //   },
-                    // );
-                    // return Container();
                   },
                   success: (data) => Center(
                     //TODO: #146 ユーザーに表示する合わせてヤバさレベルを変えるようにする
@@ -581,9 +498,6 @@ class HomePage extends riv.ConsumerWidget {
               builder: (BuildContext context, value, Widget? child) {
                 final isPaid =
                     ref.watch(userProvider.select((s) => s.isPaidUser));
-                // final isLoaded = ref.watch(
-                //   bannerAdProvider.select((s) => s.isLoaded),
-                // );
 
                 return Center(
                   child: SizedBox(
@@ -606,15 +520,7 @@ class HomePage extends riv.ConsumerWidget {
           backgroundColor: Colors.white,
           child: const Text('＾ｑ＾'),
           onPressed: () async {
-            // try {
-            //   final result = await getLocationPermissions();
-            // await Navigator.of(context).pushNamed('/timeline');
-            // } on PlatformException catch (e) {
-            //   print(e);
-            //   if (e.message == 'ERROR_ALREADY_REQUESTING_PERMISSIONS' ) {
-            //     throw Error();
-            //   }
-            // }
+
             try {
               final result = await handlePermission();
               if (result == true) {
@@ -667,7 +573,6 @@ class HomePage extends riv.ConsumerWidget {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  // Navigator.of(context).pushNamed('/timeline');
                   // 未実装ダイアログ
                   showDialog<Widget>(
                       context: context,
@@ -697,53 +602,6 @@ class HomePage extends riv.ConsumerWidget {
     );
   }
 }
-
-// Widget buildAdmob() {
-//   //TODO: #125 dispose()を呼び出す処理を書く
-//   // 参考URL: https://uedive.net/2021/5410/flutter2-gad/
-//   //TODO: #128 端末のサイズに合わせて自動で広告のサイズを変更する処理を書く
-//   String getTestBannerUnitID() {
-//     String testBannerUnitId = '';
-//     if (Platform.isIOS) {
-//       testBannerUnitId = 'ca-app-pub-3940256099942544/2934735716';
-//     } else if (Platform.isAndroid) {
-//       testBannerUnitId = 'ca-app-pub-3940256099942544/6300978111';
-//     }
-//     return testBannerUnitId;
-//   }
-
-//   final BannerAd myBanner = BannerAd(
-//     adUnitId: getTestBannerUnitID(),
-//     size: AdSize.banner,
-//     request: const AdRequest(),
-//     listener:
-//         // BannerAdListener(),
-//         BannerAdListener(
-//       // 広告が正常にロードされたときに呼ばれます。
-//       onAdLoaded: (Ad ad) => print('バナー広告がロードされました。'),
-//       // 広告のロードが失敗した際に呼ばれます。
-//       onAdFailedToLoad: (Ad ad, LoadAdError error) {
-//         print('バナー広告のロードに失敗しました。: $error');
-//       },
-//       // 広告が開かれたときに呼ばれます。
-//       onAdOpened: (Ad ad) => print('バナー広告が開かれました。'),
-//       // 広告が閉じられたときに呼ばれます。
-//       onAdClosed: (Ad ad) => print('バナー広告が閉じられました。'),
-//       // ユーザーがアプリを閉じるときに呼ばれます。
-//       // onApplicationExit: (Ad ad) => print('ユーザーがアプリを離れました。'),
-//     ),
-//   );
-//   myBanner.load();
-//   final AdWidget adWidget = AdWidget(ad: myBanner);
-//   final Container adContainer = Container(
-//     alignment: Alignment.center,
-//     child: adWidget,
-//     width: myBanner.size.width.toDouble(),
-//     height: myBanner.size.height.toDouble(),
-//   );
-//   // return entitlement == Entitlement.pro ? Container() : adContainer;
-//   return adContainer;
-// }
 
 Future<Object?> getTimelineView(BuildContext context) {
   return Navigator.of(context).pushNamed('/timeline2');
