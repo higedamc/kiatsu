@@ -21,14 +21,15 @@ class _DialogsState extends State<Dialogs> {
       body: Center(
         child: ElevatedButton(
             onPressed: (){
-              showDialog(context: context,
+             showDialog<Widget>(context: context,
                 builder: (BuildContext context){
                 return CustomDialogBox(
                   title: 'Custom Dialog Demo',
-                  descriptions: 'Hii all this is a custom dialog in flutter and  you will be use in your flutter applications',
+                  descriptions:
+                   'Hii all this is a custom dialog in flutter and  you will be use in your flutter applications',
                   text: 'Yes', key: UniqueKey(),
                 );
-                }
+                },
               );
             },
           child: const Text('Custom Dialog'),
