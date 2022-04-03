@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:kiatsu/controller/ad_controller.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/widget/ad_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,17 +31,18 @@ final currentUser = firebaseAuth.currentUser;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 final CollectionReference users = firebaseStore.collection('users');
 
-
 //TODO: #130 コンストラクターにkeyを渡す
 class HomePage extends riv.ConsumerWidget {
-  final String? cityName;
+  const HomePage({required this.cityName, required this.res2, required Key key})
+      : super(key: key);
 
-  final String? _res2 = '';
+  final String cityName;
 
-  const HomePage({this.cityName, Key? key}) : super(key: key);
+  final String res2;
+
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void submitCityName(
+  Future<void> submitCityName(
       BuildContext context, String? cityName, riv.WidgetRef ref) async {
     await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName!);
   }
@@ -74,10 +77,10 @@ class HomePage extends riv.ConsumerWidget {
 
   Future<String> fromAtNow(DateTime date) async {
     // final DateTime currentTime = ref.watch(clockProvider);
-    final Duration difference = DateTime.now().difference(date);
+    final difference = DateTime.now().difference(date);
     // final Duration difference =
     //     DateTime.now().difference(currentTime);
-    final int sec = difference.inSeconds;
+    final sec = difference.inSeconds;
 
     if (sec >= 60 * 60 * 24) {
       return '最終更新 - ${difference.inDays.toString()}日前';
@@ -90,25 +93,16 @@ class HomePage extends riv.ConsumerWidget {
     }
   }
 
-  Future<bool> checkFirstRun() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool _firstRun = prefs.getBool('firstRun') ?? true;
-    if (_firstRun) {
-      prefs.setBool('firstRun', false);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   //TODO: Riverpod + Freezed化する
   Future<bool> handlePermission() async {
-    Map<Permission, PermissionStatus> statuses = await [
+    final statuses = await [
       Permission.location,
       // Permission.locationAlways,
       Permission.locationWhenInUse,
     ].request();
-    print(statuses);
+    if (kDebugMode) {
+      print(statuses);
+    }
     if (statuses[Permission.location] == PermissionStatus.granted &&
         // statuses[Permission.locationAlways] == PermissionStatus.granted &&
         statuses[Permission.locationWhenInUse] == PermissionStatus.granted) {
@@ -134,13 +128,19 @@ class HomePage extends riv.ConsumerWidget {
     final result11 = await Permission.locationWhenInUse.isRestricted;
     final result12 = await Permission.locationWhenInUse.isPermanentlyDenied;
 
-    (result1 == true || result4 == true || result5 == true || result6 == true)
+    await (result1 == true ||
+            result4 == true ||
+            result5 == true ||
+            result6 == true)
         ? Permission.location.request()
         : Permission.location.isGranted;
-    (result2 == true || result7 == true || result8 == true || result9 == true)
+    await (result2 == true ||
+            result7 == true ||
+            result8 == true ||
+            result9 == true)
         ? Permission.locationAlways.request()
         : Permission.locationAlways.isGranted;
-    (result3 == true ||
+    await (result3 == true ||
             result10 == true ||
             result11 == true ||
             result12 == true)
@@ -150,12 +150,12 @@ class HomePage extends riv.ConsumerWidget {
 
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
-    final currentTime = ref.watch(clockProvider);
-    Size size = MediaQuery.of(context).size;
+    // final currentTime = ref.watch(clockProvider);
+    final size = MediaQuery.of(context).size;
     // print(size);
-    final width = size.width;
+    // final width = size.width;
     final height = size.height;
-    final currentWidth = width * 1 / 2;
+    // final currentWidth = width * 1 / 2;
     final currentHeight = height * 1 / 2;
     // final permission = ref.read(permissionGetter);
     // Future<void> waiter(ref) async {
@@ -177,14 +177,13 @@ class HomePage extends riv.ConsumerWidget {
     // }
 
     // final entitlement = Provider.of<RevenueCat>(context).entitlement;
-    final double deviceHeight = MediaQuery.of(context).size.height;
+    // final deviceHeight = MediaQuery.of(context).size.height;
     // final entitlement = ref.watch(revenueCatProvider).entitlement;
     // final entitlement = ref.watch(purchaseManagerProvider).entitlement;
     final cityName = ref.watch(cityNameProvider);
     // final _purchaser = ref.watch(purchaseManagerProvider);
-    final isLoaded =
-        ref.watch(bannerAdProvider.select((value) => value.isLoaded));
-    final bannerNotifier = ref.watch(bannerAdProvider.notifier)..loadBannerAd();
+    // final isLoaded =
+    //     ref.watch(bannerAdProvider.select((value) => value.isLoaded));
     return Scaffold(
       // key: _scaffoldKey,
       appBar: NeumorphicAppBar(
@@ -199,7 +198,7 @@ class HomePage extends riv.ConsumerWidget {
                 // waiter(ref);
                 // Future.delayed(Duration.zero,
                 //     () => refreshPurchaser(context, ref));
-                Future.delayed(const Duration(seconds: 0),
+                Future.delayed(Duration.zero,
                     () => submitCityName(context, cityName, ref));
 
                 return Container();
@@ -208,8 +207,10 @@ class HomePage extends riv.ConsumerWidget {
               success: (data) => IconButton(
                     icon: const Icon(Icons.share_outlined),
                     onPressed: () {
-                      Share.share(data.main!.pressure.toString() +
-                          'hPa is 低気圧しんどいぴえん🥺️ #kiatsu_app');
+                      final pressure = data.main?.pressure.toString();
+                      Share.share(
+                        '$pressure hPa is 低気圧しんどいぴえん🥺️ #kiatsu_app',
+                      ).toString();
                     },
                   ),
               orElse: () {
@@ -251,7 +252,7 @@ class HomePage extends riv.ConsumerWidget {
           // ref.read(purchaseManagerProvider);
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
-              .getWeather(cityName.toString());
+              .getWeather(cityName);
           final updatedAt = DateTime.now();
           await fromAtNow(updatedAt);
           // (context as Element).markNeedsBuild();
@@ -279,7 +280,7 @@ class HomePage extends riv.ConsumerWidget {
                               Duration.zero,
                               () => submitCityName(
                                     context,
-                                    cityName.toString(),
+                                    cityName,
                                     ref,
                                   ));
                           return Container();
@@ -294,7 +295,7 @@ class HomePage extends riv.ConsumerWidget {
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.w200,
-                            fontSize: 75.0,
+                            fontSize: 75,
                           ),
                         ),
                         orElse: () => Container(),
@@ -317,12 +318,12 @@ class HomePage extends riv.ConsumerWidget {
                       color: Colors.black,
                     ),
                     textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w200, fontSize: 75.0),
+                        fontWeight: FontWeight.w200, fontSize: 75),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 1.0),
+            const SizedBox(height: 1),
             Consumer(
               builder: (context, watch, child) {
                 final weatherState = ref.watch(weatherStateNotifierProvider);
@@ -332,7 +333,7 @@ class HomePage extends riv.ConsumerWidget {
                       Duration.zero,
                       () => submitCityName(
                         context,
-                        cityName.toString(),
+                        cityName,
                         ref,
                       ),
                     );
@@ -360,8 +361,7 @@ class HomePage extends riv.ConsumerWidget {
                                   color: Colors.black,
                                 ),
                                 textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 56.0),
+                                    fontWeight: FontWeight.w200, fontSize: 56),
                               )
                             : data.weather![0].main.toString() == 'Clear Sky'
                                 ? NeumorphicText(
@@ -378,7 +378,7 @@ class HomePage extends riv.ConsumerWidget {
                                             color: Colors.black),
                                         textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.w200,
-                                            fontSize: 56.0))
+                                            fontSize: 56))
                                     : NeumorphicText(
                                         data.weather![0].main.toString(),
                                         style: const NeumorphicStyle(
@@ -386,7 +386,7 @@ class HomePage extends riv.ConsumerWidget {
                                         ),
                                         textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.w200,
-                                            fontSize: 56.0),
+                                            fontSize: 56),
                                       ),
                   ),
                   orElse: () => Container(),
@@ -493,19 +493,19 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Center(
               // 5日分の天気データ
-              child: Text(_res2!,
+              child: Text(res2,
                   style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w100)),
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final DateTime now = DateTime.now();
-                final DateTime currentTime = ref.watch(clockProvider);
+                final now = DateTime.now();
+                final currentTime = ref.watch(clockProvider);
                 // final List<DateTime> dates = [
                 //   now.add(Duration(seconds: currentTime.second) * -1),
                 //    now.add(Duration(minutes: currentTime.minute) * -1),
                 // ];
-                final DateTime date =
+                final date =
                     now.add(Duration(seconds: currentTime.second) * -5);
                 // final secondsString = DateFormat.s().format(currentTime);
                 // final secondsInt = int.parse(secondsString);
@@ -513,10 +513,10 @@ class HomePage extends riv.ConsumerWidget {
                 // final minutesInt = int.parse(minutesString);
                 String fromAtNow(DateTime date) {
                   // final DateTime currentTime = ref.watch(clockProvider);
-                  final Duration difference = DateTime.now().difference(date);
+                  final difference = DateTime.now().difference(date);
                   // final Duration difference =
                   //     DateTime.now().difference(currentTime);
-                  final int sec = difference.inSeconds;
+                  final sec = difference.inSeconds;
 
                   if (sec >= 60 * 60 * 24) {
                     return '最終更新 - ${difference.inDays.toString()}日前';
@@ -532,7 +532,7 @@ class HomePage extends riv.ConsumerWidget {
 
                 // final updatedAt = DateTime.now();
                 return Center(
-                  child:Text(
+                  child: Text(
                     //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
 
                     // timeago.format(
@@ -557,7 +557,7 @@ class HomePage extends riv.ConsumerWidget {
                     //         ? '最終更新 - ' + minutesInt.toString() + ' 分前'
                     //         : '最終更新 - なう',
                     // currentTime.toString(),
-                    fromAtNow(date).toString(),
+                    fromAtNow(date),
                     // style: const NeumorphicStyle(
                     //   // height: 1, // 10だとちょうど下すれすれで良い感じ
                     //   color: Colors.black,
@@ -569,27 +569,32 @@ class HomePage extends riv.ConsumerWidget {
             ),
             Center(
               child: Text(
-                _res2!,
+                res2,
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w100),
               ),
             ),
             const SizedBox(
-              height: 70.0,
+              height: 70,
             ),
             Consumer(
               builder: (BuildContext context, value, Widget? child) {
-                final _isPaid =
+                final isPaid =
                     ref.watch(userProvider.select((s) => s.isPaidUser));
+                // final isLoaded = ref.watch(
+                //   bannerAdProvider.select((s) => s.isLoaded),
+                // );
+
                 return Center(
                   child: SizedBox(
-                      height: currentHeight * 0.6,
-                      //TODO: 一旦広告非表示にしてるよ！
-                      child: Container(),
-                      // _isPaid
-                      //     ? Container()
-                      //     : bannerNotifier.loadBannerAd()
-                          ),
+                    height: currentHeight * 0.6,
+                    child: 
+                    !isPaid
+                    //     ? bannerNotifier.loadBannerAd()
+                    //     :
+                      ?
+                        const AdBanner() : Container(),
+                  ),
                 );
               },
             ),
@@ -613,10 +618,14 @@ class HomePage extends riv.ConsumerWidget {
             try {
               final result = await handlePermission();
               if (result == true) {
-                print('permission granted');
+                if (kDebugMode) {
+                  print('permission granted');
+                }
                 await Navigator.of(context).pushNamed('/timeline');
               } else {
-                print('permission denied');
+                if (kDebugMode) {
+                  print('permission denied');
+                }
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: const Text('このアプリは位置情報の許可が必須です'),
                   action: SnackBarAction(
@@ -660,7 +669,7 @@ class HomePage extends riv.ConsumerWidget {
                 onPressed: () {
                   // Navigator.of(context).pushNamed('/timeline');
                   // 未実装ダイアログ
-                  showDialog(
+                  showDialog<Widget>(
                       context: context,
                       builder: (BuildContext context) {
                         return CustomDialogBox(
@@ -736,6 +745,6 @@ class HomePage extends riv.ConsumerWidget {
 //   return adContainer;
 // }
 
-getTimelineView(BuildContext context) {
+Future<Object?> getTimelineView(BuildContext context) {
   return Navigator.of(context).pushNamed('/timeline2');
 }
