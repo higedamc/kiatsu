@@ -17,20 +17,12 @@ import 'package:url_launcher/url_launcher.dart';
 class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
-  _popAndDisplaySnackBar(BuildContext context) async {
-    final result = await Navigator.pushNamed(context, '/timeline');
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('ログインしました')));
-  }
-
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    int count = 0;
-    final _auth = FirebaseAuth.instance;
-    final now = _auth.currentUser;
-    // ToDO: AppleAuthのboolが起動するか初期化して確認
-    // ToDo: 上記確認後GitHubのIssueを閉じる
+    var count = 0;
+    final auth = FirebaseAuth.instance;
+    final now = auth.currentUser;
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('アカウントページ'),
@@ -46,66 +38,57 @@ class SignInPage extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AppleAuthButton(
-                          width: 280.0,
-                          height: 50.0,
-                          borderWidth: 1.0,
-                          padding: const EdgeInsets.all(8.0),
-                          elevation: 2.0,
-                          borderRadius: 8.0,
-                          separator: 15.0,
+                          width: 280,
+                          height: 50,
+                          borderWidth: 1,
+                          padding: const EdgeInsets.all(8),
+                          elevation: 2,
+                          borderRadius: 8,
+                          separator: 15,
                           borderColor: Colors.black,
                           onPressed: () async {
-                              await AppleAuthUtil.signInWithApple(context, ref)
-                                  .then((_) => _popAndDisplaySnackBar(context));
-                              // await _popAndDisplaySnackBar(context);
-
+                            await AppleAuthUtil.signInWithApple(context, ref)
+                                .then<dynamic>(
+                              (_) => Navigator.pop(context),
+                            );
                           },
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: GithubAuthButton(
-                      //       width: 280.0,
-                      //       height: 50.0,
-                      //       borderWidth: 1.0,
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       elevation: 2.0,
-                      //       borderRadius: 8.0,
-                      //       separator: 15.0,
-                      //       borderColor: Colors.black,
-                      //       text: 'Sign in with GitHub',
-                      //       onPressed: () async => {
-                      //             GithubAuthUtil.signInWithGithub(context),
-                      //             Navigator.pop(context),
-                      //           }),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TwitterAuthButton(
-                            width: 280.0,
-                            height: 50.0,
-                            borderWidth: 1.0,
-                            padding: const EdgeInsets.all(8.0),
-                            elevation: 2.0,
-                            borderRadius: 8.0,
-                            separator: 15.0,
-                            borderColor: Colors.black,
-                            onPressed: () => {
-                                  TwitterAuthUtil.signInWithTwitter(context),
-                                  //  Navigator.pop(context, 'ログインされました'),
-                                }),
+                          width: 280,
+                          height: 50,
+                          borderWidth: 1,
+                          padding: const EdgeInsets.all(8),
+                          elevation: 2,
+                          borderRadius: 8,
+                          separator: 15,
+                          borderColor: Colors.black,
+                          onPressed: () async => {
+                            await TwitterAuthUtil.signInWithTwitter(context),
+
+                            //TODO(Kohei): きちんとホーム画面に戻るかどうか確認
+                            Navigator.popUntil(context, (_) => count++ >= 2),
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('ログインされました。'),
+                              ),
+                            ),
+                          },
+                        ),
                       ),
                       Platform.isAndroid
                           ? Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8),
                               child: GoogleAuthButton(
-                                  width: 280.0,
-                                  height: 50.0,
-                                  borderWidth: 1.0,
-                                  padding: const EdgeInsets.all(8.0),
-                                  elevation: 2.0,
-                                  borderRadius: 8.0,
-                                  separator: 15.0,
+                                  width: 280,
+                                  height: 50,
+                                  borderWidth: 1,
+                                  padding: const EdgeInsets.all(8),
+                                  elevation: 2,
+                                  borderRadius: 8,
+                                  separator: 15,
                                   borderColor: Colors.black,
                                   onPressed: () async => {
                                         GoogleAuthUtil.signInWithGoogle(
@@ -115,7 +98,7 @@ class SignInPage extends ConsumerWidget {
                             )
                           : Container(),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8),
                         child: SizedBox(
                           width: 280,
                           height: 50,
@@ -130,7 +113,7 @@ class SignInPage extends ConsumerWidget {
                             ),
                             onPressed: () async {
                               await LineAuthUtil.signIn(context)
-                                  .then((_) async => Navigator.pop(context));
+                                  .then((_) => Navigator.pop(context));
                             },
                             icon: Image.asset('assets/images/line.png'),
                             label: const Padding(
@@ -144,7 +127,7 @@ class SignInPage extends ConsumerWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8),
                         child: SizedBox(
                           width: 280,
                           height: 50,

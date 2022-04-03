@@ -10,8 +10,8 @@ part 'weather_model.freezed.dart';
 part 'weather_model.g.dart';
 
 
-WeatherClass weatherFromJson(String str) =>
-    WeatherClass.fromJson(json.decode(str));
+WeatherClass weatherFromJson(Map<String, dynamic> str) =>
+    WeatherClass.fromJson(json.decode(str.toString()) as Map<String, dynamic>);
 
 String weatherToJson(WeatherClass data) => json.encode(data.toJson());
 
@@ -97,7 +97,9 @@ abstract class WeatherElement with _$WeatherElement {
     @required String? description,
   }) = _WeatherElement;
 
-  factory WeatherElement.fromJson(Map<String, dynamic> json) => _$WeatherElementFromJson(json);
+  factory WeatherElement.fromJson(
+    Map<String, dynamic> json,
+    ) => _$WeatherElementFromJson(json);
 }
 
 @freezed

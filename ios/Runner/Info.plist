@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>ja_JP</string>
 	<key>CFBundleDisplayName</key>
 	<string>kiatsu</string>
 	<key>CFBundleExecutable</key>
@@ -12,6 +12,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ja</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>kiatsu</string>
 	<key>CFBundlePackageType</key>
@@ -38,7 +42,7 @@
 	<key>DART_DEFINE_MODE</key>
 	<string>$(DART_DEFINE_MODE)</string>
 	<key>GADApplicationIdentifier</key>
-	<string>$(ADMOB_IDENTIFIER)</string>
+	<string>ca-app-pub-9614978207890633~5275407674</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
@@ -52,11 +56,11 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app uses location to forecast the weather.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>This shit uses this shit!Yes!</string>
+	<string>Need location access for updating nearby friends</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses location to forecast the weather.</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>表示する広告を適切に選択するために使用します。</string>
+	<string>This identifier will be used to deliver personalized ads to you</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
@@ -76,8 +80,6 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

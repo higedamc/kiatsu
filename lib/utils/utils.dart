@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Utils {
-  static Future showSheet(BuildContext context, WidgetBuilder builder) =>
+  Future<void> showSheet(BuildContext context, WidgetBuilder builder) =>
       showModalBottomSheet(
         useRootNavigator: true,
         isDismissible: true,

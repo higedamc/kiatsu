@@ -126,19 +126,19 @@ class SettingPage extends ConsumerWidget {
                             title: 'アカウント管理',
                             tiles: [
                               SettingsTile(
-                                  title: 'アカウント',
-                                  subtitle: (user != null
-                                      ? user.uid.toString()
-                                      : '未登録'),
-                                  leading:
-                                      const Icon(CupertinoIcons.person_solid),
-                                  onPressed: (context) async {
-                                    await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SignInPage()));
-                                  }),
+                                title: 'アカウント',
+                                subtitle: user != null ? user.uid : '未登録',
+                                leading:
+                                    const Icon(CupertinoIcons.person_solid),
+                                onPressed: (context) async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (context) => const SignInPage(),
+                                    ),
+                                  );
+                                },
+                              ),
                               // SettingsTile(
                               //     title: 'アカウント',
                               //     // leading: const Icon(Icons.account_circle_outlined),
@@ -164,7 +164,8 @@ class SettingPage extends ConsumerWidget {
                                   ? SettingsTile(
                                       title: 'サインアウト',
                                       leading: const Icon(CupertinoIcons.eject),
-                                      onPressed: (context) async => showDialog(
+                                      onPressed: (context) async => showDialog<
+                                              Widget>(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
@@ -195,7 +196,7 @@ class SettingPage extends ConsumerWidget {
                                                               try {
                                                                 await Purchases
                                                                     .logOut();
-                                                              } catch (e) {
+                                                              } on Exception catch (e) {
                                                                 if (e == 22) {
                                                                   Navigator.pop(
                                                                       context);
@@ -272,7 +273,7 @@ class SettingPage extends ConsumerWidget {
                                   subtitle: '',
                                   onPressed: (context) async {
                                     if (user == null) {
-                                      showDialog(
+                                      await showDialog<Widget>(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return CustomDialogBox(
@@ -335,21 +336,15 @@ class SettingPage extends ConsumerWidget {
                                   title: flavor == 'dev' ? '環境確認' : 'バージョン',
                                   leading: const Icon(CupertinoIcons.number),
                                   trailing: null,
-                                  subtitle: ('v' +
-                                      (snapshot.data?.version ?? '0.0.0')),
+                                  subtitle: 'v ${snapshot.data?.version}',
                                   onPressed: (context) async {
                                     if (flavor == 'dev') {
                                       await Navigator.pushNamed(
                                           context, '/env');
                                     } else {
-                                      //TODO: クリップボードにバージョンをコピーする挙動に変更
-                                      // final checkResult = await checkFirstRun();
-                                      // ScaffoldMessenger.of(context)
-                                      //     .showSnackBar(SnackBar(
-                                      //         content: Text(
-                                      //             checkResult.toString())));
-                                      await Navigator.pushNamed(
-                                          context, '/env');
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text('何も起きないよ＾q＾')));
                                     }
                                   }),
                             ],
