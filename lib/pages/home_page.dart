@@ -7,6 +7,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/providers/providers.dart';
 import 'package:kiatsu/widget/ad_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -239,15 +240,32 @@ class HomePage extends riv.ConsumerWidget {
                 height: 70,
                 width: double.maxFinite,
                 child: Center(
-                  child: NeumorphicText(
-                    'hPa',
-                    style: const NeumorphicStyle(
-                      depth: 20,
-                      intensity: 1,
-                      color: Colors.black,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.w200, fontSize: 75),
+                  child: riv.Consumer(
+                    builder: (context, watch, child) {
+                      final weatherState =
+                          ref.watch(weatherStateNotifierProvider);
+                      return weatherState.maybeWhen(
+                        initial: () {
+                          Future.delayed(
+                            Duration.zero,
+                            () => submitCityName(context, cityName, ref),
+                          );
+                          return Container();
+                        },
+                        loading: () => Container(),
+                        success: (data) => NeumorphicText(
+                          'hPa',
+                          style: const NeumorphicStyle(
+                            depth: 20,
+                            intensity: 1,
+                            color: Colors.black,
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.w200, fontSize: 75),
+                        ),
+                        orElse: () => Container(),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -396,8 +414,22 @@ class HomePage extends riv.ConsumerWidget {
                                         ),
                                       )),
                   ),
-                  orElse: () => const Center(
-                    child: Text('FETCHING DATA...'),
+                  orElse: () => Center(
+                    child: Column(
+                      children: [
+                        const Center(child: Text('下に引っ張って更新してください')),
+                        Container(
+                          color: Colors.white,
+                          child: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Lottie.asset(
+                              'assets/json/arrow_down_bounce.json',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -414,76 +446,77 @@ class HomePage extends riv.ConsumerWidget {
                   style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w100)),
             ),
-            Consumer(
-              builder: (BuildContext context, value, Widget? child) {
-                final now = DateTime.now();
-                final currentTime = ref.watch(clockProvider);
-                // final List<DateTime> dates = [
-                //   now.add(Duration(seconds: currentTime.second) * -1),
-                //    now.add(Duration(minutes: currentTime.minute) * -1),
-                // ];
-                final date =
-                    now.add(Duration(seconds: currentTime.second) * -5);
-                // final secondsString = DateFormat.s().format(currentTime);
-                // final secondsInt = int.parse(secondsString);
-                // final minutesString = DateFormat.m().format(currentTime);
-                // final minutesInt = int.parse(minutesString);
-                String fromAtNow(DateTime date) {
-                  // final DateTime currentTime = ref.watch(clockProvider);
-                  final difference = DateTime.now().difference(date);
-                  // final Duration difference =
-                  //     DateTime.now().difference(currentTime);
-                  final sec = difference.inSeconds;
+            //TODO: 後で再有効化
+            // Consumer(
+            //   builder: (BuildContext context, value, Widget? child) {
+            //     final now = DateTime.now();
+            //     final currentTime = ref.watch(clockProvider);
+            //     // final List<DateTime> dates = [
+            //     //   now.add(Duration(seconds: currentTime.second) * -1),
+            //     //    now.add(Duration(minutes: currentTime.minute) * -1),
+            //     // ];
+            //     final date =
+            //         now.add(Duration(seconds: currentTime.second) * -5);
+            //     // final secondsString = DateFormat.s().format(currentTime);
+            //     // final secondsInt = int.parse(secondsString);
+            //     // final minutesString = DateFormat.m().format(currentTime);
+            //     // final minutesInt = int.parse(minutesString);
+            //     String fromAtNow(DateTime date) {
+            //       // final DateTime currentTime = ref.watch(clockProvider);
+            //       final difference = DateTime.now().difference(date);
+            //       // final Duration difference =
+            //       //     DateTime.now().difference(currentTime);
+            //       final sec = difference.inSeconds;
 
-                  if (sec >= 60 * 60 * 24) {
-                    return '最終更新 - ${difference.inDays.toString()}日前';
-                  } else if (sec >= 60 * 60) {
-                    return '最終更新 - ${difference.inHours.toString()}時間前';
-                  } else if (sec >= 60) {
-                    return '最終更新 - ${difference.inMinutes.toString()}分前';
-                  } else {
-                    return '最終更新 - $sec秒前';
-                  }
-                }
-                // final difference = dates.map((date) => Text(fromAtNow(date))).toList();
+            //       if (sec >= 60 * 60 * 24) {
+            //         return '最終更新 - ${difference.inDays.toString()}日前';
+            //       } else if (sec >= 60 * 60) {
+            //         return '最終更新 - ${difference.inHours.toString()}時間前';
+            //       } else if (sec >= 60) {
+            //         return '最終更新 - ${difference.inMinutes.toString()}分前';
+            //       } else {
+            //         return '最終更新 - $sec秒前';
+            //       }
+            //     }
+            //     // final difference = dates.map((date) => Text(fromAtNow(date))).toList();
 
-                // final updatedAt = DateTime.now();
-                return Center(
-                  child: Text(
-                    //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
+            //     // final updatedAt = DateTime.now();
+            //     return Center(
+            //       child: Text(
+            //         //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
 
-                    // timeago.format(
-                    //           currentTime,
-                    //           locale: 'ja',
-                    //           allowFromNow: false,
-                    //         ) ==
-                    //         '60秒未満前'
-                    // secondsInt < 60
-                    //     ? '最終更新 - ' +
-                    //         timeago.format(
-                    //           currentTime,
-                    //           locale: 'ja',
-                    //           allowFromNow: false,
-                    //         ) -
-                    //         '前'
-                    //     : '最終更新 - ' +
-                    // //         minutesString + '分前',
-                    // secondsInt <= 60
-                    //     ? '最終更新 - $secondsInt 秒前'
-                    //     : secondsInt >= 60
-                    //         ? '最終更新 - ' + minutesInt.toString() + ' 分前'
-                    //         : '最終更新 - なう',
-                    // currentTime.toString(),
-                    fromAtNow(date),
-                    // style: const NeumorphicStyle(
-                    //   // height: 1, // 10だとちょうど下すれすれで良い感じ
-                    //   color: Colors.black,
-                    // ),
-                    // textStyle: NeumorphicTextStyle(),
-                  ),
-                );
-              },
-            ),
+            //         // timeago.format(
+            //         //           currentTime,
+            //         //           locale: 'ja',
+            //         //           allowFromNow: false,
+            //         //         ) ==
+            //         //         '60秒未満前'
+            //         // secondsInt < 60
+            //         //     ? '最終更新 - ' +
+            //         //         timeago.format(
+            //         //           currentTime,
+            //         //           locale: 'ja',
+            //         //           allowFromNow: false,
+            //         //         ) -
+            //         //         '前'
+            //         //     : '最終更新 - ' +
+            //         // //         minutesString + '分前',
+            //         // secondsInt <= 60
+            //         //     ? '最終更新 - $secondsInt 秒前'
+            //         //     : secondsInt >= 60
+            //         //         ? '最終更新 - ' + minutesInt.toString() + ' 分前'
+            //         //         : '最終更新 - なう',
+            //         // currentTime.toString(),
+            //         fromAtNow(date),
+            //         // style: const NeumorphicStyle(
+            //         //   // height: 1, // 10だとちょうど下すれすれで良い感じ
+            //         //   color: Colors.black,
+            //         // ),
+            //         // textStyle: NeumorphicTextStyle(),
+            //       ),
+            //     );
+            //   },
+            // ),
             Center(
               child: Text(
                 res2,
@@ -502,12 +535,11 @@ class HomePage extends riv.ConsumerWidget {
                 return Center(
                   child: SizedBox(
                     height: currentHeight * 0.6,
-                    child: 
-                    !isPaid
-                    //     ? bannerNotifier.loadBannerAd()
-                    //     :
-                      ?
-                        const AdBanner() : Container(),
+                    child: !isPaid
+                        //     ? bannerNotifier.loadBannerAd()
+                        //     :
+                        ? const AdBanner()
+                        : Container(),
                   ),
                 );
               },
@@ -520,27 +552,35 @@ class HomePage extends riv.ConsumerWidget {
           backgroundColor: Colors.white,
           child: const Text('＾ｑ＾'),
           onPressed: () async {
-
+            await ref
+                              .refresh(weatherStateNotifierProvider.notifier)
+                              .getWeather(cityName);
             try {
               final result = await handlePermission();
               if (result == true) {
                 if (kDebugMode) {
                   print('permission granted');
                 }
-                await Navigator.of(context).pushNamed('/timeline');
+                await Navigator.pushNamed(context, '/timeline');
               } else {
                 if (kDebugMode) {
                   print('permission denied');
                 }
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: const Text('このアプリは位置情報の許可が必須です'),
-                  action: SnackBarAction(
-                      label: '許可',
-                      onPressed: () async {
-                        // await getLocationPermissions();
-                        await Geolocator.openLocationSettings();
-                      }),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('このアプリは位置情報の許可が必須です'),
+                    action: SnackBarAction(
+                        label: '許可',
+                        onPressed: () async {
+                          // await getLocationPermissions();
+                          await Geolocator.openLocationSettings();
+                          //TODO: 一旦ボタンを表示させるために強制天気取得の処理を走らせてるが後で改善させる
+                          await ref
+                              .refresh(weatherStateNotifierProvider.notifier)
+                              .getWeather(cityName);
+                        }),
+                  ),
+                );
               }
             } on PlatformException catch (e) {
               e.code == 'ERROR_ALREADY_REQUESTING_PERMISSIONS'
@@ -549,8 +589,8 @@ class HomePage extends riv.ConsumerWidget {
                       action:
                           SnackBarAction(label: 'OK', onPressed: () async {}),
                     ))
+                  // ignore: avoid_print
                   : print(e);
-              // await Permission.location.request();
             }
           }),
       bottomNavigationBar: BottomAppBar(
@@ -592,7 +632,7 @@ class HomePage extends riv.ConsumerWidget {
                   color: Colors.black,
                 ),
                 onPressed: () async {
-                  await Navigator.of(context).pushNamed('/a');
+                  await Navigator.pushNamed(context, '/a');
                 },
               ),
             ],
