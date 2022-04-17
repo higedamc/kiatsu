@@ -28,7 +28,7 @@ final CollectionReference<Map<String, dynamic>> test =
     users.doc(uid).collection('comments');
 
 class Timeline extends ConsumerWidget {
-  const Timeline({required this.cityName, required Key key}) : super(key: key);
+  const Timeline({this.cityName, Key? key}) : super(key: key);
   
 
   final String? cityName;
@@ -207,7 +207,9 @@ class Timeline extends ConsumerWidget {
               child: IconButton(
                 icon: const Icon(Icons.add, color: Colors.white),
                 onPressed: () async {
-                  print(currentWidth + currentHeight);
+                  if (kDebugMode) {
+                    print(currentWidth + currentHeight);
+                  }
                   // final _editor = TextEditingController();
 
                   await showDialog<Widget>(
@@ -216,29 +218,31 @@ class Timeline extends ConsumerWidget {
                       backgroundColor: Colors.transparent,
                       insetPadding: const EdgeInsets.all(10),
                       child: Stack(
-                        // ignore: deprecated_member_use
-                        overflow: Overflow.visible,
+                        clipBehavior: Clip.none,
                         alignment: Alignment.center,
                         children: <Widget>[
-                          Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
-                            child: TextField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              controller: txtControllerProvider,
-                              cursorWidth: 2,
-                              cursorColor: Colors.grey,
-                              decoration: InputDecoration(
-                                hintText: txtControllerProvider.text.isEmpty
-                                    ? 'テキストを入力してください'
-                                    : '',
-                                border: InputBorder.none,
+                          GestureDetector(
+                            onTap: () => FocusScope.of(context).unfocus(),
+                            child: Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                              ),
+                              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                              child: TextField(
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                controller: txtControllerProvider,
+                                cursorWidth: 2,
+                                cursorColor: Colors.grey,
+                                decoration: InputDecoration(
+                                  hintText: txtControllerProvider.text.isEmpty
+                                      ? 'テキストを入力してください'
+                                      : '',
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
                           ),
@@ -262,6 +266,7 @@ class Timeline extends ConsumerWidget {
                                     return Container();
                                   },
                                   success: (data) => ElevatedButton(
+                                    key: UniqueKey(),
                                     // style: ButtonStyle(
                                     //   backgroundColor: MaterialStateProperty.all(Colors.black38),
                                     // ),
@@ -289,7 +294,7 @@ class Timeline extends ConsumerWidget {
                                             ),
                                           ),
                                         );
-                                        Navigator.pop(context);
+                                        // Navigator.pop(context);
                                       } else {
                                         final mapData = <String, dynamic>{
                                           'comment': txtControllerProvider.text,
@@ -313,10 +318,10 @@ class Timeline extends ConsumerWidget {
                                           'comment': txtControllerProvider.text,
                                           'createdAt': createdAt,
                                           'userId': currentUser!.uid,
-                                          'location': data.name.toString(),
+                                          'location': data.name,
                                           'commentId': documentId,
                                         });
-                                        Navigator.pop(context);
+                                        // Navigator.pop(context);
                                       }
                                     },
                                     child: neu.NeumorphicText(
