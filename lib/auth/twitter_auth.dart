@@ -35,11 +35,10 @@ class TwitterAuthUtil {
     // final _user = FirebaseAuth.instance.currentUser;
     final createdAt =  DateTime.now();
     final newUser = FirebaseAuth.instance;
-    var count = 0;
     
     final firebaseStore = FirebaseFirestore.instance;
     final users = firebaseStore.collection('users');
-    final dynamic authResult = await _twitter.login().then((session) {
+    await _twitter.login().then((session) {
       final twitterAuthCredential = TwitterAuthProvider.credential(
         accessToken: session.authToken.toString(),
          secret: session.authTokenSecret.toString());
@@ -75,6 +74,7 @@ class TwitterAuthUtil {
             content: Text('ログインに失敗しました。'),),);
           });
     });
+    return null;
     // return authResult;
   }
 }
