@@ -444,6 +444,8 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - geocoding (1.0.5):
+    - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
   - Google-Mobile-Ads-SDK (8.11.0):
@@ -585,6 +587,7 @@ DEPENDENCIES:
   - flutter_line_sdk (from `.symlinks/plugins/flutter_line_sdk/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - geocoding (from `.symlinks/plugins/geocoding/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -657,6 +660,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  geocoding:
+    :path: ".symlinks/plugins/geocoding/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
   google_mobile_ads:
@@ -712,6 +717,7 @@ SPEC CHECKSUMS:
   flutter_line_sdk: b4936acf03e5db45a412d79276f3483e4f27f0c7
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
+  geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   Google-Mobile-Ads-SDK: be2192b51b74d74a6ed70590c2e8275412f1b71e
   google_mobile_ads: a2f8b901601401bf7e691b4224d5992e9a37599a
