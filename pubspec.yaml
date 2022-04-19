@@ -1,6 +1,6 @@
 name: kiatsu
 description: An application for meteoropathy
-
+publish_to: none
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
@@ -73,7 +73,6 @@ dependencies:
   settings_ui:
     git:
       url: https://github.com/higedamc/flutter-settings-ui.git
-      publish_to: none
   share: ^2.0.1
   shared_preferences: ^2.0.5
   sign_in_with_apple: ^3.0.0
