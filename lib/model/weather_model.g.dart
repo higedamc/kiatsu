@@ -12,7 +12,7 @@ _$_WeatherClass _$$_WeatherClassFromJson(Map<String, dynamic> json) =>
           ? null
           : Coord.fromJson(json['coord'] as Map<String, dynamic>),
       weather: (json['weather'] as List<dynamic>?)
-          ?.map((dynamic e) => WeatherElement.fromJson(e as Map<String, dynamic>),)
+          ?.map((dynamic e) => WeatherElement.fromJson(e as Map<String, dynamic>))
           .toList(),
       base: json['base'] as String?,
       main: json['main'] == null

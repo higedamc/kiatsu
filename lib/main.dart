@@ -24,6 +24,7 @@ import 'package:kiatsu/pages/sign_in_page.dart';
 import 'package:kiatsu/pages/subscriptions_page.dart';
 import 'package:kiatsu/pages/test_widget.dart';
 import 'package:kiatsu/pages/timeline.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
@@ -70,7 +71,21 @@ void main() {
     final result = await checkFirstRun();
     if (result == true) {
       await AppTrackingTransparency.requestTrackingAuthorization();
+                await [
+                Permission.location,
+                Permission.locationAlways,
+                Permission.locationWhenInUse,
+              ].request();
     }
+    // if (await Permission.locationWhenInUse.serviceStatus.isDisabled ||
+    //          await Permission.location.serviceStatus.isDisabled ||
+    //          await Permission.locationAlways.serviceStatus.isDisabled) {
+    //           await [
+    //             Permission.location,
+    //             Permission.locationAlways,
+    //             Permission.locationWhenInUse,
+    //           ].request();
+    //         }
     timeago.setLocaleMessages('ja', const MyCustomMessages());
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -85,6 +100,7 @@ void main() {
 
     await LineSDK.instance.setup(dotenv.env['LINE_CHANNEL_ID'].toString());
     // await PlatformViewsService.synchronizeToNativeViewHierarchy(false);
+    // await Permission.locationWhenInUse.serviceStatus.isEnabled;
     runApp(
       ProviderScope(
         child: MyApp(

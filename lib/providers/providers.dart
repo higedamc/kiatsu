@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/api_state.dart';
 import 'package:kiatsu/model/entitlement.dart';
+import 'package:kiatsu/providers/location_notifier.dart';
 import 'package:kiatsu/providers/puchase_notifier.dart';
 import 'package:kiatsu/providers/revenuecat.dart';
 import 'package:kiatsu/providers/weather_notifier.dart';
+import 'package:kiatsu/repository/location_repository.dart';
 import 'package:kiatsu/repository/permission_repository.dart';
 import 'package:kiatsu/repository/weather_repository.dart';
 import 'package:http/http.dart' as http;
@@ -14,15 +16,25 @@ import 'package:kiatsu/utils/clock_ticker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 final weatherClientProvider = Provider.autoDispose<WeatherRepository>(
-    (ref) => WeatherRepositoryImpl(http.Client()));
+  (ref) => WeatherRepository(http.Client()),
+);
+final locationClientProvider =
+    Provider.autoDispose<LocationRepository>((ref) => LocationRepositoryImpl());
 
-final permissionGetter = Provider.autoDispose<PermissionRepository>((ref) =>
-    PermissionRepositoryImpl());
+final permissionGetter = Provider.autoDispose<PermissionRepository>(
+  (ref) => PermissionRepositoryImpl(),
+);
 
 // 依存ソース
 final weatherStateNotifierProvider =
     StateNotifierProvider.autoDispose<WeatherStateNotifer, WeatherClassState>(
-        (ref) => WeatherStateNotifer(ref.watch(weatherClientProvider)));
+  (ref) => WeatherStateNotifer(ref.watch(weatherClientProvider)),
+);
+
+final locationStateNotifierProvider =
+    StateNotifierProvider.autoDispose<LocationStateNotifer, LocationState>(
+  (ref) => LocationStateNotifer(ref.watch(locationClientProvider)),
+);
 
 //backup use for textEditingController
 final cityNameProvider = StateProvider.autoDispose<String>((ref) => '');
