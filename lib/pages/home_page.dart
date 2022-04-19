@@ -41,9 +41,15 @@ class HomePage extends riv.ConsumerWidget {
 
   final String res2;
 
+  Future<void> getInitLocation(BuildContext context, riv.WidgetRef ref) async {
+    await ref.read(locationStateNotifierProvider.notifier).getMyLocation();
+  }
+
   Future<void> submitCityName(
-      BuildContext context, String? cityName, riv.WidgetRef ref) async {
-    await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName!);
+      String? cityName, riv.WidgetRef ref) async {
+    await ref
+        .read(weatherStateNotifierProvider.notifier)
+        .getWeather(cityName!, ref);
   }
 
   Future<String> fromAtNow(DateTime date) async {
@@ -121,6 +127,8 @@ class HomePage extends riv.ConsumerWidget {
 
   @override
   Widget build(BuildContext context, riv.WidgetRef ref) {
+    final locationState = ref.watch(locationStateNotifierProvider);
+    final cityName = ref.watch(cityNameProvider);
     // final currentTime = ref.watch(clockProvider);
     final size = MediaQuery.of(context).size;
     // print(size);
@@ -128,7 +136,6 @@ class HomePage extends riv.ConsumerWidget {
     final height = size.height;
     // final currentWidth = width * 1 / 2;
     final currentHeight = height * 1 / 2;
-    final cityName = ref.watch(cityNameProvider);
     return Scaffold(
       appBar: NeumorphicAppBar(
         centerTitle: true,
@@ -139,8 +146,13 @@ class HomePage extends riv.ConsumerWidget {
           final weatherState = ref.watch(weatherStateNotifierProvider);
           return weatherState.maybeWhen(
               initial: () {
-                Future.delayed(Duration.zero,
-                    () => submitCityName(context, cityName, ref));
+                Future.delayed(
+                  Duration.zero,
+                  () async {
+                    await getInitLocation(context, ref);
+                    await submitCityName(cityName, ref);
+                  },
+                );
 
                 return Container();
               },
@@ -182,7 +194,7 @@ class HomePage extends riv.ConsumerWidget {
           // ref.read(purchaseManagerProvider);
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
-              .getWeather(cityName);
+              .getWeather(cityName, ref);
           final updatedAt = DateTime.now();
           await fromAtNow(updatedAt);
           // (context as Element).markNeedsBuild();
@@ -207,12 +219,12 @@ class HomePage extends riv.ConsumerWidget {
                       return weatherState.maybeWhen(
                         initial: () {
                           Future.delayed(
-                              Duration.zero,
-                              () => submitCityName(
-                                    context,
-                                    cityName,
-                                    ref,
-                                  ));
+                            Duration.zero,
+                            () => submitCityName(
+                              cityName,
+                              ref,
+                            ),
+                          );
                           return Container();
                         },
                         loading: () => Container(),
@@ -248,7 +260,7 @@ class HomePage extends riv.ConsumerWidget {
                         initial: () {
                           Future.delayed(
                             Duration.zero,
-                            () => submitCityName(context, cityName, ref),
+                            () => submitCityName(cityName, ref),
                           );
                           return Container();
                         },
@@ -279,7 +291,6 @@ class HomePage extends riv.ConsumerWidget {
                     Future.delayed(
                       Duration.zero,
                       () => submitCityName(
-                        context,
                         cityName,
                         ref,
                       ),
@@ -359,7 +370,7 @@ class HomePage extends riv.ConsumerWidget {
                   initial: () {
                     Future.delayed(
                       Duration.zero,
-                      () => submitCityName(context, cityName.toString(), ref),
+                      () => submitCityName(cityName, ref),
                     );
                     return Container();
                   },
@@ -552,9 +563,17 @@ class HomePage extends riv.ConsumerWidget {
           backgroundColor: Colors.white,
           child: const Text('＾ｑ＾'),
           onPressed: () async {
-            await ref
-                              .refresh(weatherStateNotifierProvider.notifier)
-                              .getWeather(cityName);
+            // if (await Permission.locationWhenInUse.serviceStatus.isEnabled ||
+            //     await Permission.location.serviceStatus.isEnabled ||
+            //     await Permission.locationAlways.serviceStatus.isEnabled ||
+            //     ) {
+            //   await [
+            //     Permission.location,
+            //     Permission.locationAlways,
+            //     Permission.locationWhenInUse,
+            //   ].request();
+
+            // }
             try {
               final result = await handlePermission();
               if (result == true) {
@@ -566,19 +585,17 @@ class HomePage extends riv.ConsumerWidget {
                 if (kDebugMode) {
                   print('permission denied');
                 }
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text('このアプリは位置情報の許可が必須です'),
                     action: SnackBarAction(
-                        label: '許可',
-                        onPressed: () async {
-                          // await getLocationPermissions();
-                          await Geolocator.openLocationSettings();
-                          //TODO: 一旦ボタンを表示させるために強制天気取得の処理を走らせてるが後で改善させる
-                          await ref
-                              .refresh(weatherStateNotifierProvider.notifier)
-                              .getWeather(cityName);
-                        }),
+                      label: '許可',
+                      onPressed: () async {
+                        //TODO: 一旦ボタンを表示させるために強制天気取得の処理を走らせてるが後で改善させる
+                        await Geolocator.openLocationSettings();
+                      },
+                    ),
                   ),
                 );
               }

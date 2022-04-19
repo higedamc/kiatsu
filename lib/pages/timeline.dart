@@ -29,14 +29,14 @@ final CollectionReference<Map<String, dynamic>> test =
 
 class Timeline extends ConsumerWidget {
   const Timeline({this.cityName, Key? key}) : super(key: key);
-  
 
   final String? cityName;
 
-
   Future<void> submitCityName(
       BuildContext context, String cityName, WidgetRef ref) async {
-    await ref.read(weatherStateNotifierProvider.notifier).getWeather(cityName);
+    await ref
+        .read(weatherStateNotifierProvider.notifier)
+        .getWeather(cityName, ref);
   }
 
   @override
@@ -207,10 +207,15 @@ class Timeline extends ConsumerWidget {
               child: IconButton(
                 icon: const Icon(Icons.add, color: Colors.white),
                 onPressed: () async {
+                  //refreshを走らせないとボタンが表示されないため走らせている
+                  await ref
+                      .refresh(
+                        weatherStateNotifierProvider.notifier,
+                      )
+                      .getWeather(cityName!, ref);
                   if (kDebugMode) {
                     print(currentWidth + currentHeight);
                   }
-                  // final _editor = TextEditingController();
 
                   await showDialog<Widget>(
                     context: context,
@@ -230,7 +235,8 @@ class Timeline extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(15),
                                 color: Colors.white,
                               ),
-                              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 50, 20, 20),
                               child: TextField(
                                 keyboardType: TextInputType.multiline,
                                 maxLines: null,
@@ -303,7 +309,6 @@ class Timeline extends ConsumerWidget {
                                           'location': data.name.toString(),
                                         };
 
-                                        
                                         final docRef = await users
                                             .doc(currentUser?.uid)
                                             .collection('comments')

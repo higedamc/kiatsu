@@ -1,6 +1,6 @@
 name: kiatsu
 description: An application for meteoropathy
-
+publish_to: none
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
@@ -12,7 +12,7 @@ description: An application for meteoropathy
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Androidのバージョン指定。前者がVersionNameで後者がVersionCode
-version: 1.0.0+606
+version: 1.0.3+643
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -48,6 +48,7 @@ dependencies:
   fluttertoast: ^8.0.8
   font_awesome_flutter: ^9.0.0
   freezed_annotation: ^1.0.0
+  geocoding: ^2.0.4
   geolocator: ^8.0.0
   getwidget: ^2.0.5
   google_mobile_ads: ^1.0.0
@@ -72,7 +73,6 @@ dependencies:
   settings_ui:
     git:
       url: https://github.com/higedamc/flutter-settings-ui.git
-      publish_to: none
   share: ^2.0.1
   shared_preferences: ^2.0.5
   sign_in_with_apple: ^3.0.0
@@ -124,7 +124,6 @@ flutter:
     - assets/json/arrow_down_bounce.json
     - assets/
     - .env
-
 # To add assets to your application, add an assets section, like this:
 #   assets:
 #  - images/a_dot_burr.jpeg
