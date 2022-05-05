@@ -249,7 +249,7 @@ class SettingPage extends ConsumerWidget {
                             title: '開発者を応援する🥺',
                             tiles: [
                               SettingsTile(
-                                  title: 'フィードバック送信',
+                                  title: '報告',
                                   leading: const Icon(CupertinoIcons.smiley),
                                   subtitle: '',
                                   // leading: neu.NeumorphicIcon(Icons.bug_report),
@@ -318,7 +318,22 @@ class SettingPage extends ConsumerWidget {
                               //           SnackBar(
                               //               content: Text(checkResult.toString())));
                               //     }),
-                              SettingsTile(
+                              
+                                  SettingsTile(
+                                  title: '利用規約',
+                                  leading: const Icon(CupertinoIcons.book),
+                                  trailing: null,
+                                  // subtitle: '押',
+                                  onPressed: (context) async {
+                                    //   final checkResult = await checkFirstRun();
+                                    //   ScaffoldMessenger.of(context).showSnackBar(
+                                    //       SnackBar(
+                                    //           content: Text(checkResult.toString())));
+                                    await launch(dotenv
+                                        .env['KIATSU_TERMS_OF_USE']
+                                        .toString());
+                                  }),
+                                  SettingsTile(
                                   title: 'プライバシーポリシー',
                                   leading: const Icon(CupertinoIcons.book),
                                   trailing: null,
