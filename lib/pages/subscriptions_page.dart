@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
@@ -9,6 +11,7 @@ import 'package:kiatsu/providers/providers.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
@@ -17,6 +20,7 @@ final CollectionReference users = firebaseStore.collection('users');
 
 class SubscriptionsPage extends ConsumerWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);
+  static const flavor = String.fromEnvironment('flavor');
   bool get isLoading => false;
 
   @override
@@ -27,9 +31,11 @@ class SubscriptionsPage extends ConsumerWidget {
       final offerings = await PurchaseApi.fetchOffers(all: true);
 
       if (offerings.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('該当するプランが見つかりませんでした'),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('該当するプランが見つかりませんでした'),
+          ),
+        );
       } else {
         final packages = offerings
             .map((offer) => offer.availablePackages)
@@ -40,8 +46,9 @@ class SubscriptionsPage extends ConsumerWidget {
           context,
           (context) => PaywallWidget(
             packages: packages,
-            title: 'THANK YOUUUUUU!!!',
-            description: '今後色々なアンロックできる特典を追加していく予定です！',
+            termsOfUse: '利用規約',
+            privacyPolicy: 'プライバシーポリシー',
+            description: '広告削除及び追加機能がアンロックできるようになります',
             onClickedPackage: (package) async {
               await PurchaseApi.purchasePackage(package);
               await users.doc(user?.uid).set({'isPurchased': true});
@@ -76,10 +83,10 @@ class SubscriptionsPage extends ConsumerWidget {
             // buildEntitlement(_purchaser.entitlement),
             isNoAds
                 ? buildEntitlementIcon(text: '有料プラン利用中', icon: Icons.done)
-                : buildEntitlementIcon(
-                    text: '無料プラン利用中',
-                    icon: Icons.lock,
-                  ),
+                    : buildEntitlementIcon(
+                        text: '無料プラン利用中',
+                        icon: Icons.lock,
+                      ),
             const SizedBox(height: 32),
             isNoAds
                 ? ElevatedButton(
