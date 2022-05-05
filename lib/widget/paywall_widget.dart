@@ -1,19 +1,25 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaywallWidget extends StatefulWidget {
-  final String title;
-  final String description;
-  final List<Package> packages;
-  final ValueChanged<Package> onClickedPackage;
-
   const PaywallWidget({
     Key? key,
-    required this.title,
+    required this.termsOfUse,
+    required this.privacyPolicy,
     required this.description,
     required this.packages,
     required this.onClickedPackage,
   }) : super(key: key);
+
+  final String termsOfUse;
+  final String privacyPolicy;
+  final String description;
+  
+  final List<Package> packages;
+  final ValueChanged<Package> onClickedPackage;
 
   @override
   _PaywallWidgetState createState() => _PaywallWidgetState();
@@ -29,15 +35,64 @@ class _PaywallWidgetState extends State<PaywallWidget> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
-              Text(
-                widget.title,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RichText(
+                text: TextSpan(
+                  text: widget.termsOfUse,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      await launch(
+                        dotenv.env['KIATSU_TERMS_OF_USE'].toString(),
+                      );
+                    },
+                ),
+              ),
+              RichText(
+                text: const TextSpan(
+                  text: '・',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                 
+                ),
+              ),
+              
+              RichText(
+                text: TextSpan(
+                  text: widget.privacyPolicy,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      await launch(
+                        dotenv.env['KIATSU_PRIVACY_POLICY'].toString(),
+                      );
+                    },
+                ),
+              ),
+                ],
               ),
               const SizedBox(height: 16),
               Text(
                 widget.description,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 18),
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
               ),
               const SizedBox(height: 16),
               buildPackages(),
