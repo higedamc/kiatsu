@@ -17,7 +17,7 @@ class PaywallWidget extends StatefulWidget {
   final String termsOfUse;
   final String privacyPolicy;
   final String description;
-  
+
   final List<Package> packages;
   final ValueChanged<Package> onClickedPackage;
 
@@ -39,51 +39,49 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   RichText(
-                text: TextSpan(
-                  text: widget.termsOfUse,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
+                    text: TextSpan(
+                      text: widget.termsOfUse,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          await launch(
+                            dotenv.env['KIATSU_TERMS_OF_USE'].toString(),
+                          );
+                        },
+                    ),
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
-                      await launch(
-                        dotenv.env['KIATSU_TERMS_OF_USE'].toString(),
-                      );
-                    },
-                ),
-              ),
-              RichText(
-                text: const TextSpan(
-                  text: '・',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
+                  RichText(
+                    text: const TextSpan(
+                      text: '・',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                 
-                ),
-              ),
-              
-              RichText(
-                text: TextSpan(
-                  text: widget.privacyPolicy,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
+                  RichText(
+                    text: TextSpan(
+                      text: widget.privacyPolicy,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          await launch(
+                            dotenv.env['KIATSU_PRIVACY_POLICY'].toString(),
+                          );
+                        },
+                    ),
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
-                      await launch(
-                        dotenv.env['KIATSU_PRIVACY_POLICY'].toString(),
-                      );
-                    },
-                ),
-              ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -115,27 +113,42 @@ class _PaywallWidgetState extends State<PaywallWidget> {
   Widget buildPackage(BuildContext context, Package package) {
     final product = package.product;
 
-    return Card(
-      color: Theme.of(context).cardColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Theme(
-        data: ThemeData.light(),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(8),
-          title: Text(
-            product.title,
-            style: const TextStyle(fontSize: 18),
+    return Column(
+      children: [
+        Card(
+          color: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          subtitle: Text(product.description),
-          trailing: Text(
-            product.priceString,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          child: Theme(
+            data: ThemeData.light(),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(8),
+              title: Text(
+                product.title,
+                style: const TextStyle(fontSize: 20),
+              ),
+              subtitle: Text(product.description),
+              trailing: Text(
+                product.title.contains('Monthly')
+                    ? '${product.priceString} / 月'
+                    : '${product.priceString} / 年',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              onTap: () => widget.onClickedPackage(package),
+            ),
           ),
-          onTap: () => widget.onClickedPackage(package),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: product.title.contains('Monthly') ? null : const Text(
+             '(You can save 33%!)',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      ],
     );
   }
 }
