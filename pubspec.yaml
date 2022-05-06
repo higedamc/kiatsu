@@ -86,7 +86,7 @@ dependencies:
   tutorial_coach_mark: ^1.2.1
   url_launcher: ^6.0.20
   webview_flutter: ^3.0.0
-  wiredash: ^0.7.1
+  wiredash: ^1.0.0-alpha.7
 
 dev_dependencies:
   build_runner: ^2.1.7
