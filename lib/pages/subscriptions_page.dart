@@ -48,7 +48,7 @@ class SubscriptionsPage extends ConsumerWidget {
             packages: packages,
             termsOfUse: '利用規約',
             privacyPolicy: 'プライバシーポリシー',
-            description: '広告削除及び追加機能がアンロックできるようになります',
+            description: '広告削除及びお気持ち投稿の場での追加機能（未リリース、ベータ版を含む）がアンロックできるようになります。',
             onClickedPackage: (package) async {
               await PurchaseApi.purchasePackage(package);
               await users.doc(user?.uid).set({'isPurchased': true});
