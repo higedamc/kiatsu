@@ -95,6 +95,14 @@ class Timeline extends ConsumerWidget {
                                     },
                                   ),
                               ],
+                              secondaryActions: <Widget>[
+                                IconSlideAction(
+                                  caption: '通報',
+                                  color: Colors.blueGrey,
+                                  icon: Icons.report,
+                                  onTap: () => null,)
+
+                              ],
                               child: Container(
                                 margin: const EdgeInsets.all(10.0),
                                 padding: const EdgeInsets.all(2.0),

@@ -17,7 +17,6 @@ import 'package:url_launcher/url_launcher.dart';
 class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var count = 0;
@@ -130,7 +129,7 @@ class SignInPage extends ConsumerWidget {
                         padding: const EdgeInsets.all(8),
                         child: SizedBox(
                           width: 280,
-                          height: 50,
+                          height: 70,
                           child: Center(
                               child: RichText(
                             text: TextSpan(children: [
@@ -138,19 +137,38 @@ class SignInPage extends ConsumerWidget {
                                   text: 'kiatsu の利用を開始することで、',
                                   style: TextStyle(color: Colors.black)),
                               TextSpan(
-                                text: 'プライバシーポリシー',
+                                text: '利用規約',
                                 style: const TextStyle(
-                                    color: Colors.black,
-                                    decoration: TextDecoration.underline),
+                                  color: Colors.black,
+                                  decoration: TextDecoration.underline,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () async {
                                     await launch(
-                                        'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3');
+                                        'https://little-gourd-a5f.notion.site/a499f7c4ea1f473da3a00a2837c04be3');
                                   },
                               ),
                               const TextSpan(
-                                  text: 'に同意したことになります。',
-                                  style: TextStyle(color: Colors.black)),
+                                text: '及び、',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: 'プライバシーポリシー',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    await launch(
+                                      'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3',
+                                    );
+                                  },
+                              ),
+                              const TextSpan(
+                                  text: 'に同意したものとみなします。',
+                                  style: TextStyle(
+                                    color: Colors.black,),),
                             ]),
                           )),
                         ),
