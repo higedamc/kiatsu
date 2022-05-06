@@ -1347,7 +1347,7 @@ packages:
       name: wiredash
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0+1"
+    version: "0.7.1"
   xdg_directories:
     dependency: transitive
     description:
