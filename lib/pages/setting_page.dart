@@ -21,6 +21,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -249,12 +250,23 @@ class SettingPage extends ConsumerWidget {
                             title: '開発者を応援する🥺',
                             tiles: [
                               SettingsTile(
-                                title: '違反報告・フィードバック',
+                                //TODO: 後で戻す
+                                // title: '違反報告・フィードバック',
+                                title: 'Supabaseにメッセージ送信',
                                 leading: const Icon(CupertinoIcons.smiley),
                                 trailing: null,
                                 // subtitle: '',
                                 // leading: neu.NeumorphicIcon(Icons.bug_report),
                                 onPressed: (context) async {
+                                  final response = await Supabase.instance.client.from('messages').insert([
+                                    {
+                                      'message': 'test',
+                                      'user_id': user != null ? user.uid : '未登録',
+                                      'created_at': DateTime.now().toUtc(),
+                                    }
+                                  ]).execute();
+                                  if (response.error != null)
+                                  print('SUCCESS!');
                                   // Wiredash.of(context)!.setUserProperties(
                                   //   userId: user?.uid,
                                   // );
