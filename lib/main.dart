@@ -124,6 +124,9 @@ class MyApp extends StatelessWidget {
       secret: dotenv.env['WIREDASH_SECRET'].toString(),
       navigatorKey: _navigatorKey,
       options: WiredashOptionsData(
+        // bugReportButton: false,
+        // featureRequestButton: false,
+        // praiseButton: false,
         customTranslations: {
           // plに日本語の翻訳をオーバーライド
           const Locale.fromSubtags(languageCode: 'pl'):
