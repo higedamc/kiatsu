@@ -2,6 +2,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';  // LINE SDK追加
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -52,7 +53,7 @@ class AuthManager with ChangeNotifier {
   }
   
   void setAuth(String uid) {
-    const secret = 'wSaQ++TBdVQ2e6tA895SWQuMsOefEt2dbHsNlTu8c3/GLdsTo5XiKdHKPxsRqqtjgVdLV3AuYnFKyc7d409eiQ==';
+    final secret = dotenv.env['SUPABASE_JWT_SECRET'];
     try {
       final jwt = JWT(
         {
@@ -61,7 +62,7 @@ class AuthManager with ChangeNotifier {
         }
       );
       final token = jwt.sign(
-        SecretKey(secret),
+        SecretKey(secret!),
         expiresIn: const Duration(hours: 1),
       );
       _supabaseAuth.client.auth.setAuth(token);
