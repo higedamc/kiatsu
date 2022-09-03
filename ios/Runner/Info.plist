@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ja_JP</string>
 	<key>CFBundleDisplayName</key>
@@ -15,6 +17,7 @@
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>ja</string>
+		<string>en</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>kiatsu</string>
@@ -38,7 +41,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>666</string>
 	<key>DART_DEFINE_MODE</key>
 	<string>$(DART_DEFINE_MODE)</string>
 	<key>GADApplicationIdentifier</key>
@@ -49,6 +52,8 @@
 	<array>
 		<string>lineauth2</string>
 	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>12.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
