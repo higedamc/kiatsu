@@ -255,18 +255,32 @@ class SettingPage extends ConsumerWidget {
                                 title: 'Supabaseにメッセージ送信',
                                 leading: const Icon(CupertinoIcons.smiley),
                                 trailing: null,
-                                // subtitle: '',
+                                subtitle: null,
                                 // leading: neu.NeumorphicIcon(Icons.bug_report),
                                 onPressed: (context) async {
-                                  final response = await Supabase.instance.client.from('messages').insert([
-                                    {
-                                      'message': 'test',
-                                      'user_id': user != null ? user.uid : '未登録',
-                                      'created_at': DateTime.now().toUtc(),
-                                    }
-                                  ]).execute();
-                                  if (response.error != null)
-                                  print('SUCCESS!');
+                                  // await Supabase.initialize(
+                                  //   url: dotenv.env['SUPABASE_URL'],
+                                  //   anonKey: dotenv.env['SUPABASE_ANNON_KEY'],
+                                  //   debug: true, // optional
+                                  // );
+                                  final dateTime =
+                                      DateTime.now().toUtc();
+                                  final data = <String, dynamic>{
+                                    'uid': user!.uid,
+                                    'title': 'FUCK ME!',
+                                    'created_at': dateTime.toString(),
+                                  };
+                                  
+                                  final response = await Supabase
+                                      .instance.client
+                                      .from('messages')
+                                      .upsert(data)
+                                      .execute();
+                                  if (response.error == null)
+                                    print('SUCCESS!');
+                                  else {
+                                    print(response.error!.message);
+                                  }
                                   // Wiredash.of(context)!.setUserProperties(
                                   //   userId: user?.uid,
                                   // );
@@ -274,7 +288,8 @@ class SettingPage extends ConsumerWidget {
                                   //   const Duration(seconds: 1),
                                   //   () async => Wiredash.of(context).show(),
                                   // );
-                                  Wiredash.of(context).show();
+                                  //TODO: 後で戻す
+                                  // Wiredash.of(context).show();
                                 },
                               ),
                               // snapshot.hasData
