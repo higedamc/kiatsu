@@ -63,24 +63,26 @@ void main() {
           throw ArgumentError('Not available flavor');
       }
     }
+
     await Firebase.initializeApp(
       options: firebaseOptions(),
     );
+
     await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL'],
-    anonKey: dotenv.env['SUPABASE_ANNON_KEY'],
-    debug: true, // optional
-  );
+      url: dotenv.env['SUPABASE_URL'],
+      anonKey: dotenv.env['SUPABASE_ANON_KEY'],
+    );
+
     await Purchases.setDebugLogsEnabled(kDebugMode);
     await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString());
     final result = await checkFirstRun();
     if (result == true) {
       await AppTrackingTransparency.requestTrackingAuthorization();
-                await [
-                Permission.location,
-                Permission.locationAlways,
-                Permission.locationWhenInUse,
-              ].request();
+      await [
+        Permission.location,
+        Permission.locationAlways,
+        Permission.locationWhenInUse,
+      ].request();
     }
     // if (await Permission.locationWhenInUse.serviceStatus.isDisabled ||
     //          await Permission.location.serviceStatus.isDisabled ||
