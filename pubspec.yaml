@@ -82,6 +82,7 @@ dependencies:
   social_auth_buttons: ^2.0.0-nullsafety.1
   splash_screen_view: ^3.0.0
   subscription_holder: ^2.1.1
+  supabase_flutter: ^0.3.3
   the_apple_sign_in: ^1.1.1
   timeago: ^3.0.2
   tutorial_coach_mark: ^1.2.1
