@@ -14,7 +14,9 @@ import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/model/dev_id.dart';
 import 'package:kiatsu/pages/custom_dialog_box.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/widget/report_dialog_box.dart';
 import 'package:lottie/lottie.dart';
+import 'package:wiredash/wiredash.dart';
 
 //TODO: Firestore関連の処理のRiverpod化
 //TODO: リアクション機能実装したい
@@ -36,7 +38,7 @@ class Timeline extends ConsumerWidget {
       BuildContext context, String cityName, WidgetRef ref) async {
     await ref
         .read(weatherStateNotifierProvider.notifier)
-        .getWeather(cityName, ref);
+        .getWeather(cityName, ref, context);
   }
 
   @override
@@ -53,12 +55,13 @@ class Timeline extends ConsumerWidget {
     final currentWidth = width / 100;
     final currentHeight = height / 100;
     final txtControllerProvider = ref.watch(textControllerStateProvider);
+    final blockListProvider = ref.watch(blockIdCollectionStreamProvider);
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('お気持ち投稿の場'),
         centerTitle: true,
       ),
-      body: ref.watch(collectionStreamProvider).when(
+      body: ref.watch(commentsCollectionStreamProvider).when(
             data: (data) {
               if (kDebugMode) {
                 print(data.length);
@@ -68,97 +71,235 @@ class Timeline extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return authManager.isLoggedIn
                       ? GestureDetector(
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            elevation: 10,
-                            child: Slidable(
-                              actionPane: const SlidableDrawerActionPane(),
-                              actionExtentRatio: 0.25,
-                              actions: <Widget>[
-                                if (data[index]['userId']
-                                        ?.contains(currentUser?.uid) ==
-                                    true)
-                                  IconSlideAction(
-                                    caption: '削除',
-                                    color: Colors.red[700],
-                                    icon: Icons.delete,
-                                    onTap: () async {
-                                      await test
-                                          .doc(
-                                            data[index]['commentId'].toString(),
-                                          )
-                                          .delete();
-                                      // });
-                                      // });
-                                    },
-                                  ),
-                              ],
-                              secondaryActions: <Widget>[
-                                IconSlideAction(
-                                  caption: '通報',
-                                  color: Colors.blueGrey,
-                                  icon: Icons.report,
-                                  onTap: () => null,)
-
-                              ],
-                              child: Container(
-                                margin: const EdgeInsets.all(10.0),
-                                padding: const EdgeInsets.all(2.0),
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      //TODO: ここなんかもっと上手い書き方ないですかね（）
-                                      // TODO: 課金した際に自分の名前の投稿がわかる機能追加
-                                      leading: isNoAds == true &&
-                                              (data[index]['userId']?.contains(
-                                                    currentUser?.uid,
-                                                  ) ==
-                                                  true)
-                                          ? const Text(
-                                              'Me',
-                                              style: TextStyle(
-                                                fontWeight: neu.FontWeight.bold,
-                                                color: Colors.pink,
-                                              ),
+                          // ignore: avoid_dynamic_calls
+                          child: Visibility(
+                            visible: !(data[index]['isHidden'] == true),
+                            // visible: !(blockListProvider.value?.contains(currentUser?.uid) ?? false),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              elevation: 10,
+                              child: Slidable(
+                                actionPane: const SlidableDrawerActionPane(),
+                                actionExtentRatio: 0.25,
+                                actions: <Widget>[
+                                  if (data[index]['userId']
+                                          ?.contains(currentUser?.uid) ==
+                                      true)
+                                    IconSlideAction(
+                                      caption: '削除',
+                                      color: Colors.red[700],
+                                      icon: Icons.delete,
+                                      onTap: () async {
+                                        await test
+                                            .doc(
+                                              data[index]['commentId']
+                                                  .toString(),
                                             )
-                                          : data[index]['userId'] ==
-                                                      DevIds().dev1 ||
-                                                  data[index]['userId'] ==
-                                                      DevIds().dev2 ||
-                                                  data[index]['userId'] ==
-                                                      DevIds().dev3 ||
-                                                  data[index]['userId'] ==
-                                                      DevIds().dev4
-                                              ? const Text(
-                                                  'Dev',
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                        neu.FontWeight.bold,
+                                            .delete();
+                                        // });
+                                        // });
+                                      },
+                                    ),
+                                ],
+                                secondaryActions: <Widget>[
+                                  IconSlideAction(
+                                    caption: '通報・ブロック',
+                                    color: Colors.blueGrey,
+                                    icon: Icons.block,
+                                    onTap: () => showDialog<Widget>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        // final width =
+                                        //     MediaQuery.of(context).size.width;
+                                        // final height =
+                                        //     MediaQuery.of(context).size.height;
+                                        return AlertDialog(
+                                            backgroundColor: Colors.transparent,
+                                            contentPadding: EdgeInsets.zero,
+                                            elevation: 0,
+                                            // title: Center(child: Text("Evaluation our APP")),
+                                            content: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          10))),
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      InkWell(
+                                                        child: const Center(
+                                                          child: Text('違反報告'),
+                                                        ),
+                                                        onTap: () async =>
+                                                            Wiredash.of(context)
+                                                                .show(),
+                                                      ),
+                                                      const Divider(),
+                                                      InkWell(
+                                                          child: const Center(
+                                                            child: Text(
+                                                              'ブロック',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          onTap: () async {
+                                                            //TODO: ここにブロックの処理を書く
+                                                            // await test
+                                                            //     .doc(
+                                                            //       data[index][
+                                                            //               'isHidden']
+                                                            //           .toString(),
+                                                            //     )
+                                                            //     .update({});
+                                                            final mapData = <
+                                                                String,
+                                                                dynamic>{
+                                                              'comment':
+                                                                  txtControllerProvider
+                                                                      .text,
+                                                              'createdAt':
+                                                                  createdAt,
+                                                              'userId':
+                                                                  currentUser!
+                                                                      .uid
+                                                            };
+
+                                                            final docRef = await users
+                                                                .doc(currentUser
+                                                                    ?.uid)
+                                                                .collection(
+                                                                    'comments')
+                                                                .add(mapData);
+                                                            final documentId =
+                                                                docRef.id;
+
+                                                            await users
+                                                                .doc(currentUser
+                                                                    ?.uid)
+                                                                .collection(
+                                                                    'comments')
+                                                                .doc(documentId)
+                                                                .update({
+                                                                  'isHidden': true
+                                                            });
+
+                                                            Future.delayed(
+                                                              Duration.zero,
+                                                              () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                            );
+                                                          }),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                  ),
+                                                  child: InkWell(
+                                                    child: const Center(
+                                                        child: Text('キャンセル')),
+                                                    onTap: () =>
+                                                        Navigator.pop(context),
                                                   ),
                                                 )
-                                              : null,
+                                              ],
+                                            ));
+                                      },
+                                    ),
+                                    // showDialog<Widget>(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) {
+                                    //     return ReportDialogBox(
+                                    //       title: '',
+                                    //       descriptions: 'この機能は近日公開予定です♡',
+                                    //       text: '押',
+                                    //       key: UniqueKey(),
+                                    //     );
+                                    //   },
+                                    // ),
+                                  ),
+                                ],
+                                child: Container(
+                                  margin: const EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        //TODO: ここなんかもっと上手い書き方ないですかね（）
+                                        // TODO: 課金した際に自分の名前の投稿がわかる機能追加
+                                        leading: isNoAds == true &&
+                                                (data[index]['userId']
+                                                        ?.contains(
+                                                      currentUser?.uid,
+                                                    ) ==
+                                                    true)
+                                            ? const Text(
+                                                'Me',
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      neu.FontWeight.bold,
+                                                  color: Colors.pink,
+                                                ),
+                                              )
+                                            : data[index]['userId'] ==
+                                                        DevIds().dev1 ||
+                                                    data[index]['userId'] ==
+                                                        DevIds().dev2
+                                                ? const Text(
+                                                    'Dev',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          neu.FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : null,
 
-                                      title: Text(
-                                        data[index]['comment'].toString(),
-                                        style: const TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.black,
+                                        title: Text(
+                                          data[index]['comment'].toString(),
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          (data[index]['location'].toString() ==
+                                                      'null' ||
+                                                  data[index]['location']
+                                                          .toString() ==
+                                                      'Cupertino')
+                                              ? '電子の海'
+                                              : data[index]['location']
+                                                  .toString(),
                                         ),
                                       ),
-                                      subtitle: Text(
-                                        (data[index]['location'].toString() ==
-                                                    'null' ||
-                                                data[index]['location']
-                                                        .toString() ==
-                                                    'Cupertino')
-                                            ? '電子の海'
-                                            : data[index]['location']
-                                                .toString(),
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -220,7 +361,7 @@ class Timeline extends ConsumerWidget {
                       .refresh(
                         weatherStateNotifierProvider.notifier,
                       )
-                      .getWeather(cityName!, ref);
+                      .getWeather(cityName!, ref, context);
                   if (kDebugMode) {
                     print(currentWidth + currentHeight);
                   }

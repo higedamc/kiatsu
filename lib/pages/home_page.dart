@@ -46,10 +46,10 @@ class HomePage extends riv.ConsumerWidget {
   }
 
   Future<void> submitCityName(
-      String? cityName, riv.WidgetRef ref) async {
+      String? cityName, riv.WidgetRef ref, BuildContext context) async {
     await ref
         .read(weatherStateNotifierProvider.notifier)
-        .getWeather(cityName!, ref);
+        .getWeather(cityName!, ref, context);
   }
 
   Future<String> fromAtNow(DateTime date) async {
@@ -150,7 +150,7 @@ class HomePage extends riv.ConsumerWidget {
                   Duration.zero,
                   () async {
                     await getInitLocation(context, ref);
-                    await submitCityName(cityName, ref);
+                    await submitCityName(cityName, ref, context);
                   },
                 );
 
@@ -194,7 +194,7 @@ class HomePage extends riv.ConsumerWidget {
           // ref.read(purchaseManagerProvider);
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
-              .getWeather(cityName, ref);
+              .getWeather(cityName, ref, context);
           final updatedAt = DateTime.now();
           await fromAtNow(updatedAt);
           // (context as Element).markNeedsBuild();
@@ -223,6 +223,7 @@ class HomePage extends riv.ConsumerWidget {
                             () => submitCityName(
                               cityName,
                               ref,
+                              context
                             ),
                           );
                           return Container();
@@ -260,7 +261,7 @@ class HomePage extends riv.ConsumerWidget {
                         initial: () {
                           Future.delayed(
                             Duration.zero,
-                            () => submitCityName(cityName, ref),
+                            () => submitCityName(cityName, ref, context),
                           );
                           return Container();
                         },
@@ -293,6 +294,7 @@ class HomePage extends riv.ConsumerWidget {
                       () => submitCityName(
                         cityName,
                         ref,
+                        context
                       ),
                     );
                     return Container();
@@ -370,7 +372,7 @@ class HomePage extends riv.ConsumerWidget {
                   initial: () {
                     Future.delayed(
                       Duration.zero,
-                      () => submitCityName(cityName, ref),
+                      () => submitCityName(cityName, ref, context),
                     );
                     return Container();
                   },

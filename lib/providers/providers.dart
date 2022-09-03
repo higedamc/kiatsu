@@ -52,13 +52,22 @@ final authStateChangesProvider = StreamProvider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges();
 });
 
-final collectionStreamProvider = StreamProvider.autoDispose((ref) {
+final commentsCollectionStreamProvider = StreamProvider.autoDispose((ref) {
   final stream = FirebaseFirestore.instance
       .collectionGroup('comments')
       .orderBy('createdAt', descending: true)
       .snapshots();
   return stream
       .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+});
+
+final blockIdCollectionStreamProvider = StreamProvider.autoDispose((ref) {
+  final stream = FirebaseFirestore.instance
+  .collectionGroup('blocks')
+  .snapshots();
+  return stream
+  .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+
 });
 
 // final AutoDisposeFutureProvider<String?> documentIdProvider = FutureProvider.autoDispose((ref) async {
