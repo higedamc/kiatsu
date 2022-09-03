@@ -28,6 +28,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:wiredash/wiredash.dart';
 
@@ -62,10 +63,14 @@ void main() {
           throw ArgumentError('Not available flavor');
       }
     }
-
     await Firebase.initializeApp(
       options: firebaseOptions(),
     );
+    await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL'],
+    anonKey: dotenv.env['SUPABASE_ANNON_KEY'],
+    debug: true, // optional
+  );
     await Purchases.setDebugLogsEnabled(kDebugMode);
     await Purchases.setup(dotenv.env['REVENUECAT_SECRET_KEY'].toString());
     final result = await checkFirstRun();
