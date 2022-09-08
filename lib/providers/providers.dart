@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/api_state.dart';
@@ -14,6 +15,8 @@ import 'package:kiatsu/repository/weather_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/utils/clock_ticker.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../pages/timeline.dart';
 
 final weatherClientProvider = Provider.autoDispose<WeatherRepository>(
   (ref) => WeatherRepository(http.Client()),
@@ -62,13 +65,43 @@ final commentsCollectionStreamProvider = StreamProvider.autoDispose((ref) {
 });
 
 final blockIdCollectionStreamProvider = StreamProvider.autoDispose((ref) {
-  final stream = FirebaseFirestore.instance
-  .collectionGroup('blocks')
-  .snapshots();
-  return stream
-  .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  final userId = FirebaseAuth.instance.currentUser?.uid;
+  // String dummy = '';
+  // final zako = ref.watch(commentsCollectionStreamProvider.select((value) => value.asData?.value == 'userId'));
 
+  final stream = FirebaseFirestore.instance
+      .collectionGroup('users')
+      // .orderBy('isBlocked', descending: false)
+      // .snapshots();
+      .where('isBlockedBy'
+      // , arrayContains: userId
+      , whereNotIn: ['dummy'])
+      .snapshots();
+  return stream.map((snapshot) =>
+      snapshot.docs.map((doc) => doc.data().containsValue(userId)).toList());
 });
+
+final blockedOrNotProvider = StateProvider.autoDispose<bool>((ref) {
+  final zako = ref.watch(blockIdCollectionStreamProvider.select((value) {
+    if (value.asData?.value == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }),
+  );
+
+  if (zako == true) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+// final blockedOrNotProvider = StateProvider.autoDispose<bool>((ref) {
+//   final test = ref.read(blockIdCollectionStreamProvider);
+//   final test2 = test.
+// });
 
 // final AutoDisposeFutureProvider<String?> documentIdProvider = FutureProvider.autoDispose((ref) async {
 //   final docId = FirebaseFirestore.instance.doc('comments').snapshots().map((snapshot) => snapshot.id);
