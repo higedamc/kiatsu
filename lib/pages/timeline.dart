@@ -96,9 +96,11 @@ class Timeline extends ConsumerWidget {
 
                             // ),
                             //TODO: とりあえず投稿単位ではブロックできる
-                            visible: isBlocked == false
+                            visible:
+                            //  isBlocked == false
                             // ,
-                             && data[index]['isHidden'] == false,
+                            //  &&
+                              data[index]['isBlockedBy'].toString().contains(uid!) == false,
                             // visible: !(users.),
                             // visible: !(blockListProvider.value
                             //         ?.contains(data[index]['userId']) ??
@@ -294,10 +296,10 @@ class Timeline extends ConsumerWidget {
                                                             final getDocRefs = await docRefs.get();
                                                             final Map<String, dynamic> baka = getDocRefs.data() as Map<String, dynamic>;
                                                             final result = baka['isBlockedBy'] as List<dynamic>;
-                                                            final result2 = result.where((element) => element != 'dummy').toList();
+                                                            final result2 = result.where((dynamic e) => e != 'dummy').toList();
                                                             result2.isNotEmpty ? log('This shit is blocked!') : log('Aint blocked yet');
                                                             await docRefs.collection('comments').doc(data[index]['commentId'].toString()).update({
-                                                              'isHidden': true,
+                                                              'isBlockedBy': FieldValue.arrayUnion(foo),
                                                             });
 
 
@@ -589,7 +591,7 @@ class Timeline extends ConsumerWidget {
                                           'commentId': documentId,
                                           'isHidden': false
                                         });
-                                        // Navigator.pop(context);
+                                        Navigator.pop(context);
                                       }
                                     },
                                     child: neu.NeumorphicText(
