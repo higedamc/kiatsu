@@ -41,7 +41,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>666</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>DART_DEFINE_MODE</key>
 	<string>$(DART_DEFINE_MODE)</string>
 	<key>GADApplicationIdentifier</key>
