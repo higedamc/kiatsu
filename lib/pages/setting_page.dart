@@ -217,7 +217,9 @@ class SettingPage extends ConsumerWidget {
                                                     child: const Text('OK')),
                                               ],
                                             );
-                                          }))
+                                          },
+                                          ),
+                                          )
                                   : const SettingsTile(
                                       enabled: false,
                                       // title: '',
@@ -227,6 +229,70 @@ class SettingPage extends ConsumerWidget {
 
                                       // }
                                     ),
+                                    user != null
+                                  ? SettingsTile(
+                                      title: 'アカウント削除',
+                                      leading: const Icon(CupertinoIcons.delete),
+                                      onPressed: (context) async => showDialog<
+                                              Widget>(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'アカウントを削除すると全ての機能にアクセスできなくなり、購入情報も削除されます。'),
+                                              content:
+                                                  const Text('本当に削除しますか？'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child:
+                                                        const Text('Cancel')),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      // await FirebaseAuth.instance.signOut();
+                                                      (!Platform.isIOS)
+                                                          ? await FirebaseAuth
+                                                              .instance
+                                                              .signOut()
+                                                          // .then((_)
+                                                          //  => exit(0))
+                                                          : FirebaseAuth
+                                                              .instance
+                                                              .currentUser!
+                                                              .delete()
+                                                              .then((_) async {
+                                                              try {
+                                                                await Purchases
+                                                                    .logOut();
+                                                              } on Exception catch (e) {
+                                                                if (e == 22) {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                }
+                                                              }
+
+                                                              Navigator.pop(
+                                                                  context);
+                                                            });
+                                                    },
+                                                    child: const Text('OK', style: TextStyle(color: Colors.red),),),
+                                              ],
+                                            );
+                                          },
+                                          ),
+                                          )
+                                  : const SettingsTile(
+                                      enabled: false,
+                                      // title: '',
+                                      // leading: null,
+                                      // trailing: null,
+                                      // onPressed: (_) async {
+
+                                      // }
+                                    ),
+
 
                               //         SettingsTile(
                               //           title: '権限許可',
