@@ -1,13 +1,18 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiatsu/api/purchase_api.dart';
+import 'package:kiatsu/controller/purchase_controller.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/providers/scaffold_messanger_provider.dart';
 import 'package:kiatsu/utils/utils.dart';
 import 'package:kiatsu/widget/paywall_widget.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -27,6 +32,7 @@ class SubscriptionsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authStateChangesProvider).asData?.value;
     final isNoAds = ref.watch(userProvider.select((s) => s.isNoAdsUser));
+    final products = ref.watch(purchaseProvider.select((s) => s.products));
     Future<void> fetchOffers() async {
       final offerings = await PurchaseApi.fetchOffers(all: true);
 
@@ -37,6 +43,7 @@ class SubscriptionsPage extends ConsumerWidget {
           ),
         );
       } else {
+        //TODO: 従来のRevenueCat
         final packages = offerings
             .map((offer) => offer.availablePackages)
             .expand((pair) => pair)
@@ -50,8 +57,16 @@ class SubscriptionsPage extends ConsumerWidget {
             privacyPolicy: 'プライバシーポリシー',
             description: '広告削除及びお気持ち投稿の場での追加機能（未リリース、ベータ版を含む）がアンロックできるようになります。',
             onClickedPackage: (package) async {
-              await PurchaseApi.purchasePackage(package);
-              await users.doc(user?.uid).set({'isPurchased': true});
+              final errorCode = await PurchaseApi.purchasePackage(package);
+              if (errorCode != null) {
+                ref
+                    .read(scaffoldMessengerProvider)
+                    .currentState
+                    ?.showAfterRemoveSnackBar(
+                      message: errorCode.toString(),
+                    );
+              }
+
               Navigator.pop(context);
             },
           ),
@@ -83,10 +98,10 @@ class SubscriptionsPage extends ConsumerWidget {
             // buildEntitlement(_purchaser.entitlement),
             isNoAds
                 ? buildEntitlementIcon(text: '有料プラン利用中', icon: Icons.done)
-                    : buildEntitlementIcon(
-                        text: '無料プラン利用中',
-                        icon: Icons.lock,
-                      ),
+                : buildEntitlementIcon(
+                    text: '無料プラン利用中',
+                    icon: Icons.lock,
+                  ),
             const SizedBox(height: 32),
             isNoAds
                 ? ElevatedButton(
@@ -126,57 +141,65 @@ class SubscriptionsPage extends ConsumerWidget {
                       //The receipt is missing
                     ),
                     onPressed: () async {
-                      final restoredInfo =
-                          await Purchases.restoreTransactions();
-                      if (kDebugMode) {
-                        print(restoredInfo);
-                      }
-                      if (restoredInfo.entitlements.all['pro'] != null &&
-                          restoredInfo.entitlements.all['pro']!.isActive) {
-                        // 復元完了のポップアップ
-                        await showDialog<int>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('確認'),
-                              content: const Text('復元が完了しました。'),
-                              actions: <Widget>[
-                                ElevatedButton(
-                                  child: const Text(
-                                    'OK',
-                                    style: TextStyle(color: Colors.black),
+                      //TODO: 処理が雑なのでエラーハンドリングの処理を定義する
+                      try {
+                        final restoredInfo =
+                            await Purchases.restoreTransactions();
+                        if (kDebugMode) {
+                          print(restoredInfo);
+                        }
+                        if (restoredInfo.entitlements.all['pro'] != null &&
+                            restoredInfo.entitlements.all['pro']!.isActive) {
+                          // 復元完了のポップアップ
+                          await showDialog<int>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('確認'),
+                                content: const Text('復元が完了しました。'),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text(
+                                      'OK',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(1);
+                                    },
                                   ),
-                                  onPressed: () async {
-                                    Navigator.of(context).pop(1);
-                                  },
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          // 購入情報が見つからない場合
+                          await showDialog<int>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('確認'),
+                                content: const Text(
+                                  '過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。',
                                 ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        // 購入情報が見つからない場合
-                        await showDialog<int>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('確認'),
-                              content: const Text(
-                                '過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。',
-                              ),
-                              actions: <Widget>[
-                                ElevatedButton(
-                                  child: const Text('OK'),
-                                  onPressed: () => Navigator.of(context).pop(1),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text('OK'),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(1),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      } on PlatformException catch (e) {
+                        final errorCode = PurchasesErrorHelper.getErrorCode(e);
+                        log(errorCode.toString());
                       }
-                    }),
+                    },
+                  ),
             const SizedBox(height: 32),
           ],
         ),
