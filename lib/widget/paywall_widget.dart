@@ -143,7 +143,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
         Padding(
           padding: const EdgeInsets.all(8),
           child: product.title.contains('月間') ? null : const Text(
-             '33%お得です☆(ゝω･)v',
+             '15%お得です☆(ゝω･)v',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18),
           ),
