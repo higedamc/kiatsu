@@ -163,3 +163,7 @@ ios/Flutter/DartDefines.xcconfig/ios/Runner.xcodeproj/project.pbxproj
 /ios/fastlane/ExportOptions-dev.plist
 ios/Flutter/DartDefines.xcconfig
 /ios/fastlane/.envrc
+android/app/src/main/res/mipmap-xhdpi
+ios/Configuration.storekit
+ios/StoreKitTestCertificate.cer
+ios/Flutter/DartDefines.xcconfig
