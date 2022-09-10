@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -38,10 +39,37 @@ class AppleAuthUtil {
   /// サインアウト
   void signOut() => FirebaseAuth.instance.signOut();
 
+  void deleteAccount() => FirebaseAuth.instance.currentUser!.delete();
+
   /// サインイン
   Future<User?> signIn(BuildContext context, WidgetRef ref) async {
     final credential = await signInWithApple(context, ref);
     return credential!.user;
+  }
+
+  static Future<AuthCredential?> getAppleOAuthCredential(
+      BuildContext context) async {
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce!);
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      webAuthenticationOptions: WebAuthenticationOptions(
+        clientId: dotenv.env['FIREBASE_AUTH_CLIENT_ID']!,
+        redirectUri: Uri.parse(
+          'https://us-central1-apple-auth-server.cloudfunctions.net/hige',
+        ),
+      ),
+      nonce: nonce,
+    );
+    final oAuthCredential = OAuthProvider('apple.com').credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+      rawNonce: rawNonce,
+    );
+    return oAuthCredential;
   }
 
   // TODO: サインインがうまくいくか (Firebaseに反映されるか) 実機で検証する
@@ -49,6 +77,9 @@ class AppleAuthUtil {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final createdAt = DateTime.now();
+    final firebaseStore = FirebaseFirestore.instance;
+    final users = firebaseStore.collection('users');
     var count = 0;
 
     final auth = FirebaseAuth.instance;
@@ -81,9 +112,13 @@ class AppleAuthUtil {
       final uid = authResult.user?.uid;
       final providerData = authResult.user?.providerData;
       final firebaseUser = authResult.user;
-      await firebaseUser?.updateDisplayName(displayName);
-      await firebaseUser?.updateEmail(email.toString());
-      await firebaseUser?.updatePhotoURL(photoUrl);
+      final setData = <String, dynamic>{
+        'createdAt': createdAt.toIso8601String(),
+        'authProvider': 'apple.com',
+      };
+      await users
+          .doc(authResult.user!.uid)
+          .set(setData, SetOptions(merge: true));
       if (kDebugMode) {
         print(
           'サインインされました: uid: $uid displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser',
