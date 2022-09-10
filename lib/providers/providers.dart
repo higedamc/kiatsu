@@ -64,39 +64,72 @@ final commentsCollectionStreamProvider = StreamProvider.autoDispose((ref) {
       .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
 });
 
-final blockIdCollectionStreamProvider = StreamProvider.autoDispose((ref) {
-  final userId = FirebaseAuth.instance.currentUser?.uid;
-  // String dummy = '';
-  // final zako = ref.watch(commentsCollectionStreamProvider.select((value) => value.asData?.value == 'userId'));
+// final blockIdCollectionStreamProvider = StreamProvider.autoDispose((ref) {
+//   final userId = FirebaseAuth.instance.currentUser?.uid;
+//   // String dummy = '';
+//   // final zako = ref.watch(commentsCollectionStreamProvider.select((value) => value.asData?.value == 'userId'));
 
-  final stream = FirebaseFirestore.instance
-      .collectionGroup('users')
-      // .orderBy('isBlocked', descending: false)
-      // .snapshots();
-      .where('isBlockedBy'
-      // , arrayContains: userId
-      , whereNotIn: ['dummy'])
-      .snapshots();
-  return stream.map((snapshot) =>
-      snapshot.docs.map((doc) => doc.data().containsValue(userId)).toList());
-});
+//   final stream = FirebaseFirestore.instance.collectionGroup('users')
+//       // .orderBy('isBlocked', descending: false)
+//       // .snapshots();
+//       // .where(
+//       //     'isDeletedUser', isEqualTo: true,)
+//           .snapshots();
+//   return stream.map((snapshot) =>
+//       snapshot.docs.map<dynamic>((doc) => doc.data().containsValue('true')).toList());
+// });
 
-final blockedOrNotProvider = StateProvider.autoDispose<bool>((ref) {
-  final zako = ref.watch(blockIdCollectionStreamProvider.select((value) {
-    if (value.asData?.value == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }),
-  );
+// final blockedOrNotProvider = StateProvider.autoDispose<bool>((ref) {
+//   final zako = ref.watch(
+//     blockIdCollectionStreamProvider.select((value) {
+//       if (value.asData?.value == null) {
+//         return false;
+//       } else {
+//         return true;
+//       }
+//     }),
+//   );
 
-  if (zako == true) {
-    return true;
-  } else {
-    return false;
-  }
-});
+//   if (zako == true) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// });
+
+// final isCurrentUserBlockedProvider =
+//     FutureProvider.autoDispose<bool>((ref) async {
+//   final userId = FirebaseAuth.instance.currentUser?.uid;
+//   final CollectionReference deletedUsers = firebaseStore.collection('users');
+//   final test = await deletedUsers.doc(currentUser?.uid).get();
+//   final dynamic deletedUser = await test.get(FieldPath.fromString('isDeletedUser'));
+//   if (userId == null) {
+//     return false;
+//   } 
+//   else if (deletedUser == true) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// });
+
+// final isCurrentUserblockedOrNotProvider = StateProvider.autoDispose<bool>((ref) {
+//   final zako = ref.watch(
+//     isCurrentUserBlockedProvider.select((value) {
+//       if (value.asData?.value == false) {
+//         return false;
+//       } else {
+//         return true;
+//       }
+//     }),
+//   );
+
+//   if (zako == true) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// });
 
 // final blockedOrNotProvider = StateProvider.autoDispose<bool>((ref) {
 //   final test = ref.read(blockIdCollectionStreamProvider);
