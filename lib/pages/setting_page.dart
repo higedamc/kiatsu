@@ -99,6 +99,8 @@ class SettingPage extends ConsumerWidget {
     final currentWidth = width / 100;
     final currentHeight = height / 100;
     final user = ref.watch(authStateChangesProvider).asData?.value;
+    final authManager = ref.watch(authManagerProvider);
+    final deleteUserInfo = ref.read(userProvider);
     String? pass = dotenv.env['TWITTER_PASSWORD'];
     return Scaffold(
       // key: scaffoldMessengerKey,
@@ -164,62 +166,69 @@ class SettingPage extends ConsumerWidget {
                                   ? SettingsTile(
                                       title: 'サインアウト',
                                       leading: const Icon(CupertinoIcons.eject),
-                                      onPressed: (context) async => showDialog<
-                                              Widget>(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'サインアウトすると特定の機能にアクセスできなくなります'),
-                                              content:
-                                                  const Text('本当にサインアウトしますか？'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child:
-                                                        const Text('Cancel')),
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      // await FirebaseAuth.instance.signOut();
-                                                      (!Platform.isIOS)
-                                                          ? await FirebaseAuth
-                                                              .instance
-                                                              .signOut()
-                                                          // .then((_)
-                                                          //  => exit(0))
-                                                          : FirebaseAuth
-                                                              .instance
-                                                              .signOut()
-                                                              .then((_) async {
-                                                              try {
-                                                                await Purchases
-                                                                    .logOut();
-                                                              } on Exception catch (e) {
-                                                                if (e == 22) {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                }
-                                                              }
-                                                              // final purchaserInfo = await Purchases.getPurchaserInfo();
-                                                              // print(purchaserInfo);
-                                                              // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
+                                      onPressed: (context) async =>
+                                          showDialog<Widget>(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                'サインアウトすると特定の機能にアクセスできなくなります。'),
+                                            content:
+                                                const Text('本当にサインアウトしますか？'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text('Cancel')),
+                                              TextButton(
+                                                  onPressed: () async {
+                                                    await authManager.signOut();
+                                                    await Navigator.pushNamed(context, '/onbo');
+                                                    // await FirebaseAuth.instance.signOut();
+                                                    // (!Platform.isIOS)
+                                                    //     ? await FirebaseAuth
+                                                    //         .instance
+                                                    //         .signOut()
+                                                        // .then((_)
+                                                        //  => exit(0))
+                                                        // :
+                                                        //  authManager
+                                                        //     .deleteAccount(
+                                                        //         context, ref)
+                                                        //     .then((_) async {
+                                                        //     try {
+                                                        //       await Purchases
+                                                        //           .logOut();
+                                                        //     } on Exception catch (e) {
+                                                        //       if (e == 22) {
+                                                        //         Navigator.pop(
+                                                        //             context);
+                                                        //       }
+                                                        //     }
+                                                            // ScaffoldMessenger.of(context).showSnackBar(
+                                                            //     const SnackBar(
+                                                            //         content: Text('サインアウトしました')));
+                                                            // final purchaserInfo = await Purchases.getPurchaserInfo();
+                                                            // print(purchaserInfo);
+                                                            // (purchaserInfo.entitlements.active.containsKey(Coins.removeAdsIOS)) ?
 
-                                                              // // if (purchaserInfo != null) {
-                                                              //    null : await Purchases.logOut();
-                                                              // // }
+                                                            // // if (purchaserInfo != null) {
+                                                            //    null : await Purchases.logOut();
+                                                            // // }
 
-                                                              Navigator.pop(
-                                                                  context);
-                                                            });
-                                                    },
-                                                    child: const Text('OK')),
-                                              ],
-                                            );
-                                          },
-                                          ),
-                                          )
+                                                            // Navigator.pop(
+                                                            //     context);
+                                                            // await Navigator.pushNamed(context, '/delete');
+                                                          // });
+                                                  },
+                                                  child: const Text('OK'),
+                                                  ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    )
                                   : const SettingsTile(
                                       enabled: false,
                                       // title: '',
@@ -229,60 +238,14 @@ class SettingPage extends ConsumerWidget {
 
                                       // }
                                     ),
-                                    user != null
+                              user != null
                                   ? SettingsTile(
                                       title: 'アカウント削除',
-                                      leading: const Icon(CupertinoIcons.delete),
-                                      onPressed: (context) async => showDialog<
-                                              Widget>(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'アカウントを削除すると全ての機能にアクセスできなくなり、購入情報も削除されます。'),
-                                              content:
-                                                  const Text('本当に削除しますか？'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child:
-                                                        const Text('Cancel')),
-                                                TextButton(
-                                                    onPressed: () async {
-                                                      // await FirebaseAuth.instance.signOut();
-                                                      (!Platform.isIOS)
-                                                          ? await FirebaseAuth
-                                                              .instance
-                                                              .signOut()
-                                                          // .then((_)
-                                                          //  => exit(0))
-                                                          : FirebaseAuth
-                                                              .instance
-                                                              .currentUser!
-                                                              .delete()
-                                                              .then((_) async {
-                                                              try {
-                                                                await Purchases
-                                                                    .logOut();
-                                                              } on Exception catch (e) {
-                                                                if (e == 22) {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                }
-                                                              }
-
-                                                              Navigator.pop(
-                                                                  context);
-                                                            });
-                                                    },
-                                                    child: const Text('OK', style: TextStyle(color: Colors.red),),),
-                                              ],
-                                            );
-                                          },
-                                          ),
-                                          )
+                                      leading:
+                                          const Icon(CupertinoIcons.delete),
+                                      onPressed: (context) async =>
+                                          Navigator.pushNamed(context, '/delete')
+                                    )
                                   : const SettingsTile(
                                       enabled: false,
                                       // title: '',
@@ -292,7 +255,6 @@ class SettingPage extends ConsumerWidget {
 
                                       // }
                                     ),
-
 
                               //         SettingsTile(
                               //           title: '権限許可',
