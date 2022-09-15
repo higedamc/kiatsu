@@ -10,6 +10,7 @@ import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
+import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/pages/timeline.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +23,7 @@ class SignInPage extends ConsumerWidget {
     var count = 0;
     final auth = FirebaseAuth.instance;
     final now = auth.currentUser;
+    final isNoAds = ref.watch(userProvider.select((s) => s.isNoAdsUser));
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('アカウントページ'),
@@ -131,52 +133,63 @@ class SignInPage extends ConsumerWidget {
                           width: 280,
                           height: 70,
                           child: Center(
-                              child: RichText(
-                            text: TextSpan(children: [
-                              const TextSpan(
-                                  text: 'kiatsu の利用を開始することで、',
-                                  style: TextStyle(color: Colors.black)),
-                              TextSpan(
-                                text: '利用規約',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    await launch(
-                                        'https://little-gourd-a5f.notion.site/a499f7c4ea1f473da3a00a2837c04be3');
-                                  },
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                      text: 'kiatsu の利用を開始することで、',
+                                      style: TextStyle(color: Colors.black)),
+                                  TextSpan(
+                                    text: '利用規約',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        await launch(
+                                            'https://little-gourd-a5f.notion.site/a499f7c4ea1f473da3a00a2837c04be3');
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    text: '及び、',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: 'プライバシーポリシー',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        await launch(
+                                          'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3',
+                                        );
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    text: 'に同意したものとみなします。',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const TextSpan(
-                                text: '及び、',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              TextSpan(
-                                text: 'プライバシーポリシー',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    await launch(
-                                      'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3',
-                                    );
-                                  },
-                              ),
-                              const TextSpan(
-                                  text: 'に同意したものとみなします。',
-                                  style: TextStyle(
-                                    color: Colors.black,),),
-                            ]),
-                          )),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 )
-              : const Center(child: Text('認証済')),
+              : Center(
+                  child: Column(
+                    children: const [
+                      Text('認証済'),
+                    ],
+                  ),
+                ),
         ],
       ),
     );
