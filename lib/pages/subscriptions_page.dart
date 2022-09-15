@@ -126,7 +126,23 @@ class SubscriptionsPage extends ConsumerWidget {
                     ),
                     onPressed: () async {
                       await fetchOffers();
-                    }),
+                    },
+                  ),
+                  const SizedBox(height: 32),
+            isNoAds
+                ? ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                      primary: Colors.black,
+                    ),
+                    onPressed: () async =>
+                                    Navigator.pushNamed(context, '/icon'),
+                    child: const Text(
+                      '他の機能を見る',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )
+                : const Center(),
             const SizedBox(height: 32),
             isNoAds
                 ? const Center()

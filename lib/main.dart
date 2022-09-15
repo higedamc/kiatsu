@@ -18,6 +18,7 @@ import 'package:kiatsu/pages/account_deletion_page.dart';
 import 'package:kiatsu/pages/check_env_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
+import 'package:kiatsu/pages/icon_selection_page.dart';
 import 'package:kiatsu/pages/notification_page.dart';
 import 'package:kiatsu/pages/onboarding_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
@@ -164,6 +165,7 @@ class MyApp extends StatelessWidget {
           '/onbo': (BuildContext context) => const OnboardingPage(),
           '/env': (BuildContext context) => const CheckEnvPage(),
           '/delete': (BuildContext context) => const AccountDeletionPage(),
+          '/icon': (BuildContext conttext) => const IconSelectionPage(),
         },
         home: firebaseAuth.currentUser != null
             ? splashScreen
