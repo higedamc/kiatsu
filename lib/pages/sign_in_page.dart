@@ -39,6 +39,8 @@ class SignInPage extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AppleAuthButton(
+                          buttonColor: Colors.white,
+                          splashColor: Colors.white,
                           width: 280,
                           height: 50,
                           borderWidth: 1,
@@ -58,6 +60,8 @@ class SignInPage extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TwitterAuthButton(
+                          buttonColor: Colors.white,
+                          splashColor: Colors.white,
                           width: 280,
                           height: 50,
                           borderWidth: 1,
@@ -105,8 +109,11 @@ class SignInPage extends ConsumerWidget {
                           height: 50,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.green[600],
-                              onPrimary: Colors.white,
+                              backgroundColor: Colors.green[600],
+                              disabledForegroundColor:
+                                  Colors.transparent.withOpacity(0.38),
+                              disabledBackgroundColor:
+                                  Colors.transparent.withOpacity(0.12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
