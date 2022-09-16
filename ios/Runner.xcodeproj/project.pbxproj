@@ -16,7 +16,6 @@
 		943B905128D444C400305945 /* icon-face@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 943B904F28D444C300305945 /* icon-face@2x.png */; };
 		943B905228D444C400305945 /* icon-face@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 943B905028D444C300305945 /* icon-face@3x.png */; };
 		943E975327D8BD03000A62B7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 943E975227D8BD03000A62B7 /* StoreKit.framework */; };
-		945457F728D4A98800136332 /* retrieve_dart_defines.sh in Resources */ = {isa = PBXBuildFile; fileRef = 944E7C9A27D6462A008084AF /* retrieve_dart_defines.sh */; };
 		947F9B4228D4160B00346A3F /* icon-model@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 945FE1E528D409500071F405 /* icon-model@3x.png */; };
 		947F9B4428D4162700346A3F /* icon-model@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 945FE1E228D4094F0071F405 /* icon-model@2x.png */; };
 		94A0980427F76D0200F89A6E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94A0980627F76D0200F89A6E /* InfoPlist.strings */; };
@@ -249,7 +248,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				945457F728D4A98800136332 /* retrieve_dart_defines.sh in Resources */,
 				943B905128D444C400305945 /* icon-face@2x.png in Resources */,
 				943B905228D444C400305945 /* icon-face@3x.png in Resources */,
 				9420890427D51AF900ED3DA4 /* LaunchScreen.storyboard in Resources */,
