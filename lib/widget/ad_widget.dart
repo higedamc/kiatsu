@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -54,8 +53,8 @@ BannerAd newAdBanner(AdSize size) => BannerAd(
     );
 
 class AdBanner extends HookConsumerWidget {
-  const AdBanner({this.size = AdSize.banner})
-   : super();
+  const AdBanner({Key? key, this.size = AdSize.banner})
+   : super(key: key);
 
   final AdSize size;
 
