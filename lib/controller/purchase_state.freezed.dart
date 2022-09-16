@@ -12,21 +12,7 @@ part of 'purchase_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$PurchaseStateTearOff {
-  const _$PurchaseStateTearOff();
-
-  _PurchaseState call({Offerings? offerings}) {
-    return _PurchaseState(
-      offerings: offerings,
-    );
-  }
-}
-
-/// @nodoc
-const $PurchaseState = _$PurchaseStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$PurchaseState {
@@ -43,8 +29,6 @@ abstract class $PurchaseStateCopyWith<$Res> {
           PurchaseState value, $Res Function(PurchaseState) then) =
       _$PurchaseStateCopyWithImpl<$Res>;
   $Res call({Offerings? offerings});
-
-  $OfferingsCopyWith<$Res>? get offerings;
 }
 
 /// @nodoc
@@ -67,48 +51,34 @@ class _$PurchaseStateCopyWithImpl<$Res>
               as Offerings?,
     ));
   }
-
-  @override
-  $OfferingsCopyWith<$Res>? get offerings {
-    if (_value.offerings == null) {
-      return null;
-    }
-
-    return $OfferingsCopyWith<$Res>(_value.offerings!, (value) {
-      return _then(_value.copyWith(offerings: value));
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$PurchaseStateCopyWith<$Res>
+abstract class _$$_PurchaseStateCopyWith<$Res>
     implements $PurchaseStateCopyWith<$Res> {
-  factory _$PurchaseStateCopyWith(
-          _PurchaseState value, $Res Function(_PurchaseState) then) =
-      __$PurchaseStateCopyWithImpl<$Res>;
+  factory _$$_PurchaseStateCopyWith(
+          _$_PurchaseState value, $Res Function(_$_PurchaseState) then) =
+      __$$_PurchaseStateCopyWithImpl<$Res>;
   @override
   $Res call({Offerings? offerings});
-
-  @override
-  $OfferingsCopyWith<$Res>? get offerings;
 }
 
 /// @nodoc
-class __$PurchaseStateCopyWithImpl<$Res>
+class __$$_PurchaseStateCopyWithImpl<$Res>
     extends _$PurchaseStateCopyWithImpl<$Res>
-    implements _$PurchaseStateCopyWith<$Res> {
-  __$PurchaseStateCopyWithImpl(
-      _PurchaseState _value, $Res Function(_PurchaseState) _then)
-      : super(_value, (v) => _then(v as _PurchaseState));
+    implements _$$_PurchaseStateCopyWith<$Res> {
+  __$$_PurchaseStateCopyWithImpl(
+      _$_PurchaseState _value, $Res Function(_$_PurchaseState) _then)
+      : super(_value, (v) => _then(v as _$_PurchaseState));
 
   @override
-  _PurchaseState get _value => super._value as _PurchaseState;
+  _$_PurchaseState get _value => super._value as _$_PurchaseState;
 
   @override
   $Res call({
     Object? offerings = freezed,
   }) {
-    return _then(_PurchaseState(
+    return _then(_$_PurchaseState(
       offerings: offerings == freezed
           ? _value.offerings
           : offerings // ignore: cast_nullable_to_non_nullable
@@ -134,7 +104,7 @@ class _$_PurchaseState extends _PurchaseState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _PurchaseState &&
+            other is _$_PurchaseState &&
             const DeepCollectionEquality().equals(other.offerings, offerings));
   }
 
@@ -144,18 +114,18 @@ class _$_PurchaseState extends _PurchaseState {
 
   @JsonKey(ignore: true)
   @override
-  _$PurchaseStateCopyWith<_PurchaseState> get copyWith =>
-      __$PurchaseStateCopyWithImpl<_PurchaseState>(this, _$identity);
+  _$$_PurchaseStateCopyWith<_$_PurchaseState> get copyWith =>
+      __$$_PurchaseStateCopyWithImpl<_$_PurchaseState>(this, _$identity);
 }
 
 abstract class _PurchaseState extends PurchaseState {
-  factory _PurchaseState({Offerings? offerings}) = _$_PurchaseState;
+  factory _PurchaseState({final Offerings? offerings}) = _$_PurchaseState;
   _PurchaseState._() : super._();
 
   @override
   Offerings? get offerings;
   @override
   @JsonKey(ignore: true)
-  _$PurchaseStateCopyWith<_PurchaseState> get copyWith =>
+  _$$_PurchaseStateCopyWith<_$_PurchaseState> get copyWith =>
       throw _privateConstructorUsedError;
 }

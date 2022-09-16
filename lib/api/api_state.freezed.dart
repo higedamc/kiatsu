@@ -12,35 +12,7 @@ part of 'api_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$WeatherClassStateTearOff {
-  const _$WeatherClassStateTearOff();
-
-  _WeatherInitial initial() {
-    return const _WeatherInitial();
-  }
-
-  _WeatherLoading loading() {
-    return const _WeatherLoading();
-  }
-
-  _WeatherLoadedSuccess success(WeatherClass weatherClass) {
-    return _WeatherLoadedSuccess(
-      weatherClass,
-    );
-  }
-
-  _WeatherLoadedError error([String? message]) {
-    return _WeatherLoadedError(
-      message,
-    );
-  }
-}
-
-/// @nodoc
-const $WeatherClassState = _$WeatherClassStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$WeatherClassState {
@@ -114,22 +86,22 @@ class _$WeatherClassStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$WeatherInitialCopyWith<$Res> {
-  factory _$WeatherInitialCopyWith(
-          _WeatherInitial value, $Res Function(_WeatherInitial) then) =
-      __$WeatherInitialCopyWithImpl<$Res>;
+abstract class _$$_WeatherInitialCopyWith<$Res> {
+  factory _$$_WeatherInitialCopyWith(
+          _$_WeatherInitial value, $Res Function(_$_WeatherInitial) then) =
+      __$$_WeatherInitialCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$WeatherInitialCopyWithImpl<$Res>
+class __$$_WeatherInitialCopyWithImpl<$Res>
     extends _$WeatherClassStateCopyWithImpl<$Res>
-    implements _$WeatherInitialCopyWith<$Res> {
-  __$WeatherInitialCopyWithImpl(
-      _WeatherInitial _value, $Res Function(_WeatherInitial) _then)
-      : super(_value, (v) => _then(v as _WeatherInitial));
+    implements _$$_WeatherInitialCopyWith<$Res> {
+  __$$_WeatherInitialCopyWithImpl(
+      _$_WeatherInitial _value, $Res Function(_$_WeatherInitial) _then)
+      : super(_value, (v) => _then(v as _$_WeatherInitial));
 
   @override
-  _WeatherInitial get _value => super._value as _WeatherInitial;
+  _$_WeatherInitial get _value => super._value as _$_WeatherInitial;
 }
 
 /// @nodoc
@@ -145,7 +117,7 @@ class _$_WeatherInitial implements _WeatherInitial {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _WeatherInitial);
+        (other.runtimeType == runtimeType && other is _$_WeatherInitial);
   }
 
   @override
@@ -231,22 +203,22 @@ abstract class _WeatherInitial implements WeatherClassState {
 }
 
 /// @nodoc
-abstract class _$WeatherLoadingCopyWith<$Res> {
-  factory _$WeatherLoadingCopyWith(
-          _WeatherLoading value, $Res Function(_WeatherLoading) then) =
-      __$WeatherLoadingCopyWithImpl<$Res>;
+abstract class _$$_WeatherLoadingCopyWith<$Res> {
+  factory _$$_WeatherLoadingCopyWith(
+          _$_WeatherLoading value, $Res Function(_$_WeatherLoading) then) =
+      __$$_WeatherLoadingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$WeatherLoadingCopyWithImpl<$Res>
+class __$$_WeatherLoadingCopyWithImpl<$Res>
     extends _$WeatherClassStateCopyWithImpl<$Res>
-    implements _$WeatherLoadingCopyWith<$Res> {
-  __$WeatherLoadingCopyWithImpl(
-      _WeatherLoading _value, $Res Function(_WeatherLoading) _then)
-      : super(_value, (v) => _then(v as _WeatherLoading));
+    implements _$$_WeatherLoadingCopyWith<$Res> {
+  __$$_WeatherLoadingCopyWithImpl(
+      _$_WeatherLoading _value, $Res Function(_$_WeatherLoading) _then)
+      : super(_value, (v) => _then(v as _$_WeatherLoading));
 
   @override
-  _WeatherLoading get _value => super._value as _WeatherLoading;
+  _$_WeatherLoading get _value => super._value as _$_WeatherLoading;
 }
 
 /// @nodoc
@@ -262,7 +234,7 @@ class _$_WeatherLoading implements _WeatherLoading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _WeatherLoading);
+        (other.runtimeType == runtimeType && other is _$_WeatherLoading);
   }
 
   @override
@@ -348,31 +320,31 @@ abstract class _WeatherLoading implements WeatherClassState {
 }
 
 /// @nodoc
-abstract class _$WeatherLoadedSuccessCopyWith<$Res> {
-  factory _$WeatherLoadedSuccessCopyWith(_WeatherLoadedSuccess value,
-          $Res Function(_WeatherLoadedSuccess) then) =
-      __$WeatherLoadedSuccessCopyWithImpl<$Res>;
+abstract class _$$_WeatherLoadedSuccessCopyWith<$Res> {
+  factory _$$_WeatherLoadedSuccessCopyWith(_$_WeatherLoadedSuccess value,
+          $Res Function(_$_WeatherLoadedSuccess) then) =
+      __$$_WeatherLoadedSuccessCopyWithImpl<$Res>;
   $Res call({WeatherClass weatherClass});
 
   $WeatherClassCopyWith<$Res> get weatherClass;
 }
 
 /// @nodoc
-class __$WeatherLoadedSuccessCopyWithImpl<$Res>
+class __$$_WeatherLoadedSuccessCopyWithImpl<$Res>
     extends _$WeatherClassStateCopyWithImpl<$Res>
-    implements _$WeatherLoadedSuccessCopyWith<$Res> {
-  __$WeatherLoadedSuccessCopyWithImpl(
-      _WeatherLoadedSuccess _value, $Res Function(_WeatherLoadedSuccess) _then)
-      : super(_value, (v) => _then(v as _WeatherLoadedSuccess));
+    implements _$$_WeatherLoadedSuccessCopyWith<$Res> {
+  __$$_WeatherLoadedSuccessCopyWithImpl(_$_WeatherLoadedSuccess _value,
+      $Res Function(_$_WeatherLoadedSuccess) _then)
+      : super(_value, (v) => _then(v as _$_WeatherLoadedSuccess));
 
   @override
-  _WeatherLoadedSuccess get _value => super._value as _WeatherLoadedSuccess;
+  _$_WeatherLoadedSuccess get _value => super._value as _$_WeatherLoadedSuccess;
 
   @override
   $Res call({
     Object? weatherClass = freezed,
   }) {
-    return _then(_WeatherLoadedSuccess(
+    return _then(_$_WeatherLoadedSuccess(
       weatherClass == freezed
           ? _value.weatherClass
           : weatherClass // ignore: cast_nullable_to_non_nullable
@@ -405,7 +377,7 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _WeatherLoadedSuccess &&
+            other is _$_WeatherLoadedSuccess &&
             const DeepCollectionEquality()
                 .equals(other.weatherClass, weatherClass));
   }
@@ -416,8 +388,8 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
 
   @JsonKey(ignore: true)
   @override
-  _$WeatherLoadedSuccessCopyWith<_WeatherLoadedSuccess> get copyWith =>
-      __$WeatherLoadedSuccessCopyWithImpl<_WeatherLoadedSuccess>(
+  _$$_WeatherLoadedSuccessCopyWith<_$_WeatherLoadedSuccess> get copyWith =>
+      __$$_WeatherLoadedSuccessCopyWithImpl<_$_WeatherLoadedSuccess>(
           this, _$identity);
 
   @override
@@ -496,39 +468,39 @@ class _$_WeatherLoadedSuccess implements _WeatherLoadedSuccess {
 }
 
 abstract class _WeatherLoadedSuccess implements WeatherClassState {
-  const factory _WeatherLoadedSuccess(WeatherClass weatherClass) =
+  const factory _WeatherLoadedSuccess(final WeatherClass weatherClass) =
       _$_WeatherLoadedSuccess;
 
   WeatherClass get weatherClass;
   @JsonKey(ignore: true)
-  _$WeatherLoadedSuccessCopyWith<_WeatherLoadedSuccess> get copyWith =>
+  _$$_WeatherLoadedSuccessCopyWith<_$_WeatherLoadedSuccess> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$WeatherLoadedErrorCopyWith<$Res> {
-  factory _$WeatherLoadedErrorCopyWith(
-          _WeatherLoadedError value, $Res Function(_WeatherLoadedError) then) =
-      __$WeatherLoadedErrorCopyWithImpl<$Res>;
+abstract class _$$_WeatherLoadedErrorCopyWith<$Res> {
+  factory _$$_WeatherLoadedErrorCopyWith(_$_WeatherLoadedError value,
+          $Res Function(_$_WeatherLoadedError) then) =
+      __$$_WeatherLoadedErrorCopyWithImpl<$Res>;
   $Res call({String? message});
 }
 
 /// @nodoc
-class __$WeatherLoadedErrorCopyWithImpl<$Res>
+class __$$_WeatherLoadedErrorCopyWithImpl<$Res>
     extends _$WeatherClassStateCopyWithImpl<$Res>
-    implements _$WeatherLoadedErrorCopyWith<$Res> {
-  __$WeatherLoadedErrorCopyWithImpl(
-      _WeatherLoadedError _value, $Res Function(_WeatherLoadedError) _then)
-      : super(_value, (v) => _then(v as _WeatherLoadedError));
+    implements _$$_WeatherLoadedErrorCopyWith<$Res> {
+  __$$_WeatherLoadedErrorCopyWithImpl(
+      _$_WeatherLoadedError _value, $Res Function(_$_WeatherLoadedError) _then)
+      : super(_value, (v) => _then(v as _$_WeatherLoadedError));
 
   @override
-  _WeatherLoadedError get _value => super._value as _WeatherLoadedError;
+  _$_WeatherLoadedError get _value => super._value as _$_WeatherLoadedError;
 
   @override
   $Res call({
     Object? message = freezed,
   }) {
-    return _then(_WeatherLoadedError(
+    return _then(_$_WeatherLoadedError(
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -554,7 +526,7 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _WeatherLoadedError &&
+            other is _$_WeatherLoadedError &&
             const DeepCollectionEquality().equals(other.message, message));
   }
 
@@ -564,8 +536,9 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
 
   @JsonKey(ignore: true)
   @override
-  _$WeatherLoadedErrorCopyWith<_WeatherLoadedError> get copyWith =>
-      __$WeatherLoadedErrorCopyWithImpl<_WeatherLoadedError>(this, _$identity);
+  _$$_WeatherLoadedErrorCopyWith<_$_WeatherLoadedError> get copyWith =>
+      __$$_WeatherLoadedErrorCopyWithImpl<_$_WeatherLoadedError>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -643,41 +616,14 @@ class _$_WeatherLoadedError implements _WeatherLoadedError {
 }
 
 abstract class _WeatherLoadedError implements WeatherClassState {
-  const factory _WeatherLoadedError([String? message]) = _$_WeatherLoadedError;
+  const factory _WeatherLoadedError([final String? message]) =
+      _$_WeatherLoadedError;
 
   String? get message;
   @JsonKey(ignore: true)
-  _$WeatherLoadedErrorCopyWith<_WeatherLoadedError> get copyWith =>
+  _$$_WeatherLoadedErrorCopyWith<_$_WeatherLoadedError> get copyWith =>
       throw _privateConstructorUsedError;
 }
-
-/// @nodoc
-class _$LocationStateTearOff {
-  const _$LocationStateTearOff();
-
-  _LocationInitial initial() {
-    return const _LocationInitial();
-  }
-
-  _LocationLoading loading() {
-    return const _LocationLoading();
-  }
-
-  _LocationSuccess success(String address) {
-    return _LocationSuccess(
-      address,
-    );
-  }
-
-  _LocationLoadedError error([String? message]) {
-    return _LocationLoadedError(
-      message,
-    );
-  }
-}
-
-/// @nodoc
-const $LocationState = _$LocationStateTearOff();
 
 /// @nodoc
 mixin _$LocationState {
@@ -751,22 +697,22 @@ class _$LocationStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$LocationInitialCopyWith<$Res> {
-  factory _$LocationInitialCopyWith(
-          _LocationInitial value, $Res Function(_LocationInitial) then) =
-      __$LocationInitialCopyWithImpl<$Res>;
+abstract class _$$_LocationInitialCopyWith<$Res> {
+  factory _$$_LocationInitialCopyWith(
+          _$_LocationInitial value, $Res Function(_$_LocationInitial) then) =
+      __$$_LocationInitialCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$LocationInitialCopyWithImpl<$Res>
+class __$$_LocationInitialCopyWithImpl<$Res>
     extends _$LocationStateCopyWithImpl<$Res>
-    implements _$LocationInitialCopyWith<$Res> {
-  __$LocationInitialCopyWithImpl(
-      _LocationInitial _value, $Res Function(_LocationInitial) _then)
-      : super(_value, (v) => _then(v as _LocationInitial));
+    implements _$$_LocationInitialCopyWith<$Res> {
+  __$$_LocationInitialCopyWithImpl(
+      _$_LocationInitial _value, $Res Function(_$_LocationInitial) _then)
+      : super(_value, (v) => _then(v as _$_LocationInitial));
 
   @override
-  _LocationInitial get _value => super._value as _LocationInitial;
+  _$_LocationInitial get _value => super._value as _$_LocationInitial;
 }
 
 /// @nodoc
@@ -782,7 +728,7 @@ class _$_LocationInitial implements _LocationInitial {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _LocationInitial);
+        (other.runtimeType == runtimeType && other is _$_LocationInitial);
   }
 
   @override
@@ -868,22 +814,22 @@ abstract class _LocationInitial implements LocationState {
 }
 
 /// @nodoc
-abstract class _$LocationLoadingCopyWith<$Res> {
-  factory _$LocationLoadingCopyWith(
-          _LocationLoading value, $Res Function(_LocationLoading) then) =
-      __$LocationLoadingCopyWithImpl<$Res>;
+abstract class _$$_LocationLoadingCopyWith<$Res> {
+  factory _$$_LocationLoadingCopyWith(
+          _$_LocationLoading value, $Res Function(_$_LocationLoading) then) =
+      __$$_LocationLoadingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$LocationLoadingCopyWithImpl<$Res>
+class __$$_LocationLoadingCopyWithImpl<$Res>
     extends _$LocationStateCopyWithImpl<$Res>
-    implements _$LocationLoadingCopyWith<$Res> {
-  __$LocationLoadingCopyWithImpl(
-      _LocationLoading _value, $Res Function(_LocationLoading) _then)
-      : super(_value, (v) => _then(v as _LocationLoading));
+    implements _$$_LocationLoadingCopyWith<$Res> {
+  __$$_LocationLoadingCopyWithImpl(
+      _$_LocationLoading _value, $Res Function(_$_LocationLoading) _then)
+      : super(_value, (v) => _then(v as _$_LocationLoading));
 
   @override
-  _LocationLoading get _value => super._value as _LocationLoading;
+  _$_LocationLoading get _value => super._value as _$_LocationLoading;
 }
 
 /// @nodoc
@@ -899,7 +845,7 @@ class _$_LocationLoading implements _LocationLoading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _LocationLoading);
+        (other.runtimeType == runtimeType && other is _$_LocationLoading);
   }
 
   @override
@@ -985,29 +931,29 @@ abstract class _LocationLoading implements LocationState {
 }
 
 /// @nodoc
-abstract class _$LocationSuccessCopyWith<$Res> {
-  factory _$LocationSuccessCopyWith(
-          _LocationSuccess value, $Res Function(_LocationSuccess) then) =
-      __$LocationSuccessCopyWithImpl<$Res>;
+abstract class _$$_LocationSuccessCopyWith<$Res> {
+  factory _$$_LocationSuccessCopyWith(
+          _$_LocationSuccess value, $Res Function(_$_LocationSuccess) then) =
+      __$$_LocationSuccessCopyWithImpl<$Res>;
   $Res call({String address});
 }
 
 /// @nodoc
-class __$LocationSuccessCopyWithImpl<$Res>
+class __$$_LocationSuccessCopyWithImpl<$Res>
     extends _$LocationStateCopyWithImpl<$Res>
-    implements _$LocationSuccessCopyWith<$Res> {
-  __$LocationSuccessCopyWithImpl(
-      _LocationSuccess _value, $Res Function(_LocationSuccess) _then)
-      : super(_value, (v) => _then(v as _LocationSuccess));
+    implements _$$_LocationSuccessCopyWith<$Res> {
+  __$$_LocationSuccessCopyWithImpl(
+      _$_LocationSuccess _value, $Res Function(_$_LocationSuccess) _then)
+      : super(_value, (v) => _then(v as _$_LocationSuccess));
 
   @override
-  _LocationSuccess get _value => super._value as _LocationSuccess;
+  _$_LocationSuccess get _value => super._value as _$_LocationSuccess;
 
   @override
   $Res call({
     Object? address = freezed,
   }) {
-    return _then(_LocationSuccess(
+    return _then(_$_LocationSuccess(
       address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -1033,7 +979,7 @@ class _$_LocationSuccess implements _LocationSuccess {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _LocationSuccess &&
+            other is _$_LocationSuccess &&
             const DeepCollectionEquality().equals(other.address, address));
   }
 
@@ -1043,8 +989,8 @@ class _$_LocationSuccess implements _LocationSuccess {
 
   @JsonKey(ignore: true)
   @override
-  _$LocationSuccessCopyWith<_LocationSuccess> get copyWith =>
-      __$LocationSuccessCopyWithImpl<_LocationSuccess>(this, _$identity);
+  _$$_LocationSuccessCopyWith<_$_LocationSuccess> get copyWith =>
+      __$$_LocationSuccessCopyWithImpl<_$_LocationSuccess>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1122,38 +1068,38 @@ class _$_LocationSuccess implements _LocationSuccess {
 }
 
 abstract class _LocationSuccess implements LocationState {
-  const factory _LocationSuccess(String address) = _$_LocationSuccess;
+  const factory _LocationSuccess(final String address) = _$_LocationSuccess;
 
   String get address;
   @JsonKey(ignore: true)
-  _$LocationSuccessCopyWith<_LocationSuccess> get copyWith =>
+  _$$_LocationSuccessCopyWith<_$_LocationSuccess> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$LocationLoadedErrorCopyWith<$Res> {
-  factory _$LocationLoadedErrorCopyWith(_LocationLoadedError value,
-          $Res Function(_LocationLoadedError) then) =
-      __$LocationLoadedErrorCopyWithImpl<$Res>;
+abstract class _$$_LocationLoadedErrorCopyWith<$Res> {
+  factory _$$_LocationLoadedErrorCopyWith(_$_LocationLoadedError value,
+          $Res Function(_$_LocationLoadedError) then) =
+      __$$_LocationLoadedErrorCopyWithImpl<$Res>;
   $Res call({String? message});
 }
 
 /// @nodoc
-class __$LocationLoadedErrorCopyWithImpl<$Res>
+class __$$_LocationLoadedErrorCopyWithImpl<$Res>
     extends _$LocationStateCopyWithImpl<$Res>
-    implements _$LocationLoadedErrorCopyWith<$Res> {
-  __$LocationLoadedErrorCopyWithImpl(
-      _LocationLoadedError _value, $Res Function(_LocationLoadedError) _then)
-      : super(_value, (v) => _then(v as _LocationLoadedError));
+    implements _$$_LocationLoadedErrorCopyWith<$Res> {
+  __$$_LocationLoadedErrorCopyWithImpl(_$_LocationLoadedError _value,
+      $Res Function(_$_LocationLoadedError) _then)
+      : super(_value, (v) => _then(v as _$_LocationLoadedError));
 
   @override
-  _LocationLoadedError get _value => super._value as _LocationLoadedError;
+  _$_LocationLoadedError get _value => super._value as _$_LocationLoadedError;
 
   @override
   $Res call({
     Object? message = freezed,
   }) {
-    return _then(_LocationLoadedError(
+    return _then(_$_LocationLoadedError(
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -1179,7 +1125,7 @@ class _$_LocationLoadedError implements _LocationLoadedError {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _LocationLoadedError &&
+            other is _$_LocationLoadedError &&
             const DeepCollectionEquality().equals(other.message, message));
   }
 
@@ -1189,8 +1135,8 @@ class _$_LocationLoadedError implements _LocationLoadedError {
 
   @JsonKey(ignore: true)
   @override
-  _$LocationLoadedErrorCopyWith<_LocationLoadedError> get copyWith =>
-      __$LocationLoadedErrorCopyWithImpl<_LocationLoadedError>(
+  _$$_LocationLoadedErrorCopyWith<_$_LocationLoadedError> get copyWith =>
+      __$$_LocationLoadedErrorCopyWithImpl<_$_LocationLoadedError>(
           this, _$identity);
 
   @override
@@ -1269,11 +1215,11 @@ class _$_LocationLoadedError implements _LocationLoadedError {
 }
 
 abstract class _LocationLoadedError implements LocationState {
-  const factory _LocationLoadedError([String? message]) =
+  const factory _LocationLoadedError([final String? message]) =
       _$_LocationLoadedError;
 
   String? get message;
   @JsonKey(ignore: true)
-  _$LocationLoadedErrorCopyWith<_LocationLoadedError> get copyWith =>
+  _$$_LocationLoadedErrorCopyWith<_$_LocationLoadedError> get copyWith =>
       throw _privateConstructorUsedError;
 }

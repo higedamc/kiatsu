@@ -14,7 +14,7 @@ class PurchaseState with _$PurchaseState {
   late final List<Product>? products =
       offerings?.current?.availablePackages.map((p) => p.product).toList();
 
-  late final Product? product = products?.firstWhereOrNull(
+  late final Product? product = products?.firstWhere(
     (e) => e.identifier == _identifier,
   );
 }
