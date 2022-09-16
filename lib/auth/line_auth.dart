@@ -80,17 +80,15 @@ class LineAuthUtil {
         // Navigator.pushReplacementNamed(context,'/home');
       });
     } on PlatformException catch (e) {
-      var message = 'エラーが発生しました';
+      var message = 'キャンセルしました';
       if (e.code == '3063') {
-        message = 'キャンセルしました';
-        if (kDebugMode) {
-          print(message);
-        }
+        message = 'エラーが発生しました';
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.code),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
 
       // throw FirebaseAuthException(code: e.code, message: message);
     }
