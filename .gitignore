@@ -88,6 +88,7 @@ unlinked_spec.ds
 **/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/app.flx
 **/ios/Flutter/app.zip
+**/ios/Flutter/DartDefines.xcconfig
 **/ios/Flutter/flutter_assets/
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
@@ -143,6 +144,3 @@ ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
 android/app/src/main/res/mipmap-xhdpi
 ios/Configuration.storekit
 ios/StoreKitTestCertificate.cer
-ios/scripts/dart_defines.sh
-/ios/scripts/dart_defines.sh
-**/ios/Flutter/DartDefines.xcconfig
