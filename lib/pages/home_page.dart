@@ -6,6 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/providers/providers.dart';
+import 'package:kiatsu/utils/my_stop_watch.dart';
+import 'package:kiatsu/utils/my_time_ago.dart';
 import 'package:kiatsu/widget/ad_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -52,23 +54,7 @@ class HomePage extends riv.ConsumerWidget {
         .getWeather(cityName!, ref, context);
   }
 
-  Future<String> fromAtNow(DateTime date) async {
-    // final DateTime currentTime = ref.watch(clockProvider);
-    final difference = DateTime.now().difference(date);
-    // final Duration difference =
-    //     DateTime.now().difference(currentTime);
-    final sec = difference.inSeconds;
-
-    if (sec >= 60 * 60 * 24) {
-      return '最終更新 - ${difference.inDays.toString()}日前';
-    } else if (sec >= 60 * 60) {
-      return '最終更新 - ${difference.inHours.toString()}時間前';
-    } else if (sec >= 60) {
-      return '最終更新 - ${difference.inMinutes.toString()}分前';
-    } else {
-      return '最終更新 - $sec秒前';
-    }
-  }
+  
 
   //TODO: Riverpod + Freezed化する
   Future<bool> handlePermission() async {
@@ -129,7 +115,8 @@ class HomePage extends riv.ConsumerWidget {
   Widget build(BuildContext context, riv.WidgetRef ref) {
     final locationState = ref.watch(locationStateNotifierProvider);
     final cityName = ref.watch(cityNameProvider);
-    // final currentTime = ref.watch(clockProvider);
+    final currentTime = ref.watch(clockProvider);
+    final stopWatchTime = ref.watch(stopWatchProvider);
     final size = MediaQuery.of(context).size;
     // print(size);
     // final width = size.width;
@@ -195,8 +182,8 @@ class HomePage extends riv.ConsumerWidget {
           await ref
               .refresh(weatherStateNotifierProvider.notifier)
               .getWeather(cityName, ref, context);
-          final updatedAt = DateTime.now();
-          await fromAtNow(updatedAt);
+          ref..refresh(clockProvider.notifier)
+          ..refresh(stopWatchProvider.notifier);
           // (context as Element).markNeedsBuild();
 
           // '最終更新 - ' + timeago.format(updatedAt, locale: 'ja');
@@ -460,76 +447,17 @@ class HomePage extends riv.ConsumerWidget {
                       color: Colors.black, fontWeight: FontWeight.w100)),
             ),
             //TODO: 後で再有効化
-            // Consumer(
-            //   builder: (BuildContext context, value, Widget? child) {
-            //     final now = DateTime.now();
-            //     final currentTime = ref.watch(clockProvider);
-            //     // final List<DateTime> dates = [
-            //     //   now.add(Duration(seconds: currentTime.second) * -1),
-            //     //    now.add(Duration(minutes: currentTime.minute) * -1),
-            //     // ];
-            //     final date =
-            //         now.add(Duration(seconds: currentTime.second) * -5);
-            //     // final secondsString = DateFormat.s().format(currentTime);
-            //     // final secondsInt = int.parse(secondsString);
-            //     // final minutesString = DateFormat.m().format(currentTime);
-            //     // final minutesInt = int.parse(minutesString);
-            //     String fromAtNow(DateTime date) {
-            //       // final DateTime currentTime = ref.watch(clockProvider);
-            //       final difference = DateTime.now().difference(date);
-            //       // final Duration difference =
-            //       //     DateTime.now().difference(currentTime);
-            //       final sec = difference.inSeconds;
-
-            //       if (sec >= 60 * 60 * 24) {
-            //         return '最終更新 - ${difference.inDays.toString()}日前';
-            //       } else if (sec >= 60 * 60) {
-            //         return '最終更新 - ${difference.inHours.toString()}時間前';
-            //       } else if (sec >= 60) {
-            //         return '最終更新 - ${difference.inMinutes.toString()}分前';
-            //       } else {
-            //         return '最終更新 - $sec秒前';
-            //       }
-            //     }
-            //     // final difference = dates.map((date) => Text(fromAtNow(date))).toList();
-
-            //     // final updatedAt = DateTime.now();
-            //     return Center(
-            //       child: Text(
-            //         //日本語的に違和感があったので、60秒未満前の場合'前'を表示しないようにした笑
-
-            //         // timeago.format(
-            //         //           currentTime,
-            //         //           locale: 'ja',
-            //         //           allowFromNow: false,
-            //         //         ) ==
-            //         //         '60秒未満前'
-            //         // secondsInt < 60
-            //         //     ? '最終更新 - ' +
-            //         //         timeago.format(
-            //         //           currentTime,
-            //         //           locale: 'ja',
-            //         //           allowFromNow: false,
-            //         //         ) -
-            //         //         '前'
-            //         //     : '最終更新 - ' +
-            //         // //         minutesString + '分前',
-            //         // secondsInt <= 60
-            //         //     ? '最終更新 - $secondsInt 秒前'
-            //         //     : secondsInt >= 60
-            //         //         ? '最終更新 - ' + minutesInt.toString() + ' 分前'
-            //         //         : '最終更新 - なう',
-            //         // currentTime.toString(),
-            //         fromAtNow(date),
-            //         // style: const NeumorphicStyle(
-            //         //   // height: 1, // 10だとちょうど下すれすれで良い感じ
-            //         //   color: Colors.black,
-            //         // ),
-            //         // textStyle: NeumorphicTextStyle(),
-            //       ),
-            //     );
-            //   },
-            // ),
+            Consumer(
+              builder: (BuildContext context, value, Widget? child) {
+                // final currentTime2 = DateTime.now();
+                // final currentTime = ref.watch(clockProvider);
+                return Center(
+                  child: Text(
+                    myTimeAgo(stopWatchTime),
+                  ),
+                );
+              },
+            ),
             Center(
               child: Text(
                 res2,
