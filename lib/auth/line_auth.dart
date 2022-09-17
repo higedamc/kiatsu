@@ -42,13 +42,12 @@ class LineAuthUtil {
       // print(lineUserProfile.toString());
 
       final callable = FirebaseFunctions.instanceFor(
-        region: (flavor == 'dev') ? 'us-central1' : 'asia-northeast1')
+              region: (flavor == 'dev') ? 'us-central1' : 'asia-northeast1')
           .httpsCallable(
         'customTokenGetter',
         options: HttpsCallableOptions(timeout: const Duration(seconds: 5)),
       );
-      final response = await callable
-      .call<Map<String, dynamic>>({
+      final response = await callable.call<Map<String, dynamic>>({
         'userId': lineUserId,
         //'profile': lineUserProfile,
         // 'displayName': displayName,
@@ -60,7 +59,14 @@ class LineAuthUtil {
         final CollectionReference collections =
             firebaseStore.collection('users');
         final firebaseUser = authResult.user;
-        await collections.doc(firebaseUser?.uid).set({'createdAt': createdAt});
+        final setData = <String, dynamic>{
+          'createdAt': createdAt,
+          'authProvider': 'line',
+        };
+        await collections.doc(firebaseUser?.uid).set(
+              setData,
+              SetOptions(merge: true),
+            );
         await authResult.user?.updateDisplayName(displayName);
         if (kDebugMode) {
           print(lineUserId);
@@ -74,17 +80,15 @@ class LineAuthUtil {
         // Navigator.pushReplacementNamed(context,'/home');
       });
     } on PlatformException catch (e) {
-      var message = 'エラーが発生しました';
+      var message = 'キャンセルしました';
       if (e.code == '3063') {
-        message = 'キャンセルしました';
-        if (kDebugMode) {
-          print(message);
-        }
+        message = 'エラーが発生しました';
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.code),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
 
       // throw FirebaseAuthException(code: e.code, message: message);
     }
