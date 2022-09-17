@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
@@ -11,7 +12,6 @@ import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/controller/user_controller.dart';
-import 'package:kiatsu/pages/timeline.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,10 +50,22 @@ class SignInPage extends ConsumerWidget {
                           separator: 15,
                           borderColor: Colors.black,
                           onPressed: () async {
-                            await AppleAuthUtil.signInWithApple(context, ref)
-                                .then<dynamic>(
-                              (_) => Navigator.pop(context),
-                            );
+                            try {
+                              await AppleAuthUtil.signInWithApple(context, ref)
+                                  .then(
+                                    (_) => Navigator.popUntil(context,
+                                     (_) => count++ >= 2,),
+                                  );
+                            } on Exception catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('ログインがキャンセルされました。'),
+                                ),
+                              );
+                              if (kDebugMode) {
+                                print(e);
+                              }
+                            }
                           },
                         ),
                       ),
@@ -75,11 +87,6 @@ class SignInPage extends ConsumerWidget {
 
                             //TODO(Kohei): きちんとホーム画面に戻るかどうか確認
                             Navigator.popUntil(context, (_) => count++ >= 2),
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('ログインされました。'),
-                              ),
-                            ),
                           },
                         ),
                       ),
@@ -109,11 +116,7 @@ class SignInPage extends ConsumerWidget {
                           height: 50,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green[600],
-                              disabledForegroundColor:
-                                  Colors.transparent.withOpacity(0.38),
-                              disabledBackgroundColor:
-                                  Colors.transparent.withOpacity(0.12),
+                              primary: Colors.green[600],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
