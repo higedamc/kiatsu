@@ -14,6 +14,7 @@ import 'package:kiatsu/repository/permission_repository.dart';
 import 'package:kiatsu/repository/weather_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiatsu/utils/clock_ticker.dart';
+import 'package:kiatsu/utils/my_stop_watch.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../pages/timeline.dart';
@@ -156,6 +157,12 @@ final documentStreamProvider = StreamProvider.autoDispose((ref) {
 final clockProvider = StateNotifierProvider<Clock, DateTime>((ref) {
   return Clock();
 });
+
+final stopWatchProvider = StateNotifierProvider<MyStopWatch, DateTime>((ref) {
+  return MyStopWatch();
+});
+
+
 
 // https://tamappe.com/2021/09/29/flutter-riverpod-textfield/
 final textControllerStateProvider = StateProvider.autoDispose((ref) {
