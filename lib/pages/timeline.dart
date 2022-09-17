@@ -120,7 +120,7 @@ class Timeline extends ConsumerWidget {
                                         .toString()
                                         .contains(uid!) ==
                                     false
-                                    // && isCurrentUserBlocked == false
+                            // && isCurrentUserBlocked == false
 
                             // visible: !(users.),
                             // visible: !(blockListProvider.value
@@ -129,7 +129,8 @@ class Timeline extends ConsumerWidget {
 
                             // visible: firebaseStore.doc('blocked/$uid').snapshots().contains(data[index]['userId']) == true,
                             // visible: docShot.where((event) => event.data()!.containsKey(data[index]['$uid'])) == true,
-                            ,child: Card(
+                            ,
+                            child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -453,7 +454,11 @@ class Timeline extends ConsumerWidget {
                                             : data[index]['userId'] ==
                                                         DevIds().dev1 ||
                                                     data[index]['userId'] ==
-                                                        DevIds().dev2
+                                                        DevIds().dev2 ||
+                                                    data[index]['userId'] ==
+                                                        DevIds().dev3 ||
+                                                        data[index]['userId'] ==
+                                                        DevIds().dev4
                                                 ? const Text(
                                                     'Dev',
                                                     style: TextStyle(
