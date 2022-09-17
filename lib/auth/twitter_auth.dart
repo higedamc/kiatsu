@@ -29,13 +29,15 @@ class TwitterAuthUtil {
     return credential?.user;
   }
 
-  static Future<AuthCredential?> getTwitterAuthCredential (BuildContext context) async{
-   final authResult = await _twitter.login();
-   final twitterAuthCrendential = TwitterAuthProvider.credential(
-    accessToken: authResult.authToken.toString(),
-    secret: authResult.authTokenSecret.toString(),
+  static Future<AuthCredential?> getTwitterAuthCredential(
+    BuildContext context,
+  ) async {
+    final authResult = await _twitter.login();
+    final twitterAuthCrendential = TwitterAuthProvider.credential(
+      accessToken: authResult.authToken.toString(),
+      secret: authResult.authTokenSecret.toString(),
     );
-  return twitterAuthCrendential;
+    return twitterAuthCrendential;
     //  secret: secret)
   }
 
@@ -75,8 +77,17 @@ class TwitterAuthUtil {
                 'authProvider': 'twitter.com',
                 'isDeletedUser': false,
               };
-              await users.doc(authResult.user!.uid).set(setData, SetOptions(merge: true));
-              log('displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser, createdAt: $createdAt');
+              await users
+                  .doc(authResult.user!.uid)
+                  .set(setData, SetOptions(merge: true))
+                  .then(
+                    (_) => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('ログインされました。'),
+                      ),
+                    ),
+                  );
+              // log('displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser, createdAt: $createdAt');
               // Navigator.pop(context, '/timeline');
               // Navigator.popUntil(context, (_) => count++ >= 2);
 
