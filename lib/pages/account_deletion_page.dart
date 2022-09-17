@@ -10,10 +10,7 @@ import 'package:kiatsu/auth/auth_manager.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
 import 'package:kiatsu/const/account_deletion_disclaimer.dart';
 import 'package:kiatsu/controller/user_controller.dart';
-import 'package:kiatsu/logger.dart';
 import 'package:kiatsu/pages/timeline.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:twitter_login/twitter_login.dart';
 
 class AccountDeletionPage extends ConsumerWidget {
   const AccountDeletionPage({Key? key}) : super(key: key);
@@ -247,7 +244,7 @@ class AccountDeletionPage extends ConsumerWidget {
                   ),
                   style: ElevatedButton.styleFrom(
                     // minimumSize: const Size.fromHeight(50),
-                    backgroundColor: Colors.redAccent,
+                    primary: Colors.redAccent,
                   ),
                   //TODO: 同意すると削除ボタンが押せるようにする。
                   child: const Text(
