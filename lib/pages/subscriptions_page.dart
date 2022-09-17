@@ -59,6 +59,7 @@ class SubscriptionsPage extends ConsumerWidget {
             onClickedPackage: (package) async {
               final errorCode = await PurchaseApi.purchasePackage(package);
               if (errorCode != null) {
+                //TODO: この実装方法どこで見たか後で確認
                 ref
                     .read(scaffoldMessengerProvider)
                     .currentState
