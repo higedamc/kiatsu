@@ -138,12 +138,11 @@ ios/Flutter/dev.xcconfig
 ios/fastlane/Fastfile/ios/fastlane/Fastfile
 ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
 /ios/Flutter/prod.xcconfig
-ios/Flutter/DartDefines.xcconfig/ios/Runner.xcodeproj/project.pbxproj
 /ios/fastlane/ExportOptions-dev.plist
-ios/Flutter/DartDefines.xcconfig
 /ios/fastlane/.envrc
 android/app/src/main/res/mipmap-xhdpi
 ios/Configuration.storekit
 ios/StoreKitTestCertificate.cer
 ios/scripts/dart_defines.sh
 /ios/scripts/dart_defines.sh
+**/ios/Flutter/DartDefines.xcconfig
