@@ -144,3 +144,4 @@ ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
 android/app/src/main/res/mipmap-xhdpi
 ios/Configuration.storekit
 ios/StoreKitTestCertificate.cer
+**/ios/scripts/dart_defines.sh
