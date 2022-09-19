@@ -1,161 +1,215 @@
-import 'package:wiredash/wiredash.dart' as pl;
+import 'package:wiredash/assets/l10n/wiredash_localizations.g.dart';
 
-class CustomTranslations extends pl.WiredashTranslations {
-  const CustomTranslations() : super();
-
+class WiredashLocalizationsJapanese extends WiredashLocalizations {
+  WiredashLocalizationsJapanese([String locale = 'ja']) : super(locale);
+  
   @override
-  String get feedbackStateIntroTitle => 'いらっしゃい！';
-
+  String get backdropReturnToApp => 'アプリに戻る';
+  
   @override
-  String get captureSaveScreenshot => '保存';
-
+  String get feedbackBackButton => '戻る';
+  
   @override
-  String get captureSkip => 'キャンセル';
-
+  String get feedbackCloseButton => '閉じる';
+  
   @override
-  String get captureSpotlightNavigateMsg => '該当箇所まで操作してスクショしてください♡';
-
+  String get feedbackDiscardButton => 'フィードバックを中止';
+  
   @override
-  String get captureSpotlightNavigateTitle => '画面のキャプチャー';
-
+  String get feedbackDiscardConfirmButton => '本当に中止しますか？';
+  
   @override
-  String get captureSpotlightScreenCapturedMsg => 'スクショが保存されました！自由にお絵描きして該当箇所の報告をお願い致します♡';
-
+  String get feedbackNextButton => '進む';
+  
   @override
-  String get captureSpotlightScreenCapturedTitle => 'レッツ☆おえかき';
-
+  String get feedbackStep1MessageBreadcrumbTitle => 'メッセージを作成する';
+  
   @override
-  String get captureTakeScreenshot => 'スクショ撮影';
-
+  String get feedbackStep1MessageDescription => '遭遇した問題を説明してください。';
+  
   @override
-  String get companyLogoLabel => '5';
-
+  String get feedbackStep1MessageErrorMissingMessage => 'メッセージを追加してください';
+  
   @override
-  String get feedbackBack => '戻る';
-
+  // TODO: implement feedbackStep1MessageHint
+  String get feedbackStep1MessageHint => '';
+  
   @override
-  String get feedbackCancel => 'キャンセル';
-
+  String get feedbackStep1MessageTitle => 'フィードバックを残す';
+  
   @override
-  String get feedbackModeBugMsg => '';
-
+  String get feedbackStep2LabelsBreadcrumbTitle => 'ラベル';
+  
   @override
-  String get feedbackModeBugTitle => 'バグ報告';
-
+  // TODO: implement feedbackStep2LabelsDescription
+  String get feedbackStep2LabelsDescription => '';
+  
   @override
-  String get feedbackModeImprovementMsg => '';
-
+  // TODO: implement feedbackStep2LabelsTitle
+  String get feedbackStep2LabelsTitle => '';
+  
   @override
-  String get feedbackModeImprovementTitle => 'ほしい機能';
-
+  String get feedbackStep3GalleryBreadcrumbTitle => 'スクリーンショット';
+  
   @override
-  String get feedbackModePraiseMsg => '';
-
+  // TODO: implement feedbackStep3GalleryDescription
+  String get feedbackStep3GalleryDescription => '';
+  
   @override
-  String get feedbackModePraiseTitle => 'お褒めの言葉';
-
+  // TODO: implement feedbackStep3GalleryTitle
+  String get feedbackStep3GalleryTitle => '';
+  
   @override
-  String get feedbackSave => '保存';
-
+  // TODO: implement feedbackStep3ScreenshotBarCaptureButton
+  String get feedbackStep3ScreenshotBarCaptureButton => '';
+  
   @override
-  String get feedbackSend => '送信';
-
+  // TODO: implement feedbackStep3ScreenshotBarDrawTitle
+  String get feedbackStep3ScreenshotBarDrawTitle => '';
+  
   @override
-  // TODO: implement feedbackStateEmailMsg
-  String get feedbackStateEmailMsg => 'Eメールアドレスを下記に記入するとバグに関する最新の情報を受け取レます＾q＾';
-
+  String get feedbackStep3ScreenshotBarDrawUndoButton => '元に戻す';
+  
   @override
-  String get feedbackStateEmailTitle => '最新の情報を受け取る';
-
+  // TODO: implement feedbackStep3ScreenshotBarNavigateTitle
+  String get feedbackStep3ScreenshotBarNavigateTitle => '';
+  
   @override
-  // TODO: implement feedbackStateErrorMsg
-  String get feedbackStateErrorMsg => 'エラーが発生しました＾q＾';
-
+  String get feedbackStep3ScreenshotBarOkButton => 'OK';
+  
   @override
-  // TODO: implement feedbackStateErrorTitle
-  String get feedbackStateErrorTitle => 'エラー発生中';
-
+  String get feedbackStep3ScreenshotBarSaveButton => '保存';
+  
   @override
-  String get feedbackStateFeedbackMsg => 'あなたの意見が私の励みになります！できるだけ詳細のご記入をお願いいたします☆(ゝω･)v';
-
+  String get feedbackStep3ScreenshotOverviewAddScreenshotButton => 'スクリーンショットを追加';
+  
   @override
-  String get feedbackStateFeedbackTitle => 'フィードバック';
-
+  // TODO: implement feedbackStep3ScreenshotOverviewBreadcrumbTitle
+  String get feedbackStep3ScreenshotOverviewBreadcrumbTitle => '';
+  
   @override
-  String get feedbackStateIntroMsg => 'ここはフィードバック用のダイアログです。短いステップで開発者にフィードバックが送れますぜ！';
-
+  // TODO: implement feedbackStep3ScreenshotOverviewDescription
+  String get feedbackStep3ScreenshotOverviewDescription => '';
+  
   @override
-  String get feedbackStateSuccessCloseMsg => 'フィードバック提供ありがとう！';
-
+  // TODO: implement feedbackStep3ScreenshotOverviewSkipButton
+  String get feedbackStep3ScreenshotOverviewSkipButton => '';
+  
   @override
-  String get feedbackStateSuccessCloseTitle => '閉じる';
-
+  // TODO: implement feedbackStep3ScreenshotOverviewTitle
+  String get feedbackStep3ScreenshotOverviewTitle => '';
+  
   @override
-  String get feedbackStateSuccessMsg => '以上でフィードバック提供は完了です！お疲れ様でした！';
-
+  String get feedbackStep4EmailBreadcrumbTitle => '連絡先';
+  
   @override
-  String get feedbackStateSuccessTitle => '圧倒的感謝😭😭😭😭😭😭😭';
-
+  // TODO: implement feedbackStep4EmailDescription
+  String get feedbackStep4EmailDescription => '';
+  
   @override
-  String get feedbackSubmitRetryMsg => 'もう一度お試しあれ＾q＾';
-
+  // TODO: implement feedbackStep4EmailInputHint
+  String get feedbackStep4EmailInputHint => '';
+  
   @override
-  String get feedbackSubmitRetryTitle => 'フィードバックが完了しませんでした';
-
+  // TODO: implement feedbackStep4EmailInvalidEmail
+  String get feedbackStep4EmailInvalidEmail => '';
+  
   @override
-  // TODO: implement firstPenLabel
-  String get firstPenLabel => '19';
-
+  // TODO: implement feedbackStep4EmailTitle
+  String get feedbackStep4EmailTitle => '';
+  
   @override
-  // TODO: implement firstPenSelected
-  String get firstPenSelected => '20';
-
+  // TODO: implement feedbackStep6SubmitBreadcrumbTitle
+  String get feedbackStep6SubmitBreadcrumbTitle => '';
+  
   @override
-  // TODO: implement fourthPenLabel
-  String get fourthPenLabel => '21';
-
+  // TODO: implement feedbackStep6SubmitDescription
+  String get feedbackStep6SubmitDescription => '';
+  
   @override
-  // TODO: implement fourthPenSelected
-  String get fourthPenSelected => '22';
-
+  // TODO: implement feedbackStep6SubmitSubmitButton
+  String get feedbackStep6SubmitSubmitButton => '';
+  
   @override
-  // TODO: implement inputHintEmail
-  String get inputHintEmail => 'Eメールアドレス';
-
+  String get feedbackStep6SubmitSubmitDetailsTitle => '詳細をフィードバック';
+  
   @override
-  // TODO: implement inputHintFeedback
-  String get inputHintFeedback => '記入欄';
-
+  String get feedbackStep6SubmitSubmitHideDetailsButton => '詳細を非表示';
+  
   @override
-  // TODO: implement secondPenLabel
-  String get secondPenLabel => '25';
-
+  String get feedbackStep6SubmitSubmitShowDetailsButton => '詳細を表示';
+  
   @override
-  // TODO: implement secondPenSelected
-  String get secondPenSelected => '26';
-
+  // TODO: implement feedbackStep6SubmitTitle
+  String get feedbackStep6SubmitTitle => '';
+  
   @override
-  // TODO: implement thirdPenLabel
-  String get thirdPenLabel => '27';
-
+  // TODO: implement feedbackStep7SubmissionErrorMessage
+  String get feedbackStep7SubmissionErrorMessage => '';
+  
   @override
-  // TODO: implement thirdPenSelected
-  String get thirdPenSelected => '28';
-
+  // TODO: implement feedbackStep7SubmissionInFlightMessage
+  String get feedbackStep7SubmissionInFlightMessage => '';
+  
   @override
-  // TODO: implement undoButtonLabel
-  String get undoButtonLabel => '29';
-
+  // TODO: implement feedbackStep7SubmissionOpenErrorButton
+  String get feedbackStep7SubmissionOpenErrorButton => '';
+  
   @override
-  // TODO: implement validationHintEmail
-  String get validationHintEmail => '30';
-
+  // TODO: implement feedbackStep7SubmissionRetryButton
+  String get feedbackStep7SubmissionRetryButton => '';
+  
   @override
-  // TODO: implement validationHintFeedbackEmpty
-  String get validationHintFeedbackEmpty => '31';
-
+  // TODO: implement feedbackStep7SubmissionSuccessMessage
+  String get feedbackStep7SubmissionSuccessMessage => '';
+  
   @override
-  // TODO: implement validationHintFeedbackLength
-  String get validationHintFeedbackLength => '32';
-  /// override all the terms
+  String feedbackStepXOfY(int current, int total) {
+    // TODO: implement feedbackStepXOfY
+    '';
+  }
+  
+  @override
+  String get promoterScoreBackButton => '戻る';
+  
+  @override
+  String get promoterScoreNextButton => '次へ';
+  
+  @override
+  // TODO: implement promoterScoreStep1Description
+  String get promoterScoreStep1Description => '';
+  
+  @override
+  // TODO: implement promoterScoreStep1Question
+  String get promoterScoreStep1Question => '';
+  
+  @override
+  String promoterScoreStep2MessageDescription(int rating) {
+    // TODO: implement promoterScoreStep2MessageDescription
+    '';
+  }
+  
+  @override
+  // TODO: implement promoterScoreStep2MessageHint
+  String get promoterScoreStep2MessageHint => '';
+  
+  @override
+  // TODO: implement promoterScoreStep2MessageTitle
+  String get promoterScoreStep2MessageTitle => '';
+  
+  @override
+  // TODO: implement promoterScoreStep3ThanksMessageDetractors
+  String get promoterScoreStep3ThanksMessageDetractors => '';
+  
+  @override
+  // TODO: implement promoterScoreStep3ThanksMessagePassives
+  String get promoterScoreStep3ThanksMessagePassives => '';
+  
+  @override
+  // TODO: implement promoterScoreStep3ThanksMessagePromoters
+  String get promoterScoreStep3ThanksMessagePromoters => '';
+  
+  @override
+  String get promoterScoreSubmitButton => '提出する';
+
 }
