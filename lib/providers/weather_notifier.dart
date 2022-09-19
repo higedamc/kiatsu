@@ -12,10 +12,11 @@ class WeatherStateNotifer extends StateNotifier<WeatherClassState> {
   Future<void> getWeather(
     String cityName,
     WidgetRef ref,
+    BuildContext context,
   ) async {
     try {
       state = const WeatherClassState.loading();
-      final data = await weatherRepository.getWeather(cityName, ref);
+      final data = await weatherRepository.getWeather(cityName, ref, context);
       state = WeatherClassState.success(data);
     } on PlatformException catch (e) {
       state = WeatherClassState.error('$e');

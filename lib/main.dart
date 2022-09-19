@@ -14,9 +14,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiatsu/gen/assets.gen.dart';
 import 'package:kiatsu/l18n/ja_messages.dart';
 import 'package:kiatsu/l18n/wiredash_locale.dart';
+import 'package:kiatsu/pages/account_deletion_page.dart';
 import 'package:kiatsu/pages/check_env_page.dart';
 import 'package:kiatsu/pages/dialog.dart';
 import 'package:kiatsu/pages/home_page.dart';
+import 'package:kiatsu/pages/icon_selection_page.dart';
 import 'package:kiatsu/pages/notification_page.dart';
 import 'package:kiatsu/pages/onboarding_page.dart';
 import 'package:kiatsu/pages/setting_page.dart';
@@ -124,6 +126,9 @@ class MyApp extends StatelessWidget {
       secret: dotenv.env['WIREDASH_SECRET'].toString(),
       navigatorKey: _navigatorKey,
       options: WiredashOptionsData(
+        // bugReportButton: false,
+        // featureRequestButton: false,
+        // praiseButton: false,
         customTranslations: {
           // plに日本語の翻訳をオーバーライド
           const Locale.fromSubtags(languageCode: 'pl'):
@@ -158,7 +163,9 @@ class MyApp extends StatelessWidget {
           '/notify': (BuildContext context) => const NotificationPage(),
           '/test': (BuildContext context) => const TestWidget(),
           '/onbo': (BuildContext context) => const OnboardingPage(),
-          '/env': (BuildContext context) => const CheckEnvPage()
+          '/env': (BuildContext context) => const CheckEnvPage(),
+          '/delete': (BuildContext context) => const AccountDeletionPage(),
+          '/icon': (BuildContext conttext) => const IconSelectionPage(),
         },
         home: firebaseAuth.currentUser != null
             ? splashScreen

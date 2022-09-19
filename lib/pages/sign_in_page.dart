@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart' as neu;
@@ -10,19 +11,19 @@ import 'package:kiatsu/auth/apple_auth.dart';
 import 'package:kiatsu/auth/google_auth.dart';
 import 'package:kiatsu/auth/line_auth.dart';
 import 'package:kiatsu/auth/twitter_auth.dart';
-import 'package:kiatsu/pages/timeline.dart';
+import 'package:kiatsu/controller/user_controller.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var count = 0;
     final auth = FirebaseAuth.instance;
     final now = auth.currentUser;
+    final isNoAds = ref.watch(userProvider.select((s) => s.isNoAdsUser));
     return Scaffold(
       appBar: neu.NeumorphicAppBar(
         title: const Text('アカウントページ'),
@@ -47,10 +48,22 @@ class SignInPage extends ConsumerWidget {
                           separator: 15,
                           borderColor: Colors.black,
                           onPressed: () async {
-                            await AppleAuthUtil.signInWithApple(context, ref)
-                                .then<dynamic>(
-                              (_) => Navigator.pop(context),
-                            );
+                            try {
+                              await AppleAuthUtil.signInWithApple(context, ref)
+                                  .then(
+                                    (_) => Navigator.popUntil(context,
+                                     (_) => count++ >= 2,),
+                                  );
+                            } on Exception catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('ログインがキャンセルされました。'),
+                                ),
+                              );
+                              if (kDebugMode) {
+                                print(e);
+                              }
+                            }
                           },
                         ),
                       ),
@@ -70,11 +83,6 @@ class SignInPage extends ConsumerWidget {
 
                             //TODO(Kohei): きちんとホーム画面に戻るかどうか確認
                             Navigator.popUntil(context, (_) => count++ >= 2),
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('ログインされました。'),
-                              ),
-                            ),
                           },
                         ),
                       ),
@@ -130,35 +138,65 @@ class SignInPage extends ConsumerWidget {
                         padding: const EdgeInsets.all(8),
                         child: SizedBox(
                           width: 280,
-                          height: 50,
+                          height: 70,
                           child: Center(
-                              child: RichText(
-                            text: TextSpan(children: [
-                              const TextSpan(
-                                  text: 'kiatsu の利用を開始することで、',
-                                  style: TextStyle(color: Colors.black)),
-                              TextSpan(
-                                text: 'プライバシーポリシー',
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    decoration: TextDecoration.underline),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    await launch(
-                                        'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3');
-                                  },
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                      text: 'kiatsu の利用を開始することで、',
+                                      style: TextStyle(color: Colors.black)),
+                                  TextSpan(
+                                    text: '利用規約',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        await launch(
+                                            'https://little-gourd-a5f.notion.site/a499f7c4ea1f473da3a00a2837c04be3');
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    text: '及び、',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: 'プライバシーポリシー',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        await launch(
+                                          'https://little-gourd-a5f.notion.site/3ed747b5a53440c9b05ae3528e7667b3',
+                                        );
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    text: 'に同意したものとみなします。',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const TextSpan(
-                                  text: 'に同意したことになります。',
-                                  style: TextStyle(color: Colors.black)),
-                            ]),
-                          )),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 )
-              : const Center(child: Text('認証済')),
+              : Center(
+                  child: Column(
+                    children: const [
+                      Text('認証済'),
+                    ],
+                  ),
+                ),
         ],
       ),
     );

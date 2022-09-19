@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
 late LocationSettings locationSettings;
+LocationPermission? permission;
 
 //TODO: 下記を参考にリファクタリングする
 //参照: https://github.com/Meshkat-Shadik/WeatherApp/blob/main/lib/infrastructure/weather_repository.dart
@@ -20,7 +21,11 @@ class WeatherRepository {
   WeatherRepository(this._client);
   final http.Client _client;
 
-  Future<WeatherClass> getWeather(String cityName, WidgetRef ref) async {
+  Future<WeatherClass> getWeather(
+    String cityName,
+    WidgetRef ref,
+    BuildContext context,
+  ) async {
     try {
       final coords = await ref.watch(locationClientProvider).getCoordinates();
       //参考URL: https://camposha.info/flutter/flutter-location/#gsc.tab=0
@@ -65,28 +70,32 @@ class WeatherRepository {
         throw Exception('ネットワークまたはGPSエラーです＾q＾');
       }
     } on PermissionDeniedException catch (e) {
-      // if (e.message ==
-      //     "User denied permissions to access the device's location.") {
-      //   await [
-      //     Permission.location,
-      //     Permission.locationAlways,
-      //     Permission.locationWhenInUse,
-      //   ].request();
-      // }
-      throw Exception(e.toString());
-// ScaffoldMessenger.of(context).showSnackBar(
-//                   SnackBar(
-//                     content: const Text('このアプリは位置情報の許可が必須です'),
-//                     action: SnackBarAction(
-//                       label: '許可',
-//                       onPressed: () async {
-//                         //TODO: 一旦ボタンを表示させるために強制天気取得の処理を走らせてるが後で改善させる
-//                         await Geolocator.openLocationSettings();
-//                       },
-//                     ),
-//                   ),
-//                 );
+      if (e.message ==
+          "User denied permissions to access the device's location.") {
+        await [
+          Permission.location,
+          Permission.locationAlways,
+          Permission.locationWhenInUse,
+        ].request();
+      }
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('このアプリは位置情報の許可が必須です'),
+            action: SnackBarAction(
+              label: '許可',
+              onPressed: () async {
+                //TODO: 一旦ボタンを表示させるために強制天気取得の処理を走らせてるが後で改善させる
+                await Geolocator.openLocationSettings();
+              },
+            ),
+          ),
+        );
+      }
 
+      throw Exception(e.toString());
     }
   }
 }

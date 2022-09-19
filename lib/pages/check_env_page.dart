@@ -17,15 +17,9 @@ class CheckEnvPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  // String? dartDefineMode = Platform.environment['DART_DEFINE_MODE'];
-  const dartDefineMode = String.fromEnvironment('DART_DEFINE_MODE', defaultValue: 'null');
-  const appIdSuffix = String.fromEnvironment('APP_ID_SUFFIX', defaultValue: 'null');
-  const profile = String.fromEnvironment('APP_PROVISIONING_PROFILE_SPECIFIER', defaultValue: 'null');
-
-
     return Scaffold(
       appBar: NeumorphicAppBar(
-        title: const Text('通知'),
+        title: const Text('開発者モード'),
       ),
       body: Center(
         child: FutureBuilder<PackageInfo>(
@@ -45,10 +39,6 @@ class CheckEnvPage extends StatelessWidget {
                   Text('Package Name: ${data?.packageName}'),
                   Text('Version: ${data?.version}'),
                   Text('Build Number: ${data?.buildNumber}'),
-
-                  const Text('Mode is: $dartDefineMode'),
-                  const Text('App id suffix is: $appIdSuffix'),
-                  const Text ('Profile is: $profile'),
                 ],
               );
             }),
