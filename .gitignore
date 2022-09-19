@@ -130,10 +130,8 @@ firestore.indexes.json
 screenshots/testShit.jpg
 
 ios/Podfile.lock
-ios/Podfile
 /.env
 /ios/Runner/GoogleService-Info.plist
-ios/Podfile.lock
 android/keystore.properties
 pubspec.lock
 android/app/src/prod/google-services.json
