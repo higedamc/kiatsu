@@ -1,4 +1,5 @@
 .env
+android/app/src/prod/google-services.json
 ios/Configuration.storekit
 ios/StoreKitTestCertificate.cer
 ios/fastlane/.envrc
