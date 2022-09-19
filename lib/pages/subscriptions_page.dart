@@ -59,20 +59,18 @@ class SubscriptionsPage extends ConsumerWidget {
             onClickedPackage: (package) async {
               final succeeded = await PurchaseApi.purchasePackage(package);
               if (succeeded == true) {
+                ref
+                    .read(scaffoldMessengerProvider)
+                    .currentState
+                    ?.showAfterRemoveSnackBar(
+                      message: succeeded ? '購入が完了しました。' : '購入に失敗しました。',
+                    );
                 final setData = <String, dynamic>{
                   'isPaidUser': 'true',
                 };
                 await users
                     .doc(currentUser?.uid)
                     .set(setData, SetOptions(merge: true));
-
-                //TODO: この実装方法どこで見たか後で確認
-                ref
-                    .read(scaffoldMessengerProvider)
-                    .currentState
-                    ?.showAfterRemoveSnackBar(
-                      message: succeeded.toString(),
-                    );
               }
 
               Navigator.pop(context);
@@ -165,62 +163,69 @@ class SubscriptionsPage extends ConsumerWidget {
                       //The receipt is missing
                     ),
                     onPressed: () async {
-                      //TODO: 処理が雑なのでエラーハンドリングの処理を定義する
-                      try {
-                        final restoredInfo =
-                            await Purchases.restoreTransactions();
-                        if (kDebugMode) {
-                          print(restoredInfo);
-                        }
-                        if (restoredInfo.entitlements.all['pro'] != null &&
-                            restoredInfo.entitlements.all['pro']!.isActive) {
-                          // 復元完了のポップアップ
-                          await showDialog<int>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('確認'),
-                                content: const Text('復元が完了しました。'),
-                                actions: <Widget>[
-                                  ElevatedButton(
-                                    child: const Text(
-                                      'OK',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.of(context).pop(1);
-                                    },
+                      final purchaser = ref.read(purchaseProvider.notifier);
+                      final restoredResult = await purchaser.restore();
+                      // final restoredInfo =
+                          // await PurchaseApi.getCurrentPurchaser();
+                      if (kDebugMode) {
+                        print(restoredResult);
+                      }
+                      if (restoredResult != null) {
+                        // 復元完了のポップアップ
+                        await showDialog<int>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('確認'),
+                              content: const Text('購入情報がありません。'),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  child: const Text(
+                                    'OK',
+                                    style: TextStyle(color: Colors.black),
                                   ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          // 購入情報が見つからない場合
-                          await showDialog<int>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('確認'),
-                                content: const Text(
-                                  '過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。',
+                                  onPressed: () async {
+                                    Navigator.of(context).pop(1);
+                                  },
                                 ),
-                                actions: <Widget>[
-                                  ElevatedButton(
-                                    child: const Text('OK'),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(1),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      } on PlatformException catch (e) {
-                        final errorCode = PurchasesErrorHelper.getErrorCode(e);
-                        log(errorCode.toString());
+                              ],
+                            );
+                          },
+                        );
+                        // ref
+                        //     .read(scaffoldMessengerProvider)
+                        //     .currentState
+                        //     ?.showAfterRemoveSnackBar(
+                        //       message: '過去の購入情報が見つかりませんでした。アカウント情報をご確認ください。',
+                        //     );
+                      } else {
+                        // 購入情報が見つからない場合
+                        await showDialog<int>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('確認'),
+                              content: const Text(
+                                '過去の購入情報の復元が完了しました',
+                              ),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  child: const Text('OK'),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(1),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        // ref
+                        //     .read(scaffoldMessengerProvider)
+                        //     .currentState
+                        //     ?.showAfterRemoveSnackBar(
+                        //       message: '過去の購入情報の復元が完了しました。',
+                        //     );
                       }
                     },
                   ),
