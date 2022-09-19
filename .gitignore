@@ -59,6 +59,7 @@ unlinked_spec.ds
 !**/android/**/gradle-wrapper.jar
 **/android/.gradle
 **/android/captures/
+
 # **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
@@ -116,38 +117,39 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+# Blackboxの設定
 /.blackbox/pubring.gpg~
 /.blackbox/pubring.kbx~
 /.blackbox/secring.gpg
-/android/app/google-services.json
-/ios/Runner/GoogleService-info.plist
-/ios/GoogleService-Info.plist
-firestore.indexes.json
-/firestore.rules
-/.firebaserc
-/firebase.json
-/firestore.indexes.json
-screenshots/testShit.jpg
 
-ios/Podfile.lock
-ios/Podfile
-/.env
-/ios/Runner/GoogleService-Info.plist
-ios/Podfile.lock
+# Android関連
+android/app/google-services.json
 android/keystore.properties
-pubspec.lock
-android/app/src/prod/google-services.json
-android/app/src/dev/google-services.json
-ios/Runner/Firebase/dev/GoogleService-Info.plist
-ios/Runner/Firebase/prod/GoogleService-Info.plist
+android/app/src/main/res/mipmap-xhdpi
+
+# Firebase関連
 lib/env/firebase_options_dev.dart
 lib/env/firebase_options_prod.dart
+firestore.indexes.json
+firestore.rules
+.firebaserc
+firebase.json
+firestore.indexes.json
+
+# dart-define用xcconfigファイル
 ios/Flutter/dev.xcconfig
-ios/fastlane/Fastfile/ios/fastlane/Fastfile
-ios/fastlane/Fastfile/ios/Flutter/dev.xcconfig
-/ios/Flutter/prod.xcconfig
-/ios/fastlane/ExportOptions-dev.plist
-/ios/fastlane/.envrc
-android/app/src/main/res/mipmap-xhdpi
+ios/Flutter/prod.xcconfig
+
+### 以下後でBlackbox化するファイル群
+
+# Sandbox下でのApp内決済用ファイル
 ios/Configuration.storekit
 ios/StoreKitTestCertificate.cer
+
+# Fastlaneの環境ファイル
+ios/fastlane/.envrc
+
+# Firebase用の設定ファイル for Android
+android/app/src/prod/google-services.json
+android/app/src/dev/google-services.json
