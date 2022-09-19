@@ -1,4 +1,5 @@
 .env
 ios/Configuration.storekit
+ios/StoreKitTestCertificate.cer
 ios/fastlane/.envrc
 ios/scripts/dart_defines.sh

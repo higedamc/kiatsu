@@ -154,3 +154,4 @@ ios/fastlane/.envrc
 android/app/src/prod/google-services.json
 android/app/src/dev/google-services.json
 /ios/Configuration.storekit
+/ios/StoreKitTestCertificate.cer
