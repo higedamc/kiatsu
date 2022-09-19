@@ -57,14 +57,21 @@ class SubscriptionsPage extends ConsumerWidget {
             privacyPolicy: 'プライバシーポリシー',
             description: '広告削除及びお気持ち投稿の場での追加機能（未リリース、ベータ版を含む）がアンロックできるようになります。',
             onClickedPackage: (package) async {
-              final errorCode = await PurchaseApi.purchasePackage(package);
-              if (errorCode != null) {
+              final succeeded = await PurchaseApi.purchasePackage(package);
+              if (succeeded == true) {
+                final setData = <String, dynamic>{
+                  'isPaidUser': 'true',
+                };
+                await users
+                    .doc(currentUser?.uid)
+                    .set(setData, SetOptions(merge: true));
+
                 //TODO: この実装方法どこで見たか後で確認
                 ref
                     .read(scaffoldMessengerProvider)
                     .currentState
                     ?.showAfterRemoveSnackBar(
-                      message: errorCode.toString(),
+                      message: succeeded.toString(),
                     );
               }
 
@@ -129,7 +136,7 @@ class SubscriptionsPage extends ConsumerWidget {
                       await fetchOffers();
                     },
                   ),
-                  const SizedBox(height: 32),
+            const SizedBox(height: 32),
             isNoAds
                 ? ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -137,7 +144,7 @@ class SubscriptionsPage extends ConsumerWidget {
                       primary: Colors.black,
                     ),
                     onPressed: () async =>
-                                    Navigator.pushNamed(context, '/icon'),
+                        Navigator.pushNamed(context, '/icon'),
                     child: const Text(
                       '他の機能を見る',
                       style: TextStyle(fontSize: 20),
