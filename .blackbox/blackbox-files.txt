@@ -1,3 +1,4 @@
 .env
+ios/Configuration.storekit
 ios/fastlane/.envrc
 ios/scripts/dart_defines.sh

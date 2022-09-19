@@ -153,3 +153,4 @@ ios/fastlane/.envrc
 # Firebase用の設定ファイル for Android
 android/app/src/prod/google-services.json
 android/app/src/dev/google-services.json
+/ios/Configuration.storekit
