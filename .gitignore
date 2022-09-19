@@ -141,8 +141,6 @@ firestore.indexes.json
 ios/Flutter/dev.xcconfig
 ios/Flutter/prod.xcconfig
 
-### 以下後でBlackbox化するファイル群
-
 # Sandbox下でのApp内決済用ファイル
 ios/Configuration.storekit
 ios/StoreKitTestCertificate.cer
@@ -153,3 +151,4 @@ ios/fastlane/.envrc
 # Firebase用の設定ファイル for Android
 android/app/src/prod/google-services.json
 android/app/src/dev/google-services.json
+ios/scripts/dart_defines.sh

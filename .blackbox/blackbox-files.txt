@@ -1,3 +1,7 @@
 .env
+android/app/src/dev/google-services.json
+android/app/src/prod/google-services.json
+ios/Configuration.storekit
+ios/StoreKitTestCertificate.cer
 ios/fastlane/.envrc
 ios/scripts/dart_defines.sh
