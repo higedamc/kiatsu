@@ -73,11 +73,11 @@ void main() {
     final result = await checkFirstRun();
     if (result == true) {
       await AppTrackingTransparency.requestTrackingAuthorization();
-                await [
-                Permission.location,
-                Permission.locationAlways,
-                Permission.locationWhenInUse,
-              ].request();
+      await [
+        Permission.location,
+        Permission.locationAlways,
+        Permission.locationWhenInUse,
+      ].request();
     }
     // if (await Permission.locationWhenInUse.serviceStatus.isDisabled ||
     //          await Permission.location.serviceStatus.isDisabled ||
@@ -121,20 +121,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wiredash(
-      // key: UniqueKey(),
       projectId: dotenv.env['WIREDASH_ID'].toString(),
       secret: dotenv.env['WIREDASH_SECRET'].toString(),
-      navigatorKey: _navigatorKey,
-      options: WiredashOptionsData(
-        // bugReportButton: false,
-        // featureRequestButton: false,
-        // praiseButton: false,
-        customTranslations: {
-          // plに日本語の翻訳をオーバーライド
-          const Locale.fromSubtags(languageCode: 'pl'):
-              const CustomTranslations(),
-        },
-        locale: const Locale('pl'),
+      options: const WiredashOptionsData(
+        locale: Locale('ja'),
+        localizationDelegate: CustomWiredashTranslationsDelegate(),
       ),
       child: NeumorphicApp(
         navigatorKey: _navigatorKey,
@@ -173,6 +164,33 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class CustomWiredashTranslationsDelegate
+    extends LocalizationsDelegate<WiredashLocalizations> {
+  const CustomWiredashTranslationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) {
+    /// You have to define all languages that should be overridden
+    return ['ja'].contains(locale.languageCode);
+  }
+
+  @override
+  Future<WiredashLocalizations> load(Locale locale) {
+    switch (locale.languageCode) {
+      case 'ja':
+        // Replace some text to better address your users
+        return SynchronousFuture(WiredashLocalizationsJapanese());
+      default:
+        // TODO(Kohei): 後で直す
+        // ignore: only_throw_errors
+        throw 'Unsupported locale $locale';
+    }
+  }
+
+  @override
+  bool shouldReload(CustomWiredashTranslationsDelegate old) => false;
 }
 
 Widget splashScreen = SplashScreenView(
