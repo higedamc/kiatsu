@@ -1,84 +1,93 @@
+import 'dart:convert';
+import 'dart:developer' as developer;
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-// 参考: https://qiita.com/smiler5617/items/f94fdc1afe088586715b
-
-// TODO: 本リリースまでに実装する
 
 class GoogleAuthUtil {
   /// サインイン中か
-  static bool isSignedIn() => FirebaseAuth.instance.currentUser != null;
+  bool? isSignedIn() => FirebaseAuth.instance.currentUser != null;
 
   /// 現在のユーザー情報
-  static User? getCurrentUser() => FirebaseAuth.instance.currentUser;
+  User? getCurrentUser() => FirebaseAuth.instance.currentUser;
+
+  // emailが認証済みかどうか
+  bool? isEmailVerified() => getCurrentUser()!.emailVerified == true;
 
   /// サインアウト
-  static void signOut() => FirebaseAuth.instance.signOut();
+  void signOut() => FirebaseAuth.instance.signOut();
 
-  static final googleSignIn = GoogleSignIn(scopes: ['email']);
+  // Firerbaseアカウント削除
+  void deleteAccount() => FirebaseAuth.instance.currentUser!.delete();
 
   /// サインイン
-  static Future<User?> signIn(BuildContext context) async {
-    final UserCredential? credential = await signInWithGoogle(context);
-    return credential?.user;
+  Future<User?> signIn(BuildContext context) async {
+    final credential = await signInWithGoogle(context);
+    return credential!.user;
   }
 
-  static Future<UserCredential?> signInWithGoogle(BuildContext context) async {
-    int count = 0;
-    final newUser = FirebaseAuth.instance;
-    final createdAt = DateTime.now();
-    final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
-    final CollectionReference collection = firebaseStore.collection('users');
-
+  // TODO: サインインがうまくいくか (Firebaseに反映されるか) 実機で検証する
+  static Future<UserCredential?> signInWithGoogle(
+    BuildContext context,
+  ) async {
     try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final createdAt = DateTime.now();
+      final firebaseStore = FirebaseFirestore.instance;
+      final users = firebaseStore.collection('users');
+      // var count = 0;
 
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      final googleAuthCredential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+      final auth = FirebaseAuth.instance;
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth!.accessToken,
+        idToken: googleAuth.idToken,
       );
 
-      return newUser
-          .signInWithCredential(googleAuthCredential)
-          .then((UserCredential result) async {
-        final String? displayName = result.user?.displayName;
-        print(displayName);
-        final String? email = result.user?.email;
-        print(email);
-        final String? photoUrl = result.user?.photoURL;
-        print(photoUrl);
-        final uid = result.user?.uid;
-        print(uid);
-        final providerData = result.user?.providerData;
-        print(providerData);
-        final firebaseUser = result.user;
-        print(firebaseUser);
-        await firebaseUser?.updateDisplayName(displayName);
-        await firebaseUser?.updateEmail(email.toString());
-        await firebaseUser?.updatePhotoURL(photoUrl);
-        await collection.doc(result.user?.uid).set({'createdAt': createdAt});
-        Navigator.popUntil(context, (_) => count++ >= 2);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('ログインされました。')));
-        
-        // await collection.doc(uid.toString()).collection('userInfo').doc().set({
-        //   'uid': uid,
-        //   'displayName': displayName,
-        //   'email': email,
-        //   'photoUrl': photoUrl,
-        //   'createdAt': createdAt,
-        //   'providerData': providerData,
-        // }, SetOptions(merge: true));
-      });
-    } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
-      throw FirebaseAuthException(code: e.code, message: e.message);
+      return auth.signInWithCredential(credential).then(
+        (authResult) async {
+          final displayName = authResult.user?.displayName;
+          final email = authResult.user?.email;
+          final photoUrl = authResult.user?.photoURL;
+          final uid = authResult.user?.uid;
+          final providerData = authResult.user?.providerData;
+          final firebaseUser = authResult.user;
+          final setData = <String, dynamic>{
+            'createdAt': createdAt.toIso8601String(),
+            'authProvider': 'google.com',
+          };
+          await users
+              .doc(authResult.user!.uid)
+              .set(setData, SetOptions(merge: true));
+          if (kDebugMode) {
+            print(
+              'サインインされました: uid: $uid displayName: $displayName, email: $email, photoUrl: $photoUrl, uid: $uid, providerData: $providerData, firebaseUser: $firebaseUser',
+            );
+          }
+          return authResult;
+          // Navigator.popUntil(context, (_) => count++ >= 1);
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(
+          //     content: Text('ログインされました。'),
+          //   ),
+          // );
+        },
+      );
+    } on PlatformException catch (e) {
+      var message = 'キャンセルしました';
+      if (e.code == '3063') {
+        message = 'エラーが発生しました';
+      }
+      throw FirebaseAuthException(code: e.code, message: message);
     }
   }
 }
