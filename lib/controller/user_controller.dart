@@ -14,11 +14,11 @@ class UserController extends StateNotifier<UserState>
     with SubscriptionHolderMixin {
   UserController() : super(UserState()) {
     // リスナーも提供されている
-    Purchases.addPurchaserInfoUpdateListener(
-      (purchaserInfo) {
-        logger.info('purchaserInfo: $purchaserInfo');
+    Purchases.addCustomerInfoUpdateListener(
+      (customerInfo) {
+        logger.info('customerInfo: $customerInfo');
         state = state.copyWith(
-          purchaserInfo: purchaserInfo,
+          customerInfo: customerInfo,
         );
       },
     );
@@ -35,7 +35,7 @@ class UserController extends StateNotifier<UserState>
           final loginResult = await Purchases.logIn(user.uid);
           state = state.copyWith(
             user: user,
-            purchaserInfo: loginResult.purchaserInfo,
+            customerInfo: loginResult.customerInfo,
           );
         },
       ),

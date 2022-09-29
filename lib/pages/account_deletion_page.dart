@@ -12,7 +12,6 @@ import 'package:kiatsu/const/account_deletion_disclaimer.dart';
 import 'package:kiatsu/controller/user_controller.dart';
 import 'package:kiatsu/logger.dart';
 import 'package:kiatsu/pages/timeline.dart';
-import 'package:purchases_flutter/models/purchaser_info_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:twitter_login/twitter_login.dart';
 

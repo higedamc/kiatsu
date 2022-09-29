@@ -111,7 +111,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
       );
 
   Widget buildPackage(BuildContext context, Package package) {
-    final product = package.product;
+    final product = package.storeProduct;
 
     return Column(
       children: [
